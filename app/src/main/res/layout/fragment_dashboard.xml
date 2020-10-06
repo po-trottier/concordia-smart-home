@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light"
-    tools:context=".ui.slideshow.SlideshowFragment" >
+    tools:context=".fragments.dashboard.DashboardModel" >
 
     <TextView
-        android:id="@+id/text_slideshow"
+        android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

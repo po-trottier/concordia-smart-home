@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light"
-    tools:context=".ui.home.HomeFragment" >
+    tools:context=".fragments.logs.LogsModel" >
 
     <TextView
-        android:id="@+id/text_home"
+        android:id="@+id/text_slideshow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
