@@ -6,6 +6,8 @@
         <item name="colorAccent">@color/accent</item>
         <item name="actionOverflowButtonStyle">@style/CustomOverflowButton</item>
         <item name="drawerArrowStyle">@style/CustomDrawerArrow</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="CustomDrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
