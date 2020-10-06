@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">Smart Home Simulator</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="nav_header_title">Smart Home Simulator</string>
     <string name="nav_header_subtitle">Team #20</string>
     <string name="nav_header_desc">Navigation header</string>
+
     <string name="action_about">About</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_map">House Layout</string>
+    <string name="menu_logs">Activity Logs</string>
 </resources>

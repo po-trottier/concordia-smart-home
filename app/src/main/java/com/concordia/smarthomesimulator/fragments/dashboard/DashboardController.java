@@ -1,4 +1,4 @@
-package com.concordia.smarthomesimulator.ui.slideshow;
+package com.concordia.smarthomesimulator.fragments.dashboard;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,15 +12,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.concordia.smarthomesimulator.R;
 
-public class SlideshowFragment extends Fragment {
+public class DashboardController extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private DashboardModel dashboardModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel = ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        dashboardModel = ViewModelProviders.of(this).get(DashboardModel.class);
+        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        final TextView textView = root.findViewById(R.id.text_home);
+        dashboardModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

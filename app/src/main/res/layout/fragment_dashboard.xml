@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light"
-    tools:context=".ui.home.HomeFragment" >
+    tools:context=".fragments.dashboard.DashboardController" >
 
     <TextView
         android:id="@+id/text_home"

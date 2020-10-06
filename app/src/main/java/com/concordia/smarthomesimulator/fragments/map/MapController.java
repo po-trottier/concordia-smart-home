@@ -1,4 +1,4 @@
-package com.concordia.smarthomesimulator.ui.home;
+package com.concordia.smarthomesimulator.fragments.map;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,15 +12,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.concordia.smarthomesimulator.R;
 
-public class HomeFragment extends Fragment {
+public class MapController extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private MapModel mapModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        mapModel = ViewModelProviders.of(this).get(MapModel.class);
+        View root = inflater.inflate(R.layout.fragment_map, container, false);
+        final TextView textView = root.findViewById(R.id.text_gallery);
+        mapModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
