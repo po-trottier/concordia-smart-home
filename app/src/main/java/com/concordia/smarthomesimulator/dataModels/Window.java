@@ -15,7 +15,7 @@ public class Window implements IDevice {
     private boolean isOpened = false;
     private boolean isLocked = false;
 
-    Window() {
+    public Window() {
         Resources res = Resources.getSystem();
 
         iconOpened = res.getDrawable(R.drawable.ic_window_open_variant, null);

@@ -8,9 +8,9 @@ public class Geometry {
     public float width;
     public float height;
 
-    Geometry() {}
+    public Geometry() {}
 
-    Geometry(float width, float height) {
+    public Geometry(float width, float height) {
         x = 0;
         y = 0;
         this.width = width;

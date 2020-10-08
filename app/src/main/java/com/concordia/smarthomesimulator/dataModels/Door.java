@@ -12,7 +12,7 @@ public class Door implements IDevice {
     private final int tintClosed;
     private boolean isOpened = false;
 
-    Door() {
+    public Door() {
         Resources res = Resources.getSystem();
 
         iconOpened = res.getDrawable(R.drawable.ic_door_open, null);

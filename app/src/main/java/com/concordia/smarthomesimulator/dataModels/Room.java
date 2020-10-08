@@ -8,7 +8,7 @@ public class Room {
     private Geometry geometry;
     private final Vector<IDevice> devices;
 
-    Room (String name, Geometry geometry) {
+    public Room (String name, Geometry geometry) {
         this.name = name;
         this.geometry = geometry;
         this.devices = new Vector<>();

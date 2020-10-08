@@ -12,7 +12,7 @@ public class Light implements IDevice {
     private final int tintClosed;
     private boolean isOpened = false;
 
-    Light() {
+    public Light() {
         Resources res = Resources.getSystem();
 
         iconOpened = res.getDrawable(R.drawable.ic_lightbulb_on, null);

@@ -4,18 +4,24 @@ import java.util.Vector;
 
 public class HouseLayout {
 
+    private final String image;
     private String name;
     private Geometry geometry;
     private Vector<Room> rooms;
     private Vector<Inhabitant> inhabitants;
 
-    HouseLayout(String name, float width, float height) {
+    public HouseLayout(String name, String image, float width, float height) {
         this.name = name;
+        this.image = image;
         this.geometry = new Geometry(width, height);
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public Geometry getGeometry() {

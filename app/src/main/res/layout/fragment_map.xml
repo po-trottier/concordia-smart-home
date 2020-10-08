@@ -8,17 +8,39 @@
     android:background="@color/light"
     tools:context=".fragments.map.MapController" >
 
-    <TextView
-        android:id="@+id/text_gallery"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/text_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+        <Button
+            android:id="@+id/save_layout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:text="@string/button_save_layout" />
+        <Button
+            android:id="@+id/load_layout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:backgroundTint="@color/primaryDark"
+            android:textColor="@color/white"
+            android:text="@string/button_load_layout" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

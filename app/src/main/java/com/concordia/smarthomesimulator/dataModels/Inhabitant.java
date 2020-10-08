@@ -5,7 +5,7 @@ public class Inhabitant {
     private final String name;
     private Room room;
 
-    Inhabitant(String name) {
+    public Inhabitant(String name) {
         this.name = name;
     }
 
