@@ -37,7 +37,9 @@ public class MapController extends Fragment {
         );
 
         view = inflater.inflate(R.layout.fragment_map, container, false);
-        final TextView textView = view.findViewById(R.id.text_gallery);
+
+        // TODO: Remove these lines (part of the default activity)
+        final TextView textView = view.findViewById(R.id.text_map);
         mapModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -45,6 +47,7 @@ public class MapController extends Fragment {
             }
         });
 
+        // Set the Save Button behaviour
         final Button saveButton = view.findViewById(R.id.save_layout_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +59,7 @@ public class MapController extends Fragment {
             }
         });
 
+        // Set the Load Button behaviour
         final Button loadButton = view.findViewById(R.id.load_layout_button);
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override

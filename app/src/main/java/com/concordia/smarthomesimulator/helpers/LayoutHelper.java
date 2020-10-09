@@ -13,11 +13,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
 public class LayoutHelper {
 
     private final static String fileName = "layout.json";
 
+    /**
+     * Save house layout.
+     *
+     * @param context     the context
+     * @param requestCode the permission request code
+     * @param layout      the layout
+     * @return operation success
+     */
     public static boolean saveHouseLayout(Context context, int requestCode, HouseLayout layout) {
         // Convert the House Layout to a JSON Object
         Gson gson = new Gson();
@@ -44,6 +51,13 @@ public class LayoutHelper {
         }
     }
 
+    /**
+     * Load house layout.
+     *
+     * @param context     the context
+     * @param requestCode the permission request code
+     * @return the house layout
+     */
     public static HouseLayout loadHouseLayout(Context context, int requestCode) {
         // If we don't have read permissions request them
         if (context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

@@ -56,14 +56,38 @@ public class Window implements IDevice {
         this.isOpened = isOpened;
     }
 
+    /**
+     * Gets locked icon.
+     *
+     * @return the locked icon
+     */
     public Drawable getLockedIcon() {
         return iconLocked;
     }
 
+    /**
+     * Gets locked tint.
+     *
+     * @return the locked tint
+     */
     public int getLockedTint() {
         return tintLocked;
     }
 
+    /**
+     * Gets is locked.
+     *
+     * @return is locked
+     */
+    public boolean getIsLocked() {
+        return isLocked;
+    }
+
+    /**
+     * Sets is locked.
+     *
+     * @param isLocked the is locked
+     */
     public void setIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
     }

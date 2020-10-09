@@ -17,23 +17,47 @@ public class MapModel extends ViewModel {
     private Context context;
     private final MutableLiveData<String> mText;
 
+    /**
+     * Instantiates a new Map model.
+     */
     public MapModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }
 
+    /**
+     * Gets text.
+     *
+     * @return the text
+     */
     public LiveData<String> getText() {
         return mText;
     }
 
+
+    /**
+     * Sets context.
+     *
+     * @param context the context
+     */
     public void setContext(Context context) {
         this.context = context;
     }
 
+    /**
+     * Save house layout.
+     *
+     * @param layout the house layout
+     */
     public boolean saveHouseLayout(HouseLayout layout) {
         return LayoutHelper.saveHouseLayout(context, WRITE_PERMISSION_REQUEST_CODE, layout);
     }
 
+    /**
+     * Load house layout.
+     *
+     * @return the house layout
+     */
     public HouseLayout loadHouseLayout() {
         return LayoutHelper.loadHouseLayout(context, READ_PERMISSION_REQUEST_CODE);
     }
