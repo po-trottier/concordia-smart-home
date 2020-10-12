@@ -19,6 +19,12 @@ public class MainController extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+    // The Main Model instantiates some fragments inside the content view
+    // to allow for dynamic content to be set by the navigation drawer.
+    // This is therefore the "parent" controller that controls the fragment
+    // views, which are themselves controlled by the "children" controllers
+    // present in the appropriate fragments sub-folders.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Initialize to the home screen
@@ -54,12 +60,14 @@ public class MainController extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        // Manage "back" navigation button logic.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Add appropriate logic for the various Action Bar menu items.
         switch (item.getItemId()) {
             case R.id.action_about:
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));

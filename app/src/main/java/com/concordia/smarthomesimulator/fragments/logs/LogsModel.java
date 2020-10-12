@@ -1,31 +1,19 @@
 package com.concordia.smarthomesimulator.fragments.logs;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import com.concordia.smarthomesimulator.R;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-public class LogsModel extends Fragment {
+public class LogsModel extends ViewModel {
 
-    private LogsController logsController;
+    private MutableLiveData<String> mText;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        logsController = ViewModelProviders.of(this).get(LogsController.class);
-        View root = inflater.inflate(R.layout.fragment_logs, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        logsController.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+    public LogsModel() {
+        mText = new MutableLiveData<>();
+        mText.setValue("This is slideshow fragment");
+    }
+
+    public LiveData<String> getText() {
+        return mText;
     }
 }

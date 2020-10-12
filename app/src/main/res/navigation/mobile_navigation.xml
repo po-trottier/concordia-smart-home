@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_dashboard"
-        android:name="com.concordia.smarthomesimulator.fragments.dashboard.DashboardModel"
+        android:name="com.concordia.smarthomesimulator.fragments.dashboard.DashboardController"
         android:label="@string/menu_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/nav_map"
-        android:name="com.concordia.smarthomesimulator.fragments.map.MapModel"
+        android:name="com.concordia.smarthomesimulator.fragments.map.MapController"
         android:label="@string/menu_map"
         tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/nav_logs"
-        android:name="com.concordia.smarthomesimulator.fragments.logs.LogsModel"
+        android:name="com.concordia.smarthomesimulator.fragments.logs.LogsController"
         android:label="@string/menu_logs"
         tools:layout="@layout/fragment_logs" />
 </navigation>

@@ -1,19 +1,31 @@
 package com.concordia.smarthomesimulator.fragments.dashboard;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import com.concordia.smarthomesimulator.R;
 
-public class DashboardController extends ViewModel {
+public class DashboardController extends Fragment {
 
-    private MutableLiveData<String> mText;
+    private DashboardModel dashboardModel;
 
-    public DashboardController() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-    }
-
-    public LiveData<String> getText() {
-        return mText;
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        dashboardModel = ViewModelProviders.of(this).get(DashboardModel.class);
+        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        final TextView textView = root.findViewById(R.id.text_home);
+        dashboardModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                textView.setText(s);
+            }
+        });
+        return root;
     }
 }
