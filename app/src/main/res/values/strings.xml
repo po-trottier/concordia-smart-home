@@ -26,4 +26,9 @@
 
     <string name="button_save_layout">Save Layout</string>
     <string name="button_load_layout">Open Layout</string>
+
+    <string name="edit_text_username">Enter username</string>
+    <string name="edit_text_password">Enter password</string>
+    <string name="button_login">Log in</string>
+    <string name="login_page">Welcome to Smart Home Simulator!</string>
 </resources>
