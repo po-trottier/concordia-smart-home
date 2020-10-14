@@ -7,6 +7,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.main.MainController;
+import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 
 public class LoginController extends AppCompatActivity {
 
@@ -25,6 +26,8 @@ public class LoginController extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginController.this, MainController.class);
                 LoginController.this.startActivity(intent);
+                ActivityLogHelper.add("button pressed","login screen", getApplicationContext());
+                //ActivityLogHelper.clearLog(getApplicationContext());
                 finish();
             }
         });
