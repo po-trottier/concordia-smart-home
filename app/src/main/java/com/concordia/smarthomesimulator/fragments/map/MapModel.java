@@ -10,10 +10,6 @@ import com.concordia.smarthomesimulator.helpers.LayoutHelper;
 
 public class MapModel extends ViewModel {
 
-    public static final int WRITE_PERMISSION_REQUEST_CODE = 1000;
-    public static final int READ_PERMISSION_REQUEST_CODE = 1001;
-
-    @SuppressLint("StaticFieldLeak")
     private Context context;
     private final MutableLiveData<String> mText;
 
@@ -50,7 +46,7 @@ public class MapModel extends ViewModel {
      * @param layout the house layout
      */
     public boolean saveHouseLayout(HouseLayout layout) {
-        return LayoutHelper.saveHouseLayout(context, WRITE_PERMISSION_REQUEST_CODE, layout);
+        return LayoutHelper.saveHouseLayout(context, layout);
     }
 
     /**
@@ -59,6 +55,6 @@ public class MapModel extends ViewModel {
      * @return the house layout
      */
     public HouseLayout loadHouseLayout() {
-        return LayoutHelper.loadHouseLayout(context, READ_PERMISSION_REQUEST_CODE);
+        return LayoutHelper.loadHouseLayout(context);
     }
 }
