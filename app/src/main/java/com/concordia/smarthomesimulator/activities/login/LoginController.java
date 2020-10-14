@@ -26,8 +26,15 @@ public class LoginController extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginController.this, MainController.class);
                 LoginController.this.startActivity(intent);
+
+                /**
+                 *Two following two lines after this comment block are strictly for the developers
+                 *These should be removed as they are only here for the
+                 *purpose of showing how to use the methods
+                 */
                 ActivityLogHelper.add("button pressed","login screen", getApplicationContext());
                 //ActivityLogHelper.clearLog(getApplicationContext());
+
                 finish();
             }
         });
