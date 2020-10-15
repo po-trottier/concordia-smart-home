@@ -1,102 +1,131 @@
 package com.concordia.smarthomesimulator.helpers;
+
+import android.Manifest;
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
-import java.io.BufferedReader;
+import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.LogEntry;
+import com.google.gson.Gson;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.Vector;
 
-/** CREDITS : The following methods are based on an Android Studio tutorial video by Coding In Flow
- *URL https://www.youtube.com/watch?v=EcfUkjlL9RI&t=505s
- */
+import static com.concordia.smarthomesimulator.Constants.READ_PERMISSION_REQUEST_CODE;
+import static com.concordia.smarthomesimulator.Constants.WRITE_PERMISSION_REQUEST_CODE;
+
+// CREDITS : The following methods are based on an Android Studio tutorial video by Coding In Flow
+// URL https://www.youtube.com/watch?v=EcfUkjlL9RI&t=505s
 
 public final class ActivityLogHelper {
 
-    /**Log can be found in internal storage
-     *Tools -> Device File Explorer
-     *scroll down through directories to  /data/user/0/com.concordia.smarthomesimulator/files
-     */
-    final static String FILE_NAME = "activityLog";
+    private final static String FILE_NAME = "logs.json";
 
-
-    /**First call will create the activityLog file inside internal storage.
-     *Subsequent calls will strictly append to the existing file.
+    /**
+     * First call will create the activityLog file inside internal storage.
+     * Subsequent calls will strictly append to the existing file.
      *
-     * @param message   message desired for entry
-     * @param component component associated to entry
-     * @param ctx  Context of the application
+     * @param context       Context of the application
+     * @param entry         Log entry
      */
-    public static void add(String message, String component, Context ctx){
-        try {
-            FileOutputStream fOut = ctx.openFileOutput(FILE_NAME,Context.MODE_APPEND);
-            fOut.write(formatEntry(message,component).getBytes() );
-            fOut.close();
-            File fileDir = new File(ctx.getFilesDir(),FILE_NAME);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void add(Context context, LogEntry entry) {
+        // Read the existing file
+        Vector<LogEntry> logs = read(context);
+        if (logs == null) {
+            logs = new Vector<>();
+        }
+        // Add an entry to the file
+        logs.add(entry);
+        ActivityLogs activityLogs = new ActivityLogs(logs);
+        // Convert to JSON
+        Gson gson = new Gson();
+        String jsonLogs = gson.toJson(activityLogs);
+        // Make sure we have the proper permissions
+        if (PermissionsHelper.verifyPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_PERMISSION_REQUEST_CODE)) {
+            File path = context.getExternalFilesDir(null);
+            File file = new File(path, FILE_NAME);
+            try (FileOutputStream stream = new FileOutputStream(file)) {
+                stream.write(jsonLogs.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    /** Reads log in it's entirety and stores it in a String
+    /**
+     * Reads log in it's entirety and stores it in a String
      * which is returned and the end of execution.
      *
-     * @param ctx  Context of the application
-     * @return String   Contents of the activityLog file
+     * @param context Context of the application
+     * @return String Contents of the activityLog file
      */
-    public static String readLog(Context ctx){
-        FileInputStream fIn = null;
-        String text = "";
-
-        try{
-            fIn = ctx.openFileInput(FILE_NAME);
-            InputStreamReader isr = new InputStreamReader(fIn);
-            BufferedReader br =  new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-
-            while((text = br.readLine()) !=  null){
-                sb.append(text).append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally{
-            if(fIn != null){
-                try {
-                    fIn.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+    public static Vector<LogEntry> read(Context context) {
+        if (PermissionsHelper.verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
+            File path = context.getExternalFilesDir(null);
+            File file = new File(path, FILE_NAME);
+            // Read the file
+            try (FileInputStream stream = new FileInputStream(file)) {
+                // Build the string from the file buffer
+                StringBuilder fileContent = new StringBuilder();
+                byte[] buffer = new byte[1024];
+                int n;
+                while ((n = stream.read(buffer)) != -1) {
+                    fileContent.append(new String(buffer, 0, n));
                 }
+                // Convert the JSON string to a Java Object
+                Gson gson = new Gson();
+                ActivityLogs logs = gson.fromJson(fileContent.toString(), ActivityLogs.class);
+                return logs.getAll();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return text;
+            return null;
         }
+        return null;
     }
 
-    /**This will delete the log.
-     *Right click "files" in Device File Explorer and select Synchronize
-     *in order to refresh folder.
+    /**
+     * This will delete the log.
+     * Right click "files" in Device File Explorer and select Synchronize
+     * in order to refresh folder.
      *
-     * @param ctx  Context of the application
-     * */
-    public static void clearLog(Context ctx){
-        File fileDir = new File(ctx.getFilesDir(),FILE_NAME);
-        fileDir.delete();
-    }
-
-    /**Returns formatted activityLog entry
-     *
-     * @param message   message desired for entry
-     * @param component component associated to entry
-     * @return String   formatted entry
+     * @param context Context of the application
      */
-    private static String formatEntry(String message,String component){
-        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-        Date dateTime = new Date();
-        return (message + "  " + component + "  " +  df.format(dateTime) +
-                '\n');
+    public static void clear(Context context) {
+        File path = context.getExternalFilesDir(null);
+        File file = new File(path, FILE_NAME);
+        if (file.delete())
+            Toast.makeText(context, R.string.toast_deleted, Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(context, R.string.toast_could_not_delete, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * The type ActivityLogs is used internally to help writing JSON data to the logs file. It has no other purpose.
+     */
+    private static class ActivityLogs {
+
+        private final LogEntry[] logs;
+
+        /**
+         * Instantiates a new Activity logs.
+         *
+         * @param logs the logs
+         */
+        public ActivityLogs(Vector<LogEntry> logs) {
+            this.logs = logs.toArray(new LogEntry[0]);
+        }
+
+        /**
+         * Gets all logs.
+         *
+         * @return all logs
+         */
+        public Vector<LogEntry> getAll() {
+            return new Vector<>(Arrays.asList(logs));
+        }
     }
 }
