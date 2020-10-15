@@ -10,7 +10,6 @@ import com.concordia.smarthomesimulator.helpers.LayoutHelper;
 
 public class MapModel extends ViewModel {
 
-    private Context context;
     private final MutableLiveData<String> mText;
 
     /**
@@ -30,31 +29,24 @@ public class MapModel extends ViewModel {
         return mText;
     }
 
-
-    /**
-     * Sets context.
-     *
-     * @param context the context
-     */
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
     /**
      * Save house layout.
      *
-     * @param layout the house layout
+     * @param context the context
+     * @param layout  the layout
+     * @return whether the layout was saved or not
      */
-    public boolean saveHouseLayout(HouseLayout layout) {
+    public boolean saveHouseLayout(Context context, HouseLayout layout) {
         return LayoutHelper.saveHouseLayout(context, layout);
     }
 
     /**
      * Load house layout.
      *
+     * @param context the context
      * @return the house layout
      */
-    public HouseLayout loadHouseLayout() {
+    public HouseLayout loadHouseLayout(Context context) {
         return LayoutHelper.loadHouseLayout(context);
     }
 }
