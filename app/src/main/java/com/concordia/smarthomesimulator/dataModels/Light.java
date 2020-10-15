@@ -6,39 +6,31 @@ import com.concordia.smarthomesimulator.R;
 
 public class Light implements IDevice {
 
-    private final Drawable iconOpened;
-    private final Drawable iconClosed;
-    private final int tintOpened;
-    private final int tintClosed;
+    private final Resources res;
     private boolean isOpened = false;
 
     public Light() {
-        Resources res = Resources.getSystem();
-
-        iconOpened = res.getDrawable(R.drawable.ic_lightbulb_on, null);
-        iconClosed = res.getDrawable(R.drawable.ic_lightbulb_off, null);
-        tintOpened = res.getColor(R.color.primary, null);
-        tintClosed = res.getColor(R.color.accent, null);
+        res = Resources.getSystem();
     }
 
     @Override
     public Drawable getOpenedIcon() {
-        return iconOpened;
+        return res.getDrawable(R.drawable.ic_lightbulb_on, null);
     }
 
     @Override
     public Drawable getClosedIcon() {
-        return iconClosed;
+        return res.getDrawable(R.drawable.ic_lightbulb_off, null);
     }
 
     @Override
     public int getOpenedTint() {
-        return tintOpened;
+        return res.getColor(R.color.primary, null);
     }
 
     @Override
     public int getClosedTint() {
-        return tintClosed;
+        return res.getColor(R.color.accent, null);
     }
 
     @Override

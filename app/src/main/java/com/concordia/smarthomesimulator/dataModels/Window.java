@@ -6,44 +6,32 @@ import com.concordia.smarthomesimulator.R;
 
 public class Window implements IDevice {
 
-    private final Drawable iconOpened;
-    private final Drawable iconClosed;
-    private final Drawable iconLocked;
-    private final int tintOpened;
-    private final int tintClosed;
-    private final int tintLocked;
+    private final Resources res;
     private boolean isOpened = false;
     private boolean isLocked = false;
 
     public Window() {
-        Resources res = Resources.getSystem();
-
-        iconOpened = res.getDrawable(R.drawable.ic_window_open_variant, null);
-        iconClosed = res.getDrawable(R.drawable.ic_window_closed_variant, null);
-        iconLocked = res.getDrawable(R.drawable.ic_window_locked_variant, null);
-        tintOpened = res.getColor(R.color.primary, null);
-        tintClosed = res.getColor(R.color.accent, null);
-        tintLocked = res.getColor(R.color.charcoal, null);
+        res = Resources.getSystem();
     }
 
     @Override
     public Drawable getOpenedIcon() {
-        return iconOpened;
+        return res.getDrawable(R.drawable.ic_window_open_variant, null);
     }
 
     @Override
     public Drawable getClosedIcon() {
-        return iconClosed;
+        return res.getDrawable(R.drawable.ic_window_closed_variant, null);
     }
 
     @Override
     public int getOpenedTint() {
-        return tintOpened;
+        return res.getColor(R.color.primary, null);
     }
 
     @Override
     public int getClosedTint() {
-        return tintClosed;
+        return res.getColor(R.color.accent, null);
     }
 
     @Override
@@ -62,7 +50,7 @@ public class Window implements IDevice {
      * @return the locked icon
      */
     public Drawable getLockedIcon() {
-        return iconLocked;
+        return res.getDrawable(R.drawable.ic_window_locked_variant, null);
     }
 
     /**
@@ -71,7 +59,7 @@ public class Window implements IDevice {
      * @return the locked tint
      */
     public int getLockedTint() {
-        return tintLocked;
+        return res.getColor(R.color.charcoal, null);
     }
 
     /**

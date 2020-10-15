@@ -34,9 +34,9 @@ public class HouseLayout {
     }
 
     /**
-     * Gets image.
+     * Gets image in base64 encoding.
      *
-     * @return the image
+     * @return the image in base64 encoding
      */
     public String getImage() {
         return image;
