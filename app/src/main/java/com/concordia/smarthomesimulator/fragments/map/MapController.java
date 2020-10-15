@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -26,7 +27,6 @@ public class MapController extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         mapModel = new ViewModelProvider(this).get(MapModel.class);
-        mapModel.setContext(context);
 
         // TODO: Replace these lines. This is for testing purpose only
         houseLayout = new HouseLayout(
@@ -52,10 +52,10 @@ public class MapController extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mapModel.saveHouseLayout(houseLayout))
-                    Snackbar.make(view, R.string.snackbar_save_error, BaseTransientBottomBar.LENGTH_LONG).show();
+                if (mapModel.saveHouseLayout(context, houseLayout))
+                    Toast.makeText(context, R.string.snackbar_save_success, Toast.LENGTH_LONG).show();
                 else
-                    Snackbar.make(view, R.string.snackbar_save_success, BaseTransientBottomBar.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.snackbar_save_error, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -65,7 +65,7 @@ public class MapController extends Fragment {
             @Override
             public void onClick(View v) {
                 HouseLayout before = houseLayout;
-                houseLayout = mapModel.loadHouseLayout();
+                houseLayout = mapModel.loadHouseLayout(context);
                 if (houseLayout == null || before == houseLayout)
                     Snackbar.make(view, R.string.snackbar_load_error, BaseTransientBottomBar.LENGTH_LONG).show();
                 else

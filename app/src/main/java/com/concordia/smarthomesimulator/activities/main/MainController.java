@@ -18,8 +18,8 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.about.AboutController;
 import com.google.android.material.navigation.NavigationView;
 
-import static com.concordia.smarthomesimulator.fragments.map.MapModel.READ_PERMISSION_REQUEST_CODE;
-import static com.concordia.smarthomesimulator.fragments.map.MapModel.WRITE_PERMISSION_REQUEST_CODE;
+import static com.concordia.smarthomesimulator.Constants.READ_PERMISSION_REQUEST_CODE;
+import static com.concordia.smarthomesimulator.Constants.WRITE_PERMISSION_REQUEST_CODE;
 
 public class MainController extends AppCompatActivity {
 
