@@ -5,15 +5,15 @@ import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class LogsModel extends ViewModel {
 
     private Context context;
-    private Vector<LogEntry> logs;
+    private ArrayList<LogEntry> logs;
 
     public LogsModel() {
-        logs = new Vector<>();
+        logs = new ArrayList<>();
     }
 
     public void readLogs(Context context) {
@@ -21,11 +21,11 @@ public class LogsModel extends ViewModel {
     }
 
     public void clearLogs(Context context) {
-        logs = new Vector<>();
+        logs = new ArrayList<>();
         ActivityLogHelper.clear(context);
     }
 
-    public Vector<LogEntry> getLogs() {
+    public ArrayList<LogEntry> getLogs() {
         return logs;
     }
 }

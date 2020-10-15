@@ -11,8 +11,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
 
 import static com.concordia.smarthomesimulator.Constants.READ_PERMISSION_REQUEST_CODE;
 import static com.concordia.smarthomesimulator.Constants.WRITE_PERMISSION_REQUEST_CODE;
@@ -33,9 +33,9 @@ public final class ActivityLogHelper {
      */
     public static void add(Context context, LogEntry entry) {
         // Read the existing file
-        Vector<LogEntry> logs = read(context);
+        ArrayList<LogEntry> logs = read(context);
         if (logs == null) {
-            logs = new Vector<>();
+            logs = new ArrayList<>();
         }
         // Add an entry to the file
         logs.add(entry);
@@ -62,7 +62,7 @@ public final class ActivityLogHelper {
      * @param context Context of the application
      * @return String Contents of the activityLog file
      */
-    public static Vector<LogEntry> read(Context context) {
+    public static ArrayList<LogEntry> read(Context context) {
         if (PermissionsHelper.verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
             File path = context.getExternalFilesDir(null);
             File file = new File(path, FILE_NAME);
@@ -115,7 +115,7 @@ public final class ActivityLogHelper {
          *
          * @param logs the logs
          */
-        public ActivityLogs(Vector<LogEntry> logs) {
+        public ActivityLogs(ArrayList<LogEntry> logs) {
             this.logs = logs.toArray(new LogEntry[0]);
         }
 
@@ -124,8 +124,8 @@ public final class ActivityLogHelper {
          *
          * @return all logs
          */
-        public Vector<LogEntry> getAll() {
-            return new Vector<>(Arrays.asList(logs));
+        public ArrayList<LogEntry> getAll() {
+            return new ArrayList<>(Arrays.asList(logs));
         }
     }
 }

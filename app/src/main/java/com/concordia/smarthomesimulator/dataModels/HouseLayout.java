@@ -1,14 +1,14 @@
 package com.concordia.smarthomesimulator.dataModels;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class HouseLayout {
 
     private final String image;
     private String name;
     private Geometry geometry;
-    private Vector<Room> rooms;
-    private Vector<Inhabitant> inhabitants;
+    private ArrayList<Room> rooms;
+    private ArrayList<Inhabitant> inhabitants;
 
     /**
      * Instantiates a new House layout.
@@ -56,7 +56,7 @@ public class HouseLayout {
      *
      * @return the rooms
      */
-    public Vector<Room> getRooms() {
+    public ArrayList<Room> getRooms() {
         return rooms;
     }
 
@@ -65,7 +65,7 @@ public class HouseLayout {
      *
      * @return the inhabitants
      */
-    public Vector<Inhabitant> getInhabitants() {
+    public ArrayList<Inhabitant> getInhabitants() {
         return inhabitants;
     }
 
@@ -101,7 +101,7 @@ public class HouseLayout {
      *
      * @param rooms the rooms
      */
-    public void addRooms(Vector<Room> rooms) {
+    public void addRooms(ArrayList<Room> rooms) {
         this.rooms.addAll(rooms);
     }
 
@@ -119,7 +119,7 @@ public class HouseLayout {
      *
      * @param inhabitants the inhabitants
      */
-    public void addInhabitants(Vector<Inhabitant> inhabitants) {
+    public void addInhabitants(ArrayList<Inhabitant> inhabitants) {
         this.inhabitants.addAll(inhabitants);
     }
 

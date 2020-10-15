@@ -1,12 +1,12 @@
 package com.concordia.smarthomesimulator.dataModels;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class Room {
 
     private String name;
     private Geometry geometry;
-    private final Vector<IDevice> devices;
+    private final ArrayList<IDevice> devices;
 
     /**
      * Instantiates a new Room.
@@ -17,7 +17,7 @@ public class Room {
     public Room (String name, Geometry geometry) {
         this.name = name;
         this.geometry = geometry;
-        this.devices = new Vector<>();
+        this.devices = new ArrayList<>();
     }
 
     /**
@@ -43,7 +43,7 @@ public class Room {
      *
      * @return the devices
      */
-    public Vector<IDevice> getDevices() {
+    public ArrayList<IDevice> getDevices() {
         return devices;
     }
 
@@ -79,7 +79,7 @@ public class Room {
      *
      * @param devices the devices
      */
-    public void addDevices(Vector<IDevice> devices) {
+    public void addDevices(ArrayList<IDevice> devices) {
         this.devices.addAll(devices);
     }
 
