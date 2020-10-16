@@ -27,8 +27,10 @@ public final class UserbaseHelper {
             if (userbase == null){
                 // no record of userbase, creating a default one
                 List<User> users = new ArrayList<User>();
-                users.add(new User("root","root", Permissions.PARENT));
                 users.add(new User("parent","parent",Permissions.PARENT));
+                users.add(new User("child","child", Permissions.CHILD));
+                users.add(new User("guest","guest", Permissions.GUEST));
+                users.add(new User("stranger","stranger", Permissions.STRANGER));
                 userbase = new Userbase(users);
                 writeUserbase(context, userbase);
             }

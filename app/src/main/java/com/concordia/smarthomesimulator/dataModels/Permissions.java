@@ -4,15 +4,19 @@ public enum Permissions {
     /**
      * Parent permissions.
      */
-    PARENT(7),
+    PARENT(15),
     /**
      * Child permissions.
      */
-    CHILD(3),
+    CHILD(7),
     /**
-     * Visitor permissions.
+     * Guest permissions.
      */
-    VISITOR(1);
+    GUEST(3),
+    /**
+     * Stranger permissions.
+     */
+    STRANGER(1);
 
     private int bitVal;
 
