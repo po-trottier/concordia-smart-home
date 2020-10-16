@@ -61,10 +61,9 @@ public class LoginController extends AppCompatActivity {
                 if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
                     Toast.makeText(LoginController.this, "Please enter a username and password",Toast.LENGTH_SHORT).show();
                 } else {
-                    Optional<User> potential_user = getUserWithCredentials(inputUsername, inputPassword, userBase);
-                    if (potential_user.isPresent()){
+                    User logged_user = getUserWithCredentials(inputUsername, inputPassword, userBase);
+                    if (logged_user != null){
                         //save logged user info to preferences
-                        User logged_user = potential_user.get();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("username",logged_user.getUsername());
                         editor.putString("password",logged_user.getPassword());

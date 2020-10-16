@@ -93,15 +93,13 @@ public final class UserbaseHelper {
      * @param userbase the userbase
      * @return the optional which is empty or contains the user
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static Optional<User> getUserWithCredentials(String username, String password, Userbase userbase){
-
+    public static User getUserWithCredentials(String username, String password, Userbase userbase){
         for(User user : userbase.getUsers()){
             if (user.getPassword().equals(password) && user.getUsername().equals(username)){
-                return Optional.of(user);
+                return user;
             }
         }
-        return Optional.empty();
+        return null;
     }
 
 }
