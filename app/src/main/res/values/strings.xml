@@ -29,7 +29,7 @@
     <string name="button_save_layout">Save Layout</string>
     <string name="button_load_layout">Open Layout</string>
     <string name="button_clear_logs">Clear Logs</string>
-
+    
 
     <string name="edit_text_username">Enter username</string>
     <string name="edit_text_password">Enter password</string>
