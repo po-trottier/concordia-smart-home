@@ -6,7 +6,7 @@ This simulator was developed as a requirement for the SOEN343 course given at Co
 
 - Quandeel Arshad *(?)*
 - Luigi Besani Urena *(?)*
-- William Morin-Laberge *(?)*
+- William Morin-Laberge *(40097269)*
 - Aswin Philip *(?)*
 - Pierre-Olivier Trottier *(40059235)*
 
