@@ -35,4 +35,7 @@
     <string name="edit_text_password">Enter password</string>
     <string name="button_login">Log in</string>
     <string name="login_page">Welcome to Smart Home Simulator!</string>
+
+    <string name="empty_username_password_fields">Please enter a username and password</string>
+    <string name="wrong_credentials_message">The credentials entered do not correspond to a known account</string>
 </resources>

@@ -18,65 +18,58 @@ import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 
-import java.util.Optional;
-
-import static com.concordia.smarthomesimulator.helpers.UserbaseHelper.getUserWithCredentials;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 
 public class LoginController extends AppCompatActivity {
 
-    /**
-     * The Context of the login activity.
-     */
-    Context context;
-    /**
-     * The Shared preferences used to store the info of the logged user.
-     */
-    SharedPreferences sharedPreferences;
+
+    private Context context;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         setContentView(R.layout.activity_login);
         setLoginIntent();
     }
 
     private void setLoginIntent() {
         //binding elements from the view
-        Button loginButton = findViewById(R.id.login_button);
-        final EditText eUsername = findViewById(R.id.etUsername);
-        final EditText ePassword = findViewById(R.id.etPassword);
+        final Button loginButton = findViewById(R.id.login_button);
+        final EditText usernameField = findViewById(R.id.usernameField);
+        final EditText passwordField = findViewById(R.id.passwordField);
 
-        final Userbase userBase = new Userbase(context);
-        sharedPreferences = this.getSharedPreferences("com.concordia.smarthomesimulator",Context.MODE_PRIVATE);
+        Userbase userBase = new Userbase(context);
 
         //adding a listener to the login button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String inputUsername = eUsername.getText().toString();
-                String inputPassword = ePassword.getText().toString();
+                String inputUsername = usernameField.getText().toString();
+                String inputPassword = passwordField.getText().toString();
 
                 if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
-                    Toast.makeText(LoginController.this, "Please enter a username and password",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.empty_username_password_fields,Toast.LENGTH_SHORT).show();
                 } else {
-                    User logged_user = getUserWithCredentials(inputUsername, inputPassword, userBase);
-                    if (logged_user != null){
+                    User loggedUser = UserbaseHelper.getUserWithCredentials(inputUsername, inputPassword, userBase);
+                    if (loggedUser != null){
                         //save logged user info to preferences
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("username",logged_user.getUsername());
-                        editor.putString("password",logged_user.getPassword());
-                        editor.putInt("permissions", logged_user.getPermission().getBitVal());
+                        editor.putString("username",loggedUser.getUsername());
+                        editor.putString("password",loggedUser.getPassword());
+                        editor.putInt("permissions", loggedUser.getPermission().getBitVal());
                         editor.apply();
 
                         //proceeding to the next activity and logging what happened
                         Intent intent = new Intent(LoginController.this, MainController.class);
-                        ActivityLogHelper.add(context, new LogEntry("Login","User logged in", LogImportance.IMPORTANT));
+                        ActivityLogHelper.add(context, new LogEntry("Login",String.format("User %s logged in", loggedUser.getUsername()), LogImportance.IMPORTANT));
                         LoginController.this.startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(LoginController.this, "The credentials entered do not correspond to a known account",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.wrong_credentials_message,Toast.LENGTH_SHORT).show();
                         ActivityLogHelper.add(context, new LogEntry("Login","The credentials entered do not correspond to a known account", LogImportance.IMPORTANT));
                     }
                 }
