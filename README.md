@@ -12,14 +12,13 @@ This simulator was developed as a requirement for the SOEN343 course given at Co
 
 ## Documentation
 
-#### Default accounts(username,password, permissions):  
-parent, parent, parent  
-child, child, child  
-guest, guest, guest  
-stranger, stranger, stranger  
-
-
 The following documentation will graphically describe the general organisation of the program in the form of a Domain Model diagram, different Class diagrams, and a sequence diagram describing the Simulation context.
+
+#### Default accounts (username, password):  
+- parent, parent  
+- child, child  
+- guest, guest  
+- stranger, stranger  
 
 #### Domain Model
 
