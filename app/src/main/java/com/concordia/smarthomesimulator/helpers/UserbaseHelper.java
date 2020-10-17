@@ -22,18 +22,11 @@ public final class UserbaseHelper {
     public static Userbase loadUserbase(Context context){
         Userbase userbase = null;
         //checking if a user file is present, creating one if it isn't
-        try {
-            userbase = (Userbase) FileHelper.readObjectFromFile(context, USERS_FILE_NAME, Userbase.class);
-            if (userbase == null){
-                // no record of userbase, creating a default one
-                userbase = setupDefaultUserbase(context);
-            }
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }catch (IOException e) {
-            e.printStackTrace();
+        userbase = (Userbase) FileHelper.loadObjectFromFile(context, USERS_FILE_NAME, Userbase.class);
+        if (userbase == null){
+            // no record of userbase, creating a default one
+            userbase = setupDefaultUserbase(context);
         }
-
         return userbase;
     }
 
@@ -42,16 +35,9 @@ public final class UserbaseHelper {
      *
      * @param context  the context
      * @param userbase the userbase
-     * @return the boolean depicting if the write operation was successful
      */
-    public static boolean loadUserbase(Context context, Userbase userbase){
-        try {
-            FileHelper.writeObjectToFile(context, USERS_FILE_NAME, userbase);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+    public static void saveUserbase(Context context, Userbase userbase){
+        FileHelper.saveObjectToFile(context, USERS_FILE_NAME, userbase);
     }
 
     /**
@@ -78,7 +64,7 @@ public final class UserbaseHelper {
         users.add(new User("guest","guest", Permissions.GUEST));
         users.add(new User("stranger","stranger", Permissions.STRANGER));
         Userbase userbase = new Userbase(users);
-        loadUserbase(context, userbase);
+        saveUserbase(context, userbase);
         return userbase;
     }
 
