@@ -23,7 +23,6 @@ import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 public class LoginController extends AppCompatActivity {
 
-
     private Context context;
     private SharedPreferences sharedPreferences;
 
@@ -42,7 +41,7 @@ public class LoginController extends AppCompatActivity {
         final EditText usernameField = findViewById(R.id.usernameField);
         final EditText passwordField = findViewById(R.id.passwordField);
 
-        Userbase userBase = new Userbase(context);
+        Userbase userbase = new Userbase(context);
 
         //adding a listener to the login button
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +53,7 @@ public class LoginController extends AppCompatActivity {
                 if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
                     Toast.makeText(context, R.string.empty_username_password_fields,Toast.LENGTH_SHORT).show();
                 } else {
-                    User loggedUser = UserbaseHelper.getUserWithCredentials(inputUsername, inputPassword, userBase);
+                    User loggedUser = UserbaseHelper.getUserWithCredentials(inputUsername, inputPassword, userbase);
                     if (loggedUser != null){
                         //save logged user info to preferences
                         SharedPreferences.Editor editor = sharedPreferences.edit();

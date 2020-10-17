@@ -16,7 +16,7 @@ public class Userbase {
      * @param context the context of the caller, used to get permissions to read from external storage
      */
     public Userbase(Context context){
-        this.users = UserbaseHelper.readUserbase(context).getUsers();
+        this.users = UserbaseHelper.loadUserbase(context).getUsers();
     }
 
     /**
