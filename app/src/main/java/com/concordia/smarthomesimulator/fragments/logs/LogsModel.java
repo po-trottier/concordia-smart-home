@@ -21,7 +21,7 @@ public class LogsModel extends ViewModel {
     }
 
     public void clearLogs(Context context) {
-        logs = new ArrayList<>();
+        logs.clear();
         ActivityLogHelper.clear(context);
     }
 

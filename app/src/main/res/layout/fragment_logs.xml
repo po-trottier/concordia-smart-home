@@ -8,28 +8,43 @@
     tools:context=".fragments.logs.LogsController">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintVertical_bias="0.88">
+
         <TextView
             android:id="@+id/logs_count_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/charcoal"
             android:textAlignment="center"
+            android:textColor="@color/charcoal"
             android:textSize="20sp" />
+
         <Button
             android:id="@+id/clear_logs_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/button_clear_logs"
             android:layout_margin="16dp"
-            android:textAlignment="center"
             android:backgroundTint="@color/primary"
+            android:text="@string/button_clear_logs"
+            android:textAlignment="center"
             android:textColor="@color/white" />
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="423dp"
+        android:layout_height="429dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
 </androidx.constraintlayout.widget.ConstraintLayout>
