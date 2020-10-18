@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,6 +32,29 @@ public class DashboardController extends Fragment {
         dashboardModel = new ViewModelProvider(this).get(DashboardModel.class);
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         context = getActivity();
+
+        final Switch onOffSwitch = view.findViewById(R.id.onoff);
+        onOffSwitch.setText(dashboardModel.getOnOffSwitch());
+
+        final ImageView usersImage = view.findViewById(R.id.image);
+
+        final TextView user = view.findViewById(R.id.text_user);
+        user.setText(dashboardModel.getUser());
+
+        final TextView location = view.findViewById(R.id.location);
+        location.setText(dashboardModel.getLocation());
+
+        final TextView room = view.findViewById(R.id.room);
+        room.setText(dashboardModel.getRoom());
+
+        final TextView temperature = view.findViewById(R.id.temperature);
+        temperature.setText(dashboardModel.getTemperature());
+
+        final TextView date = view.findViewById(R.id.date);
+        date.setText(dashboardModel.getDate());
+
+        final TextView time = view.findViewById(R.id.time);
+        time.setText(dashboardModel.getTime());
 
         setupEditIntent();
 

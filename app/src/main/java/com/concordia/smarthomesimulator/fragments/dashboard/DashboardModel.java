@@ -1,19 +1,61 @@
 package com.concordia.smarthomesimulator.fragments.dashboard;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class DashboardModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    public String onOffSwitch = "On/Off";
+    public String editButton = "Edit Simulation";
+    public String user = "Parent";
+    public String location = "Location";
+    public String room = "Kitchen";
+    public String temperature = "Outside temperature: 15°C";
+    public String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+    public String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
 
     public DashboardModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public String getOnOffSwitch(){
+        return onOffSwitch;
     }
+
+    public String getEditButton(){
+        return editButton;
+    }
+
+    public String getUser(){
+        return user;
+    }
+
+    public String getLocation(){
+        return location;
+    }
+
+    public String getRoom(){
+        return room;
+    }
+
+    public String getTemperature(){
+        return temperature;
+    }
+
+    public String getDate(){
+        return date;
+    }
+
+    public String getTime(){
+        return time;
+    }
+
 }
+
+
+
+
+
