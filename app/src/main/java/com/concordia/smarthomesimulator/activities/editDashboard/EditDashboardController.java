@@ -12,6 +12,9 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class EditDashboardController extends AppCompatActivity {
 
     private Context context;
@@ -57,6 +60,17 @@ public class EditDashboardController extends AppCompatActivity {
 
         ArrayAdapter<String> permissions_adapter = new ArrayAdapter<>(context,
                 R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.permissions_spinner));
+        permissions_adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        permissions_spinner.setAdapter(permissions_adapter);
+    }
+
+    private void setupUsernamesSpinner(){
+        permissions_spinner = (Spinner) findViewById(R.id.permissions_spinner);
+        List<String> usernames = new LinkedList<>();
+        usernames.add("woo");
+
+        ArrayAdapter<String> permissions_adapter = new ArrayAdapter<>(context,
+                R.layout.support_simple_spinner_dropdown_item, usernames);
         permissions_adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         permissions_spinner.setAdapter(permissions_adapter);
     }
