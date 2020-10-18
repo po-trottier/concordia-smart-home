@@ -22,6 +22,9 @@ public class HouseLayout {
         this.name = name;
         this.image = image;
         this.geometry = new Geometry(width, height);
+
+        rooms = new ArrayList<>();
+        inhabitants = new ArrayList<>();
     }
 
     /**

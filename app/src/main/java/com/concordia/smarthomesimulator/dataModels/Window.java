@@ -6,32 +6,30 @@ import com.concordia.smarthomesimulator.R;
 
 public class Window implements IDevice {
 
-    private final Resources res;
     private boolean isOpened = false;
     private boolean isLocked = false;
 
     public Window() {
-        res = Resources.getSystem();
     }
 
     @Override
-    public Drawable getOpenedIcon() {
-        return res.getDrawable(R.drawable.ic_window_open_variant, null);
+    public int getOpenedIcon() {
+        return R.drawable.ic_window_open_variant;
     }
 
     @Override
-    public Drawable getClosedIcon() {
-        return res.getDrawable(R.drawable.ic_window_closed_variant, null);
+    public int getClosedIcon() {
+        return R.drawable.ic_window_closed_variant;
     }
 
     @Override
     public int getOpenedTint() {
-        return res.getColor(R.color.primary, null);
+        return R.color.primary;
     }
 
     @Override
     public int getClosedTint() {
-        return res.getColor(R.color.accent, null);
+        return R.color.accent;
     }
 
     @Override
@@ -44,13 +42,18 @@ public class Window implements IDevice {
         this.isOpened = isOpened;
     }
 
+    @Override
+    public DeviceType getDeviceType() {
+        return DeviceType.WINDOW;
+    }
+
     /**
      * Gets locked icon.
      *
      * @return the locked icon
      */
-    public Drawable getLockedIcon() {
-        return res.getDrawable(R.drawable.ic_window_locked_variant, null);
+    public int getLockedIcon() {
+        return R.drawable.ic_window_locked_variant;
     }
 
     /**
@@ -59,7 +62,7 @@ public class Window implements IDevice {
      * @return the locked tint
      */
     public int getLockedTint() {
-        return res.getColor(R.color.charcoal, null);
+        return R.color.charcoal;
     }
 
     /**

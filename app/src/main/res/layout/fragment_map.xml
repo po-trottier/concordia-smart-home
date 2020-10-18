@@ -9,38 +9,34 @@
     tools:context=".fragments.map.MapController" >
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            android:id="@+id/map_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ImageView>
+        <ListView
+            android:id="@+id/map_room_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <ListView
+            android:id="@+id/map_inhabitant_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_edit_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <TextView
-            android:id="@+id/text_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-        <Button
-            android:id="@+id/save_layout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:backgroundTint="@color/primary"
-            android:textColor="@color/white"
-            android:text="@string/button_save_layout" />
-        <Button
-            android:id="@+id/load_layout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:backgroundTint="@color/primaryDark"
-            android:textColor="@color/white"
-            android:text="@string/button_load_layout" />
-    </LinearLayout>
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_baseline_edit_24"
+        android:tint="@color/white"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

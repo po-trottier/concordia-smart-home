@@ -17,6 +17,7 @@ public class Room {
     public Room (String name, Geometry geometry) {
         this.name = name;
         this.geometry = geometry;
+
         this.devices = new ArrayList<>();
     }
 

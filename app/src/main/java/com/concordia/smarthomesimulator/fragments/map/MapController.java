@@ -1,22 +1,37 @@
 package com.concordia.smarthomesimulator.fragments.map;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
+import com.concordia.smarthomesimulator.activities.login.LoginController;
+import com.concordia.smarthomesimulator.activities.main.MainController;
+import com.concordia.smarthomesimulator.adapters.MapInhabitantAdapter;
+import com.concordia.smarthomesimulator.adapters.MapRoomAdapter;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
+import com.concordia.smarthomesimulator.dataModels.Inhabitant;
+import com.concordia.smarthomesimulator.dataModels.Room;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class MapController extends Fragment {
     private View view;
@@ -28,51 +43,49 @@ public class MapController extends Fragment {
         context = getActivity();
         mapModel = new ViewModelProvider(this).get(MapModel.class);
 
-        // TODO: Replace these lines. This is for testing purpose only
-        houseLayout = new HouseLayout(
-            "House Layout Test",
-            "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=",
-            1.3f,
-            1.5f
-        );
-
         view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        // TODO: Remove these lines (part of the default activity)
-        final TextView textView = view.findViewById(R.id.text_map);
-        mapModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        houseLayout = mapModel.loadDemoHouseLayout();
 
-        // Set the Save Button behaviour
-        final Button saveButton = view.findViewById(R.id.save_layout_button);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mapModel.saveHouseLayout(context, houseLayout))
-                    Toast.makeText(context, R.string.snackbar_save_success, Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(context, R.string.snackbar_save_error, Toast.LENGTH_LONG).show();
-            }
-        });
-
-        // Set the Load Button behaviour
-        final Button loadButton = view.findViewById(R.id.load_layout_button);
-        loadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HouseLayout before = houseLayout;
-                houseLayout = mapModel.loadHouseLayout(context);
-                if (houseLayout == null || before == houseLayout)
-                    Snackbar.make(view, R.string.snackbar_load_error, BaseTransientBottomBar.LENGTH_LONG).show();
-                else
-                    Snackbar.make(view, R.string.snackbar_load_success, BaseTransientBottomBar.LENGTH_LONG).show();
-            }
-        });
+        setMapDetails();
+        setCustomAdapter();
+        setCustomAdapterInhabitants();
+        setEditIntent();
 
         return view;
+    }
+
+    private void setMapDetails() {
+        ImageView layoutImage = view.findViewById(R.id.map_image);
+        byte[] imageBytes = Base64.decode(houseLayout.getImage(), Base64.DEFAULT);
+        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        layoutImage.setImageBitmap(decodedImage);
+    }
+
+    private void setCustomAdapter() {
+        ArrayList<Room> rooms = houseLayout.getRooms();
+        MapRoomAdapter adapter = new MapRoomAdapter(context, 0, rooms);
+
+        ListView roomList = view.findViewById(R.id.map_room_list);
+        roomList.setAdapter(adapter);
+    }
+
+    private void setCustomAdapterInhabitants() {
+        ArrayList<Inhabitant> inhabitants = houseLayout.getInhabitants();
+        MapInhabitantAdapter adapterInhabitant = new MapInhabitantAdapter(context, 0, inhabitants);
+
+        ListView inhabitantList = view.findViewById(R.id.map_inhabitant_list);
+        inhabitantList.setAdapter(adapterInhabitant);
+    }
+
+    private void setEditIntent() {
+        FloatingActionButton fab = view.findViewById(R.id.fab_edit_map);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditMapController.class);
+                context.startActivity(intent);
+            }
+        });
     }
 }

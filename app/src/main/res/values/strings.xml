@@ -69,11 +69,22 @@
     <string name="edit_text_new_username">Enter new username</string>
     <string name="edit_text_new_password">Enter new password</string>
 
+    <string name="map_window">Window</string>
+    <string name="map_door">Door</string>
+    <string name="map_light">Light</string>
+    <string name="map_opened">Opened</string>
+    <string name="map_closed">Closed</string>
+    <string name="map_locked">Locked</string>
+    <string name="default_room_name">Room</string>
+    <string name="default_device_name">Device</string>
+    <string name="default_inhabitant_title">Inhabitants</string>
+
+    <string name="title_activity_edit_map">Edit House Layout</string>
+
     <string-array name="permissions_spinner">
         <item>Parent</item>
         <item>Child</item>
         <item>Guest</item>
         <item>Stranger</item>
     </string-array>
-
 </resources>
