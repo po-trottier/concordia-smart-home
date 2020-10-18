@@ -33,10 +33,10 @@ public class DashboardController extends Fragment {
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         context = getActivity();
 
-        final Switch sw = view.findViewById(R.id.onoff);
-        sw.setText(dashboardModel.getSw());
+        final Switch onOffSwitch = view.findViewById(R.id.onoff);
+        onOffSwitch.setText(dashboardModel.getOnOffSwitch());
 
-        final ImageView img = view.findViewById(R.id.image);
+        final ImageView usersImage = view.findViewById(R.id.image);
 
         final TextView user = view.findViewById(R.id.text_user);
         user.setText(dashboardModel.getUser());
