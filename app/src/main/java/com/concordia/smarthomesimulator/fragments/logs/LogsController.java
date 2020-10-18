@@ -9,19 +9,17 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
-import com.concordia.smarthomesimulator.helpers.CustomAdapter;
+import com.concordia.smarthomesimulator.adapters.ActivityLogsAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class LogsController extends Fragment {
 
     private Context context;
     private LogsModel logsModel;
-    private ListView logLst;
+    private ListView logList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
@@ -29,18 +27,13 @@ public class LogsController extends Fragment {
         logsModel.readLogs(context);
 
         View root = inflater.inflate(R.layout.fragment_logs, container, false);
-
-        //
-
-        logLst = (ListView)root.findViewById(R.id.list_view);
-        CustomAdapter adapter = new CustomAdapter(getContext(),0,logsModel.getLogs());
-        logLst.setAdapter(adapter);
-//
-
+        logList = (ListView)root.findViewById(R.id.activity_logs_list);
+        ActivityLogsAdapter adapter = new ActivityLogsAdapter(getContext(),0,logsModel.getLogs());
+        logList.setAdapter(adapter);
         final TextView logsCount = root.findViewById(R.id.logs_count_text);
         logsCount.setText(logsModel.getLogs().size() + " log(s) found");
+        final FloatingActionButton clearLogs = root.findViewById(R.id.clear_logs_button);
 
-        final Button clearLogs = root.findViewById(R.id.clear_logs_button);
         clearLogs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
