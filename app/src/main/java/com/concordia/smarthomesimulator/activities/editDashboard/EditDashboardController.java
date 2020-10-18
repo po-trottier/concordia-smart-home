@@ -65,7 +65,7 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupUsernamesSpinner(){
-        permissions_spinner = (Spinner) findViewById(R.id.permissions_spinner);
+        permissions_spinner = (Spinner) findViewById(R.id.username_spinner);
         List<String> usernames = new LinkedList<>();
         usernames.add("woo");
 
