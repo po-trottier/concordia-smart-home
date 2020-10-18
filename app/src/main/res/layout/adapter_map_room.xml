@@ -4,15 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp">
     <TextView
         android:id="@+id/adapter_room_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/default_room_name"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:textSize="20sp" />
     <LinearLayout
         android:id="@+id/adapter_device_list"
         android:layout_width="match_parent"

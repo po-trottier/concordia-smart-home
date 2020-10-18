@@ -78,6 +78,8 @@
     <string name="default_room_name">Room</string>
     <string name="default_device_name">Device</string>
     <string name="default_inhabitant_title">Inhabitants</string>
+    <string name="title_rooms">Rooms</string>
+    <string name="title_inhabitants">Inhabitants</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
 
