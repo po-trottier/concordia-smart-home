@@ -32,14 +32,14 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="10dp"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@drawable/ic_baseline_account_box_24" />
 
         <TextView
             android:id="@+id/text_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
-            android:paddingVertical="10dp"
+            android:paddingVertical="5dp"
             android:layout_margin="5dp"
             android:textAlignment="center"
             android:textSize="20sp" />

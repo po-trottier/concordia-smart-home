@@ -37,6 +37,7 @@ public class DashboardController extends Fragment {
         onOffSwitch.setText(dashboardModel.getOnOffSwitch());
 
         final ImageView usersImage = view.findViewById(R.id.image);
+        usersImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_box_24));
 
         final TextView user = view.findViewById(R.id.text_user);
         user.setText(dashboardModel.getUser());
