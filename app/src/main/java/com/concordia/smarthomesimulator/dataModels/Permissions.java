@@ -32,4 +32,17 @@ public enum Permissions {
     public int getBitVal() {
         return bitVal;
     }
+
+    public static Permissions toPermissions(String permissionsStr){
+        if (permissionsStr.equalsIgnoreCase("parent")){
+            return PARENT;
+        } else if (permissionsStr.equalsIgnoreCase("child")){
+            return CHILD;
+        } else if (permissionsStr.equalsIgnoreCase("guest")){
+            return GUEST;
+        } else{
+            return STRANGER;
+        }
+
+    }
 }

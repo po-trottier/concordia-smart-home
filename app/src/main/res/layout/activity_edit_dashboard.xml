@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".activities.editDashboard.EditDashboardController">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.editDashboard.EditDashboardController">
 
     <include
-            layout="@layout/app_bar_secondary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        layout="@layout/app_bar_secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
         <LinearLayout
@@ -19,14 +18,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <include
-                    layout="@layout/partial_edit_context"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                layout="@layout/partial_edit_context"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <include
-                    layout="@layout/partial_edit_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                layout="@layout/partial_edit_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </ScrollView>

@@ -1,12 +1,15 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 public class User {
-    private String username;
-    private String password;
-    private Permissions permission;
+    private final String username;
+    private final String password;
+    private final Permissions permission;
 
     /**
      * Instantiates a new User.
+     *
+     * Users cannot be modified, new ones must be created and appended to the userbase. So users don't have
+     * identical usernames or passwords.
      *
      * @param username   the username
      * @param password   the password
@@ -27,14 +30,6 @@ public class User {
         return username;
     }
 
-    /**
-     * Sets username.
-     *
-     * @param username the username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     /**
      * Gets password.
@@ -45,14 +40,6 @@ public class User {
         return password;
     }
 
-    /**
-     * Sets password.
-     *
-     * @param password the password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     /**
      * Gets permission.
@@ -63,12 +50,4 @@ public class User {
         return permission;
     }
 
-    /**
-     * Sets permission.
-     *
-     * @param permission the permission
-     */
-    public void setPermission(Permissions permission) {
-        this.permission = permission;
-    }
 }

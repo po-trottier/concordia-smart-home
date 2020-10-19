@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Userbase {
@@ -35,6 +36,14 @@ public class Userbase {
      */
     public List<User> getUsers() {
         return users;
+    }
+
+    public List<String> getUsernames(){
+        List<String> usernames = new ArrayList<>();
+        for (User user: users) {
+            usernames.add(user.getUsername());
+        }
+        return usernames;
     }
 }
 

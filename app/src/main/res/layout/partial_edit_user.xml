@@ -14,30 +14,12 @@
         android:textAlignment="center"
         android:textSize="30sp"
         android:text="@string/edit_user_welcome"/>
-    <EditText
-        android:id="@+id/oldUsernameField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="8dp"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:hint="@string/edit_text_old_username"/>
+
     <Spinner
         android:id="@+id/username_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <!--    <EditText-->
-    <!--            android:id="@+id/oldPasswordField"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:inputType="textPassword"-->
-    <!--            android:layout_margin="8dp"-->
-    <!--            app:layout_constraintStart_toStartOf="parent"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            android:ems="10"-->
-    <!--            android:hint="@string/edit_text_old_password"/>-->
+
     <EditText
         android:id="@+id/newUsernameField"
         android:layout_width="match_parent"
@@ -54,22 +36,29 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:layout_margin="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:ems="10"
         android:hint="@string/edit_text_new_password"/>
+
     <Spinner
         android:id="@+id/permissions_spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"/>
 
-    </Spinner>
     <Button
         android:id="@+id/delete_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/delete_user_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/create_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/create_user_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </LinearLayout>
