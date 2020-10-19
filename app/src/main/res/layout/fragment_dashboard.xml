@@ -50,7 +50,7 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
-                    android:textSize="24sp"
+                    android:textSize="30sp"
                     android:text="@string/dashboard_context"/>
 
                 <androidx.cardview.widget.CardView
@@ -95,7 +95,7 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
-                    android:textSize="24sp"
+                    android:textSize="30sp"
                     android:text="@string/dashboard_logged_user"/>
 
                 <androidx.cardview.widget.CardView
