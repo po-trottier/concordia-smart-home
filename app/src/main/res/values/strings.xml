@@ -9,44 +9,51 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="action_about">About</string>
+    <string name="action_logout">Log Out</string>
 
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_map">House Layout</string>
     <string name="menu_logs">Activity Logs</string>
 
-    <string name="toast_allow_write_permissions">Please allow storage permissions to the application and retry saving
-        the layout afterwards.
+    <string name="toast_allow_write_permissions">
+        Please allow storage permissions to the application and retry saving the layout afterwards.
     </string>
-    <string name="toast_allow_read_permissions">Please allow storage permissions to the application and retry loading
-        the layout afterwards.
+    <string name="toast_allow_read_permissions">
+        Please allow storage permissions to the application and retry loading the layout afterwards.
     </string>
-    <string name="toast_write_permissions">Storage permissions to the application were allowed. Please retry saving the
-        layout.
+    <string name="toast_write_permissions">
+        Storage permissions to the application were allowed. Please retry saving the layout.
     </string>
-    <string name="toast_read_permissions">Storage permissions to the application were allowed. Please retry loading the
-        layout.
+    <string name="toast_read_permissions">
+        Storage permissions to the application were allowed. Please retry loading the layout.
     </string>
-    <string name="toast_deleted">The logs file was successfully deleted.</string>
-    <string name="toast_could_not_delete">The logs file could not be deleted from the device\'s storage. Please try
-        again.
+    <string name="toast_deleted">
+        The logs file was successfully deleted.
     </string>
-
-    <string name="snackbar_save_success">The layout was saved successfully. You will now be able to open it.</string>
-    <string name="snackbar_load_success">The layout was opened successfully.</string>
-    <string name="snackbar_save_error">There was an error while saving the layout. Please try again.</string>
-    <string name="snackbar_load_error">There was an error while opening the layout. It might already be opened or
-        unavailable.
+    <string name="toast_could_not_delete">
+        The logs file could not be deleted from the device\'s storage. Please try again.
+    </string>
+    <string name="snackbar_save_success">
+        The layout was saved successfully. You will now be able to open it.
+    </string>
+    <string name="snackbar_load_success">
+        The layout was opened successfully.
+    </string>
+    <string name="snackbar_save_error">
+        There was an error while saving the layout. Please try again.
+    </string>
+    <string name="snackbar_load_error">
+        There was an error while opening the layout. It might already be opened or unavailable.
     </string>
 
     <string name="button_save_layout">Save Layout</string>
     <string name="button_load_layout">Open Layout</string>
     <string name="button_clear_logs">Clear Logs</string>
 
-
     <string name="edit_text_username">Enter username</string>
     <string name="edit_text_password">Enter password</string>
     <string name="button_login">Log in</string>
-    <string name="login_page">Welcome to Smart Home Simulator!</string>
+    <string name="login_page">Welcome to the</string>
 
     <string name="empty_username_password_fields">Please enter a username and password</string>
     <string name="wrong_credentials_message">The credentials entered do not correspond to a known account</string>
@@ -69,11 +76,25 @@
     <string name="edit_error">An error occurred, the account could not be edited</string>
     <string name="edit_success">The user account was edited successfully</string>
 
+    <string name="map_window">Window</string>
+    <string name="map_door">Door</string>
+    <string name="map_light">Light</string>
+    <string name="map_opened">Opened</string>
+    <string name="map_closed">Closed</string>
+    <string name="map_locked">Locked</string>
+    <string name="map_room_outdoors">Outdoors</string>
+    <string name="default_room_name">Room</string>
+    <string name="default_device_name">Device</string>
+    <string name="default_inhabitant_title">Inhabitants</string>
+    <string name="title_rooms">Rooms</string>
+    <string name="title_inhabitants">Inhabitants</string>
+
+    <string name="title_activity_edit_map">Edit House Layout</string>
+
     <string-array name="permissions_spinner">
         <item>Parent</item>
         <item>Child</item>
         <item>Guest</item>
         <item>Stranger</item>
     </string-array>
-
 </resources>
