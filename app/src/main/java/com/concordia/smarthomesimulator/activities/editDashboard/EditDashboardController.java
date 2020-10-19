@@ -58,6 +58,7 @@ public class EditDashboardController extends AppCompatActivity {
 
         setSaveIntent();
         setDeleteUserIntent();
+        setCreateUserIntent();
 
         setupTimezoneSpinner();
         setupPermissionSpinner();
@@ -118,6 +119,8 @@ public class EditDashboardController extends AppCompatActivity {
 
                 sharedPreferencesEditor.apply();
 
+                // todo edit user
+
                 finish();
             }
         });
@@ -136,6 +139,15 @@ public class EditDashboardController extends AppCompatActivity {
                             // TODO: Actually delete the user
                         }})
                     .show();
+            }
+        });
+    }
+
+    private void setCreateUserIntent(){
+        deleteUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // todo create user
             }
         });
     }

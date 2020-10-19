@@ -62,7 +62,12 @@
     <string name="delete_user_button">Delete User</string>
 
     <string name="edit_user_welcome">Modify Existing User</string>
+    <string name="edit_success">The user account was edited successfully</string>
+    <string name="edit_error">An error occurred, the account could not be edited</string>
+    <string name="edit_conflict">The account could not be edited because another user has the same username or password</string>
     <string name="edit_user_welcome_create">Create a New User</string>
+    <string name="create_user_successful">User created successfully!</string>
+    <string name="create_user_failed">Another user with the same username or password already exists.</string>
     <string name="edit_user_select">Select a user</string>
     <string name="edit_text_new_username">Username</string>
     <string name="edit_text_new_password">Password</string>
