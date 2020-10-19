@@ -65,7 +65,7 @@ public class LoginController extends AppCompatActivity {
 
                         // Proceeding to the next activity and logging what happened
                         Intent intent = new Intent(LoginController.this, MainController.class);
-                        ActivityLogHelper.add(context, new LogEntry("Login",String.format("User %s logged in", loggedUser.getUsername()), LogImportance.IMPORTANT));
+                        ActivityLogHelper.add(context, new LogEntry("Login",String.format("User \"%s\" logged in", loggedUser.getUsername()), LogImportance.IMPORTANT));
                         LoginController.this.startActivity(intent);
                         finish();
                     } else {

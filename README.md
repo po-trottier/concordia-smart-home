@@ -5,7 +5,7 @@ This simulator was developed as a requirement for the SOEN343 course given at Co
 #### The Team
 
 - Qandeel Arshad *(40041524)*
-- Luigi Besani Urena *(?)*
+- Luigi Besani Urena *(40030054)*
 - William Morin-Laberge *(40097269)*
 - Ashwin Philip *(40096505)*
 - Pierre-Olivier Trottier *(40059235)*

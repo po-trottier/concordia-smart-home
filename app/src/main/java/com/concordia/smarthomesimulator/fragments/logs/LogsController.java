@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.adapters.ActivityLogsAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 public class LogsController extends Fragment {
 
@@ -26,16 +25,16 @@ public class LogsController extends Fragment {
         logsModel.readLogs(context);
 
         View root = inflater.inflate(R.layout.fragment_logs, container, false);
+        ListView logList = root.findViewById(R.id.activity_logs_list);
+        ActivityLogsAdapter adapter = new ActivityLogsAdapter(context,0,logsModel.getLogs());
+        logList.setAdapter(adapter);
 
-        final TextView logsCount = root.findViewById(R.id.logs_count_text);
-        logsCount.setText(logsModel.getLogs().size() + " log(s) found");
-
-        final Button clearLogs = root.findViewById(R.id.clear_logs_button);
+        final FloatingActionButton clearLogs = root.findViewById(R.id.clear_logs_button);
         clearLogs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logsModel.clearLogs(context);
-                logsCount.setText(logsModel.getLogs().size() + " log(s) found");
+                adapter.notifyDataSetChanged();
             }
         });
 
