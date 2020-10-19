@@ -50,7 +50,6 @@ public class DashboardController extends Fragment {
         final TextView temperature = view.findViewById(R.id.temperature);
         temperature.setText(dashboardModel.getTemperature());
 
-
         final TextView date = view.findViewById(R.id.date);
         date.setText(dashboardModel.getDate());
 
