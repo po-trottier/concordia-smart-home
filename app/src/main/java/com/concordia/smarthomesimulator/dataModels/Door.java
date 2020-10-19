@@ -6,31 +6,30 @@ import com.concordia.smarthomesimulator.R;
 
 public class Door implements IDevice {
 
-    private final Resources res;
     private boolean isOpened = false;
 
     public Door() {
-        res = Resources.getSystem();
+
     }
 
     @Override
-    public Drawable getOpenedIcon() {
-        return res.getDrawable(R.drawable.ic_door_open, null);
+    public int getOpenedIcon() {
+        return R.drawable.ic_door_open;
     }
 
     @Override
-    public Drawable getClosedIcon() {
-        return res.getDrawable(R.drawable.ic_door, null);
+    public int getClosedIcon() {
+        return R.drawable.ic_door;
     }
 
     @Override
     public int getOpenedTint() {
-        return res.getColor(R.color.primary, null);
+        return R.color.primary;
     }
 
     @Override
     public int getClosedTint() {
-        return res.getColor(R.color.accent, null);
+        return R.color.accent;
     }
 
     @Override
@@ -41,5 +40,10 @@ public class Door implements IDevice {
     @Override
     public void setIsOpened(boolean isOpened) {
         this.isOpened = isOpened;
+    }
+
+    @Override
+    public DeviceType getDeviceType() {
+        return DeviceType.DOOR;
     }
 }
