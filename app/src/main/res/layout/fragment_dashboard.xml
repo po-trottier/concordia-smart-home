@@ -18,18 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Switch
-            android:id="@+id/onoff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="10dp"
-            android:checked="true"
-            android:textOff="OFF"
-            android:textOn="ON"
-            android:text="@string/on_off_switch"
-            />
-
         <ImageView
             android:id="@+id/image_dashboard"
             android:layout_width="wrap_content"
@@ -79,7 +67,7 @@
         android:id="@+id/fab_edit_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_edit"
         android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
