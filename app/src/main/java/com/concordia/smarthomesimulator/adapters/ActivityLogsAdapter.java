@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * This code is based off/inspired by a tutorial named "ListView custom adapter"
  * by VoidRealms on Youtube
  * URL : https://www.youtube.com/watch?v=1olQnH9bE2c
- *
+ * <p>
  * ActivityLogAdapter serves as bridge between our data (activity logs) and the ListView within
  * the fragments_logs.xml file. From here the format of the text
  * and the color of the text to be added are determined.
@@ -38,45 +38,48 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
         ctx = context;
     }
 
-    /**
-     * @return number of logs stored
-     */
     @Override
     public int getCount(){
         return items.size();
     }
 
-    /**
-     * This method allows for the inflation of the textView to be inserted
-     * within the fragments_log ListView as an item.
-     * Formatting of the text is also applied here.
-     *
-     * @param position index used for item position
-     * @param convertView
-     * @param parent
-     * @return a list item
-     */
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(ctx);
         View row = inflater.inflate(R.layout.activity_log_list_item, parent, false);
 
-        TextView entryView = (TextView)row.findViewById(R.id.entry);
         LogEntry entry = items.get(position);
-        entryView.setText(entry.getComponent().toString() + ": " + entry.getMessage().toString() + " " + entry.getDateTime().toString() + " " + entry.getImportance().toString());
 
+        TextView componentText = row.findViewById(R.id.log_component_text);
+        componentText.setText(entry.getComponent());
+
+        TextView mainText = row.findViewById(R.id.log_main_text);
+        mainText.setText(entry.getMessage());
+
+        TextView dateTimeText = row.findViewById(R.id.log_date_time_text);
+        dateTimeText.setText(entry.getDateTime().toString());
+
+        TextView importanceText = row.findViewById(R.id.log_importance_text);
+        importanceText.setText(entry.getImportance().toString());
+
+        int textColor;
         switch(entry.getImportance()) {
             case CRITICAL:
-                entryView.setTextColor(Color.RED);
+                textColor = Color.RED;
                 break;
             case IMPORTANT:
-                entryView.setTextColor(Color.rgb(228,123,0));
+                // Orange
+                textColor = Color.rgb(228,123,0);
                 break;
             default:
-                entryView.setTextColor(Color.BLACK);
+                textColor = Color.DKGRAY;
                 break;
         }
+
+        mainText.setTextColor(textColor);
+        importanceText.setTextColor(textColor);
+
         return row;
     }
 }

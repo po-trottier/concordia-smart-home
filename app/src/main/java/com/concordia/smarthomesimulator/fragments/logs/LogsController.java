@@ -19,14 +19,6 @@ public class LogsController extends Fragment {
     private Context context;
     private LogsModel logsModel;
 
-    /**
-     * This method is created containing the activity logs and a button used to clear all logs
-     *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return View containing the activity logs and a button used to clear all logs.
-     */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         logsModel = new ViewModelProvider(this).get(LogsModel.class);
