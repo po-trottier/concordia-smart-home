@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.*;
@@ -9,9 +10,7 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.Userbase;
+import com.concordia.smarthomesimulator.dataModels.*;
 
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class EditDashboardController extends AppCompatActivity {
 
     private Context context;
     private EditDashboardModel editDashboardModel;
+    private SharedPreferences sharedPreferences;
     private Userbase userbase;
     private Spinner permissionsSpinner;
     private Spinner usernameSpinner;
@@ -29,6 +29,7 @@ public class EditDashboardController extends AppCompatActivity {
         setContentView(R.layout.activity_edit_dashboard);
         editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
         context = this;
+        sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         userbase = new Userbase(context);
         setupToolbar();
         setupPermissionSpinner();
@@ -52,9 +53,10 @@ public class EditDashboardController extends AppCompatActivity {
                 String usernameToDelete = usernameSpinner.getSelectedItem().toString();
                 //making sure the user doesn't delete itself
                 if (hasSelectedSelf(usernameToDelete)){
-                    Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
                 } else {
-                    userbase.deleteUserIfPossible(usernameToDelete, context);
+                    userbase.deleteUserFromUsernameIfPossible(usernameToDelete, context);
+                    resetActivity();
                 }
             }
         });
@@ -69,16 +71,33 @@ public class EditDashboardController extends AppCompatActivity {
                 User userToAdd = getUserFromTextFields();
                 if (!userToAdd.getUsername().isEmpty() && !userToAdd.getPassword().isEmpty()) {
                     int feedback = editDashboardModel.addUser(context, userToAdd, userbase);
-                    Toast.makeText(context, feedback, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
+                    resetActivity();
                 } else {
-                    Toast.makeText(context, R.string.create_user_missing_fields, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.create_user_missing_fields, Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
     private void setEditUserIntent(){
+        final Button editUserButton = findViewById(R.id.edit_button);
 
+        editUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final User editedUser = getUserFromTextFields();
+                final String spinnerUsername = usernameSpinner.getSelectedItem().toString();
+
+                if (!editedUser.getUsername().isEmpty() || !editedUser.getPassword().isEmpty()) {
+                    int feedback = editDashboardModel.editUser(editedUser, spinnerUsername, context, userbase);
+                    Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
+                    resetActivity();
+                } else {
+                    Toast.makeText(context, R.string.edit_user_missing_field, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private User getUserFromTextFields(){
@@ -91,13 +110,15 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private boolean hasSelectedSelf(String usernameToDelete){
-        SharedPreferences sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String loggedUsername = sharedPreferences.getString("username", "username not found");
         return loggedUsername.equals(usernameToDelete);
     }
 
     private void resetActivity(){
-
+        //resetting the activity, called when spinners must be updated
+        Intent intent = new Intent(EditDashboardController.this, EditDashboardController.class);
+        EditDashboardController.this.startActivity(intent);
+        finish();
     }
 
     private void setupPermissionSpinner(){

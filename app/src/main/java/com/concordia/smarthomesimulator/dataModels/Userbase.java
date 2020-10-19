@@ -46,7 +46,16 @@ public class Userbase {
         return usernames;
     }
 
-    public boolean deleteUserIfPossible(String usernameToDelete, Context context){
+    public User getUserFromUsername(String username){
+        for (User user: users) {
+            if (user.getUsername().equals(username)){
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public boolean deleteUserFromUsernameIfPossible(String usernameToDelete, Context context){
         for (int i = 0; i < users.size(); i++){
             if (users.get(i).getUsername().equals(usernameToDelete)){
                 users.remove(i);
@@ -58,14 +67,26 @@ public class Userbase {
     }
 
     public boolean addUserIfPossible(User userToAdd, Context context){
-        for (User user: getUsers()) {
-            if (user.isSimilar(userToAdd)){
-                return false;
-            }
+        if (containsSimilarUser(userToAdd)){
+            return false;
         }
         users.add(userToAdd);
         UserbaseHelper.saveUserbase(context,this);
         return true;
+    }
+
+    public boolean containsSimilarUser(User userToCompare){
+        return getNumberOfSimilarUsers(userToCompare) > 0;
+    }
+
+    public int getNumberOfSimilarUsers(User userToCompare){
+        int count = 0;
+        for (User user: getUsers()) {
+            if (user.isSimilar(userToCompare)){
+                count++;
+            }
+        }
+        return count;
     }
 }
 
