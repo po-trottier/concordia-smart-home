@@ -33,6 +33,12 @@ public enum Permissions {
         return bitVal;
     }
 
+    /**
+     * Converts a string representing a permission to a permission
+     *
+     * @param permissionsStr the permissions string
+     * @return the permissions
+     */
     public static Permissions toPermissions(String permissionsStr){
         if (permissionsStr.equalsIgnoreCase("parent")){
             return PARENT;

@@ -7,7 +7,7 @@ public class User {
 
     /**
      * Instantiates a new User.
-     *
+     * <p>
      * Users cannot be modified, new ones must be created and appended to the userbase. So users don't have
      * identical usernames or passwords.
      *
@@ -50,6 +50,12 @@ public class User {
         return permission;
     }
 
+    /**
+     * A user is similar to another if they have the same username or password
+     *
+     * @param user the user
+     * @return the boolean
+     */
     public boolean isSimilar(User user){
         return this.username.equals(user.username) || this.password.equals(user.password);
     }

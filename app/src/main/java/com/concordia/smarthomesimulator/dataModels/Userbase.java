@@ -38,6 +38,11 @@ public class Userbase {
         return users;
     }
 
+    /**
+     * Gets a list of all usernames
+     *
+     * @return the list
+     */
     public List<String> getUsernames(){
         List<String> usernames = new ArrayList<>();
         for (User user: users) {
@@ -46,6 +51,12 @@ public class Userbase {
         return usernames;
     }
 
+    /**
+     * Gets user from username.
+     *
+     * @param username the username
+     * @return the user
+     */
     public User getUserFromUsername(String username){
         for (User user: users) {
             if (user.getUsername().equals(username)){
@@ -55,6 +66,13 @@ public class Userbase {
         return null;
     }
 
+    /**
+     * Deletes a user if present
+     *
+     * @param usernameToDelete the username to delete
+     * @param context          the context
+     * @return the boolean showing if the deletion was successful
+     */
     public boolean deleteUserFromUsernameIfPossible(String usernameToDelete, Context context){
         for (int i = 0; i < users.size(); i++){
             if (users.get(i).getUsername().equals(usernameToDelete)){
@@ -66,6 +84,13 @@ public class Userbase {
         return false;
     }
 
+    /**
+     * Will add a user if no similar users exist in the userbase.
+     *
+     * @param userToAdd the user to add
+     * @param context   the context
+     * @return the boolean showing if the addition was successful
+     */
     public boolean addUserIfPossible(User userToAdd, Context context){
         if (containsSimilarUser(userToAdd)){
             return false;
@@ -75,10 +100,22 @@ public class Userbase {
         return true;
     }
 
+    /**
+     * Checks if the userbase contains a similar user
+     *
+     * @param userToCompare the user to compare
+     * @return the boolean
+     */
     public boolean containsSimilarUser(User userToCompare){
         return getNumberOfSimilarUsers(userToCompare) > 0;
     }
 
+    /**
+     * Gets number of similar users.
+     *
+     * @param userToCompare the user to compare
+     * @return the number of similar users
+     */
     public int getNumberOfSimilarUsers(User userToCompare){
         int count = 0;
         for (User user: getUsers()) {

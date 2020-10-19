@@ -9,7 +9,14 @@ import com.concordia.smarthomesimulator.dataModels.Userbase;
 public class EditDashboardModel extends ViewModel{
 
 
-
+    /**
+     * Adds the user to the userbase if no similar users exists in the userbase.
+     *
+     * @param context   the context
+     * @param userToAdd the user to add
+     * @param userbase  the userbase the user is added to
+     * @return the int code for the feedback message
+     */
     public int addUser(Context context, User userToAdd, Userbase userbase){
         if (userbase.addUserIfPossible(userToAdd, context)){
             return R.string.create_user_successful;
@@ -17,12 +24,21 @@ public class EditDashboardModel extends ViewModel{
         return R.string.create_user_failed;
     }
 
-    public int editUser(User editedUser, String spinnerUsername, Context context, Userbase userbase){
-        final User oldUser = userbase.getUserFromUsername(spinnerUsername);
+    /**
+     * Will edit a user account if the edited account is not similar to another account in the userbase.
+     *
+     * @param editedUser      the edited user
+     * @param oldUser         the old user
+     * @param context         the context
+     * @param userbase        the userbase
+     * @return the int code for the feedback message
+     */
+    public int editUser(User editedUser, User oldUser, Context context, Userbase userbase){
         String newUsername = "newUsername";
         String newPassword = "newPassword";
+
         if (editedUser.getUsername().isEmpty()){
-            newUsername = spinnerUsername;
+            newUsername = oldUser.getUsername();
             newPassword = editedUser.getPassword();
         } else if (editedUser.getPassword().isEmpty()){
             newUsername = editedUser.getUsername();
