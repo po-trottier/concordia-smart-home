@@ -33,15 +33,16 @@ public class EditDashboardModel extends ViewModel{
      * @return the int code for the feedback message
      */
     public int editUser(User editedUser, User oldUser, Context context, Userbase userbase){
-        String newUsername = oldUser.getUsername();
-        String newPassword = oldUser.getPassword();
+        String newUsername = "newUsername";
+        String newPassword = "newPassword";
+
         if (editedUser.getUsername().isEmpty()){
             newUsername = oldUser.getUsername();
             newPassword = editedUser.getPassword();
         } else if (editedUser.getPassword().isEmpty()){
             newUsername = editedUser.getUsername();
             newPassword = oldUser.getPassword();
-        } else if (!editedUser.getUsername().isEmpty() && !editedUser.getPassword().isEmpty()){
+        } else {
             newUsername = editedUser.getUsername();
             newPassword = editedUser.getPassword();
         }

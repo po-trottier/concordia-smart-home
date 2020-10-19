@@ -119,6 +119,13 @@ public class EditDashboardController extends AppCompatActivity {
                 sharedPreferencesEditor.apply();
 
                 finish();
+                if (!editedUser.getUsername().isEmpty() || !editedUser.getPassword().isEmpty()) {
+                    int feedback = editDashboardModel.editUser(editedUser, oldUser, context, userbase);
+                    Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
+                    resetActivity();
+                } else {
+                    Toast.makeText(context, R.string.edit_user_missing_field, Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
