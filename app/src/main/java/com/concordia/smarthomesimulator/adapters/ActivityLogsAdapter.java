@@ -66,14 +66,14 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
         int textColor;
         switch(entry.getImportance()) {
             case CRITICAL:
-                textColor = Color.RED;
+                textColor = getContext().getColor(R.color.danger);;
                 break;
             case IMPORTANT:
                 // Orange
-                textColor = Color.rgb(228,123,0);
+                textColor = getContext().getColor(R.color.accentDark);
                 break;
             default:
-                textColor = Color.DKGRAY;
+                textColor = getContext().getColor(R.color.primary);;
                 break;
         }
 
