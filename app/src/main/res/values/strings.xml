@@ -98,6 +98,9 @@
     <string name="dashboard_context">Simulation Context</string>
     <string name="dashboard_logged_user">Currently Logged In</string>
 
+    <string name="about_name">Name</string>
+    <string name="about_student_id">Student ID</string>
+
     <string-array name="permissions_spinner">
         <item>Parent</item>
         <item>Child</item>
