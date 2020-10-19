@@ -90,13 +90,10 @@ public class EditDashboardController extends AppCompatActivity {
                 final String spinnerUsername = usernameSpinner.getSelectedItem().toString();
                 final User oldUser = userbase.getUserFromUsername(spinnerUsername);
 
-                if (!editedUser.getUsername().isEmpty() || !editedUser.getPassword().isEmpty()) {
-                    int feedback = editDashboardModel.editUser(editedUser, oldUser, context, userbase);
-                    Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
-                    resetActivity();
-                } else {
-                    Toast.makeText(context, R.string.edit_user_missing_field, Toast.LENGTH_LONG).show();
-                }
+                int feedback = editDashboardModel.editUser(editedUser, oldUser, context, userbase);
+                Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
+                resetActivity();
+
             }
         });
     }
