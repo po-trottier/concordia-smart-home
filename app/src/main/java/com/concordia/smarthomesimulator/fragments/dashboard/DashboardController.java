@@ -28,9 +28,9 @@ public class DashboardController extends Fragment {
     private View view;
     private Context context;
     private SharedPreferences sharedPreferences;
-    TextView status;
-    TextView temperature;
-    TextClock clock;
+    private TextView status;
+    private TextView temperature;
+    private TextClock clock;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashboardModel = new ViewModelProvider(this).get(DashboardModel.class);
@@ -82,7 +82,6 @@ public class DashboardController extends Fragment {
         boolean statusValue = sharedPreferences.getBoolean(PREFERENCES_KEY_STATUS, false);
         status.setText(statusValue ? getString(R.string.simulation_status_started) : getString(R.string.simulation_status_stopped));
         status.setTextColor(statusValue ? context.getColor(R.color.primary) : context.getColor(R.color.charcoal));
-
     }
 
     private void setupEditIntent() {
