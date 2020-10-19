@@ -35,8 +35,7 @@ public class EditDashboardController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard);
         editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
-        context = EditDashboardController.this;
-        sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        context = this;
         setupToolbar();
         setupPermissionSpinner();
 
