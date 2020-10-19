@@ -84,6 +84,12 @@
 
     <string name="title_activity_edit_map">Edit House Layout</string>
 
+    <string name="edit_text_temperature">Enter temperature</string>
+    <string name="edit_text_timezone">Enter timezone</string>
+    <string name="edit_context_welcome">Edit Context</string>
+    <string name="edit_button_context">Save</string>
+    <string name="on_off_switch">On/Off</string>
+
     <string-array name="permissions_spinner">
         <item>Parent</item>
         <item>Child</item>

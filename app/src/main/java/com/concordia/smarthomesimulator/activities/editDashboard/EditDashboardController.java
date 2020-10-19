@@ -1,16 +1,23 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
+import com.concordia.smarthomesimulator.fragments.dashboard.DashboardController;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +28,7 @@ public class EditDashboardController extends AppCompatActivity {
     private EditDashboardModel editDashboardModel;
     private Userbase userbase;
     Spinner permissions_spinner;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +36,39 @@ public class EditDashboardController extends AppCompatActivity {
         setContentView(R.layout.activity_edit_dashboard);
         editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
         context = EditDashboardController.this;
+        sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         setupToolbar();
         setupPermissionSpinner();
 
         //simulation context
+        final TextView contextTitle = findViewById(R.id.edit_context_title);
+        final EditText setTemperature = findViewById(R.id.set_temperature);
+        final EditText setTimeZone = findViewById(R.id.set_timezone);
+        final Button saveTemperature = findViewById(R.id.edit_context_button);
+
+        saveTemperature.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String temperature = setTemperature.getText().toString();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Temperature", temperature);
+                editor.apply();
+
+                String timezone = setTimeZone.getText().toString();
+                editor = sharedPreferences.edit();
+                editor.putString("TimeZone", timezone);
+                editor.apply();
+            }
+        });
 
         //users
         setDeleteUserIntent();
         setCreateUserIntent();
 
+    }
+
+    private String getTemperature(EditText setTemperature){
+            return setTemperature.getText().toString();
     }
 
     private void setCreateUserIntent(){

@@ -20,7 +20,6 @@ import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
-
 public class LoginController extends AppCompatActivity {
 
     private Context context;

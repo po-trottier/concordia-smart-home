@@ -2,12 +2,16 @@ package com.concordia.smarthomesimulator.fragments.dashboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.DigitalClock;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,31 +26,26 @@ import com.concordia.smarthomesimulator.dataModels.LogImportance;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.TimeZone;
+
 public class DashboardController extends Fragment {
 
     private DashboardModel dashboardModel;
     private View view;
     private Context context;
+    private SharedPreferences sharedPreferences;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashboardModel = new ViewModelProvider(this).get(DashboardModel.class);
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         context = getActivity();
+        sharedPreferences = getActivity().getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
-        final Switch onOffSwitch = view.findViewById(R.id.onoff);
-        onOffSwitch.setText(dashboardModel.getOnOffSwitch());
-
-        final ImageView usersImage = view.findViewById(R.id.image);
-        usersImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_box_24));
+        final ImageView usersImage = view.findViewById(R.id.image_dashboard);
+        usersImage.setImageDrawable(context.getDrawable(R.drawable.ic_baseline_account_box_24));
 
         final TextView user = view.findViewById(R.id.text_user);
         user.setText(dashboardModel.getUser());
-
-        final TextView location = view.findViewById(R.id.location);
-        location.setText(dashboardModel.getLocation());
-
-        final TextView room = view.findViewById(R.id.room);
-        room.setText(dashboardModel.getRoom());
 
         final TextView temperature = view.findViewById(R.id.temperature);
         temperature.setText(dashboardModel.getTemperature());
@@ -54,10 +53,14 @@ public class DashboardController extends Fragment {
         final TextView date = view.findViewById(R.id.date);
         date.setText(dashboardModel.getDate());
 
-        final TextView time = view.findViewById(R.id.time);
-        time.setText(dashboardModel.getTime());
+        final TextClock clock = view.findViewById(R.id.dashboard_clock);
+        clock.setTimeZone(TimeZone.getTimeZone("America/New_York").toString());
 
-        setupEditIntent();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("TimeZone", clock.getTimeZone());
+        editor.apply();
+
+         setupEditIntent();
 
         return view;
     }

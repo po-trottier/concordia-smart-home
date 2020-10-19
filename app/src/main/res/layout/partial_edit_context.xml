@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/edit_context_title"
+        android:layout_width="243dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:text="@string/edit_context_welcome"/>
+    <EditText
+        android:id="@+id/set_temperature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:hint="@string/edit_text_temperature"/>
+    <EditText
+        android:id="@+id/set_timezone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:hint="@string/edit_text_timezone"/>
+    <Button
+        android:id="@+id/edit_context_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_button_context"/>
+    </LinearLayout>
