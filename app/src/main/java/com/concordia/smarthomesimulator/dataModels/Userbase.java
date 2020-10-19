@@ -101,6 +101,21 @@ public class Userbase {
     }
 
     /**
+     * Checks if the userbase contains this user.
+     *
+     * @param userToCompare the user to compare
+     * @return the boolean
+     */
+    public boolean containsUser(User userToCompare){
+        for (User user: getUsers()) {
+            if (user.equals(userToCompare)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Checks if the userbase contains a similar user
      *
      * @param userToCompare the user to compare

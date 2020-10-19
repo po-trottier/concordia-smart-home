@@ -1,5 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import java.util.Objects;
+
 public class User {
     private final String username;
     private final String password;
@@ -60,4 +62,17 @@ public class User {
         return this.username.equals(user.username) || this.password.equals(user.password);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return username.equals(user.username) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password);
+    }
 }

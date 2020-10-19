@@ -65,6 +65,7 @@
     <string name="edit_text_new_username">Enter new username</string>
     <string name="edit_text_new_password">Enter new password</string>
     <string name="edit_user_missing_field">You must at least enter a username or a password to edit a user</string>
+    <string name="edit_conflict">The account could not be edited because another user has the same username or password</string>
     <string name="edit_error">An error occurred, the account could not be edited</string>
     <string name="edit_success">The user account was edited successfully</string>
 

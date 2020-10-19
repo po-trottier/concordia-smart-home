@@ -1,6 +1,5 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
 import android.content.Context;
-import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.User;
@@ -50,14 +49,14 @@ public class EditDashboardModel extends ViewModel{
         User userToAdd = new User(newUsername, newPassword, editedUser.getPermission());
         // if the new user is not similar to any other use except the one it's replacing, add it and delete
         // the old user
-        if (userbase.getNumberOfSimilarUsers(userToAdd) < 2) {
+        if (userbase.getNumberOfSimilarUsers(userToAdd) < 2 && !userbase.containsUser(userToAdd)) {
             userbase.deleteUserFromUsernameIfPossible(oldUser.getUsername(), context);
             // we don't care about the return of addUser since we know it will be successful as the similar user
             // was deleted
             addUser(context, userToAdd, userbase);
             return R.string.edit_success;
         } else{
-            return R.string.edit_error;
+            return R.string.edit_conflict;
         }
     }
 
