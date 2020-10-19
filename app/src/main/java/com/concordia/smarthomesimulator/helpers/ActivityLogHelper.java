@@ -45,7 +45,7 @@ public final class ActivityLogHelper {
      */
     public static ArrayList<LogEntry> read(Context context) {
         ActivityLogs logs = (ActivityLogs) FileHelper.loadObjectFromFile(context, FILE_NAME, ActivityLogs.class);
-        return logs == null ? null : logs.getAll();
+        return logs == null ? new ArrayList<LogEntry>() : logs.getAll();
     }
 
     /**
