@@ -44,13 +44,12 @@ public class MapInhabitantAdapter  extends ArrayAdapter<Inhabitant> {
 
         TextView inhabitantName = row.findViewById(R.id.adapter_inhabitant_name);
         inhabitantName.setText(inhabitant.getName());
-        TextView inhabitantRoom = row.findViewById(R.id.adapter_inhabitant_room);
 
+        TextView inhabitantRoom = row.findViewById(R.id.adapter_inhabitant_room);
         if (inhabitant.getRoom() == null){
-            inhabitantRoom.setText("Outside");
-        }
-        else {
-        inhabitantRoom.setText(inhabitant.getRoom().getName());
+            inhabitantRoom.setText(context.getString(R.string.map_room_outdoors));
+        } else {
+            inhabitantRoom.setText(inhabitant.getRoom().getName());
         }
 
         return row;
