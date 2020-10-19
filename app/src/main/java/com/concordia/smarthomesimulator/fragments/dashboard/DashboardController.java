@@ -28,6 +28,9 @@ public class DashboardController extends Fragment {
     private View view;
     private Context context;
     private SharedPreferences sharedPreferences;
+    private TextView status;
+    private TextView temperature;
+    private TextClock clock;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashboardModel = new ViewModelProvider(this).get(DashboardModel.class);
@@ -56,24 +59,29 @@ public class DashboardController extends Fragment {
         }
         permissions.setText(permissionValue);
 
-        final TextView status = view.findViewById(R.id.simulation_status);
-        boolean statusValue = sharedPreferences.getBoolean(PREFERENCES_KEY_STATUS, false);
-        status.setText(statusValue ? getString(R.string.simulation_status_started) : getString(R.string.simulation_status_stopped));
-        status.setTextColor(statusValue ? context.getColor(R.color.primary) : context.getColor(R.color.charcoal));
-
-        final TextView temperature = view.findViewById(R.id.simulation_temperature);
-        String tempString = Integer.toString(sharedPreferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE));
-        temperature.setText(tempString + getString(R.string.degrees_celsius));
-
+        status = view.findViewById(R.id.simulation_status);
+        temperature = view.findViewById(R.id.simulation_temperature);
         final TextView date = view.findViewById(R.id.date);
         date.setText(dashboardModel.getDate());
-
-        final TextClock clock = view.findViewById(R.id.dashboard_clock);
-        clock.setTimeZone(sharedPreferences.getString(PREFERENCES_KEY_TIME_ZONE, DEFAULT_TIME_ZONE));
+        clock = view.findViewById(R.id.dashboard_clock);
 
          setupEditIntent();
 
         return view;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        String tempString = Integer.toString(sharedPreferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE));
+        temperature.setText(tempString + getString(R.string.degrees_celsius));
+
+        String timezone = sharedPreferences.getString(PREFERENCES_KEY_TIME_ZONE, DEFAULT_TIME_ZONE);
+        clock.setTimeZone(timezone);
+
+        boolean statusValue = sharedPreferences.getBoolean(PREFERENCES_KEY_STATUS, false);
+        status.setText(statusValue ? getString(R.string.simulation_status_started) : getString(R.string.simulation_status_stopped));
+        status.setTextColor(statusValue ? context.getColor(R.color.primary) : context.getColor(R.color.charcoal));
     }
 
     private void setupEditIntent() {
