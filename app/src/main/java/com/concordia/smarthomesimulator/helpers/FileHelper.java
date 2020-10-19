@@ -1,10 +1,8 @@
 package com.concordia.smarthomesimulator.helpers;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
+import com.concordia.smarthomesimulator.dataModels.Userbase;
 import com.google.gson.Gson;
 
 import java.io.*;
@@ -23,7 +21,7 @@ public final class FileHelper {
      * @return the object
      */
     public static Object loadObjectFromFile(Context context, String fileName, Class className) {
-        if (verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
+        if (PermissionsHelper.verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
             File path = context.getExternalFilesDir(null);
             File file = new File(path, fileName);
             if (file.exists()){
@@ -54,47 +52,20 @@ public final class FileHelper {
      * @param fileName the file name
      * @param object   the object
      */
-    public static boolean saveObjectToFile(Context context, String fileName, Object object) {
+    public static void saveObjectToFile(Context context, String fileName, Object object) {
         // Convert the Object to a JSON Object
         Gson gson = new Gson();
         String jsonObject = gson.toJson(object);
 
         // Make sure we have the right permissions
-        if (verifyPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_PERMISSION_REQUEST_CODE)) {
+        if (PermissionsHelper.verifyPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_PERMISSION_REQUEST_CODE)) {
             File path = context.getExternalFilesDir(null);
             File file = new File(path, fileName);
             try(FileOutputStream stream = new FileOutputStream(file)){
                 stream.write(jsonObject.getBytes());
-                return true;
             } catch (IOException e){
                 e.printStackTrace();
             }
         }
-        return false;
-    }
-
-    public static String loadRawResource(Context context, int fileResource) {
-        StringBuilder total = new StringBuilder();
-        try (InputStream inputStream = context.getResources().openRawResource(fileResource)) {
-            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-            for (String line; (line = r.readLine()) != null; ) {
-                total.append(line).append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return total.toString();
-    }
-
-    private static boolean verifyPermission(Context context, String permission, int requestCode) {
-        if (context.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    (Activity) context,
-                    new String[] { permission },
-                    requestCode
-            );
-            return false;
-        }
-        return true;
     }
 }

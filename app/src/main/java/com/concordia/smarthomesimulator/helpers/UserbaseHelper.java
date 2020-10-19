@@ -50,7 +50,7 @@ public final class UserbaseHelper {
      */
     public static User getUserWithCredentials(String username, String password, Userbase userbase){
         for(User user : userbase.getUsers()){
-            if (user.getPassword().equals(password) && user.getUsername().toLowerCase().equals(username.toLowerCase())){
+            if (user.getPassword().equals(password) && user.getUsername().equals(username)){
                 return user;
             }
         }

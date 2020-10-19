@@ -6,30 +6,31 @@ import com.concordia.smarthomesimulator.R;
 
 public class Light implements IDevice {
 
+    private final Resources res;
     private boolean isOpened = false;
 
     public Light() {
-
+        res = Resources.getSystem();
     }
 
     @Override
-    public int getOpenedIcon() {
-        return R.drawable.ic_lightbulb_on;
+    public Drawable getOpenedIcon() {
+        return res.getDrawable(R.drawable.ic_lightbulb_on, null);
     }
 
     @Override
-    public int getClosedIcon() {
-        return R.drawable.ic_lightbulb_off;
+    public Drawable getClosedIcon() {
+        return res.getDrawable(R.drawable.ic_lightbulb_off, null);
     }
 
     @Override
     public int getOpenedTint() {
-        return R.color.primary;
+        return res.getColor(R.color.primary, null);
     }
 
     @Override
     public int getClosedTint() {
-        return R.color.accent;
+        return res.getColor(R.color.accent, null);
     }
 
     @Override
@@ -40,10 +41,5 @@ public class Light implements IDevice {
     @Override
     public void setIsOpened(boolean isOpened) {
         this.isOpened = isOpened;
-    }
-
-    @Override
-    public DeviceType getDeviceType() {
-        return DeviceType.LIGHT;
     }
 }

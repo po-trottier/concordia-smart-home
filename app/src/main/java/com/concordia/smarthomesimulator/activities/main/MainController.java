@@ -16,7 +16,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.about.AboutController;
-import com.concordia.smarthomesimulator.activities.login.LoginController;
 import com.google.android.material.navigation.NavigationView;
 
 import static com.concordia.smarthomesimulator.Constants.READ_PERMISSION_REQUEST_CODE;
@@ -78,11 +77,6 @@ public class MainController extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_about:
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));
-                return true;
-            case R.id.action_logout:
-                // TODO: ACTUALLY LOGOUT!
-                MainController.this.startActivity(new Intent(MainController.this, LoginController.class));
-                finish();
                 return true;
 
             default:

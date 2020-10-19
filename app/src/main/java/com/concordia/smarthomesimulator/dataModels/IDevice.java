@@ -9,14 +9,14 @@ public interface IDevice {
      *
      * @return the opened icon
      */
-    public int getOpenedIcon();
+    public Drawable getOpenedIcon();
 
     /**
      * Gets closed icon.
      *
      * @return the closed icon
      */
-    public int getClosedIcon();
+    public Drawable getClosedIcon();
 
     /**
      * Gets opened tint.
@@ -45,11 +45,4 @@ public interface IDevice {
      * @param isOpened the is opened
      */
     public void setIsOpened(boolean isOpened);
-
-    /**
-     * Gets device type.
-     *
-     * @return the device type
-     */
-    public DeviceType getDeviceType();
 }
