@@ -1,11 +1,9 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
@@ -46,7 +44,20 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setDeleteUserIntent(){
+        final Button deleteUserButton = findViewById(R.id.delete_button);
 
+        deleteUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String usernameToDelete = usernameSpinner.getSelectedItem().toString();
+                //making sure the user doesn't delete itself
+                if (hasSelectedSelf(usernameToDelete)){
+                    Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_SHORT).show();
+                } else {
+                    userbase.deleteUserIfPossible(usernameToDelete, context);
+                }
+            }
+        });
     }
 
     private void setCreateUserIntent(){
@@ -55,25 +66,38 @@ public class EditDashboardController extends AppCompatActivity {
         createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User userToAdd = getUserFromUI();
-                editDashboardModel.createUser();
+                User userToAdd = getUserFromTextFields();
+                if (!userToAdd.getUsername().isEmpty() && !userToAdd.getPassword().isEmpty()) {
+                    int feedback = editDashboardModel.addUser(context, userToAdd, userbase);
+                    Toast.makeText(context, feedback, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, R.string.create_user_missing_fields, Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
     }
 
     private void setEditUserIntent(){
 
     }
 
-    private User getUserFromUI(){
+    private User getUserFromTextFields(){
         // fetch the username from the UI then all needed information from the userbase
         final EditText usernameField = findViewById(R.id.newUsernameField);
         final EditText passwordField = findViewById(R.id.newPasswordField);
         String permissionsString = permissionsSpinner.getSelectedItem().toString();
         Permissions permissions = Permissions.toPermissions(permissionsString);
         return new User(usernameField.getText().toString(), passwordField.getText().toString(), permissions);
+    }
+
+    private boolean hasSelectedSelf(String usernameToDelete){
+        SharedPreferences sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        String loggedUsername = sharedPreferences.getString("username", "username not found");
+        return loggedUsername.equals(usernameToDelete);
+    }
+
+    private void resetActivity(){
+
     }
 
     private void setupPermissionSpinner(){

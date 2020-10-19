@@ -50,4 +50,8 @@ public class User {
         return permission;
     }
 
+    public boolean isSimilar(User user){
+        return this.username.equals(user.username) || this.password.equals(user.password);
+    }
+
 }

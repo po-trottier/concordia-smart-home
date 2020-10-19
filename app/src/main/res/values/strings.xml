@@ -55,10 +55,13 @@
 
     <string name="edit_user_button">Edit</string>
     <string name="create_user_button">Create</string>
-    <string name="delete_user_button">Delete</string>
+    <string name="create_user_successful">User created successfully!</string>
+    <string name="create_user_missing_fields">You must enter a username and password to create a user</string>
+    <string name="create_user_failed">Another user with the same username or password already exists.</string>
 
-    <string name="edit_text_old_username">Enter old username (to edit/delete)</string>
-    <string name="edit_text_old_password">Enter old password (required for creation)</string>
+    <string name="delete_user_button">Delete</string>
+    <string name="delete_logged_user_warning">You cannot delete your own user account!</string>
+
     <string name="edit_text_new_username">Enter new username</string>
     <string name="edit_text_new_password">Enter new password</string>
 

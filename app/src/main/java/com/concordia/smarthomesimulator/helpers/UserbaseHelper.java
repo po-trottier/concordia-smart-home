@@ -59,6 +59,7 @@ public final class UserbaseHelper {
 
     private static Userbase setupDefaultUserbase(Context context){
         List<User> users = new ArrayList<User>();
+        users.add(new User("p","p",Permissions.PARENT));
         users.add(new User("parent","parent",Permissions.PARENT));
         users.add(new User("child","child", Permissions.CHILD));
         users.add(new User("guest","guest", Permissions.GUEST));
