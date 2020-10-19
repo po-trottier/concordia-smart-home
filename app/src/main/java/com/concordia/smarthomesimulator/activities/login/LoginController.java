@@ -20,6 +20,7 @@ import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
+import static com.concordia.smarthomesimulator.Constants.*;
 
 public class LoginController extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class LoginController extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         setContentView(R.layout.activity_login);
         setLoginIntent();
     }
@@ -57,12 +58,12 @@ public class LoginController extends AppCompatActivity {
                     if (loggedUser != null){
                         //save logged user info to preferences
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("username",loggedUser.getUsername());
-                        editor.putString("password",loggedUser.getPassword());
-                        editor.putInt("permissions", loggedUser.getPermission().getBitVal());
+                        editor.putString(PREFERENCES_KEY_USERNAME, loggedUser.getUsername());
+                        editor.putString(PREFERENCES_KEY_PASSWORD, loggedUser.getPassword());
+                        editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitVal());
                         editor.apply();
 
-                        //proceeding to the next activity and logging what happened
+                        // Proceeding to the next activity and logging what happened
                         Intent intent = new Intent(LoginController.this, MainController.class);
                         ActivityLogHelper.add(context, new LogEntry("Login",String.format("User %s logged in", loggedUser.getUsername()), LogImportance.IMPORTANT));
                         LoginController.this.startActivity(intent);

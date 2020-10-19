@@ -58,16 +58,17 @@
     <string name="empty_username_password_fields">Please enter a username and password</string>
     <string name="wrong_credentials_message">The credentials entered do not correspond to a known account</string>
 
-    <string name="edit_user_welcome">Delete / Create / Edit Users</string>
+    <string name="create_user_button">Create User</string>
+    <string name="delete_user_button">Delete User</string>
 
-    <string name="edit_user_button">Edit</string>
-    <string name="create_user_button">Create</string>
-    <string name="delete_user_button">Delete</string>
-
-    <string name="edit_text_old_username">Enter old username (to edit/delete)</string>
-    <string name="edit_text_old_password">Enter old password (required for creation)</string>
-    <string name="edit_text_new_username">Enter new username</string>
-    <string name="edit_text_new_password">Enter new password</string>
+    <string name="edit_user_welcome">Modify Existing User</string>
+    <string name="edit_user_welcome_create">Create a New User</string>
+    <string name="edit_user_select">Select a user</string>
+    <string name="edit_text_new_username">Username</string>
+    <string name="edit_text_new_password">Password</string>
+    <string name="edit_text_new_permissions">Permissions</string>
+    <string name="edit_text_delete_user_title">Deleting user</string>
+    <string name="edit_text_delete_user">Are you sure you want to delete the selected user?</string>
 
     <string name="map_window">Window</string>
     <string name="map_door">Door</string>
@@ -83,6 +84,19 @@
     <string name="title_inhabitants">Inhabitants</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
+    <string name="title_activity_edit_dashboard">Edit Simulation Context</string>
+
+    <string name="edit_text_simulation_status">Simulation Status</string>
+    <string name="simulation_status_started">Started</string>
+    <string name="simulation_status_stopped">Stopped</string>
+    <string name="edit_text_temperature">Outdoors Temperature</string>
+    <string name="edit_text_timezone">Simulation Time Zone</string>
+    <string name="edit_context_welcome">Context Parameters</string>
+
+    <string name="degrees_celsius">°C</string>
+
+    <string name="dashboard_context">Simulation Context</string>
+    <string name="dashboard_logged_user">Currently Logged In</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>
