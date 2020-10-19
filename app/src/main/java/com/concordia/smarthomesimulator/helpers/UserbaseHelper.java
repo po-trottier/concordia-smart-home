@@ -50,7 +50,7 @@ public final class UserbaseHelper {
      */
     public static User getUserWithCredentials(String username, String password, Userbase userbase){
         for(User user : userbase.getUsers()){
-            if (user.getPassword().equals(password) && user.getUsername().equals(username)){
+            if (user.getPassword().equals(password) && user.getUsername().toLowerCase().equals(username.toLowerCase())){
                 return user;
             }
         }
@@ -58,7 +58,7 @@ public final class UserbaseHelper {
     }
 
     private static Userbase setupDefaultUserbase(Context context){
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         users.add(new User("parent","parent",Permissions.PARENT));
         users.add(new User("child","child", Permissions.CHILD));
         users.add(new User("guest","guest", Permissions.GUEST));

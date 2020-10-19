@@ -45,7 +45,7 @@ public class MapController extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        houseLayout = mapModel.loadDemoHouseLayout();
+        houseLayout = mapModel.loadDemoHouseLayout(context);
 
         setMapDetails();
         setCustomAdapter();
