@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class HouseLayout {
 
-    private final String image;
+    private String image;
     private String name;
     private Geometry geometry;
     private ArrayList<Room> rooms;
@@ -79,6 +79,15 @@ public class HouseLayout {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param image the image encoded in bas64 format
+     */
+    public void setImage(String image) {
+        this.image = image;
     }
 
     /**
