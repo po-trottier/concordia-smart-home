@@ -1,144 +1,204 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.dataModels.User;
+import com.concordia.smarthomesimulator.dataModels.Userbase;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
+
+import static com.concordia.smarthomesimulator.Constants.*;
 
 public class EditDashboardController extends AppCompatActivity {
 
     private Context context;
-    private EditDashboardModel editDashboardModel;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor sharedPreferencesEditor;
+    private EditDashboardModel editDashboardModel;
     private Userbase userbase;
-    private Spinner permissionsSpinner;
+
+    private SwitchCompat statusField;
+    private TextView statusText;
+    private EditText temperatureField;
+    private FloatingActionButton saveContext;
+    private Button deleteUser;
+    private Spinner timezoneSpinner;
+    private Spinner editPermissionsSpinner;
+    private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard);
-        editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
+
         context = this;
-        sharedPreferences = this.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        userbase = new Userbase(context);
+        editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
+        sharedPreferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        sharedPreferencesEditor = sharedPreferences.edit();
+
         setupToolbar();
+
+        findControls();
+
+        setSaveIntent();
+        setDeleteUserIntent();
+
+        setupTimezoneSpinner();
         setupPermissionSpinner();
         setupUsernamesSpinner();
 
-        //simulation context
+        fillKnownValues();
 
-        // --- USERS ---
-        setDeleteUserIntent();
-        setEditUserIntent();
-        setCreateUserIntent();
+        // DO NOT PUT BEFORE "fillKnownValues" !
+        setupStatusSwitch();
+    }
 
+    private void findControls() {
+        statusField = findViewById(R.id.on_off);
+        statusText = findViewById(R.id.on_off_text);
+        temperatureField = findViewById(R.id.set_temperature);
+        saveContext = findViewById(R.id.save_context_button);
+        timezoneSpinner = findViewById(R.id.timezone_spinner);
+        editPermissionsSpinner = findViewById(R.id.edit_permissions_spinner);
+        newPermissionsSpinner = findViewById(R.id.new_permissions_spinner);
+        usernameSpinner = findViewById(R.id.username_spinner);
+        deleteUser = findViewById(R.id.delete_button);
+    }
+
+    private void fillKnownValues() {
+        // Set the simulation status
+        statusField.setChecked(sharedPreferences.getBoolean(PREFERENCES_KEY_STATUS, false));
+
+        // Set the known temperature
+        temperatureField.setText(Integer.toString(sharedPreferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
+
+        // Set the know Time Zone
+        String timeZone = sharedPreferences.getString(PREFERENCES_KEY_TIME_ZONE, "");
+        String[] available = TimeZone.getAvailableIDs();
+        for (int i = 0; i < available.length; i++) {
+            if (available[i].equals(timeZone)) {
+                timezoneSpinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    private void setSaveIntent() {
+        saveContext.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String timezone = timezoneSpinner.getSelectedItem().toString();
+
+                int temperature = DEFAULT_TEMPERATURE;
+                try {
+                    temperature = Integer.parseInt(temperatureField.getText().toString());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+
+                sharedPreferencesEditor.putBoolean(PREFERENCES_KEY_STATUS, statusField.isChecked());
+                sharedPreferencesEditor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
+                sharedPreferencesEditor.putString(PREFERENCES_KEY_TIME_ZONE, timezone);
+
+                sharedPreferencesEditor.apply();
+
+                finish();
+            }
+        });
     }
 
     private void setDeleteUserIntent(){
-        final Button deleteUserButton = findViewById(R.id.delete_button);
-
-        deleteUserButton.setOnClickListener(new View.OnClickListener() {
+        deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                String usernameToDelete = usernameSpinner.getSelectedItem().toString();
-                //making sure the user doesn't delete itself
-                if (hasSelectedSelf(usernameToDelete)){
-                    Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                    .setTitle(getString(R.string.edit_text_delete_user_title))
+                    .setMessage(getString(R.string.edit_text_delete_user))
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // TODO: Actually delete the user
+                        }})
+                    .show();
+            }
+        });
+    }
+
+    private void setupStatusSwitch() {
+        if (statusField.isChecked()) {
+            statusText.setText(getString(R.string.simulation_status_started));
+            statusText.setTextColor(getColor(R.color.primary));
+        } else {
+            statusText.setText(getString(R.string.simulation_status_stopped));
+            statusText.setTextColor(getColor(R.color.charcoal));
+        }
+        statusField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (statusField.isChecked()) {
+                    statusText.setText(getString(R.string.simulation_status_started));
+                    statusText.setTextColor(getColor(R.color.primary));
                 } else {
-                    userbase.deleteUserFromUsernameIfPossible(usernameToDelete, context);
-                    resetActivity();
+                    statusText.setText(getString(R.string.simulation_status_stopped));
+                    statusText.setTextColor(getColor(R.color.charcoal));
                 }
             }
         });
     }
 
-    private void setCreateUserIntent(){
-        final Button createUserButton = findViewById(R.id.create_button);
-
-        createUserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                User userToAdd = getUserFromTextFields();
-                if (!userToAdd.getUsername().isEmpty() && !userToAdd.getPassword().isEmpty()) {
-                    int feedback = editDashboardModel.addUser(context, userToAdd, userbase);
-                    Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
-                    resetActivity();
-                } else {
-                    Toast.makeText(context, R.string.create_user_missing_fields, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
-
-    private void setEditUserIntent(){
-        final Button editUserButton = findViewById(R.id.edit_button);
-
-        editUserButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final User editedUser = getUserFromTextFields();
-                final String spinnerUsername = usernameSpinner.getSelectedItem().toString();
-                final User oldUser = userbase.getUserFromUsername(spinnerUsername);
-
-                int feedback = editDashboardModel.editUser(editedUser, oldUser, context, userbase);
-                Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
-                resetActivity();
-
-            }
-        });
-    }
-
-    private User getUserFromTextFields(){
-        // fetch the username from the UI then all needed information from the userbase
-        final EditText usernameField = findViewById(R.id.newUsernameField);
-        final EditText passwordField = findViewById(R.id.newPasswordField);
-        String permissionsString = permissionsSpinner.getSelectedItem().toString();
-        Permissions permissions = Permissions.toPermissions(permissionsString);
-        return new User(usernameField.getText().toString(), passwordField.getText().toString(), permissions);
-    }
-
-    private boolean hasSelectedSelf(String usernameToDelete){
-        String loggedUsername = sharedPreferences.getString("username", "username not found");
-        return loggedUsername.equals(usernameToDelete);
-    }
-
-    private void resetActivity(){
-        //resetting the activity, called when spinners must be updated
-        Intent intent = new Intent(EditDashboardController.this, EditDashboardController.class);
-        EditDashboardController.this.startActivity(intent);
-        finish();
+    private void setupTimezoneSpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            context,
+            R.layout.support_simple_spinner_dropdown_item,
+            TimeZone.getAvailableIDs()
+        );
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        timezoneSpinner.setAdapter(adapter);
     }
 
     private void setupPermissionSpinner(){
-        permissionsSpinner = (Spinner) findViewById(R.id.permissions_spinner);
-
-        ArrayAdapter<String> permissionsAdapter = new ArrayAdapter<>(context,
-                R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.permissions_spinner));
-        permissionsSpinner.setAdapter(permissionsAdapter);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            context,
+            R.layout.support_simple_spinner_dropdown_item,
+            getResources().getStringArray(R.array.permissions_spinner)
+        );
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        editPermissionsSpinner.setAdapter(adapter);
+        newPermissionsSpinner.setAdapter(adapter);
     }
 
     private void setupUsernamesSpinner(){
-        usernameSpinner = (Spinner) findViewById(R.id.username_spinner);
-        List<String> usernames = userbase.getUsernames();
-
-        ArrayAdapter<String> permissionsAdapter = new ArrayAdapter<>(context,
-                R.layout.support_simple_spinner_dropdown_item, usernames);
-        usernameSpinner.setAdapter(permissionsAdapter);
+        List<User> users = UserbaseHelper.loadUserbase(context).getUsers();
+        List<String> usernames = users.stream().map(User::getUsername).collect(Collectors.toList());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            context,
+            R.layout.support_simple_spinner_dropdown_item,
+            usernames
+        );
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        usernameSpinner.setAdapter(adapter);
     }
 
     private void setupToolbar() {
         // Setup the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_secondary);
+        toolbar.setTitle(getString(R.string.title_activity_edit_dashboard));
         toolbar.setTitleTextColor(getColor(R.color.charcoal));
         setSupportActionBar(toolbar);
 
