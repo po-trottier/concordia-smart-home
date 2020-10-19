@@ -10,4 +10,7 @@ public class Constants {
     public static final String PREFERENCES_KEY_USERNAME = "username";
     public static final String PREFERENCES_KEY_PASSWORD = "password";
     public static final String PREFERENCES_KEY_PERMISSIONS = "permissions";
+
+    public static final int DEFAULT_TEMPERATURE = 20;
+    public static final String DEFAULT_TIME_ZONE = "America/Montreal";
 }

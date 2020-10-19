@@ -69,6 +69,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/rounded_text_field_background"/>
+            <Button
+                android:id="@+id/create_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/create_user_button"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_button_background"
+                android:backgroundTint="@color/primary"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

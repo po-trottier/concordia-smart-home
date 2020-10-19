@@ -26,8 +26,6 @@ import static com.concordia.smarthomesimulator.Constants.*;
 
 public class EditDashboardController extends AppCompatActivity {
 
-    private static final int DEFAULT_TEMPERATURE = 20;
-
     private Context context;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPreferencesEditor;

@@ -86,15 +86,17 @@
     <string name="title_activity_edit_map">Edit House Layout</string>
     <string name="title_activity_edit_dashboard">Edit Simulation Context</string>
 
-    <string name="on_off_switch">On/Off</string>
     <string name="edit_text_simulation_status">Simulation Status</string>
     <string name="simulation_status_started">Started</string>
     <string name="simulation_status_stopped">Stopped</string>
-    <string name="edit_text_temperature">Outside Temperature</string>
+    <string name="edit_text_temperature">Outdoors Temperature</string>
     <string name="edit_text_timezone">Simulation Time Zone</string>
     <string name="edit_context_welcome">Context Parameters</string>
 
     <string name="degrees_celsius">°C</string>
+
+    <string name="dashboard_context">Simulation Context</string>
+    <string name="dashboard_logged_user">Currently Logged In</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>
