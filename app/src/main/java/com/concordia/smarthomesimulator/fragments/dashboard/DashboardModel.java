@@ -14,8 +14,6 @@ public class DashboardModel extends ViewModel {
     public String getDate(){
         return new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(new Date());
     }
-
-
 }
 
 

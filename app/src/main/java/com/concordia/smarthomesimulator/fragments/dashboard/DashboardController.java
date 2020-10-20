@@ -16,7 +16,6 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,8 +27,11 @@ public class DashboardController extends Fragment {
     private View view;
     private Context context;
     private SharedPreferences sharedPreferences;
+    private TextView date;
     private TextView status;
     private TextView temperature;
+    private TextView user;
+    private TextView permissions;
     private TextClock clock;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,10 +40,32 @@ public class DashboardController extends Fragment {
         context = getActivity();
         sharedPreferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
-        final TextView user = view.findViewById(R.id.text_user_username);
-        user.setText(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""));
+        findControls();
 
-        final TextView permissions = view.findViewById(R.id.text_user_permissions);
+        setKnownValues();
+
+        setupEditIntent();
+
+        return view;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        setKnownValues();
+    }
+
+    private void findControls() {
+        status = view.findViewById(R.id.simulation_status);
+        temperature = view.findViewById(R.id.simulation_temperature);
+        date = view.findViewById(R.id.date);
+        clock = view.findViewById(R.id.dashboard_clock);
+        user = view.findViewById(R.id.text_user_username);
+        permissions = view.findViewById(R.id.text_user_permissions);
+    }
+
+    private void setKnownValues() {
+        // Set the Permissions
         String permissionValue;
         switch (sharedPreferences.getInt(PREFERENCES_KEY_PERMISSIONS, 1)) {
             case 15:
@@ -59,26 +83,20 @@ public class DashboardController extends Fragment {
         }
         permissions.setText(permissionValue);
 
-        status = view.findViewById(R.id.simulation_status);
-        temperature = view.findViewById(R.id.simulation_temperature);
-        final TextView date = view.findViewById(R.id.date);
+        // Set the Username
+        user.setText(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""));
+
+        // Set the Date
         date.setText(dashboardModel.getDate());
-        clock = view.findViewById(R.id.dashboard_clock);
 
-         setupEditIntent();
+        // Set the Time Zone
+        clock.setTimeZone(sharedPreferences.getString(PREFERENCES_KEY_TIME_ZONE, DEFAULT_TIME_ZONE));
 
-        return view;
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
+        // Set the Temperature
         String tempString = Integer.toString(sharedPreferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE));
         temperature.setText(tempString + getString(R.string.degrees_celsius));
 
-        String timezone = sharedPreferences.getString(PREFERENCES_KEY_TIME_ZONE, DEFAULT_TIME_ZONE);
-        clock.setTimeZone(timezone);
-
+        // Set the Simulation Status
         boolean statusValue = sharedPreferences.getBoolean(PREFERENCES_KEY_STATUS, false);
         status.setText(statusValue ? getString(R.string.simulation_status_started) : getString(R.string.simulation_status_stopped));
         status.setTextColor(statusValue ? context.getColor(R.color.primary) : context.getColor(R.color.charcoal));

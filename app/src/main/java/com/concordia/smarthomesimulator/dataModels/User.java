@@ -65,6 +65,8 @@ public class User {
         if (o == null || getClass() != o.getClass())
             return false;
         User user = (User) o;
-        return username.equalsIgnoreCase(user.username) && password.equals(user.password);
+        return username.equalsIgnoreCase(user.username)
+                && password.equals(user.password)
+                && permission.equals(user.permission);
     }
 }
