@@ -52,11 +52,13 @@ public class EditDashboardController extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard);
-        context = this;
-        userbase = new Userbase(context);
         editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
+        context = this;
+
         sharedPreferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         sharedPreferencesEditor = sharedPreferences.edit();
+
+        userbase = new Userbase(context);
 
         setupToolbar();
 
@@ -115,6 +117,17 @@ public class EditDashboardController extends AppCompatActivity {
         saveContext.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                // Edit user in the Userbase
+                User newUser = new User(
+                        editedUsername.getText().toString(),
+                        editedPassword.getText().toString(),
+                        Permissions.toPermissions(editPermissionsSpinner.getSelectedItem().toString())
+                );
+                User oldUser = userbase.getUserFromUsername(usernameSpinner.getSelectedItem().toString());
+                int feedbackResource = editDashboardModel.editUser(context, userbase, newUser, oldUser);
+                Toast.makeText(context, feedbackResource, Toast.LENGTH_LONG).show();
+
+                // Edit Simulation Context
                 String timezone = timezoneSpinner.getSelectedItem().toString();
 
                 int temperature = DEFAULT_TEMPERATURE;
@@ -124,21 +137,19 @@ public class EditDashboardController extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                // Set the Shared Preferences
                 sharedPreferencesEditor.putBoolean(PREFERENCES_KEY_STATUS, statusField.isChecked());
                 sharedPreferencesEditor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
                 sharedPreferencesEditor.putString(PREFERENCES_KEY_TIME_ZONE, timezone);
-
+                // If the edited user is the current user modify it
+                if (sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "").equalsIgnoreCase(newUser.getUsername())) {
+                    sharedPreferencesEditor.putString(PREFERENCES_KEY_USERNAME, newUser.getUsername());
+                    sharedPreferencesEditor.putString(PREFERENCES_KEY_PASSWORD, newUser.getPassword());
+                    sharedPreferencesEditor.putInt(PREFERENCES_KEY_PERMISSIONS, newUser.getPermission().getBitValue());
+                }
                 sharedPreferencesEditor.apply();
 
-                User editedUser = new User(
-                        editedUsername.getText().toString(),
-                        editedPassword.getText().toString(),
-                        Permissions.toPermissions(editPermissionsSpinner.getSelectedItem().toString())
-                );
-                User oldUser = userbase.getUserFromUsername(usernameSpinner.getSelectedItem().toString());
-                int feedback = editDashboardModel.editUser(editedUser, oldUser, context, userbase);
-                Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
-
+                // Close the activity
                 finish();
             }
         });
@@ -158,13 +169,18 @@ public class EditDashboardController extends AppCompatActivity {
                             if (hasSelectedSelf(usernameToDelete)){
                                 Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
                             } else {
-                                editDashboardModel.deleteUser(context, usernameToDelete,userbase);
+                                editDashboardModel.deleteUser(context, userbase, usernameToDelete);
                                 Toast.makeText(context, R.string.delete_logged_user_success, Toast.LENGTH_LONG).show();
                             }
                         }})
                     .show();
             }
         });
+    }
+
+    private boolean hasSelectedSelf(String usernameToDelete){
+        String loggedUsername = sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "");
+        return loggedUsername.equalsIgnoreCase(usernameToDelete);
     }
 
     private void setCreateUserIntent(){
@@ -174,7 +190,7 @@ public class EditDashboardController extends AppCompatActivity {
                 String newUsername = newUsernameField.getText().toString();
                 String newPassword = newPasswordField.getText().toString();
                 Permissions newPermissions = Permissions.toPermissions(newPermissionsSpinner.getSelectedItem().toString());
-                int feedback = editDashboardModel.addUser(context, new User(newUsername, newPassword, newPermissions), userbase);
+                int feedback = editDashboardModel.addUser(context, userbase, new User(newUsername, newPassword, newPermissions));
                 Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
             }
         });
@@ -224,20 +240,14 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupUsernamesSpinner(){
-        List<User> users = UserbaseHelper.loadUserbase(context).getUsers();
-        List<String> usernames = users.stream().map(User::getUsername).collect(Collectors.toList());
+        List<String> users = UserbaseHelper.loadUserbase(context).getUsernames();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
             context,
             R.layout.support_simple_spinner_dropdown_item,
-            usernames
+            users
         );
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         usernameSpinner.setAdapter(adapter);
-    }
-
-    private boolean hasSelectedSelf(String usernameToDelete){
-        String loggedUsername = sharedPreferences.getString("username", "username not found");
-        return loggedUsername.equals(usernameToDelete);
     }
 
     private void setupToolbar() {

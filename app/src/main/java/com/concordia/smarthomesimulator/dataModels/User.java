@@ -1,7 +1,5 @@
 package com.concordia.smarthomesimulator.dataModels;
 
-import java.util.Objects;
-
 public class User {
     private final String username;
     private final String password;
@@ -32,7 +30,6 @@ public class User {
         return username;
     }
 
-
     /**
      * Gets password.
      *
@@ -41,7 +38,6 @@ public class User {
     public String getPassword() {
         return password;
     }
-
 
     /**
      * Gets permission.
@@ -53,26 +49,22 @@ public class User {
     }
 
     /**
-     * A user is similar to another if they have the same username or password
+     * A user is similar to another if they have the same username
      *
      * @param user the user
      * @return the boolean
      */
-    public boolean isSimilar(User user){
-        return this.username.equals(user.username) || this.password.equals(user.password);
+    public boolean isSimilar(User user) {
+        return this.username.equalsIgnoreCase(user.username);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         User user = (User) o;
-        return username.equals(user.username) &&
-                password.equals(user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, password);
+        return username.equalsIgnoreCase(user.username) && password.equals(user.password);
     }
 }

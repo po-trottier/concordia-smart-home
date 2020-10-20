@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Userbase {
 
@@ -44,11 +44,7 @@ public class Userbase {
      * @return the list
      */
     public List<String> getUsernames(){
-        List<String> usernames = new ArrayList<>();
-        for (User user: users) {
-            usernames.add(user.getUsername());
-        }
-        return usernames;
+        return users.stream().map(User::getUsername).collect(Collectors.toList());
     }
 
     /**
@@ -59,7 +55,7 @@ public class Userbase {
      */
     public User getUserFromUsername(String username){
         for (User user: users) {
-            if (user.getUsername().equals(username)){
+            if (user.getUsername().equalsIgnoreCase(username)){
                 return user;
             }
         }
@@ -69,30 +65,28 @@ public class Userbase {
     /**
      * Deletes a user if present
      *
-     * @param usernameToDelete the username to delete
      * @param context          the context
-     * @return the boolean showing if the deletion was successful
+     * @param usernameToDelete the username to delete
      */
-    public boolean deleteUserFromUsernameIfPossible(String usernameToDelete, Context context){
+    public void deleteUserFromUsernameIfPossible(Context context, String usernameToDelete){
         for (int i = 0; i < users.size(); i++){
-            if (users.get(i).getUsername().equals(usernameToDelete)){
+            if (users.get(i).getUsername().equalsIgnoreCase(usernameToDelete)){
                 users.remove(i);
                 UserbaseHelper.saveUserbase(context, this);
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     /**
      * Will add a user if no similar users exist in the userbase.
      *
-     * @param userToAdd the user to add
      * @param context   the context
+     * @param userToAdd the user to add
      * @return the boolean showing if the addition was successful
      */
-    public boolean addUserIfPossible(User userToAdd, Context context){
-        if (containsSimilarUser(userToAdd)){
+    public boolean addUserIfPossible(Context context, User userToAdd){
+        if (getNumberOfSimilarUsers(userToAdd) > 0){
             return false;
         }
         users.add(userToAdd);
@@ -116,16 +110,6 @@ public class Userbase {
     }
 
     /**
-     * Checks if the userbase contains a similar user
-     *
-     * @param userToCompare the user to compare
-     * @return the boolean
-     */
-    public boolean containsSimilarUser(User userToCompare){
-        return getNumberOfSimilarUsers(userToCompare) > 0;
-    }
-
-    /**
      * Gets number of similar users.
      *
      * @param userToCompare the user to compare
@@ -133,7 +117,7 @@ public class Userbase {
      */
     public int getNumberOfSimilarUsers(User userToCompare){
         int count = 0;
-        for (User user: getUsers()) {
+        for (User user : getUsers()) {
             if (user.isSimilar(userToCompare)){
                 count++;
             }
