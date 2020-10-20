@@ -30,4 +30,4 @@ The following documentation will graphically describe the general organisation o
 
 #### Log Helper Class Diagram
 
-![Log Model Class Diagram](./documentation/class-log-model.png "Log Model Class Diagram")
+![Log Model Class Diagram](./documentation/class-log-model.PNG "Log Model Class Diagram")
