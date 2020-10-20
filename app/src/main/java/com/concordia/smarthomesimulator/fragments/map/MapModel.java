@@ -114,19 +114,20 @@ public class MapModel extends ViewModel {
 
     public boolean encodeAndSaveImage(Context context, Uri data) {
         try {
+            // Get the Bitmap for the selected Image
             final InputStream stream = context.getContentResolver().openInputStream(data);
             final Bitmap bitmap = BitmapFactory.decodeStream(stream);
-
+            // Build a Byte Array with the Bitmap
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG ,100, output);
             byte[] bytes = output.toByteArray();
-
+            // Encode the Byte Array to a Base64 string
             String image = Base64.encodeToString(bytes, Base64.DEFAULT);
-
+            // Save the new House Layout
             HouseLayout layout = loadHouseLayout(context);
             layout.setImage(image);
             saveHouseLayout(context, layout);
-
+            // Success
             return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

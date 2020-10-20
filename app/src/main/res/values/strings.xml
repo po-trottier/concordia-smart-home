@@ -105,6 +105,9 @@
     <string name="dashboard_context">Simulation Context</string>
     <string name="dashboard_logged_user">Currently Logged In</string>
 
+    <string name="edit_layout_upload_success">The image was saved successfully.</string>
+    <string name="edit_layout_upload_error">An error occurred while saving the image. Please try again later.</string>
+
     <string name="about_name">Name</string>
     <string name="about_student_id">Student ID</string>
 
