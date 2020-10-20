@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
 import android.content.Context;
+import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.User;
@@ -21,6 +22,10 @@ public class EditDashboardModel extends ViewModel{
             return R.string.create_user_successful;
         }
         return R.string.create_user_failed;
+    }
+
+    public void deleteUser(Context context, String usernameToDelete, Userbase userbase){
+        userbase.deleteUserFromUsernameIfPossible(usernameToDelete, context);
     }
 
     /**

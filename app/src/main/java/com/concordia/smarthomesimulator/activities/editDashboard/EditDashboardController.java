@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.Permissions;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
@@ -39,6 +40,8 @@ public class EditDashboardController extends AppCompatActivity {
     private Button deleteUser;
     private Spinner timezoneSpinner;
     private Spinner editPermissionsSpinner;
+    private EditText newUsernameField;
+    private EditText newPasswordField;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
 
@@ -80,6 +83,8 @@ public class EditDashboardController extends AppCompatActivity {
         newPermissionsSpinner = findViewById(R.id.new_permissions_spinner);
         usernameSpinner = findViewById(R.id.username_spinner);
         deleteUser = findViewById(R.id.delete_button);
+        newUsernameField = findViewById(R.id.new_username_field);
+        newPasswordField = findViewById(R.id.new_password_field);
     }
 
     private void fillKnownValues() {
@@ -136,7 +141,12 @@ public class EditDashboardController extends AppCompatActivity {
                     .setNegativeButton(android.R.string.no, null)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            // TODO: Actually delete the user
+                            final String usernameToDelete = usernameSpinner.getSelectedItem().toString();
+                            if (hasSelectedSelf(usernameToDelete)){
+                                Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
+                            } else {
+                                editDashboardModel.deleteUser(context, usernameToDelete,userbase);
+                            }
                         }})
                     .show();
             }
@@ -147,7 +157,11 @@ public class EditDashboardController extends AppCompatActivity {
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo create user
+                String newUsername = newUsernameField.getText().toString();
+                String newPassword = newPasswordField.getText().toString();
+                Permissions newPermissions = Permissions.toPermissions(newPermissionsSpinner.getSelectedItem().toString());
+                int feedback = editDashboardModel.addUser(context, new User(newUsername, newPassword, newPermissions), userbase);
+                Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -205,6 +219,11 @@ public class EditDashboardController extends AppCompatActivity {
         );
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         usernameSpinner.setAdapter(adapter);
+    }
+
+    private boolean hasSelectedSelf(String usernameToDelete){
+        String loggedUsername = sharedPreferences.getString("username", "username not found");
+        return loggedUsername.equals(usernameToDelete);
     }
 
     private void setupToolbar() {
