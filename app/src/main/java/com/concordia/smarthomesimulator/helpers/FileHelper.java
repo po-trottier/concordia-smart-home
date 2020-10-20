@@ -73,6 +73,13 @@ public final class FileHelper {
         return false;
     }
 
+    /**
+     * Load raw resource files.
+     *
+     * @param context      the context
+     * @param fileResource the file resource
+     * @return the file content
+     */
     public static String loadRawResource(Context context, int fileResource) {
         StringBuilder total = new StringBuilder();
         try (InputStream inputStream = context.getResources().openRawResource(fileResource)) {
@@ -89,9 +96,9 @@ public final class FileHelper {
     private static boolean verifyPermission(Context context, String permission, int requestCode) {
         if (context.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    (Activity) context,
-                    new String[] { permission },
-                    requestCode
+                (Activity) context,
+                new String[] { permission },
+                requestCode
             );
             return false;
         }

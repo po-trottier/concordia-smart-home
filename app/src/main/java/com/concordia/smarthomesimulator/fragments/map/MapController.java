@@ -6,30 +6,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
-import com.concordia.smarthomesimulator.activities.login.LoginController;
-import com.concordia.smarthomesimulator.activities.main.MainController;
 import com.concordia.smarthomesimulator.adapters.MapInhabitantAdapter;
 import com.concordia.smarthomesimulator.adapters.MapRoomAdapter;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.Inhabitant;
 import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.helpers.FileHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -46,13 +40,28 @@ public class MapController extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        loadLayout();
-        setMapDetails();
-        setCustomAdapter();
-        setCustomAdapterInhabitants();
         setEditIntent();
 
         return view;
+    }
+
+    @Override
+    public void onResume(){
+        loadProperLayout();
+        
+        setMapDetails();
+        setCustomRoomAdapter();
+        setCustomInhabitantsAdapter();
+
+        super.onResume();
+    }
+
+    private void loadProperLayout(){
+        houseLayout = mapModel.loadHouseLayout(context);
+        if (houseLayout == null){
+            houseLayout = mapModel.loadDemoHouseLayout(context);
+            mapModel.saveHouseLayout(context, houseLayout);
+        }
     }
 
     private void setMapDetails() {
@@ -62,7 +71,7 @@ public class MapController extends Fragment {
         layoutImage.setImageBitmap(decodedImage);
     }
 
-    private void setCustomAdapter() {
+    private void setCustomRoomAdapter() {
         ArrayList<Room> rooms = houseLayout.getRooms();
         MapRoomAdapter adapter = new MapRoomAdapter(context, 0, rooms);
 
@@ -70,7 +79,7 @@ public class MapController extends Fragment {
         roomList.setAdapter(adapter);
     }
 
-    private void setCustomAdapterInhabitants() {
+    private void setCustomInhabitantsAdapter() {
         ArrayList<Inhabitant> inhabitants = houseLayout.getInhabitants();
         MapInhabitantAdapter adapterInhabitant = new MapInhabitantAdapter(context, 0, inhabitants);
 
@@ -88,19 +97,5 @@ public class MapController extends Fragment {
 
             }
         });
-    }
-
-    @Override
-    public void onResume(){
-        loadLayout();
-        setMapDetails();
-        super.onResume();
-    }
-
-    private void loadLayout(){
-        houseLayout = mapModel.loadHouseLayout(context);
-        if (houseLayout == null){
-            houseLayout = mapModel.loadDemoHouseLayout(context);
-        }
     }
 }

@@ -45,8 +45,6 @@ public class EditMapController extends AppCompatActivity {
 
         setupToolbar();
         setPhotoPickerIntent(this);
-
-        ImageView image = findViewById(R.id.image);
     }
 
     private void setupToolbar() {
@@ -80,33 +78,18 @@ public class EditMapController extends AppCompatActivity {
         });
     }
 
-
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
-        switch (resultCode) {
+        switch (reqCode) {
             case RECEIVE_IMAGE_REQUEST_CODE:
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                selectedImage.compress(Bitmap.CompressFormat.JPEG ,100, baos);
-                byte[] imageBytes = baos.toByteArray();
-                String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-                HouseLayout layout = mapModel.loadHouseLayout(this);
-                layout.setImage(imageString);
-                mapModel.saveHouseLayout(context, layout);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-            break;
-
-            default: super.onActivityResult(reqCode, resultCode, data);
-
+                if (mapModel.encodeAndSaveImage(context, data.getData()))
+                    Toast.makeText(context, "Image saved successfully", Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(context, "Could not save image", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                super.onActivityResult(reqCode, resultCode, data);
+                break;
         }
     }
-
 }
