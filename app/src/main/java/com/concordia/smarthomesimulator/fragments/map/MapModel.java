@@ -12,7 +12,6 @@ import java.util.Arrays;
 public class MapModel extends ViewModel {
 
     private final static String FILE_NAME = "layout.json";
-    private final static String LAYOUT_IMAGE = "demo_layout.txt";
 
     /**
      * Instantiates a new Map model.
