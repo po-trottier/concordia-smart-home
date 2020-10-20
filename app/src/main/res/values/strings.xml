@@ -55,20 +55,27 @@
     <string name="button_login">Log in</string>
     <string name="login_page">Welcome to the</string>
 
-    <string name="empty_username_password_fields">Please enter a username and password</string>
-    <string name="wrong_credentials_message">The credentials entered do not correspond to a known account</string>
+    <string name="empty_username_password_fields">Please enter a username and password.</string>
+    <string name="wrong_credentials_message">The credentials entered do not correspond to a known account.</string>
 
     <string name="create_user_button">Create User</string>
     <string name="delete_user_button">Delete User</string>
 
     <string name="edit_user_welcome">Modify Existing User</string>
+    <string name="edit_success">The user account was edited successfully.</string>
+    <string name="edit_error">An error occurred, the account could not be edited.</string>
+    <string name="edit_conflict">The account could not be edited because another user has the same username.</string>
     <string name="edit_user_welcome_create">Create a New User</string>
+    <string name="create_user_successful">User was created successfully!</string>
+    <string name="create_user_failed">Another user with the same username already exists.</string>
     <string name="edit_user_select">Select a user</string>
     <string name="edit_text_new_username">Username</string>
     <string name="edit_text_new_password">Password</string>
     <string name="edit_text_new_permissions">Permissions</string>
     <string name="edit_text_delete_user_title">Deleting user</string>
     <string name="edit_text_delete_user">Are you sure you want to delete the selected user?</string>
+    <string name="delete_logged_user_warning">You cannot delete your own account.</string>
+    <string name="delete_logged_user_success">The user has been deleted.</string>
 
     <string name="map_window">Window</string>
     <string name="map_door">Door</string>

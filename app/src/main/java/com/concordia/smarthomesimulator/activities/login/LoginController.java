@@ -60,7 +60,7 @@ public class LoginController extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(PREFERENCES_KEY_USERNAME, loggedUser.getUsername());
                         editor.putString(PREFERENCES_KEY_PASSWORD, loggedUser.getPassword());
-                        editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitVal());
+                        editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitValue());
                         editor.apply();
 
                         // Proceeding to the next activity and logging what happened

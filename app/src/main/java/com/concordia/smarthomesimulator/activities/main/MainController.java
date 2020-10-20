@@ -96,13 +96,13 @@ public class MainController extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case WRITE_PERMISSION_REQUEST_CODE:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                if (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED)
                     Toast.makeText(this, R.string.toast_allow_write_permissions, Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(this, R.string.toast_write_permissions, Toast.LENGTH_LONG).show();
                 break;
             case READ_PERMISSION_REQUEST_CODE:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                if (grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED)
                     Toast.makeText(this, R.string.toast_allow_read_permissions, Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(this, R.string.toast_read_permissions, Toast.LENGTH_LONG).show();
