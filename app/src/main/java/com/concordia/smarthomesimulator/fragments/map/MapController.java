@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,7 @@ public class MapController extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        houseLayout = mapModel.loadDemoHouseLayout(context);
-
+        loadLayout();
         setMapDetails();
         setCustomAdapter();
         setCustomAdapterInhabitants();
@@ -85,7 +85,22 @@ public class MapController extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditMapController.class);
                 context.startActivity(intent);
+
             }
         });
+    }
+
+    @Override
+    public void onResume(){
+        loadLayout();
+        setMapDetails();
+        super.onResume();
+    }
+
+    private void loadLayout(){
+        houseLayout = mapModel.loadHouseLayout(context);
+        if (houseLayout == null){
+            houseLayout = mapModel.loadDemoHouseLayout(context);
+        }
     }
 }
