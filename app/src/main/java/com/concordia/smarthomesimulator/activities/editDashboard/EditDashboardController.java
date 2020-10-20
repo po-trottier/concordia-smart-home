@@ -40,6 +40,9 @@ public class EditDashboardController extends AppCompatActivity {
     private Button deleteUser;
     private Spinner timezoneSpinner;
     private Spinner editPermissionsSpinner;
+    private EditText editedUsername;
+    private EditText editedPassword;
+    private Button createUserButton;
     private EditText newUsernameField;
     private EditText newPasswordField;
     private Spinner newPermissionsSpinner;
@@ -49,8 +52,8 @@ public class EditDashboardController extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard);
-
         context = this;
+        userbase = new Userbase(context);
         editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
         sharedPreferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         sharedPreferencesEditor = sharedPreferences.edit();
@@ -80,9 +83,12 @@ public class EditDashboardController extends AppCompatActivity {
         saveContext = findViewById(R.id.save_context_button);
         timezoneSpinner = findViewById(R.id.timezone_spinner);
         editPermissionsSpinner = findViewById(R.id.edit_permissions_spinner);
+        editedUsername = findViewById(R.id.edit_username_field);
+        editedPassword = findViewById(R.id.edit_password_field);
         newPermissionsSpinner = findViewById(R.id.new_permissions_spinner);
         usernameSpinner = findViewById(R.id.username_spinner);
         deleteUser = findViewById(R.id.delete_button);
+        createUserButton = findViewById(R.id.create_button);
         newUsernameField = findViewById(R.id.new_username_field);
         newPasswordField = findViewById(R.id.new_password_field);
     }
@@ -124,7 +130,14 @@ public class EditDashboardController extends AppCompatActivity {
 
                 sharedPreferencesEditor.apply();
 
-                // todo edit user
+                User editedUser = new User(
+                        editedUsername.getText().toString(),
+                        editedPassword.getText().toString(),
+                        Permissions.toPermissions(editPermissionsSpinner.getSelectedItem().toString())
+                );
+                User oldUser = userbase.getUserFromUsername(usernameSpinner.getSelectedItem().toString());
+                int feedback = editDashboardModel.editUser(editedUser, oldUser, context, userbase);
+                Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
 
                 finish();
             }
@@ -146,6 +159,7 @@ public class EditDashboardController extends AppCompatActivity {
                                 Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
                             } else {
                                 editDashboardModel.deleteUser(context, usernameToDelete,userbase);
+                                Toast.makeText(context, R.string.delete_logged_user_success, Toast.LENGTH_LONG).show();
                             }
                         }})
                     .show();
@@ -154,7 +168,7 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setCreateUserIntent(){
-        deleteUser.setOnClickListener(new View.OnClickListener() {
+        createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newUsername = newUsernameField.getText().toString();

@@ -75,6 +75,7 @@
     <string name="edit_text_delete_user_title">Deleting user</string>
     <string name="edit_text_delete_user">Are you sure you want to delete the selected user?</string>
     <string name="delete_logged_user_warning">Are you sure you want to delete the selected user?</string>
+    <string name="delete_logged_user_success">The user has been deleted</string>
 
     <string name="map_window">Window</string>
     <string name="map_door">Door</string>
