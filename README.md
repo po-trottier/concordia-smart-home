@@ -27,3 +27,7 @@ The following documentation will graphically describe the general organisation o
 #### Layout Helper Class Diagram
 
 ![Map Model Class Diagram](./documentation/class-map-model.png "Map Model Class Diagram")
+
+#### Log Helper Class Diagram
+
+![Log Model Class Diagram](./documentation/class-log-model.png "Log Model Class Diagram")
