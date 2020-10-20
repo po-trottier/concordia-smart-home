@@ -1,18 +1,24 @@
 package com.concordia.smarthomesimulator.fragments.map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Base64;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.FileHelper;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MapModel extends ViewModel {
 
     private final static String FILE_NAME = "layout.json";
-    private final static String LAYOUT_IMAGE = "demo_layout.txt";
 
     /**
      * Instantiates a new Map model.
@@ -104,5 +110,28 @@ public class MapModel extends ViewModel {
         layout.addInhabitant(person3);
 
         return layout;
+    }
+
+    public boolean encodeAndSaveImage(Context context, Uri data) {
+        try {
+            // Get the Bitmap for the selected Image
+            final InputStream stream = context.getContentResolver().openInputStream(data);
+            final Bitmap bitmap = BitmapFactory.decodeStream(stream);
+            // Build a Byte Array with the Bitmap
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG ,100, output);
+            byte[] bytes = output.toByteArray();
+            // Encode the Byte Array to a Base64 string
+            String image = Base64.encodeToString(bytes, Base64.DEFAULT);
+            // Save the new House Layout
+            HouseLayout layout = loadHouseLayout(context);
+            layout.setImage(image);
+            saveHouseLayout(context, layout);
+            // Success
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
