@@ -13,9 +13,8 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.Userbase;
+import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -127,7 +126,9 @@ public class EditDashboardController extends AppCompatActivity {
                 User oldUser = userbase.getUserFromUsername(usernameSpinner.getSelectedItem().toString());
                 if (!newUser.equals(oldUser)) {
                     int feedbackResource = editDashboardModel.editUser(context, userbase, newUser, oldUser);
-                    Toast.makeText(context, feedbackResource, Toast.LENGTH_LONG).show();
+                    String message = getString(feedbackResource);
+                    ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 }
 
                 // Edit Simulation Context
@@ -152,6 +153,8 @@ public class EditDashboardController extends AppCompatActivity {
                 }
                 sharedPreferencesEditor.apply();
 
+                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
+
                 // Close the activity
                 finish();
             }
@@ -173,7 +176,11 @@ public class EditDashboardController extends AppCompatActivity {
                                 Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
                             } else {
                                 editDashboardModel.deleteUser(context, userbase, usernameToDelete);
-                                Toast.makeText(context, R.string.delete_logged_user_success, Toast.LENGTH_LONG).show();
+
+                                String message = getString(R.string.delete_logged_user_success);
+                                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
+                                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+
                                 setupUsernamesSpinner();
                             }
                         }})
@@ -195,8 +202,10 @@ public class EditDashboardController extends AppCompatActivity {
                 String newPassword = newPasswordField.getText().toString();
                 Permissions newPermissions = Permissions.toPermissions(newPermissionsSpinner.getSelectedItem().toString());
 
-                int feedback = editDashboardModel.addUser(context, userbase, new User(newUsername, newPassword, newPermissions));
-                Toast.makeText(context, feedback, Toast.LENGTH_LONG).show();
+                int feedbackResource = editDashboardModel.addUser(context, userbase, new User(newUsername, newPassword, newPermissions));
+                String message = getString(feedbackResource);
+                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 
                 // Reset the fields
                 newUsernameField.setText("");

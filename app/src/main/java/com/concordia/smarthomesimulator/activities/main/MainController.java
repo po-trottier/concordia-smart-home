@@ -1,6 +1,8 @@
 package com.concordia.smarthomesimulator.activities.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,14 +19,18 @@ import androidx.navigation.ui.NavigationUI;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.about.AboutController;
 import com.concordia.smarthomesimulator.activities.login.LoginController;
+import com.concordia.smarthomesimulator.dataModels.LogEntry;
+import com.concordia.smarthomesimulator.dataModels.LogImportance;
+import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.google.android.material.navigation.NavigationView;
 
-import static com.concordia.smarthomesimulator.Constants.READ_PERMISSION_REQUEST_CODE;
-import static com.concordia.smarthomesimulator.Constants.WRITE_PERMISSION_REQUEST_CODE;
+import static com.concordia.smarthomesimulator.Constants.*;
 
 public class MainController extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    Context context;
+    SharedPreferences sharedPreferences;
 
     // The Main Model instantiates some fragments inside the content view
     // to allow for dynamic content to be set by the navigation drawer.
@@ -37,6 +43,9 @@ public class MainController extends AppCompatActivity {
         // Initialize to the home screen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;
+        sharedPreferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
         // Setup the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -77,14 +86,21 @@ public class MainController extends AppCompatActivity {
         // Add appropriate logic for the various Action Bar menu items.
         switch (item.getItemId()) {
             case R.id.action_about:
+                ActivityLogHelper.add(context, new LogEntry("About","Opened the About Page.", LogImportance.MINOR));
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));
                 return true;
             case R.id.action_logout:
-                // TODO: ACTUALLY LOGOUT!
+                // Remove Logged In User Information
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove(PREFERENCES_KEY_USERNAME);
+                editor.remove(PREFERENCES_KEY_PASSWORD);
+                editor.remove(PREFERENCES_KEY_PERMISSIONS);
+                editor.commit();
+                // Redirect to the Login Screen
+                ActivityLogHelper.add(context, new LogEntry("Exit","User logged out.", LogImportance.IMPORTANT));
                 MainController.this.startActivity(new Intent(MainController.this, LoginController.class));
                 finish();
                 return true;
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

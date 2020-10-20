@@ -30,7 +30,7 @@ public final class ActivityLogHelper {
             logs = new ArrayList<>();
         }
         // Add an entry to the file
-        logs.add(entry);
+        logs.add(0, entry);
         ActivityLogs activityLogs = new ActivityLogs(logs);
         // Save to file
         FileHelper.saveObjectToFile(context, FILE_NAME, activityLogs);

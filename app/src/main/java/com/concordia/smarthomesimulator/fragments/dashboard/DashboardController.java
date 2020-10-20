@@ -108,8 +108,8 @@ public class DashboardController extends Fragment {
             @Override
             public void onClick(View view) {
                 //proceeding to the next activity and logging what happened
+                ActivityLogHelper.add(context, new LogEntry("Dashboard","Started Editing the Simulation Context.", LogImportance.MINOR));
                 Intent intent = new Intent(context, EditDashboardController.class);
-                ActivityLogHelper.add(context, new LogEntry("Dashboard","Starting EditDashboard", LogImportance.MINOR));
                 context.startActivity(intent);
             }
         });

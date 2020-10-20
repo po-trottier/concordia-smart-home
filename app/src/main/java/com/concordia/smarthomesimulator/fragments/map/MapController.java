@@ -20,9 +20,8 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.MapInhabitantAdapter;
 import com.concordia.smarthomesimulator.adapters.MapRoomAdapter;
-import com.concordia.smarthomesimulator.dataModels.HouseLayout;
-import com.concordia.smarthomesimulator.dataModels.Inhabitant;
-import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.FileHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -92,9 +91,9 @@ public class MapController extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityLogHelper.add(context, new LogEntry("House Layout", "Started editing the House Layout.", LogImportance.MINOR));
                 Intent intent = new Intent(context, EditMapController.class);
                 context.startActivity(intent);
-
             }
         });
     }

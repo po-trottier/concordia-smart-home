@@ -18,6 +18,7 @@ public class LogsModel extends ViewModel {
 
     public void readLogs(Context context) {
         logs = ActivityLogHelper.read(context);
+        logs.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
     }
 
     public void clearLogs(Context context) {

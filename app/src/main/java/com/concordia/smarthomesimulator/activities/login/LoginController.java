@@ -32,7 +32,19 @@ public class LoginController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         context = this;
         sharedPreferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+
+        String previousUsername = sharedPreferences.getString(PREFERENCES_KEY_USERNAME, null);
+        String previousPassword = sharedPreferences.getString(PREFERENCES_KEY_PASSWORD, null);
+        int previousPermissions = sharedPreferences.getInt(PREFERENCES_KEY_PERMISSIONS, -1);
+        if (previousUsername != null && previousPassword != null && previousPermissions != -1) {
+            ActivityLogHelper.add(context, new LogEntry("Login",String.format("User \"%s\" was already logged in.", previousUsername), LogImportance.IMPORTANT));
+            Intent intent = new Intent(LoginController.this, MainController.class);
+            LoginController.this.startActivity(intent);
+            finish();
+        }
+
         setContentView(R.layout.activity_login);
+
         setLoginIntent();
     }
 
@@ -64,13 +76,13 @@ public class LoginController extends AppCompatActivity {
                         editor.apply();
 
                         // Proceeding to the next activity and logging what happened
+                        ActivityLogHelper.add(context, new LogEntry("Login",String.format("User \"%s\" logged in successfully.", loggedUser.getUsername()), LogImportance.IMPORTANT));
                         Intent intent = new Intent(LoginController.this, MainController.class);
-                        ActivityLogHelper.add(context, new LogEntry("Login",String.format("User \"%s\" logged in", loggedUser.getUsername()), LogImportance.IMPORTANT));
                         LoginController.this.startActivity(intent);
                         finish();
                     } else {
                         Toast.makeText(context, R.string.wrong_credentials_message,Toast.LENGTH_SHORT).show();
-                        ActivityLogHelper.add(context, new LogEntry("Login","The credentials entered do not correspond to a known account", LogImportance.IMPORTANT));
+                        ActivityLogHelper.add(context, new LogEntry("Login",String.format("Someone tried to login to an account with username \"%s\" but failed.", inputUsername), LogImportance.CRITICAL));
                     }
                 }
 

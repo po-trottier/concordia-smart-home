@@ -47,6 +47,12 @@ public class MapModel extends ViewModel {
         return (HouseLayout) FileHelper.loadObjectFromFile(context, FILE_NAME, HouseLayout.class);
     }
 
+    /**
+     * Load demo house layout house layout.
+     *
+     * @param context the context
+     * @return the house layout
+     */
     public HouseLayout loadDemoHouseLayout(Context context){
         // Create new House Layout
         String base64Image = FileHelper.loadRawResource(context, R.raw.demo_layout);
@@ -112,6 +118,13 @@ public class MapModel extends ViewModel {
         return layout;
     }
 
+    /**
+     * Encode and save image boolean.
+     *
+     * @param context the context
+     * @param data    the data
+     * @return the whether the operation was successful or not
+     */
     public boolean encodeAndSaveImage(Context context, Uri data) {
         try {
             // Get the Bitmap for the selected Image
