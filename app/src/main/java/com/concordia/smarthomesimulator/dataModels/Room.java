@@ -6,7 +6,9 @@ public class Room {
 
     private String name;
     private Geometry geometry;
-    private final ArrayList<IDevice> devices;
+    private final ArrayList<Door> doors;
+    private final ArrayList<Light> lights;
+    private final ArrayList<Window> windows;
 
     /**
      * Instantiates a new Room.
@@ -18,7 +20,9 @@ public class Room {
         this.name = name;
         this.geometry = geometry;
 
-        this.devices = new ArrayList<>();
+        this.windows = new ArrayList<>();
+        this.doors = new ArrayList<>();
+        this.lights = new ArrayList<>();
     }
 
     /**
@@ -45,6 +49,10 @@ public class Room {
      * @return the devices
      */
     public ArrayList<IDevice> getDevices() {
+        ArrayList<IDevice> devices = new ArrayList<>();
+        devices.addAll(doors);
+        devices.addAll(lights);
+        devices.addAll(windows);
         return devices;
     }
 
@@ -72,7 +80,17 @@ public class Room {
      * @param device the device
      */
     public void addDevice(IDevice device) {
-        devices.add(device);
+        switch (device.getDeviceType()) {
+            case DOOR:
+                doors.add((Door) device);
+                break;
+            case LIGHT:
+                lights.add((Light) device);
+                break;
+            case WINDOW:
+                windows.add((Window) device);
+                break;
+        }
     }
 
     /**
@@ -81,7 +99,9 @@ public class Room {
      * @param devices the devices
      */
     public void addDevices(ArrayList<IDevice> devices) {
-        this.devices.addAll(devices);
+        for (IDevice device : devices) {
+            addDevice(device);
+        }
     }
 
     /**
@@ -90,6 +110,16 @@ public class Room {
      * @param device the device
      */
     public void removeDevice(IDevice device) {
-        devices.remove(device);
+        switch (device.getDeviceType()) {
+            case DOOR:
+                doors.remove(device);
+                break;
+            case LIGHT:
+                lights.remove(device);
+                break;
+            case WINDOW:
+                windows.remove(device);
+                break;
+        }
     }
 }
