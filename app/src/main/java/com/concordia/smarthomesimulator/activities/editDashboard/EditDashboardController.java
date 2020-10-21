@@ -26,8 +26,8 @@ import static com.concordia.smarthomesimulator.Constants.*;
 public class EditDashboardController extends AppCompatActivity {
 
     private Context context;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedPreferencesEditor;
+    private SharedPreferences preferences;
+
     private EditDashboardModel editDashboardModel;
     private Userbase userbase;
 
@@ -49,29 +49,23 @@ public class EditDashboardController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_dashboard);
-        editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
         context = this;
 
-        sharedPreferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        sharedPreferencesEditor = sharedPreferences.edit();
+        setContentView(R.layout.activity_edit_dashboard);
+        editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
 
+        preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         userbase = new Userbase(context);
 
         setupToolbar();
-
         findControls();
-
         setSaveIntent();
         setDeleteUserIntent();
         setCreateUserIntent();
-
         setupTimezoneSpinner();
         setupPermissionSpinner();
         setupUsernamesSpinner();
-
         fillKnownValues();
-
         // DO NOT PUT BEFORE "fillKnownValues" !
         setupStatusSwitch();
     }
@@ -95,65 +89,44 @@ public class EditDashboardController extends AppCompatActivity {
 
     private void fillKnownValues() {
         // Set the simulation status
-        statusField.setChecked(sharedPreferences.getBoolean(PREFERENCES_KEY_STATUS, false));
-
+        statusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_STATUS, false));
         // Set the known temperature
-        temperatureField.setText(Integer.toString(sharedPreferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
-
+        temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
         // Set the know Time Zone
-        String timeZone = sharedPreferences.getString(PREFERENCES_KEY_TIME_ZONE, "");
-        String[] available = TimeZone.getAvailableIDs();
-        for (int i = 0; i < available.length; i++) {
-            if (available[i].equals(timeZone)) {
-                timezoneSpinner.setSelection(i);
-                break;
-            }
-        }
+        String timeZone = preferences.getString(PREFERENCES_KEY_TIME_ZONE, "");
+        timezoneSpinner.setSelection(editDashboardModel.getTimeZoneIndex(timeZone));
     }
 
     private void setSaveIntent() {
         saveContext.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                // Edit user in the Userbase if it was changed
-                User newUser = new User(
-                        editedUsername.getText().toString(),
-                        editedPassword.getText().toString(),
-                        Permissions.toPermissions(editPermissionsSpinner.getSelectedItem().toString())
-                );
-                User oldUser = userbase.getUserFromUsername(usernameSpinner.getSelectedItem().toString());
-                if (!newUser.equals(oldUser)) {
-                    int feedbackResource = editDashboardModel.editUser(context, userbase, newUser, oldUser);
+                // Get the User's information
+                String username= editedUsername.getText().toString();
+                String password = editedPassword.getText().toString();
+                String permissions = editPermissionsSpinner.getSelectedItem().toString();
+                String oldUsername = usernameSpinner.getSelectedItem().toString();
+                // Edit user if it was changed
+                int feedbackResource = editDashboardModel.editUser(context, preferences, userbase, username, password, permissions, oldUsername);
+                if (feedbackResource != -1) {
                     String message = getString(feedbackResource);
                     ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 }
 
-                // Edit Simulation Context
+                // Get the Simulation Context Parameters
                 String timezone = timezoneSpinner.getSelectedItem().toString();
-
                 int temperature = DEFAULT_TEMPERATURE;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-
-                // Set the Shared Preferences
-                sharedPreferencesEditor.putBoolean(PREFERENCES_KEY_STATUS, statusField.isChecked());
-                sharedPreferencesEditor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
-                sharedPreferencesEditor.putString(PREFERENCES_KEY_TIME_ZONE, timezone);
-                // If the edited user is the current user modify it
-                if (sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "").equalsIgnoreCase(oldUser.getUsername())) {
-                    sharedPreferencesEditor.putString(PREFERENCES_KEY_USERNAME, newUser.getUsername());
-                    sharedPreferencesEditor.putString(PREFERENCES_KEY_PASSWORD, newUser.getPassword());
-                    sharedPreferencesEditor.putInt(PREFERENCES_KEY_PERMISSIONS, newUser.getPermission().getBitValue());
-                }
-                sharedPreferencesEditor.apply();
-
-                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
+                // Edit the parameters
+                editDashboardModel.editParameters(preferences, statusField.isChecked(), temperature, timezone);
 
                 // Close the activity
+                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
                 finish();
             }
         });
@@ -170,7 +143,7 @@ public class EditDashboardController extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             final String usernameToDelete = usernameSpinner.getSelectedItem().toString();
-                            if (hasSelectedSelf(usernameToDelete)){
+                            if (editDashboardModel.hasSelectedSelf(preferences, usernameToDelete)){
                                 Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
                             } else {
                                 editDashboardModel.deleteUser(context, userbase, usernameToDelete);
@@ -187,29 +160,23 @@ public class EditDashboardController extends AppCompatActivity {
         });
     }
 
-    private boolean hasSelectedSelf(String usernameToDelete){
-        String loggedUsername = sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "");
-        return loggedUsername.equalsIgnoreCase(usernameToDelete);
-    }
-
     private void setCreateUserIntent(){
         createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Get the User's information
                 String newUsername = newUsernameField.getText().toString();
                 String newPassword = newPasswordField.getText().toString();
                 Permissions newPermissions = Permissions.toPermissions(newPermissionsSpinner.getSelectedItem().toString());
-
+                // Add the new User
                 int feedbackResource = editDashboardModel.addUser(context, userbase, new User(newUsername, newPassword, newPermissions));
                 String message = getString(feedbackResource);
                 ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-
                 // Reset the fields
                 newUsernameField.setText("");
                 newPasswordField.setText("");
                 newPermissionsSpinner.setSelection(0);
-
                 // Notify the list has changed
                 setupUsernamesSpinner();
             }
@@ -279,7 +246,6 @@ public class EditDashboardController extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 setUserInformation(userbase.getUserFromUsername(users.get(position)));
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });

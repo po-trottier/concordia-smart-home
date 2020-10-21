@@ -1,12 +1,37 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.Permissions;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
 
+import java.util.TimeZone;
+
+import static com.concordia.smarthomesimulator.Constants.*;
+
 public class EditDashboardModel extends ViewModel{
 
+    public EditDashboardModel() {
+    }
+
+    /**
+     * Gets time zone index.
+     *
+     * @param timeZone the time zone
+     * @return the time zone index
+     */
+    public int getTimeZoneIndex(String timeZone) {
+        String[] available = TimeZone.getAvailableIDs();
+        for (int i = 0; i < available.length; i++) {
+            if (available[i].equals(timeZone)) {
+                return i;
+            }
+        }
+        return 0;
+    }
 
     /**
      * Adds the user to the userbase if no similar users exists in the userbase.
@@ -25,7 +50,8 @@ public class EditDashboardModel extends ViewModel{
 
     /**
      * Delete user.
-     *  @param context          the context
+     *
+     * @param context          the context
      * @param userbase         the userbase
      * @param usernameToDelete the username to delete
      */
@@ -36,37 +62,84 @@ public class EditDashboardModel extends ViewModel{
     /**
      * Will edit a user account if the edited account is not similar to another account in the userbase.
      *
-     * @param context         the context
-     * @param userbase        the userbase
-     * @param editedUser      the edited user
-     * @param oldUser         the old user
+     * @param context          the context
+     * @param preferences      the preferences
+     * @param userbase         the userbase
+     * @param username         the username
+     * @param password         the password
+     * @param permissions      the new permissions
+     * @param previousUsername the previous username
      * @return the int code for the feedback message
      */
-    public int editUser(Context context, Userbase userbase, User editedUser, User oldUser){
-        String newUsername;
-        String newPassword;
+    public int editUser(Context context, SharedPreferences preferences, Userbase userbase, String username, String password, String permissions, String previousUsername){
+        // Get the Old User
+        User oldUser = userbase.getUserFromUsername(previousUsername);
 
-        if (editedUser.getUsername().isEmpty()){
-            newUsername = oldUser.getUsername();
-            newPassword = editedUser.getPassword();
-        } else if (editedUser.getPassword().isEmpty()){
-            newUsername = editedUser.getUsername();
-            newPassword = oldUser.getPassword();
-        } else {
-            newUsername = editedUser.getUsername();
-            newPassword = editedUser.getPassword();
-        }
+        // Validate the values of the username and password
+        String validUsername = username;
+        String validPassword = password;
+        Permissions validPermissions = Permissions.toPermissions(permissions);
+        if (validUsername.isEmpty())
+            validUsername = oldUser.getUsername();
+        if (validPassword.isEmpty())
+            validPassword = oldUser.getPassword();
+        if (validPermissions == null)
+            validPermissions = oldUser.getPermission();
 
-        User userToAdd = new User(newUsername, newPassword, editedUser.getPermission());
-        // if the new user is not similar to any other use except the one it's replacing, add it and delete the old user
-        if (userbase.getNumberOfSimilarUsers(userToAdd) < 2 && !userbase.containsUser(userToAdd)) {
-            userbase.deleteUserFromUsernameIfPossible(context, oldUser.getUsername());
-            // we don't care about the return of addUser since we know it will be successful as the similar user was deleted
-            addUser(context, userbase, userToAdd);
-            return R.string.edit_success;
-        } else{
+        // Create the New User
+        User newUser = new User(validUsername, validPassword, validPermissions);
+
+        // If we haven't changed the user, then don't do anything
+        if (newUser.equals(oldUser))
+            return -1;
+
+        // Validate that the new user doesn't already exist and that the username is unique
+        if (userbase.getNumberOfSimilarUsers(newUser) > 1 || userbase.containsUser(newUser))
             return R.string.edit_conflict;
+
+        // Delete the Old User
+        userbase.deleteUserFromUsernameIfPossible(context, oldUser.getUsername());
+
+        // Add the New User
+        addUser(context, userbase, newUser);
+
+        // If the edited user is the current user modify it
+        if (preferences.getString(PREFERENCES_KEY_USERNAME, "").equalsIgnoreCase(oldUser.getUsername())) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(PREFERENCES_KEY_USERNAME, username);
+            editor.putString(PREFERENCES_KEY_PASSWORD, password);
+            editor.putInt(PREFERENCES_KEY_PERMISSIONS, Permissions.toPermissions(permissions).getBitValue());
+            editor.apply();
         }
+
+        return R.string.edit_success;
     }
 
+    /**
+     * Edit parameters.
+     *
+     * @param preferences the preferences
+     * @param status      the status
+     * @param temperature the temperature
+     * @param timezone    the timezone
+     */
+    public void editParameters(SharedPreferences preferences, boolean status, int temperature, String timezone) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREFERENCES_KEY_STATUS, status);
+        editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
+        editor.putString(PREFERENCES_KEY_TIME_ZONE, timezone);
+        editor.apply();
+    }
+
+    /**
+     * Has selected self boolean.
+     *
+     * @param preferences      the preferences
+     * @param username the username to check
+     * @return the whether the user selected themselves or not
+     */
+    public boolean hasSelectedSelf(SharedPreferences preferences, String username){
+        String loggedUsername = preferences.getString(PREFERENCES_KEY_USERNAME, "");
+        return loggedUsername.equalsIgnoreCase(username);
+    }
 }
