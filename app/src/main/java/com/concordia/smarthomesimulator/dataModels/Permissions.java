@@ -18,10 +18,10 @@ public enum Permissions {
      */
     STRANGER(1);
 
-    private int bitVal;
+    private final int bitValue;
 
-    Permissions(int bitVal) {
-        this.bitVal = bitVal;
+    Permissions(int bitValue) {
+        this.bitValue = bitValue;
     }
 
     /**
@@ -29,7 +29,22 @@ public enum Permissions {
      *
      * @return the bit val
      */
-    public int getBitVal() {
-        return bitVal;
+    public int getBitValue() {
+        return bitValue;
+    }
+
+    /**
+     * Converts a string representing a permission to a permission
+     *
+     * @param permissions the permissions string
+     * @return the permissions
+     */
+    public static Permissions toPermissions(String permissions){
+        switch (permissions.toLowerCase()) {
+            case "parent": return PARENT;
+            case "child": return CHILD;
+            case "guest": return GUEST;
+            default: return STRANGER;
+        }
     }
 }

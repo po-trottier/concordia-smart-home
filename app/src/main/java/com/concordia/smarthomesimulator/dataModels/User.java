@@ -1,12 +1,15 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 public class User {
-    private String username;
-    private String password;
-    private Permissions permission;
+    private final String username;
+    private final String password;
+    private final Permissions permission;
 
     /**
      * Instantiates a new User.
+     * <p>
+     * Users cannot be modified, new ones must be created and appended to the userbase. So users don't have
+     * identical usernames or passwords.
      *
      * @param username   the username
      * @param password   the password
@@ -28,30 +31,12 @@ public class User {
     }
 
     /**
-     * Sets username.
-     *
-     * @param username the username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
      * Gets password.
      *
      * @return the password
      */
     public String getPassword() {
         return password;
-    }
-
-    /**
-     * Sets password.
-     *
-     * @param password the password
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**
@@ -64,11 +49,24 @@ public class User {
     }
 
     /**
-     * Sets permission.
+     * A user is similar to another if they have the same username
      *
-     * @param permission the permission
+     * @param user the user
+     * @return the boolean
      */
-    public void setPermission(Permissions permission) {
-        this.permission = permission;
+    public boolean isSimilar(User user) {
+        return this.username.equalsIgnoreCase(user.username);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        User user = (User) o;
+        return username.equalsIgnoreCase(user.username)
+                && password.equals(user.password)
+                && permission.equals(user.permission);
     }
 }

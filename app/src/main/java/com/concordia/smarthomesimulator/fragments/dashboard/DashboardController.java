@@ -16,56 +16,31 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import static com.concordia.smarthomesimulator.Constants.*;
 
 public class DashboardController extends Fragment {
 
     private DashboardModel dashboardModel;
     private View view;
     private Context context;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences preferences;
+    private TextView date;
     private TextView status;
     private TextView temperature;
+    private TextView user;
+    private TextView permissions;
     private TextClock clock;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashboardModel = new ViewModelProvider(this).get(DashboardModel.class);
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         context = getActivity();
-        sharedPreferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
-        final TextView user = view.findViewById(R.id.text_user_username);
-        user.setText(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""));
-
-        final TextView permissions = view.findViewById(R.id.text_user_permissions);
-        String permissionValue;
-        switch (sharedPreferences.getInt(PREFERENCES_KEY_PERMISSIONS, 1)) {
-            case 15:
-                permissionValue = getResources().getStringArray(R.array.permissions_spinner)[0];
-                break;
-            case 7:
-                permissionValue = getResources().getStringArray(R.array.permissions_spinner)[1];
-                break;
-            case 3:
-                permissionValue = getResources().getStringArray(R.array.permissions_spinner)[2];
-                break;
-            default:
-                permissionValue = getResources().getStringArray(R.array.permissions_spinner)[3];
-                break;
-        }
-        permissions.setText(permissionValue);
-
-        status = view.findViewById(R.id.simulation_status);
-        temperature = view.findViewById(R.id.simulation_temperature);
-        final TextView date = view.findViewById(R.id.date);
-        date.setText(dashboardModel.getDate());
-        clock = view.findViewById(R.id.dashboard_clock);
-
-         setupEditIntent();
+        findControls();
+        setKnownValues();
+        setupEditIntent();
 
         return view;
     }
@@ -73,15 +48,32 @@ public class DashboardController extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        String tempString = Integer.toString(sharedPreferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE));
-        temperature.setText(tempString + getString(R.string.degrees_celsius));
+        setKnownValues();
+    }
 
-        String timezone = sharedPreferences.getString(PREFERENCES_KEY_TIME_ZONE, DEFAULT_TIME_ZONE);
-        clock.setTimeZone(timezone);
+    private void findControls() {
+        status = view.findViewById(R.id.simulation_status);
+        temperature = view.findViewById(R.id.simulation_temperature);
+        date = view.findViewById(R.id.date);
+        clock = view.findViewById(R.id.dashboard_clock);
+        user = view.findViewById(R.id.text_user_username);
+        permissions = view.findViewById(R.id.text_user_permissions);
+    }
 
-        boolean statusValue = sharedPreferences.getBoolean(PREFERENCES_KEY_STATUS, false);
-        status.setText(statusValue ? getString(R.string.simulation_status_started) : getString(R.string.simulation_status_stopped));
-        status.setTextColor(statusValue ? context.getColor(R.color.primary) : context.getColor(R.color.charcoal));
+    private void setKnownValues() {
+        // Set the Permissions
+        permissions.setText(dashboardModel.getPermissions(context, preferences));
+        // Set the Username
+        user.setText(dashboardModel.getUsername(preferences));
+        // Set the Date
+        date.setText(dashboardModel.getDate());
+        // Set the Time Zone
+        clock.setTimeZone(dashboardModel.getTimeZone(preferences));
+        // Set the Temperature
+        temperature.setText(dashboardModel.getTemperature(context, preferences));
+        // Set the Simulation Status
+        status.setText(dashboardModel.getStatusText(context, preferences));
+        status.setTextColor(dashboardModel.getStatusColor(context, preferences));
     }
 
     private void setupEditIntent() {
@@ -90,8 +82,8 @@ public class DashboardController extends Fragment {
             @Override
             public void onClick(View view) {
                 //proceeding to the next activity and logging what happened
+                ActivityLogHelper.add(context, new LogEntry("Dashboard","Started Editing the Simulation Context.", LogImportance.MINOR));
                 Intent intent = new Intent(context, EditDashboardController.class);
-                ActivityLogHelper.add(context, new LogEntry("Dashboard","Starting EditDashboard", LogImportance.MINOR));
                 context.startActivity(intent);
             }
         });

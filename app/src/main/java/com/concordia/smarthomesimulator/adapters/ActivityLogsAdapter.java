@@ -1,6 +1,5 @@
 package com.concordia.smarthomesimulator.adapters;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +46,7 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(ctx);
-        View row = inflater.inflate(R.layout.activity_log_list_item, parent, false);
+        View row = inflater.inflate(R.layout.adapter_logs_entry, parent, false);
 
         LogEntry entry = items.get(position);
 

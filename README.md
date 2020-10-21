@@ -24,17 +24,18 @@ The following documentation will graphically describe the general organisation o
 
 ![Domain Model](./documentation/domain-model.png "Domain Model")
 
+#### Sequence diagram (Context of the Simulation)
+
+![Sequence Diagram](./documentation/sequence-diagram.png "Sequence Diagram")
+
 #### Layout Helper Class Diagram
 
 ![Map Model Class Diagram](./documentation/class-map-model.png "Map Model Class Diagram")
 
 
+#### Log Helper Class Diagram
 
-
-
-
-
-
+![Log Model Class Diagram](./documentation/class-log-model.PNG "Log Model Class Diagram")
 
 #### Dashboard Model Class Diagram
 
