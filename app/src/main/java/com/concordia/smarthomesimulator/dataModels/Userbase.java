@@ -68,14 +68,15 @@ public class Userbase {
      * @param context          the context
      * @param usernameToDelete the username to delete
      */
-    public void deleteUserFromUsernameIfPossible(Context context, String usernameToDelete){
+    public boolean deleteUserFromUsernameIfPossible(Context context, String usernameToDelete){
         for (int i = 0; i < users.size(); i++){
             if (users.get(i).getUsername().equalsIgnoreCase(usernameToDelete)){
                 users.remove(i);
                 UserbaseHelper.saveUserbase(context, this);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     /**

@@ -28,10 +28,17 @@ The following documentation will graphically describe the general organisation o
 
 ![Sequence Diagram](./documentation/sequence-diagram.png "Sequence Diagram")
 
-#### Layout Helper Class Diagram
+#### Map Model Class Diagram
 
 ![Map Model Class Diagram](./documentation/class-map-model.png "Map Model Class Diagram")
 
+#### Login Model Class Diagram
+
+![Login Model Class Diagram](./documentation/class-login-model.png "Login Model Class Diagram")
+
+#### Layout Helper Class Diagram
+
+![Map Model Class Diagram](./documentation/class-map-model.png "Map Model Class Diagram")
 
 #### Log Helper Class Diagram
 
