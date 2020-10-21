@@ -26,7 +26,7 @@ The following documentation will graphically describe the general organisation o
 
 #### Sequence diagram (Context of the Simulation)
 
-![Domain Model](./documentation/Sequence-diagram.png "Sequence diagram")
+![Sequence Diagram](./documentation/sequence-diagram.png "Sequence Diagram")
 
 #### Layout Helper Class Diagram
 
