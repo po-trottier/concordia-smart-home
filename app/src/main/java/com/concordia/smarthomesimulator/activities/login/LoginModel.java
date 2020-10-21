@@ -19,6 +19,12 @@ public class LoginModel extends ViewModel {
     public LoginModel() {
     }
 
+    /**
+     * Gets is user logged in.
+     *
+     * @param preferences the preferences
+     * @return whether the user id logged in or not
+     */
     public boolean getIsUserLoggedIn(SharedPreferences preferences) {
         String previousUsername = preferences.getString(PREFERENCES_KEY_USERNAME, null);
         String previousPassword = preferences.getString(PREFERENCES_KEY_PASSWORD, null);
@@ -27,6 +33,15 @@ public class LoginModel extends ViewModel {
         return previousUsername != null && previousPassword != null && previousPermissions != -1;
     }
 
+    /**
+     * Log user in boolean.
+     *
+     * @param context     the context
+     * @param preferences the preferences
+     * @param username    the username
+     * @param password    the password
+     * @return the whether the operation was successful or not
+     */
     public boolean logUserIn(Context context, SharedPreferences preferences, String username, String password) {
         Userbase userbase = new Userbase(context);
 

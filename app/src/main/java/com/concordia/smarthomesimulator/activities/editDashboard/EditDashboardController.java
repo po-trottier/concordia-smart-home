@@ -4,11 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,7 +20,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 

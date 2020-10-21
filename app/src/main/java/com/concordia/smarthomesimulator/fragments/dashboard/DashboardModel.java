@@ -16,7 +16,14 @@ public class DashboardModel extends ViewModel {
 
     public DashboardModel() {
     }
-    
+
+    /**
+     * Gets permissions.
+     *
+     * @param context     the context
+     * @param preferences the preferences
+     * @return the permissions
+     */
     public String getPermissions(Context context, SharedPreferences preferences) {
         switch (preferences.getInt(PREFERENCES_KEY_PERMISSIONS, 1)) {
             case 15:
@@ -30,28 +37,66 @@ public class DashboardModel extends ViewModel {
         }
     }
 
+    /**
+     * Gets username.
+     *
+     * @param preferences the preferences
+     * @return the username
+     */
     public String getUsername(SharedPreferences preferences) {
         return preferences.getString(PREFERENCES_KEY_USERNAME, "");
     }
 
+    /**
+     * Get date string.
+     *
+     * @return the string
+     */
     public String getDate(){
         return new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(new Date());
     }
 
+    /**
+     * Get time zone string.
+     *
+     * @param preferences the preferences
+     * @return the string
+     */
     public String getTimeZone(SharedPreferences preferences){
         return preferences.getString(PREFERENCES_KEY_TIME_ZONE, DEFAULT_TIME_ZONE);
     }
 
+    /**
+     * Gets temperature.
+     *
+     * @param context     the context
+     * @param preferences the preferences
+     * @return the temperature
+     */
     public String getTemperature(Context context, SharedPreferences preferences) {
         String tempString = Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE));
         return tempString + context.getString(R.string.degrees_celsius);
     }
 
+    /**
+     * Gets status text.
+     *
+     * @param context     the context
+     * @param preferences the preferences
+     * @return the status text
+     */
     public String getStatusText(Context context, SharedPreferences preferences) {
         boolean statusValue = preferences.getBoolean(PREFERENCES_KEY_STATUS, false);
         return statusValue ? context.getString(R.string.simulation_status_started) : context.getString(R.string.simulation_status_stopped);
     }
 
+    /**
+     * Gets status color.
+     *
+     * @param context     the context
+     * @param preferences the preferences
+     * @return the status color
+     */
     public int getStatusColor(Context context, SharedPreferences preferences) {
         boolean statusValue = preferences.getBoolean(PREFERENCES_KEY_STATUS, false);
         return statusValue ? context.getColor(R.color.primary) : context.getColor(R.color.charcoal);
