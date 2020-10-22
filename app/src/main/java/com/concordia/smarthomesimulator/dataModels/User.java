@@ -1,14 +1,22 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * The type User.
+ */
 public class User {
     private final String username;
     private final String password;
     private final Permissions permission;
+    private Map<String, String> preferences;
 
     /**
      * Instantiates a new User.
      * <p>
-     * Users cannot be modified, new ones must be created and appended to the userbase. So users don't have
+     * Users cannot be modified except for preferences, new ones must be created and appended to the userbase. So users don't have
      * identical usernames or passwords.
      *
      * @param username   the username
@@ -19,6 +27,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.permission = permission;
+        this.preferences = new HashMap<>();
     }
 
     /**
@@ -46,6 +55,25 @@ public class User {
      */
     public Permissions getPermission() {
         return permission;
+    }
+
+
+    /**
+     * Sets preferences.
+     *
+     * @param preferences the preferences
+     */
+    public void setPreferences(Map<String, String> preferences) {
+        this.preferences = preferences;
+    }
+
+    /**
+     * Gets preferences.
+     *
+     * @return the preferences
+     */
+    public Map<String, String> getPreferences() {
+        return preferences;
     }
 
     /**

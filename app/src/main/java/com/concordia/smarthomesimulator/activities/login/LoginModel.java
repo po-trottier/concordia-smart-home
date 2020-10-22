@@ -12,6 +12,8 @@ import com.concordia.smarthomesimulator.dataModels.Userbase;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
+import java.util.Map;
+
 import static com.concordia.smarthomesimulator.Constants.*;
 
 public class LoginModel extends ViewModel {
@@ -57,14 +59,25 @@ public class LoginModel extends ViewModel {
             return  false;
         }
 
-        // Save logged user info to preferences
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_KEY_USERNAME, loggedUser.getUsername());
-        editor.putString(PREFERENCES_KEY_PASSWORD, loggedUser.getPassword());
-        editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitValue());
-        editor.apply();
+        if (loggedUser.getPreferences().size() == 0) {
+            // Save logged user info to preferences if the user has no saved preferences
+            editor.putString(PREFERENCES_KEY_USERNAME, loggedUser.getUsername());
+            editor.putString(PREFERENCES_KEY_PASSWORD, loggedUser.getPassword());
+            editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitValue());
+            editor.apply();
+        } else {
+            // Otherwise load the preferences from the user obj
+            loadPreferences(loggedUser, editor);
+        }
 
         return true;
+    }
+
+    private void loadPreferences(User user, SharedPreferences.Editor editor){
+        for (Map.Entry<String, String> entry : user.getPreferences().entrySet()) {
+            editor.putString(entry.getKey(), entry.getValue());
+        }
     }
 }
 
