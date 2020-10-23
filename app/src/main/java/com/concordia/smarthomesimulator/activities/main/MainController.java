@@ -21,6 +21,8 @@ import com.concordia.smarthomesimulator.activities.about.AboutController;
 import com.concordia.smarthomesimulator.activities.login.LoginController;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
+import com.concordia.smarthomesimulator.dataModels.User;
+import com.concordia.smarthomesimulator.dataModels.Userbase;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.google.android.material.navigation.NavigationView;
 
@@ -90,12 +92,13 @@ public class MainController extends AppCompatActivity {
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));
                 return true;
             case R.id.action_logout:
-                // Remove Logged In User Information
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                savePreferencesToUserbase(sharedPreferences);
+                // Remove Logged In User Information (keep the other preferences such as time and temperature)
                 editor.remove(PREFERENCES_KEY_USERNAME);
                 editor.remove(PREFERENCES_KEY_PASSWORD);
                 editor.remove(PREFERENCES_KEY_PERMISSIONS);
-                editor.commit();
+                editor.apply();
                 // Redirect to the Login Screen
                 ActivityLogHelper.add(context, new LogEntry("Exit","User logged out.", LogImportance.IMPORTANT));
                 MainController.this.startActivity(new Intent(MainController.this, LoginController.class));
@@ -106,6 +109,14 @@ public class MainController extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void savePreferencesToUserbase(SharedPreferences sharedPreferences){
+        Userbase userbase = new Userbase(context);
+        userbase.saveUserPreferences(
+                sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""),
+                sharedPreferences.getAll(),
+                context);
     }
 
     @Override

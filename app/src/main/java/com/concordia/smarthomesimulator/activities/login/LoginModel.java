@@ -65,18 +65,24 @@ public class LoginModel extends ViewModel {
             editor.putString(PREFERENCES_KEY_USERNAME, loggedUser.getUsername());
             editor.putString(PREFERENCES_KEY_PASSWORD, loggedUser.getPassword());
             editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitValue());
-            editor.apply();
         } else {
             // Otherwise load the preferences from the user obj
             loadPreferences(loggedUser, editor);
         }
+        editor.apply();
 
         return true;
     }
 
     private void loadPreferences(User user, SharedPreferences.Editor editor){
-        for (Map.Entry<String, String> entry : user.getPreferences().entrySet()) {
-            editor.putString(entry.getKey(), entry.getValue());
+        for (Map.Entry<String, ?> entry : user.getPreferences().entrySet()) {
+            if (entry.getValue() instanceof String){
+                editor.putString(entry.getKey(), (String)entry.getValue());
+            } else if (entry.getValue() instanceof Integer){
+                editor.putInt(entry.getKey(), (int)entry.getValue());
+            } else if (entry.getValue() instanceof Boolean){
+                editor.putBoolean(entry.getKey(), (boolean)entry.getValue());
+            }
         }
     }
 }

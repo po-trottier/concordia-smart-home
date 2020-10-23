@@ -11,7 +11,7 @@ public class User {
     private final String username;
     private final String password;
     private final Permissions permission;
-    private Map<String, String> preferences;
+    private Map<String, ?> preferences;
 
     /**
      * Instantiates a new User.
@@ -63,7 +63,7 @@ public class User {
      *
      * @param preferences the preferences
      */
-    public void setPreferences(Map<String, String> preferences) {
+    public void setPreferences(Map<String, ?> preferences) {
         this.preferences = preferences;
     }
 
@@ -72,7 +72,7 @@ public class User {
      *
      * @return the preferences
      */
-    public Map<String, String> getPreferences() {
+    public Map<String, ?> getPreferences() {
         return preferences;
     }
 
