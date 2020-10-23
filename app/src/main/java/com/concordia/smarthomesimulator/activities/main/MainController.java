@@ -94,10 +94,13 @@ public class MainController extends AppCompatActivity {
             case R.id.action_logout:
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 savePreferencesToUserbase(sharedPreferences);
-                // Remove Logged In User Information (keep the other preferences such as time and temperature)
+                // Remove Logged In User Information
                 editor.remove(PREFERENCES_KEY_USERNAME);
                 editor.remove(PREFERENCES_KEY_PASSWORD);
                 editor.remove(PREFERENCES_KEY_PERMISSIONS);
+                editor.remove(PREFERENCES_KEY_TEMPERATURE);
+                editor.remove(PREFERENCES_KEY_TIME_ZONE);
+                editor.remove(PREFERENCES_KEY_STATUS);
                 editor.apply();
                 // Redirect to the Login Screen
                 ActivityLogHelper.add(context, new LogEntry("Exit","User logged out.", LogImportance.IMPORTANT));

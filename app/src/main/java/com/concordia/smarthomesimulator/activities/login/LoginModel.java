@@ -80,6 +80,9 @@ public class LoginModel extends ViewModel {
                 editor.putString(entry.getKey(), (String)entry.getValue());
             } else if (entry.getValue() instanceof Integer){
                 editor.putInt(entry.getKey(), (int)entry.getValue());
+            } else if (entry.getValue() instanceof Double){
+                // converting to int, problem caused by reading/writing the object file
+                editor.putInt(entry.getKey(), ((Double) entry.getValue()).intValue());
             } else if (entry.getValue() instanceof Boolean){
                 editor.putBoolean(entry.getKey(), (boolean)entry.getValue());
             }
