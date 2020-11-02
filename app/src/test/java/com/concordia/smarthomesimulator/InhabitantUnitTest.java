@@ -26,15 +26,4 @@ public class InhabitantUnitTest {
         // Test
         assertEquals(inhabitant.getName(), name);
     }
-
-    @Test
-    public void inhabitantRoomCanBeSet() {
-        // Setup
-        Inhabitant inhabitant = new Inhabitant("inhabitant");
-        // Act
-        Room room = new Room("room", new Geometry());
-        inhabitant.setRoom(room);
-        // Test
-        assertEquals(inhabitant.getRoom(), room);
-    }
 }

@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.fragments.map;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.util.Base64;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.factories.DeviceFactory;
 import com.concordia.smarthomesimulator.helpers.FileHelper;
 
 import java.io.ByteArrayOutputStream;
@@ -16,14 +18,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.concordia.smarthomesimulator.Constants.*;
+
 public class MapModel extends ViewModel {
 
+    private final DeviceFactory deviceFactory;
     private final static String FILE_NAME = "layout.json";
 
     /**
      * Instantiates a new Map model.
      */
     public MapModel() {
+        deviceFactory = new DeviceFactory();
     }
 
     /**
@@ -54,16 +60,19 @@ public class MapModel extends ViewModel {
      * @return the house layout
      */
     public HouseLayout loadDemoHouseLayout(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
+
         // Create new House Layout
         String base64Image = FileHelper.loadRawResource(context, R.raw.demo_layout);
-        HouseLayout layout = new HouseLayout("Demo House", base64Image, 6f, 6f);
+        HouseLayout layout = new HouseLayout("Demo House", base64Image, 6f, 6f, currentUser);
 
         // Create room #1
         Room bedroom = new Room("Bedroom", new Geometry(2f,2f));
 
-        Window bedroomWindow = new Window();
-        Light bedroomLight = new Light();
-        Door bedroomDoor = new Door();
+        Window bedroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
+        Light bedroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+        Door bedroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
 
         bedroomWindow.setIsLocked(true);
         bedroomDoor.setIsOpened(true);
@@ -75,10 +84,10 @@ public class MapModel extends ViewModel {
         // Create room #2
         Room kitchen = new Room("Kitchen", new Geometry(2f,2f));
 
-        Window kitchenWindow = new Window();
-        Light kitchenLight = new Light();
-        Light kitchenLight2 = new Light();
-        Door kitchenDoor = new Door();
+        Window kitchenWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
+        Light kitchenLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+        Light kitchenLight2 = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+        Door kitchenDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
 
         kitchen.addDevices(new ArrayList<>(Arrays.asList(kitchenWindow, kitchenLight, kitchenLight2, kitchenDoor)));
 
@@ -87,9 +96,9 @@ public class MapModel extends ViewModel {
         // Create room #3
         Room bathroom = new Room("Bathroom", new Geometry(2f,2f));
 
-        Window bathroomWindow = new Window();
-        Light bathroomLight = new Light();
-        Door bathroomDoor = new Door();
+        Window bathroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
+        Light bathroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+        Door bathroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
 
         bathroomWindow.setIsLocked(true);
         bathroomDoor.setIsOpened(true);
@@ -98,22 +107,16 @@ public class MapModel extends ViewModel {
 
         layout.addRoom(bathroom);
 
-        // Add inhabitant #1
+        // Add inhabitants
         Inhabitant person1 = new Inhabitant("Person1");
-        person1.setRoom(bedroom);
+        bedroom.addInhabitant(person1);
 
-        layout.addInhabitant(person1);
-
-        // Add inhabitant #2
         Inhabitant person2 = new Inhabitant("Person2");
-        person2.setRoom(kitchen);
+        kitchen.addInhabitant(person2);
 
-        layout.addInhabitant(person2);
-
-        // Add inhabitant #3
-        Inhabitant person3 = new Inhabitant("Person3");
-
-        layout.addInhabitant(person3);
+        Inhabitant person4 = new Inhabitant("Person3");
+        Room garage = layout.getRoom(DEFAULT_NAME_GARAGE);
+        garage.addInhabitant(person4);
 
         return layout;
     }

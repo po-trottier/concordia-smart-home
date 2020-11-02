@@ -6,6 +6,7 @@ public class Room {
 
     private String name;
     private Geometry geometry;
+    private final ArrayList<Inhabitant> inhabitants;
     private final ArrayList<Door> doors;
     private final ArrayList<Light> lights;
     private final ArrayList<Window> windows;
@@ -20,6 +21,7 @@ public class Room {
         this.name = name;
         this.geometry = geometry;
 
+        this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
         this.doors = new ArrayList<>();
         this.lights = new ArrayList<>();
@@ -44,6 +46,15 @@ public class Room {
     }
 
     /**
+     * Gets inhabitants.
+     *
+     * @return the inhabitants
+     */
+    public ArrayList<Inhabitant> getInhabitants() {
+        return inhabitants;
+    }
+
+    /**
      * Gets devices.
      *
      * @return the devices
@@ -54,6 +65,16 @@ public class Room {
         devices.addAll(lights);
         devices.addAll(windows);
         return devices;
+    }
+
+    /**
+     * Whether an inhabitant is in this room or not.
+     *
+     * @param name the name of the inhabitant
+     * @return whether the inhabitant is in this room or not.
+     */
+    public boolean hasInhabitant(String name) {
+        return this.inhabitants.stream().anyMatch(inhabitant -> inhabitant.getName().equalsIgnoreCase(name));
     }
 
     /**
@@ -72,6 +93,24 @@ public class Room {
      */
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
+    }
+
+    /**
+     * Add an inhabitant.
+     *
+     * @param inhabitant the inhabitant
+     */
+    public void addInhabitant(Inhabitant inhabitant) {
+        inhabitants.add(inhabitant);
+    }
+
+    /**
+     * Add inhabitants.
+     *
+     * @param inhabitants the inhabitants
+     */
+    public void addInhabitants(ArrayList<Inhabitant> inhabitants) {
+        this.inhabitants.addAll(inhabitants);
     }
 
     /**
@@ -101,6 +140,20 @@ public class Room {
     public void addDevices(ArrayList<IDevice> devices) {
         for (IDevice device : devices) {
             addDevice(device);
+        }
+    }
+
+    /**
+     * Remove an inhabitant.
+     *
+     * @param name the name
+     */
+    public void removeInhabitant(String name) {
+        for(Inhabitant inhabitant : inhabitants) {
+            if (inhabitant.getName().equals(name)) {
+                inhabitants.remove(inhabitant);
+                return;
+            }
         }
     }
 

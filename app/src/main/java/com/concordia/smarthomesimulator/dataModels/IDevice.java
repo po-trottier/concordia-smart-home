@@ -2,6 +2,9 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import android.graphics.drawable.Drawable;
 
+/**
+ * The interface Device.
+ */
 public interface IDevice {
 
     /**
@@ -45,6 +48,20 @@ public interface IDevice {
      * @param isOpened the is opened
      */
     public void setIsOpened(boolean isOpened);
+
+    /**
+     * Gets geometry for the device.
+     *
+     * @return the geometry
+     */
+    public Geometry getGeometry();
+
+    /**
+     * Sets the geometry for the device.
+     *
+     * @param geometry the geometry
+     */
+    public void setGeometry(Geometry geometry);
 
     /**
      * Gets device type.

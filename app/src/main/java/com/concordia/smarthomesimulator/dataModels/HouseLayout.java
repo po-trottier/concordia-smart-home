@@ -1,14 +1,16 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
+import static com.concordia.smarthomesimulator.Constants.*;
 
 public class HouseLayout {
 
     private String image;
     private String name;
     private Geometry geometry;
-    private ArrayList<Room> rooms;
-    private ArrayList<Inhabitant> inhabitants;
+    private final ArrayList<Room> rooms;
 
     /**
      * Instantiates a new House layout.
@@ -18,13 +20,21 @@ public class HouseLayout {
      * @param width  the width
      * @param height the height
      */
-    public HouseLayout(String name, String image, float width, float height) {
+    public HouseLayout(String name, String image, float width, float height, String currentUser) {
         this.name = name;
         this.image = image;
         this.geometry = new Geometry(width, height);
 
         rooms = new ArrayList<>();
-        inhabitants = new ArrayList<>();
+
+        // Add the default rooms (Outdoors and Garage)
+        rooms.add(new Room(DEFAULT_NAME_OUTDOORS, new Geometry()));
+        rooms.add(new Room(DEFAULT_NAME_GARAGE, new Geometry()));
+
+        // Add the current user if he's not already in a room
+        boolean userExists = currentUser != null && rooms.stream().anyMatch(room -> room.hasInhabitant(currentUser));
+        if (!userExists)
+            this.getRoom(DEFAULT_NAME_OUTDOORS).addInhabitant(new Inhabitant(currentUser));
     }
 
     /**
@@ -59,17 +69,20 @@ public class HouseLayout {
      *
      * @return the rooms
      */
-    public ArrayList<Room> getRooms() {
-        return rooms;
+    public Room getRoom(String name) {
+        return rooms.stream()
+                .filter(room -> room.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
-     * Gets inhabitants.
+     * Gets rooms.
      *
-     * @return the inhabitants
+     * @return the rooms
      */
-    public ArrayList<Inhabitant> getInhabitants() {
-        return inhabitants;
+    public ArrayList<Room> getRooms() {
+        return rooms;
     }
 
     /**
@@ -118,24 +131,6 @@ public class HouseLayout {
     }
 
     /**
-     * Add an inhabitant.
-     *
-     * @param inhabitant the inhabitant
-     */
-    public void addInhabitant(Inhabitant inhabitant) {
-        inhabitants.add(inhabitant);
-    }
-
-    /**
-     * Add inhabitants.
-     *
-     * @param inhabitants the inhabitants
-     */
-    public void addInhabitants(ArrayList<Inhabitant> inhabitants) {
-        this.inhabitants.addAll(inhabitants);
-    }
-
-    /**
      * Remove a room.
      *
      * @param name the name
@@ -146,20 +141,6 @@ public class HouseLayout {
                rooms.remove(room);
                return;
            }
-        }
-    }
-
-    /**
-     * Remove an inhabitant.
-     *
-     * @param name the name
-     */
-    public void removeInhabitant(String name) {
-        for(Inhabitant inhabitant : inhabitants) {
-            if (inhabitant.getName().equals(name)) {
-                inhabitants.remove(inhabitant);
-                return;
-            }
         }
     }
 }

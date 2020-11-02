@@ -8,8 +8,19 @@ public class Window implements IDevice {
 
     private boolean isOpened = false;
     private boolean isLocked = false;
+    private Geometry geometry;
 
     public Window() {
+        geometry = new Geometry();
+    }
+
+    /**
+     * Instantiates a new Window.
+     *
+     * @param geometry the geometry of the device
+     */
+    public Window(Geometry geometry) {
+        this.geometry = geometry;
     }
 
     @Override
@@ -40,6 +51,16 @@ public class Window implements IDevice {
     @Override
     public void setIsOpened(boolean isOpened) {
         this.isOpened = isOpened;
+    }
+
+    @Override
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    @Override
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
     }
 
     @Override

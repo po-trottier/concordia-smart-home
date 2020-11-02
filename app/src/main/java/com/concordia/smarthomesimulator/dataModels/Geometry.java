@@ -28,6 +28,21 @@ public class Geometry {
     }
 
     /**
+     * Instantiates a new Geometry.
+     *
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     * @param width  the width
+     * @param height the height
+     */
+    public Geometry(float x, float y, float width, float height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    /**
      * Gets the x coordinate.
      *
      * @return the x coordinate

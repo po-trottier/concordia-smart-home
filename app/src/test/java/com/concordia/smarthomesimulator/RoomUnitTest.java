@@ -1,10 +1,6 @@
 package com.concordia.smarthomesimulator;
 
-import com.concordia.smarthomesimulator.dataModels.Door;
-import com.concordia.smarthomesimulator.dataModels.Geometry;
-import com.concordia.smarthomesimulator.dataModels.Light;
-import com.concordia.smarthomesimulator.dataModels.Room;
-import com.concordia.smarthomesimulator.dataModels.Window;
+import com.concordia.smarthomesimulator.dataModels.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -81,5 +77,48 @@ public class RoomUnitTest {
         room.removeDevice(door);
         // Test
         assertEquals(room.getDevices().size(), 1);
+    }
+
+    @Test
+    public void roomHasNoInhabitantsByDefault() {
+        // Setup
+        Room room = new Room("room", new Geometry());
+        // Test
+        assertEquals(room.getInhabitants().size(), 0);
+    }
+
+    @Test
+    public void roomInhabitantCanBeAdded() {
+        // Setup
+        Room room = new Room("room", new Geometry());
+        // Act
+        room.addInhabitant(new Inhabitant("inhabitant"));
+        // Test
+        assertEquals(room.getInhabitants().size(), 1);
+    }
+
+    @Test
+    public void roomInhabitantsCanBeAdded() {
+        // Setup
+        Inhabitant inhabitant = new Inhabitant("inhabitant");
+        Inhabitant inhabitant2 = new Inhabitant("inhabitant2");
+        Room room = new Room("room", new Geometry());
+        // Act
+        room.addInhabitants(new ArrayList<>(Arrays.asList(inhabitant, inhabitant2)));
+        // Test
+        assertEquals(room.getInhabitants().size(), 2);
+    }
+
+    @Test
+    public void roomInhabitantsCanBeRemoved() {
+        // Setup
+        Inhabitant inhabitant = new Inhabitant("inhabitant");
+        Inhabitant inhabitant2 = new Inhabitant("inhabitant2");
+        Room room = new Room("room", new Geometry());
+        room.addInhabitants(new ArrayList<>(Arrays.asList(inhabitant, inhabitant2)));
+        // Act
+        room.removeInhabitant(inhabitant.getName());
+        // Test
+        assertEquals(room.getInhabitants().size(), 1);
     }
 }
