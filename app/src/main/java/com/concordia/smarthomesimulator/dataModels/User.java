@@ -11,7 +11,7 @@ public class User {
     private final String username;
     private final String password;
     private final Permissions permission;
-    private Map<String, ?> preferences;
+    private UserPreferences userPreferences;
 
     /**
      * Instantiates a new User.
@@ -23,11 +23,18 @@ public class User {
      * @param password   the password
      * @param permission the permission
      */
+    public User(String username, String password, Permissions permission, UserPreferences userPreferences) {
+        this.username = username;
+        this.password = password;
+        this.permission = permission;
+        this.userPreferences = userPreferences;
+    }
+
     public User(String username, String password, Permissions permission) {
         this.username = username;
         this.password = password;
         this.permission = permission;
-        this.preferences = new HashMap<>();
+        this.userPreferences = new UserPreferences(this);
     }
 
     /**
@@ -57,25 +64,6 @@ public class User {
         return permission;
     }
 
-
-    /**
-     * Sets preferences.
-     *
-     * @param preferences the preferences
-     */
-    public void setPreferences(Map<String, ?> preferences) {
-        this.preferences = preferences;
-    }
-
-    /**
-     * Gets preferences.
-     *
-     * @return the preferences
-     */
-    public Map<String, ?> getPreferences() {
-        return preferences;
-    }
-
     /**
      * A user is similar to another if they have the same username
      *
@@ -96,5 +84,13 @@ public class User {
         return username.equalsIgnoreCase(user.username)
                 && password.equals(user.password)
                 && permission.equals(user.permission);
+    }
+
+    public UserPreferences getUserPreferences() {
+        return userPreferences;
+    }
+
+    public void setUserPreferences(UserPreferences userPreferences) {
+        this.userPreferences = userPreferences;
     }
 }

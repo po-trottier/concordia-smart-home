@@ -92,9 +92,9 @@ public class MainController extends AppCompatActivity {
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));
                 return true;
             case R.id.action_logout:
-                SharedPreferences.Editor editor = sharedPreferences.edit();
                 savePreferencesToUserbase(sharedPreferences);
                 // Remove Logged In User Information
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(PREFERENCES_KEY_USERNAME);
                 editor.remove(PREFERENCES_KEY_PASSWORD);
                 editor.remove(PREFERENCES_KEY_PERMISSIONS);
@@ -118,7 +118,7 @@ public class MainController extends AppCompatActivity {
         Userbase userbase = new Userbase(context);
         userbase.saveUserPreferences(
                 sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""),
-                sharedPreferences.getAll(),
+                sharedPreferences,
                 context);
     }
 

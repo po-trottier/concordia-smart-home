@@ -59,35 +59,11 @@ public class LoginModel extends ViewModel {
             return  false;
         }
 
-        SharedPreferences.Editor editor = preferences.edit();
-        if (loggedUser.getPreferences().size() == 0) {
-            // Save logged user info to preferences if the user has no saved preferences
-            editor.putString(PREFERENCES_KEY_USERNAME, loggedUser.getUsername());
-            editor.putString(PREFERENCES_KEY_PASSWORD, loggedUser.getPassword());
-            editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitValue());
-        } else {
-            // Otherwise load the preferences from the user obj
-            loadPreferences(loggedUser, editor);
-        }
-        editor.apply();
+        loggedUser.getUserPreferences().loadUserPreferences(preferences);
 
         return true;
     }
 
-    private void loadPreferences(User user, SharedPreferences.Editor editor){
-        for (Map.Entry<String, ?> entry : user.getPreferences().entrySet()) {
-            if (entry.getValue() instanceof String){
-                editor.putString(entry.getKey(), (String)entry.getValue());
-            } else if (entry.getValue() instanceof Integer){
-                editor.putInt(entry.getKey(), (int)entry.getValue());
-            } else if (entry.getValue() instanceof Double){
-                // converting to int, problem caused by reading/writing the object file
-                editor.putInt(entry.getKey(), ((Double) entry.getValue()).intValue());
-            } else if (entry.getValue() instanceof Boolean){
-                editor.putBoolean(entry.getKey(), (boolean)entry.getValue());
-            }
-        }
-    }
 }
 
 

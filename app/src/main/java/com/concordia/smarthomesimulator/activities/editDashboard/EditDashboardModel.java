@@ -78,7 +78,7 @@ public class EditDashboardModel extends ViewModel{
         // Validate the values of the username and password
         String validUsername = username;
         String validPassword = password;
-        Permissions validPermissions = Permissions.toPermissions(permissions);
+        Permissions validPermissions = Permissions.fromString(permissions);
         if (validUsername.isEmpty())
             validUsername = oldUser.getUsername();
         if (validPassword.isEmpty())
@@ -108,7 +108,7 @@ public class EditDashboardModel extends ViewModel{
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(PREFERENCES_KEY_USERNAME, username);
             editor.putString(PREFERENCES_KEY_PASSWORD, password);
-            editor.putInt(PREFERENCES_KEY_PERMISSIONS, Permissions.toPermissions(permissions).getBitValue());
+            editor.putInt(PREFERENCES_KEY_PERMISSIONS, Permissions.fromString(permissions).getBitValue());
             editor.apply();
         }
 
