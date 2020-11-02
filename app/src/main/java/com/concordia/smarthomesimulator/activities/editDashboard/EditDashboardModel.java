@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.Permissions;
 import com.concordia.smarthomesimulator.dataModels.User;
+import com.concordia.smarthomesimulator.dataModels.UserPreferences;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
 
 import java.util.TimeZone;
@@ -97,7 +98,10 @@ public class EditDashboardModel extends ViewModel{
         if (userbase.getNumberOfSimilarUsers(newUser) > 1 || userbase.containsUser(newUser))
             return R.string.edit_conflict;
 
-        // Delete the Old User
+        // Set the preferences of the new user to that of the old user
+        newUser.setUserPreferences(oldUser.getUserPreferences());
+
+        // Delete the Old User and transfer the preferences
         userbase.deleteUserFromUsernameIfPossible(context, oldUser.getUsername());
 
         // Add the New User
