@@ -1,9 +1,9 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
-import static com.concordia.smarthomesimulator.Constants.*;
+import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_GARAGE;
+import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
 
 public class HouseLayout {
 
@@ -65,9 +65,9 @@ public class HouseLayout {
     }
 
     /**
-     * Gets rooms.
+     * Gets a specific room based on its name.
      *
-     * @return the rooms
+     * @return the room
      */
     public Room getRoom(String name) {
         return rooms.stream()
