@@ -48,6 +48,12 @@ public enum Permissions {
         }
     }
 
+    /**
+     * Converts integer to permissions.
+     *
+     * @param permissions the permissions in integer form
+     * @return the permissions
+     */
     public static Permissions fromInteger(int permissions){
         switch (permissions){
             case 15: return PARENT;

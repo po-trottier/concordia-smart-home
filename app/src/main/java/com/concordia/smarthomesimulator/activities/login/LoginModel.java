@@ -12,8 +12,6 @@ import com.concordia.smarthomesimulator.dataModels.Userbase;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
-import java.util.Map;
-
 import static com.concordia.smarthomesimulator.Constants.*;
 
 public class LoginModel extends ViewModel {
