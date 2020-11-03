@@ -8,25 +8,21 @@ import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
 public class HouseLayout {
 
     private String name;
-    private Geometry geometry;
     private final ArrayList<Room> rooms;
 
     /**
      * Instantiates a new House layout.
      *  @param name        the name
-     * @param width       the width
-     * @param height      the height
-     * @param currentUser the currently logged in user
+     *  @param currentUser the currently logged in user
      */
-    public HouseLayout(String name, int width, int height, String currentUser) {
+    public HouseLayout(String name, String currentUser) {
         this.name = name;
-        this.geometry = new Geometry(width, height);
 
         rooms = new ArrayList<>();
 
         // Add the default rooms (Outdoors and Garage)
-        rooms.add(new Room(DEFAULT_NAME_OUTDOORS, new Geometry()));
-        rooms.add(new Room(DEFAULT_NAME_GARAGE, new Geometry()));
+        rooms.add(new Room(DEFAULT_NAME_GARAGE, new Geometry(-1, -1, 3, 3)));
+        rooms.add(new Room(DEFAULT_NAME_OUTDOORS, new Geometry(-1, -1, 3, 3)));
 
         // Add the current user if he's not already in a room
         boolean userExists = currentUser != null && rooms.stream().anyMatch(room -> room.hasInhabitant(currentUser));
@@ -44,24 +40,15 @@ public class HouseLayout {
     }
 
     /**
-     * Gets geometry.
-     *
-     * @return the geometry
-     */
-    public Geometry getGeometry() {
-        return geometry;
-    }
-
-    /**
      * Gets a specific room based on its name.
      *
      * @return the room
      */
     public Room getRoom(String name) {
         return rooms.stream()
-                .filter(room -> room.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
+            .filter(room -> room.getName().equalsIgnoreCase(name))
+            .findFirst()
+            .orElse(null);
     }
 
     /**
@@ -80,15 +67,6 @@ public class HouseLayout {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Sets geometry.
-     *
-     * @param geometry the geometry
-     */
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
     }
 
     /**

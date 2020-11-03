@@ -91,7 +91,7 @@ public class HouseLayoutHelper {
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
 
         // Create new House Layout
-        return new HouseLayout("Empty Layout", 10, 10, currentUser);
+        return new HouseLayout("Empty Layout", currentUser);
     }
 
     private static HouseLayout loadDemoHouseLayout(Context context) {
@@ -101,7 +101,7 @@ public class HouseLayoutHelper {
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
 
         // Create new House Layout
-        HouseLayout layout = new HouseLayout("Demo Layout", 10, 10, currentUser);
+        HouseLayout layout = new HouseLayout("Demo Layout", currentUser);
 
         // Create Bedroom
         Room bedroom = new Room("Bedroom", new Geometry(0,0, 3, 6));
