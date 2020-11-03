@@ -5,23 +5,14 @@ import android.content.SharedPreferences;
 import static com.concordia.smarthomesimulator.Constants.*;
 
 public class UserPreferences {
+
     private String username;
     private String password;
     private Permissions permissions;
     private int temperature;
     private String timeZone;
     private boolean status;
-
-
-    public UserPreferences(String username, String password, Permissions permissions, int temperature, String timeZone, boolean status) {
-        this.username = username;
-        this.password = password;
-        this.permissions = permissions;
-        this.temperature = temperature;
-        this.timeZone = timeZone;
-        this.status = status;
-    }
-
+    private String layout;
 
     public UserPreferences(String username, String password, Permissions permissions) {
         this.username = username;
@@ -127,7 +118,7 @@ public class UserPreferences {
      *
      * @return the boolean
      */
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 
@@ -138,6 +129,24 @@ public class UserPreferences {
      */
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    /**
+     * Gets the selected layout.
+     *
+     * @return the layout
+     */
+    public String getLayout() {
+        return layout;
+    }
+
+    /**
+     * Sets the selected layout.
+     *
+     * @param layout the layout
+     */
+    public void setLayout(String layout) {
+        this.layout = layout;
     }
 
     /**
@@ -153,6 +162,7 @@ public class UserPreferences {
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
         editor.putString(PREFERENCES_KEY_TIME_ZONE, timeZone);
         editor.putBoolean(PREFERENCES_KEY_STATUS, status);
+        editor.putString(PREFERENCES_KEY_LAYOUT, layout);
         editor.apply();
     }
 
@@ -168,6 +178,7 @@ public class UserPreferences {
         temperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE,0);
         timeZone = preferences.getString(PREFERENCES_KEY_TIME_ZONE,"");
         status = preferences.getBoolean(PREFERENCES_KEY_STATUS, false);
+        layout = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
     }
 
     /**
@@ -183,6 +194,7 @@ public class UserPreferences {
         editor.remove(PREFERENCES_KEY_TEMPERATURE);
         editor.remove(PREFERENCES_KEY_TIME_ZONE);
         editor.remove(PREFERENCES_KEY_STATUS);
+        editor.remove(PREFERENCES_KEY_LAYOUT);
         editor.apply();
     }
 }
