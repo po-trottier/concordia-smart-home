@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/alert_save_layout_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/rounded_text_field_background"
+        android:hint="@string/field_alert_save_layout"
+        android:textSize="16sp"
+        android:inputType="text"/>
+</LinearLayout>
