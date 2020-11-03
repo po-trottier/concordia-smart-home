@@ -54,6 +54,19 @@ public class CustomMapDrawable extends Drawable {
     private Paint devicePaint;
     private Paint deviceStrokePaint;
 
+    /**
+     * Instantiates a new Custom map drawable.
+     *
+     * Important information:
+     * - For best results, all rooms and devices in the layout should have a 1x1 aspect ratio (or close). For example, the layout could be of size 10x10
+     * - Doors and windows are 1 unit long no matter the size of the layout so it's best to scale accordingly
+     * - The garage and outdoors are automatically drawn at the bottom of the layout
+     * - Rooms or devices with invalid coordinates and/or sizes will break the rendering (x = -1, etc.)
+     * - Other than for these few key points, the layout should always scale accordingly to your device size
+     *
+     * @param context     the context
+     * @param houseLayout the house layout to draw
+     */
     public CustomMapDrawable(Context context, HouseLayout houseLayout) {
         this.context = context;
         this.houseLayout = houseLayout;
