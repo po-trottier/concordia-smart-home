@@ -57,7 +57,7 @@ public class LoginModel extends ViewModel {
             return  false;
         }
 
-        loggedUser.getUserPreferences().load(preferences);
+        loggedUser.getUserPreferences().sendToContext(preferences);
 
         return true;
     }

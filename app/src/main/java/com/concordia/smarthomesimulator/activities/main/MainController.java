@@ -92,7 +92,7 @@ public class MainController extends AppCompatActivity {
             case R.id.action_logout:
                 // Save the preferences
                 Userbase userbase = new Userbase(context);
-                userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "")).getUserPreferences().save(sharedPreferences);
+                userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "")).getUserPreferences().receiveFromContext(sharedPreferences);
                 UserbaseHelper.saveUserbase(context, userbase);
                 // Remove Logged In User Information
                 UserPreferences.clear(sharedPreferences);

@@ -145,7 +145,7 @@ public class UserPreferences {
      *
      * @param preferences the preferences
      */
-    public void load(SharedPreferences preferences){
+    public void sendToContext(SharedPreferences preferences){
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PREFERENCES_KEY_USERNAME, username);
         editor.putString(PREFERENCES_KEY_PASSWORD, password);
@@ -161,7 +161,7 @@ public class UserPreferences {
      *
      * @param preferences the preferences
      */
-    public void save(SharedPreferences preferences){
+    public void receiveFromContext(SharedPreferences preferences){
         username = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         password = preferences.getString(PREFERENCES_KEY_PASSWORD,"");
         permissions = Permissions.fromInteger(preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0));
