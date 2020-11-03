@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">Smart Home Simulator</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="nav_header_title">Smart Home Simulator</string>
     <string name="nav_header_subtitle">Team #20</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -33,22 +30,6 @@
     <string name="toast_could_not_delete">
         The logs file could not be deleted from the device\'s storage. Please try again.
     </string>
-    <string name="snackbar_save_success">
-        The layout was saved successfully. You will now be able to open it.
-    </string>
-    <string name="snackbar_load_success">
-        The layout was opened successfully.
-    </string>
-    <string name="snackbar_save_error">
-        There was an error while saving the layout. Please try again.
-    </string>
-    <string name="snackbar_load_error">
-        There was an error while opening the layout. It might already be opened or unavailable.
-    </string>
-
-    <string name="button_save_layout">Save Layout</string>
-    <string name="button_load_layout">Open Layout</string>
-    <string name="button_clear_logs">Clear Logs</string>
 
     <string name="edit_text_username">Enter username</string>
     <string name="edit_text_password">Enter password</string>
@@ -63,7 +44,6 @@
 
     <string name="edit_user_welcome">Modify Existing User</string>
     <string name="edit_success">The user account was edited successfully.</string>
-    <string name="edit_error">An error occurred, the account could not be edited.</string>
     <string name="edit_conflict">The account could not be edited because another user has the same username.</string>
     <string name="edit_user_welcome_create">Create a New User</string>
     <string name="create_user_successful">User was created successfully!</string>
@@ -83,12 +63,9 @@
     <string name="map_opened">Opened</string>
     <string name="map_closed">Closed</string>
     <string name="map_locked">Locked</string>
-    <string name="map_room_outdoors">Outdoors</string>
     <string name="default_room_name">Room</string>
     <string name="default_device_name">Device</string>
-    <string name="default_inhabitant_title">Inhabitants</string>
     <string name="title_rooms">Rooms</string>
-    <string name="title_inhabitants">Inhabitants</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
     <string name="title_activity_edit_dashboard">Edit Simulation Context</string>

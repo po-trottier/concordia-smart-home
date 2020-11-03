@@ -15,10 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.DeviceType;
-import com.concordia.smarthomesimulator.dataModels.IDevice;
-import com.concordia.smarthomesimulator.dataModels.Room;
-import com.concordia.smarthomesimulator.dataModels.Window;
+import com.concordia.smarthomesimulator.dataModels.*;
 
 import java.util.List;
 
@@ -49,48 +46,65 @@ public class MapRoomAdapter extends ArrayAdapter<Room> {
         TextView roomName = row.findViewById(R.id.adapter_room_name);
         roomName.setText(room.getName());
 
+        LinearLayout inhabitantList = row.findViewById(R.id.adapter_inhabitant_list);
+        for (Inhabitant inhabitant : room.getInhabitants()) {
+            inhabitantList.addView(setupInhabitantView(inflater, inhabitant));
+        }
+
         LinearLayout deviceList = row.findViewById(R.id.adapter_device_list);
         for (IDevice device : room.getDevices()){
-            View child = inflater.inflate(R.layout.adapter_map_device, null);
-
-            DeviceType type = device.getDeviceType();
-
-            ImageView deviceIcon = child.findViewById(R.id.adapter_device_image);
-            TextView deviceStatus = child.findViewById(R.id.adapter_device_status);
-
-            if(type == DeviceType.WINDOW && ((Window) device).getIsLocked()){
-                deviceIcon.setImageResource(((Window) device).getLockedIcon());
-                deviceIcon.setColorFilter(context.getColor(((Window) device).getLockedTint()), PorterDuff.Mode.SRC_IN);
-
-                deviceStatus.setText(context.getString(R.string.map_locked));
-            } else {
-                int tintResource = device.getIsOpened() ? device.getOpenedTint() : device.getClosedTint();
-                deviceIcon.setImageResource(device.getIsOpened() ? device.getOpenedIcon() : device.getClosedIcon());
-                deviceIcon.setColorFilter(context.getColor(tintResource), PorterDuff.Mode.SRC_IN);
-
-                deviceStatus.setText(device.getIsOpened() ? context.getString(R.string.map_opened) : context.getString(R.string.map_closed));
-            }
-
-            TextView deviceType = child.findViewById(R.id.adapter_device_type_text);
-            String deviceTypeText;
-            switch (type) {
-                case LIGHT:
-                    deviceTypeText = context.getString(R.string.map_light);
-                    break;
-                case DOOR:
-                    deviceTypeText = context.getString(R.string.map_door);
-                    break;
-                case WINDOW:
-                    deviceTypeText = context.getString(R.string.map_window);
-                    break;
-                default:
-                    deviceTypeText = context.getString(R.string.default_device_name);
-            }
-            deviceType.setText(deviceTypeText);
-
-            deviceList.addView(child);
+            deviceList.addView(setupDeviceView(inflater, device));
         }
 
         return row;
+    }
+
+    private View setupInhabitantView(LayoutInflater inflater, Inhabitant inhabitant) {
+        View child = inflater.inflate(R.layout.adapter_map_inhabitant, null);
+
+        TextView inhabitantName = child.findViewById(R.id.adapter_inhabitant_name);
+        inhabitantName.setText(inhabitant.getName());
+
+        return child;
+    }
+
+    private View setupDeviceView(LayoutInflater inflater, IDevice device) {
+        View child = inflater.inflate(R.layout.adapter_map_device, null);
+        DeviceType type = device.getDeviceType();
+
+        ImageView deviceIcon = child.findViewById(R.id.adapter_device_image);
+        TextView deviceStatus = child.findViewById(R.id.adapter_device_status);
+
+        if(type == DeviceType.WINDOW && ((Window) device).getIsLocked()){
+            deviceIcon.setImageResource(((Window) device).getLockedIcon());
+            deviceIcon.setColorFilter(context.getColor(((Window) device).getLockedTint()), PorterDuff.Mode.SRC_IN);
+
+            deviceStatus.setText(context.getString(R.string.map_locked));
+        } else {
+            int tintResource = device.getIsOpened() ? device.getOpenedTint() : device.getClosedTint();
+            deviceIcon.setImageResource(device.getIsOpened() ? device.getOpenedIcon() : device.getClosedIcon());
+            deviceIcon.setColorFilter(context.getColor(tintResource), PorterDuff.Mode.SRC_IN);
+
+            deviceStatus.setText(device.getIsOpened() ? context.getString(R.string.map_opened) : context.getString(R.string.map_closed));
+        }
+
+        TextView deviceType = child.findViewById(R.id.adapter_device_type_text);
+        String deviceTypeText;
+        switch (type) {
+            case LIGHT:
+                deviceTypeText = context.getString(R.string.map_light);
+                break;
+            case DOOR:
+                deviceTypeText = context.getString(R.string.map_door);
+                break;
+            case WINDOW:
+                deviceTypeText = context.getString(R.string.map_window);
+                break;
+            default:
+                deviceTypeText = context.getString(R.string.default_device_name);
+        }
+        deviceType.setText(deviceTypeText);
+
+        return child;
     }
 }

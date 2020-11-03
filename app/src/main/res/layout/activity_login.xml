@@ -39,7 +39,6 @@
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/login_fields"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"

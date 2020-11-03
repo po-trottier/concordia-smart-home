@@ -7,9 +7,19 @@ import com.concordia.smarthomesimulator.R;
 public class Door implements IDevice {
 
     private boolean isOpened = false;
+    private Geometry geometry;
 
     public Door() {
+        geometry = new Geometry();
+    }
 
+    /**
+     * Instantiates a new Door.
+     *
+     * @param geometry the geometry of the device
+     */
+    public Door(Geometry geometry) {
+        this.geometry = geometry;
     }
 
     @Override
@@ -40,6 +50,16 @@ public class Door implements IDevice {
     @Override
     public void setIsOpened(boolean isOpened) {
         this.isOpened = isOpened;
+    }
+
+    @Override
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    @Override
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
     }
 
     @Override

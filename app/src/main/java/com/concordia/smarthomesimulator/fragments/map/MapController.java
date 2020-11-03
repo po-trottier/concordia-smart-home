@@ -12,17 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
-import com.concordia.smarthomesimulator.adapters.MapInhabitantAdapter;
 import com.concordia.smarthomesimulator.adapters.MapRoomAdapter;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
-import com.concordia.smarthomesimulator.helpers.FileHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -50,7 +49,6 @@ public class MapController extends Fragment {
         
         setMapDetails();
         setCustomRoomAdapter();
-        setCustomInhabitantsAdapter();
 
         super.onResume();
     }
@@ -68,6 +66,9 @@ public class MapController extends Fragment {
         byte[] imageBytes = Base64.decode(houseLayout.getImage(), Base64.DEFAULT);
         Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
         layoutImage.setImageBitmap(decodedImage);
+
+        TextView layoutName = view.findViewById(R.id.map_layout_name);
+        layoutName.setText(houseLayout.getName());
     }
 
     private void setCustomRoomAdapter() {
@@ -76,14 +77,6 @@ public class MapController extends Fragment {
 
         ListView roomList = view.findViewById(R.id.map_room_list);
         roomList.setAdapter(adapter);
-    }
-
-    private void setCustomInhabitantsAdapter() {
-        ArrayList<Inhabitant> inhabitants = houseLayout.getInhabitants();
-        MapInhabitantAdapter adapterInhabitant = new MapInhabitantAdapter(context, 0, inhabitants);
-
-        ListView inhabitantList = view.findViewById(R.id.map_inhabitant_list);
-        inhabitantList.setAdapter(adapterInhabitant);
     }
 
     private void setEditIntent() {

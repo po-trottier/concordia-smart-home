@@ -14,4 +14,7 @@ public class Constants {
 
     public static final int DEFAULT_TEMPERATURE = 20;
     public static final String DEFAULT_TIME_ZONE = "America/Montreal";
+
+    public static final String DEFAULT_NAME_OUTDOORS = "Outdoors";
+    public static final String DEFAULT_NAME_GARAGE = "Garage";
 }
