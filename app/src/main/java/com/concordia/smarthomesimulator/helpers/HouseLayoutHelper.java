@@ -95,7 +95,7 @@ public class HouseLayoutHelper {
     }
 
     private static HouseLayout loadDemoHouseLayout(Context context) {
-        DeviceFactory deviceFactory = new DeviceFactory();
+//        DeviceFactory deviceFactory = new DeviceFactory();
 
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
@@ -106,9 +106,12 @@ public class HouseLayoutHelper {
         // Create Bedroom
         Room bedroom = new Room("Bedroom", new Geometry(0,0, 3, 6));
 
-        Window bedroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
-        Light bedroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Door bedroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+//        Window bedroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
+//        Light bedroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+//        Door bedroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+//
+//        bedroomWindow.setIsLocked(true);
+//        bedroomDoor.setIsOpened(true);
 //
 //        bedroom.addDevices(new ArrayList<>(Arrays.asList(bedroomWindow, bedroomLight, bedroomDoor)));
 
@@ -120,10 +123,12 @@ public class HouseLayoutHelper {
         // Create Kitchen
         Room kitchen = new Room("Kitchen", new Geometry(0, 6, 8,4));
 
-        Window kitchenWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
-        Light kitchenLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Light kitchenLight2 = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Door kitchenDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+//        Window kitchenWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
+//        Light kitchenLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+//        Light kitchenLight2 = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+//        Door kitchenDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+//
+//        kitchen.addDevices(new ArrayList<>(Arrays.asList(kitchenWindow, kitchenLight, kitchenLight2, kitchenDoor)));
 
         Inhabitant person2 = new Inhabitant("Person2");
         kitchen.addInhabitant(person2);
@@ -133,14 +138,14 @@ public class HouseLayoutHelper {
         // Create Bathroom
         Room bathroom = new Room("Bathroom", new Geometry(3, 4, 2, 2));
 
-        Window bathroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
-        Light bathroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Door bathroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
-
-        bathroomWindow.setIsLocked(true);
-        bathroomDoor.setIsOpened(true);
-
-        bathroom.addDevices(new ArrayList<>(Arrays.asList(bathroomWindow, bathroomLight, bathroomDoor)));
+//        Window bathroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
+//        Light bathroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
+//        Door bathroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+//
+//        bathroomWindow.setIsLocked(true);
+//        bathroomDoor.setIsOpened(true);
+//
+//        bathroom.addDevices(new ArrayList<>(Arrays.asList(bathroomWindow, bathroomLight, bathroomDoor)));
 
         layout.addRoom(bathroom);
 
