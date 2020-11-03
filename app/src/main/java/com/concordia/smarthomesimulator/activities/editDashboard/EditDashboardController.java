@@ -167,7 +167,7 @@ public class EditDashboardController extends AppCompatActivity {
                 // Get the User's information
                 String newUsername = newUsernameField.getText().toString();
                 String newPassword = newPasswordField.getText().toString();
-                Permissions newPermissions = Permissions.toPermissions(newPermissionsSpinner.getSelectedItem().toString());
+                Permissions newPermissions = Permissions.fromString(newPermissionsSpinner.getSelectedItem().toString());
                 // Add the new User
                 int feedbackResource = editDashboardModel.addUser(context, userbase, new User(newUsername, newPassword, newPermissions));
                 String message = getString(feedbackResource);

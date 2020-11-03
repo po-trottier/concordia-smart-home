@@ -1,7 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.Context;
-
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import java.util.List;

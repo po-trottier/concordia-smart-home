@@ -57,15 +57,11 @@ public class LoginModel extends ViewModel {
             return  false;
         }
 
-        // Save logged user info to preferences
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_KEY_USERNAME, loggedUser.getUsername());
-        editor.putString(PREFERENCES_KEY_PASSWORD, loggedUser.getPassword());
-        editor.putInt(PREFERENCES_KEY_PERMISSIONS, loggedUser.getPermission().getBitValue());
-        editor.apply();
+        loggedUser.getUserPreferences().sendToContext(preferences);
 
         return true;
     }
+
 }
 
 
