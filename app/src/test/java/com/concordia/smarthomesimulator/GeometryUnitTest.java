@@ -20,7 +20,15 @@ public class GeometryUnitTest {
     @Test
     public void geometryCanBeCreatedWithParameters() {
         // Setup
-        Geometry geometry = new Geometry(1f, 1f);
+        Geometry geometry = new Geometry(1, 1);
+        // Test
+        assertNotNull(geometry);
+    }
+
+    @Test
+    public void geometryCanBeCreatedWithAllParameters() {
+        // Setup
+        Geometry geometry = new Geometry(1, 1, 1, 1);
         // Test
         assertNotNull(geometry);
     }
@@ -28,8 +36,8 @@ public class GeometryUnitTest {
     @Test
     public void geometryGetProperValues() {
         // Setup
-        float width = 1f;
-        float height = 2f;
+        int width = 1;
+        int height = 2;
         Geometry geometry = new Geometry(width, height);
         // Test
         assertEquals(geometry.getHeight(), height, EPSILON);
@@ -41,8 +49,8 @@ public class GeometryUnitTest {
     @Test
     public void geometryCanBeSet() {
         // Setup
-        float width = 1f;
-        float height = 2f;
+        int width = 1;
+        int height = 2;
         Geometry geometry = new Geometry();
         // Act
         geometry.setWidth(width);
@@ -57,8 +65,8 @@ public class GeometryUnitTest {
     @Test
     public void geometryCoordinatesCanBeSet() {
         // Setup
-        float x = 1f;
-        float y = 2f;
+        int x = 1;
+        int y = 2;
         Geometry geometry = new Geometry();
         // Act
         geometry.setX(x);

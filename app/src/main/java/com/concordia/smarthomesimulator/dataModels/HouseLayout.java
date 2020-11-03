@@ -13,13 +13,12 @@ public class HouseLayout {
 
     /**
      * Instantiates a new House layout.
-     *
-     * @param name        the name
+     *  @param name        the name
      * @param width       the width
      * @param height      the height
      * @param currentUser the currently logged in user
      */
-    public HouseLayout(String name, float width, float height, String currentUser) {
+    public HouseLayout(String name, int width, int height, String currentUser) {
         this.name = name;
         this.geometry = new Geometry(width, height);
 

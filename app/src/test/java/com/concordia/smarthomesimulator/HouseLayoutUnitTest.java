@@ -13,12 +13,10 @@ import static org.junit.Assert.*;
 
 public class HouseLayoutUnitTest {
 
-    final static float EPSILON = Float.intBitsToFloat(Float.floatToIntBits(1f) + 1);
-
     @Test
     public void houseLayoutCanBeCreated() {
         // Setup
-        HouseLayout layout = new HouseLayout("layout", 1f, 1f, null);
+        HouseLayout layout = new HouseLayout("layout", 1, 1, null);
         // Test
         assertNotNull(layout);
     }
@@ -27,7 +25,7 @@ public class HouseLayoutUnitTest {
     public void houseLayoutReturnsProperName() {
         // Setup
         final String name = "layout";
-        HouseLayout layout = new HouseLayout(name, 1f, 1f, null);
+        HouseLayout layout = new HouseLayout(name, 1, 1, null);
         // Test
         assertEquals(layout.getName(), name);
     }
@@ -35,12 +33,12 @@ public class HouseLayoutUnitTest {
     @Test
     public void houseLayoutReturnsProperGeometry() {
         // Setup
-        float width = 1f;
-        float height = 2f;
+        int width = 1;
+        int height = 2;
         HouseLayout layout = new HouseLayout("layout", width, height, null);
         // Test
-        assertEquals(layout.getGeometry().getWidth(), width, EPSILON);
-        assertEquals(layout.getGeometry().getHeight(), height, EPSILON);
+        assertEquals(layout.getGeometry().getWidth(), width);
+        assertEquals(layout.getGeometry().getHeight(), height);
         assertNotEquals(layout.getGeometry().getWidth(), height);
         assertNotEquals(layout.getGeometry().getHeight(), width);
     }
@@ -48,7 +46,7 @@ public class HouseLayoutUnitTest {
     @Test
     public void houseLayoutHasNoRoomByDefault() {
         // Setup
-        HouseLayout layout = new HouseLayout("layout", 1f, 1f, null);
+        HouseLayout layout = new HouseLayout("layout", 1, 1, null);
         // Test
         assertEquals(layout.getRooms().size(), 0);
     }
@@ -56,7 +54,7 @@ public class HouseLayoutUnitTest {
     @Test
     public void houseLayoutRoomCanBeAdded() {
         // Setup
-        HouseLayout layout = new HouseLayout("layout", 1f, 1f, null);
+        HouseLayout layout = new HouseLayout("layout", 1, 1, null);
         // Act
         layout.addRoom(new Room("room", new Geometry()));
         // Test
@@ -68,7 +66,7 @@ public class HouseLayoutUnitTest {
         // Setup
         Room room = new Room("room", new Geometry());
         Room room2 = new Room("room2", new Geometry());
-        HouseLayout layout = new HouseLayout("layout", 1f, 1f, null);
+        HouseLayout layout = new HouseLayout("layout", 1, 1, null);
         // Act
         layout.addRooms(new ArrayList<>(Arrays.asList(room, room2)));
         // Test
@@ -80,7 +78,7 @@ public class HouseLayoutUnitTest {
         // Setup
         Room room = new Room("room", new Geometry());
         Room room2 = new Room("room2", new Geometry());
-        HouseLayout layout = new HouseLayout("layout", 1f, 1f, null);
+        HouseLayout layout = new HouseLayout("layout", 1, 1, null);
         layout.addRooms(new ArrayList<>(Arrays.asList(room, room2)));
         // Act
         layout.removeRoom(room.getName());

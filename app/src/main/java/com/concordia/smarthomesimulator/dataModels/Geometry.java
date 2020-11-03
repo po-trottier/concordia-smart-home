@@ -4,10 +4,10 @@ package com.concordia.smarthomesimulator.dataModels;
  * The type Geometry.
  */
 public class Geometry {
-    private float x;
-    private float y;
-    private float width;
-    private float height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 
     /**
      * Instantiates a new Geometry.
@@ -20,7 +20,7 @@ public class Geometry {
      * @param width  the width
      * @param height the height
      */
-    public Geometry(float width, float height) {
+    public Geometry(int width, int height) {
         x = 0;
         y = 0;
         this.width = width;
@@ -35,7 +35,7 @@ public class Geometry {
      * @param width  the width
      * @param height the height
      */
-    public Geometry(float x, float y, float width, float height) {
+    public Geometry(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -47,7 +47,7 @@ public class Geometry {
      *
      * @return the x coordinate
      */
-    public float getX() {
+    public int getX() {
         return x;
     }
 
@@ -56,7 +56,7 @@ public class Geometry {
      *
      * @return the y coordinate
      */
-    public float getY() {
+    public int getY() {
         return y;
     }
 
@@ -65,7 +65,7 @@ public class Geometry {
      *
      * @return the width
      */
-    public float getWidth() {
+    public int getWidth() {
         return width;
     }
 
@@ -74,7 +74,7 @@ public class Geometry {
      *
      * @return the height
      */
-    public float getHeight() {
+    public int getHeight() {
         return height;
     }
 
@@ -83,7 +83,7 @@ public class Geometry {
      *
      * @param x the x coordinate
      */
-    public void setX(float x) {
+    public void setX(int x) {
         this.x = x;
     }
 
@@ -92,7 +92,7 @@ public class Geometry {
      *
      * @param y the y coordinate
      */
-    public void setY(float y) {
+    public void setY(int y) {
         this.y = y;
     }
 
@@ -101,7 +101,7 @@ public class Geometry {
      *
      * @param width the width
      */
-    public void setWidth(float width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -110,7 +110,7 @@ public class Geometry {
      *
      * @param height the height
      */
-    public void setHeight(float height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 }
