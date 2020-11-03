@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_GARAGE;
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
 
-public class CustomHouseLayout extends Drawable {
+public class CustomMapDrawable extends Drawable {
 
     private final static int DEFAULT_SCALING_MAX = 10;
 
@@ -54,7 +54,7 @@ public class CustomHouseLayout extends Drawable {
     private Paint devicePaint;
     private Paint deviceStrokePaint;
 
-    public CustomHouseLayout(Context context, HouseLayout houseLayout) {
+    public CustomMapDrawable(Context context, HouseLayout houseLayout) {
         this.context = context;
         this.houseLayout = houseLayout;
 

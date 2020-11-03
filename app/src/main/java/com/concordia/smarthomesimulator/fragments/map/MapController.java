@@ -3,11 +3,8 @@ package com.concordia.smarthomesimulator.fragments.map;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -18,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
-import com.concordia.smarthomesimulator.controls.CustomHouseLayout;
+import com.concordia.smarthomesimulator.controls.CustomMapDrawable;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
@@ -68,25 +65,8 @@ public class MapController extends Fragment {
 
     private void setMapDetails() {
         ImageView mapView = view.findViewById(R.id.custom_house_layout);
-        CustomHouseLayout houseLayoutDrawable = new CustomHouseLayout(context, mapModel.getHouseLayout());
-        mapView.setImageDrawable(houseLayoutDrawable);
-//        mapView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                int[] position = new int[2];
-//                v.getLocationOnScreen(position);
-//
-//                int touchX = (int) event.getX();
-//                int touchY = (int) event.getY();
-//
-//                int imageX = touchX - position[0];
-//                int imageY = touchY - position[1];
-//
-//                houseLayoutDrawable.receiveClick(imageX, imageY);
-//
-//                return false;
-//            }
-//        });
+        CustomMapDrawable mapDrawable = new CustomMapDrawable(context, mapModel.getHouseLayout());
+        mapView.setImageDrawable(mapDrawable);
 
         TextView layoutName = view.findViewById(R.id.map_layout_name);
         layoutName.setText(mapModel.getHouseLayout().getName());
