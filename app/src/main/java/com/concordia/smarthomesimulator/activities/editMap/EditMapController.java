@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class EditMapController extends AppCompatActivity {
 
     private EditMapModel editMapModel;
-    private HouseLayout houseLayout;
+
     private Context context;
     private LayoutInflater inflater;
 
@@ -46,7 +46,7 @@ public class EditMapController extends AppCompatActivity {
     }
 
     private void fillKnownValues() {
-        houseLayout = HouseLayoutHelper.getSelectedLayout(context);
+        editMapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
         // TODO: Fill in values with proper ones
     }
 
@@ -61,7 +61,7 @@ public class EditMapController extends AppCompatActivity {
     }
 
     private void setOpenIntent() {
-        HouseLayout backupLayout = houseLayout;
+        HouseLayout backupLayout = editMapModel.getHouseLayout();
         final AlertDialog dialog = new AlertDialog.Builder(context)
             .setTitle(getString(R.string.title_alert_open_layout))
             .setMessage(getString(R.string.text_alert_open_layout))
@@ -69,7 +69,7 @@ public class EditMapController extends AppCompatActivity {
             .setPositiveButton(R.string.generic_open, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    HouseLayoutHelper.updateSelectedLayout(context, houseLayout);
+                    HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
                     fillKnownValues();
                 }
             })
@@ -79,10 +79,10 @@ public class EditMapController extends AppCompatActivity {
                     // If the previously selected layout is now deleted, select a default layout
                     ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedHouseLayouts(context);
                     if (layouts.stream().noneMatch(layout -> layout.getName().equals(backupLayout.getName()))) {
-                        houseLayout = layouts.get(0);
-                        HouseLayoutHelper.updateSelectedLayout(context, houseLayout);
+                        editMapModel.setHouseLayout(layouts.get(0));
+                        HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
                     } else {
-                        houseLayout = backupLayout;
+                        editMapModel.setHouseLayout(backupLayout);
                     }
                 }
             }).create();
@@ -101,9 +101,9 @@ public class EditMapController extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
                     if (layoutName != null) {
-                        houseLayout.setName(layoutName.getText().toString().trim());
-                        HouseLayoutHelper.updateSelectedLayout(context, houseLayout);
-                        if (editMapModel.saveHouseLayout(context, houseLayout)) {
+                        editMapModel.getHouseLayout().setName(layoutName.getText().toString().trim());
+                        HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
+                        if (editMapModel.saveHouseLayout(context, editMapModel.getHouseLayout())) {
                             Toast.makeText(context, getString(R.string.success_alert_save_layout), Toast.LENGTH_LONG).show();
                             finish();
                         } else {
@@ -126,7 +126,7 @@ public class EditMapController extends AppCompatActivity {
         layoutList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                houseLayout = layouts.get(position);
+                editMapModel.setHouseLayout(layouts.get(position));
                 for (int i = 0; i < parent.getChildCount(); i ++) {
                     View child = parent.getChildAt(i);
                     child.setBackgroundColor(context.getColor(android.R.color.transparent));

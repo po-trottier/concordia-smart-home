@@ -12,7 +12,27 @@ import static com.concordia.smarthomesimulator.Constants.*;
 
 public class EditMapModel  extends ViewModel {
 
+    private HouseLayout houseLayout;
+
     public EditMapModel() {
+    }
+
+    /**
+     * Gets house layout.
+     *
+     * @return the house layout
+     */
+    public HouseLayout getHouseLayout() {
+        return houseLayout;
+    }
+
+    /**
+     * Sets house layout.
+     *
+     * @param houseLayout the house layout
+     */
+    public void setHouseLayout(HouseLayout houseLayout) {
+        this.houseLayout = houseLayout;
     }
 
     /**

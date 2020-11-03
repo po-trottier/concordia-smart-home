@@ -33,8 +33,6 @@ public class MapController extends Fragment {
     private Context context;
     private LayoutInflater inflater;
 
-    private HouseLayout houseLayout;
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         mapModel = new ViewModelProvider(this).get(MapModel.class);
@@ -52,9 +50,9 @@ public class MapController extends Fragment {
     }
 
     private void updateContent() {
-        houseLayout = HouseLayoutHelper.getSelectedLayout(context);
+        mapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
         FrameLayout content = view.findViewById(R.id.map_fragment);
-        if (houseLayout == null) {
+        if (mapModel.getHouseLayout() == null) {
             content.removeAllViews();
             content.addView(inflater.inflate(R.layout.fragment_map_no_layout, null, false));
             setOpenIntent();
@@ -71,11 +69,11 @@ public class MapController extends Fragment {
         // TODO: GENERATE LAYOUT
 
         TextView layoutName = view.findViewById(R.id.map_layout_name);
-        layoutName.setText(houseLayout.getName());
+        layoutName.setText(mapModel.getHouseLayout().getName());
     }
 
     private void setCustomRoomAdapter() {
-        ArrayList<Room> rooms = houseLayout.getRooms();
+        ArrayList<Room> rooms = mapModel.getHouseLayout().getRooms();
         MapRoomAdapter adapter = new MapRoomAdapter(context, 0, rooms);
 
         ListView roomList = view.findViewById(R.id.map_room_list);
@@ -93,7 +91,7 @@ public class MapController extends Fragment {
     }
 
     private void setupOpenDialog() {
-        HouseLayout backupLayout = houseLayout;
+        HouseLayout backupLayout = mapModel.getHouseLayout();
         final AlertDialog dialog = new AlertDialog.Builder(context)
             .setTitle(getString(R.string.title_alert_open_layout))
             .setMessage(getString(R.string.text_alert_open_layout))
@@ -101,14 +99,14 @@ public class MapController extends Fragment {
             .setPositiveButton(R.string.generic_open, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    HouseLayoutHelper.updateSelectedLayout(context, houseLayout);
+                    HouseLayoutHelper.updateSelectedLayout(context, mapModel.getHouseLayout());
                     updateContent();
                 }
             })
             .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    houseLayout = backupLayout;
+                    mapModel.setHouseLayout(backupLayout);
                     updateContent();
                 }
             }).create();
@@ -126,7 +124,7 @@ public class MapController extends Fragment {
         layoutList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                houseLayout = layouts.get(position);
+                mapModel.setHouseLayout(layouts.get(position));
                 for (int i = 0; i < parent.getChildCount(); i++) {
                     View child = parent.getChildAt(i);
                     child.setBackgroundColor(context.getColor(android.R.color.transparent));
