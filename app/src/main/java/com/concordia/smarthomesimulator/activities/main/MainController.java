@@ -19,11 +19,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.about.AboutController;
 import com.concordia.smarthomesimulator.activities.login.LoginController;
-import com.concordia.smarthomesimulator.dataModels.LogEntry;
-import com.concordia.smarthomesimulator.dataModels.LogImportance;
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.Userbase;
+import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.google.android.material.navigation.NavigationView;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -92,16 +90,12 @@ public class MainController extends AppCompatActivity {
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));
                 return true;
             case R.id.action_logout:
-                savePreferencesToUserbase(sharedPreferences);
+                // Save the preferences
+                Userbase userbase = new Userbase(context);
+                userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "")).getUserPreferences().save(sharedPreferences);
+                UserbaseHelper.saveUserbase(context, userbase);
                 // Remove Logged In User Information
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove(PREFERENCES_KEY_USERNAME);
-                editor.remove(PREFERENCES_KEY_PASSWORD);
-                editor.remove(PREFERENCES_KEY_PERMISSIONS);
-                editor.remove(PREFERENCES_KEY_TEMPERATURE);
-                editor.remove(PREFERENCES_KEY_TIME_ZONE);
-                editor.remove(PREFERENCES_KEY_STATUS);
-                editor.apply();
+                UserPreferences.clear(sharedPreferences);
                 // Redirect to the Login Screen
                 ActivityLogHelper.add(context, new LogEntry("Exit","User logged out.", LogImportance.IMPORTANT));
                 MainController.this.startActivity(new Intent(MainController.this, LoginController.class));
@@ -112,14 +106,6 @@ public class MainController extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void savePreferencesToUserbase(SharedPreferences sharedPreferences){
-        Userbase userbase = new Userbase(context);
-        userbase.saveUserPreferences(
-                sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""),
-                sharedPreferences,
-                context);
     }
 
     @Override

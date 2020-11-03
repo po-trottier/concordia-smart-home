@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Userbase {
@@ -47,12 +46,6 @@ public class Userbase {
      */
     public List<String> getUsernames(){
         return users.stream().map(User::getUsername).collect(Collectors.toList());
-    }
-
-    public void saveUserPreferences(String username, SharedPreferences sharedPreferences, Context context){
-        User userToUpdate = getUserFromUsername(username);
-        userToUpdate.getUserPreferences().saveUserPreferences(sharedPreferences);
-        UserbaseHelper.saveUserbase(context, this);
     }
 
     /**

@@ -3,7 +3,6 @@ package com.concordia.smarthomesimulator.dataModels;
 import android.content.SharedPreferences;
 
 import static com.concordia.smarthomesimulator.Constants.*;
-import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_STATUS;
 
 public class UserPreferences {
     private String username;
@@ -13,36 +12,21 @@ public class UserPreferences {
     private String timeZone;
     private boolean status;
 
-    private final static String DEFAULT_TIME_ZONE = "America/Los_Angeles";
-    private final static int DEFAULT_TEMPERATURE = 20;
-    private final static boolean DEFAULT_STATUS = false;
 
-    /**
-     * Instantiates a new User preferences.
-     *
-     * @param user        the user
-     * @param temperature the temperature
-     * @param timeZone    the time zone
-     * @param status      the status
-     */
-    public UserPreferences(User user, int temperature, String timeZone, boolean status) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.permissions = user.getPermission();
+    public UserPreferences(String username, String password, Permissions permissions, int temperature, String timeZone, boolean status) {
+        this.username = username;
+        this.password = password;
+        this.permissions = permissions;
         this.temperature = temperature;
         this.timeZone = timeZone;
         this.status = status;
     }
 
-    /**
-     * Instantiates a new User preferences.
-     *
-     * @param user the user
-     */
-    public UserPreferences(User user) {
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.permissions = user.getPermission();
+
+    public UserPreferences(String username, String password, Permissions permissions) {
+        this.username = username;
+        this.password = password;
+        this.permissions = permissions;
         this.temperature = DEFAULT_TEMPERATURE;
         this.timeZone = DEFAULT_TIME_ZONE;
         this.status = DEFAULT_STATUS;
@@ -161,7 +145,7 @@ public class UserPreferences {
      *
      * @param preferences the preferences
      */
-    public void loadUserPreferences(SharedPreferences preferences){
+    public void load(SharedPreferences preferences){
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PREFERENCES_KEY_USERNAME, username);
         editor.putString(PREFERENCES_KEY_PASSWORD, password);
@@ -177,12 +161,28 @@ public class UserPreferences {
      *
      * @param preferences the preferences
      */
-    public void saveUserPreferences(SharedPreferences preferences){
+    public void save(SharedPreferences preferences){
         username = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         password = preferences.getString(PREFERENCES_KEY_PASSWORD,"");
         permissions = Permissions.fromInteger(preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0));
         temperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE,0);
         timeZone = preferences.getString(PREFERENCES_KEY_TIME_ZONE,"");
         status = preferences.getBoolean(PREFERENCES_KEY_STATUS, false);
+    }
+
+    /**
+     * Clear the user preferences
+     *
+     * @param sharedPreferences the shared preferences
+     */
+    public static void clear(SharedPreferences sharedPreferences){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(PREFERENCES_KEY_USERNAME);
+        editor.remove(PREFERENCES_KEY_PASSWORD);
+        editor.remove(PREFERENCES_KEY_PERMISSIONS);
+        editor.remove(PREFERENCES_KEY_TEMPERATURE);
+        editor.remove(PREFERENCES_KEY_TIME_ZONE);
+        editor.remove(PREFERENCES_KEY_STATUS);
+        editor.apply();
     }
 }

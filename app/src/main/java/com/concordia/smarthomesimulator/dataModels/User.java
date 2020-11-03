@@ -35,7 +35,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.permission = permission;
-        this.userPreferences = new UserPreferences(this);
+        this.userPreferences = new UserPreferences(username, password, permission);
     }
 
     /**
