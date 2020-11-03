@@ -8,6 +8,7 @@ public class Geometry {
     private int y;
     private int width;
     private int height;
+    private Orientation orientation = Orientation.IGNORE;
 
     /**
      * Instantiates a new Geometry.
@@ -37,13 +38,7 @@ public class Geometry {
     public Geometry(int x, int y, Orientation orientation) {
         this.x = x;
         this.y = y;
-        if (orientation == Orientation.HORIZONTAL) {
-            this.width = 1;
-            this.height = 0;
-        } else {
-            this.width = 0;
-            this.height = 1;
-        }
+        setOrientation(orientation);
     }
 
     /**
@@ -98,6 +93,15 @@ public class Geometry {
     }
 
     /**
+     * Gets orientation.
+     *
+     * @return the orientation
+     */
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    /**
      * Sets the x coordinate.
      *
      * @param x the x coordinate
@@ -131,5 +135,24 @@ public class Geometry {
      */
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    /**
+     * Sets orientation.
+     *
+     * @param orientation the orientation
+     */
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
+        switch (orientation) {
+            case HORIZONTAL:
+                this.width = 1;
+                this.height = 0;
+                break;
+            case VERTICAL:
+                this.width = 0;
+                this.height = 1;
+                break;
+        }
     }
 }

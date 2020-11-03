@@ -68,7 +68,7 @@ public class MapController extends Fragment {
 
     private void setMapDetails() {
         ImageView mapView = view.findViewById(R.id.custom_house_layout);
-        CustomHouseLayout houseLayoutDrawable = new CustomHouseLayout(mapModel.getHouseLayout());
+        CustomHouseLayout houseLayoutDrawable = new CustomHouseLayout(context, mapModel.getHouseLayout());
         mapView.setImageDrawable(houseLayoutDrawable);
 //        mapView.setOnTouchListener(new View.OnTouchListener() {
 //            @Override

@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_GARAGE;
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
@@ -20,9 +21,15 @@ public class HouseLayout {
 
         rooms = new ArrayList<>();
 
-        // Add the default rooms (Outdoors and Garage)
-        rooms.add(new Room(DEFAULT_NAME_GARAGE, new Geometry(-1, -1, 3, 3)));
-        rooms.add(new Room(DEFAULT_NAME_OUTDOORS, new Geometry(-1, -1, 3, 3)));
+        // Create the default rooms (Outdoors and Garage)
+        Room garage = new Room(DEFAULT_NAME_GARAGE, new Geometry(-1, -1, 1, 1));
+        Room outdoors = new Room(DEFAULT_NAME_OUTDOORS, new Geometry(-1, -1, 1, 1));
+        // Add the Garage Door
+        Door garageDoor = new Door();
+        garageDoor.setGeometry(new Geometry(-1, -1, Orientation.HORIZONTAL));
+        garage.addDevice(garageDoor);
+        // Add the rooms to the layout
+        rooms.addAll(new ArrayList<>(Arrays.asList(garage, outdoors)));
 
         // Add the current user if he's not already in a room
         boolean userExists = currentUser != null && rooms.stream().anyMatch(room -> room.hasInhabitant(currentUser));
