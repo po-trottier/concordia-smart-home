@@ -15,6 +15,13 @@ import static com.concordia.smarthomesimulator.Constants.WRITE_PERMISSION_REQUES
 
 public final class FileHelper {
 
+    /**
+     * List files in a given directory.
+     *
+     * @param context   the context
+     * @param directory the directory to look into
+     * @return the array of files found
+     */
     public static File[] listFilesInDirectory(Context context, String directory) {
         if (verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
             File base = context.getExternalFilesDir(null);
@@ -39,11 +46,10 @@ public final class FileHelper {
      */
     public static Object loadObjectFromFile(Context context, String directory, String fileName, Class className) {
         if (verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
-            File base = context.getExternalFilesDir(null);
-            File path = base;
+            File path = context.getExternalFilesDir(null);
 
             if (directory != null) {
-                path = new File(base, directory);
+                path = new File(path, directory);
                 if (!path.isDirectory())
                     return null;
             }
@@ -98,13 +104,14 @@ public final class FileHelper {
 
         // Make sure we have the right permissions
         if (verifyPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_PERMISSION_REQUEST_CODE)) {
-            File base = context.getExternalFilesDir(null);
-            File path = base;
+            File path = context.getExternalFilesDir(null);
+
             if (directory != null) {
-                path = new File(base, directory);
-                if (!path.isDirectory());
+                path = new File(path, directory);
+                if (!path.isDirectory())
                     path.mkdir();
             }
+
             File file = new File(path, fileName);
             try(FileOutputStream stream = new FileOutputStream(file)){
                 stream.write(jsonObject.getBytes());
