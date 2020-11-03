@@ -8,23 +8,46 @@ import androidx.core.app.ActivityCompat;
 import com.google.gson.Gson;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import static com.concordia.smarthomesimulator.Constants.READ_PERMISSION_REQUEST_CODE;
 import static com.concordia.smarthomesimulator.Constants.WRITE_PERMISSION_REQUEST_CODE;
 
 public final class FileHelper {
 
+    public static File[] listFilesInDirectory(Context context, String directory) {
+        if (verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
+            File base = context.getExternalFilesDir(null);
+            File path = new File(base, directory);
+
+            if (!path.exists() || !path.isDirectory())
+                return new File[]{};
+
+            return path.listFiles();
+        }
+        return new File[]{};
+    }
+
     /**
      * Load object from file object.
      *
      * @param context   the context
+     * @param directory the directory in which the file is located
      * @param fileName  the name of the file where the object is stored
      * @param className the class of the object
      * @return the object
      */
-    public static Object loadObjectFromFile(Context context, String fileName, Class className) {
+    public static Object loadObjectFromFile(Context context, String directory, String fileName, Class className) {
         if (verifyPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE, READ_PERMISSION_REQUEST_CODE)) {
-            File path = context.getExternalFilesDir(null);
+            File base = context.getExternalFilesDir(null);
+            File path = base;
+
+            if (directory != null) {
+                path = new File(base, directory);
+                if (!path.isDirectory())
+                    return null;
+            }
+
             File file = new File(path, fileName);
             if (file.exists()){
                 // Read the file
@@ -48,20 +71,40 @@ public final class FileHelper {
     }
 
     /**
+     * Load object from file object.
+     *
+     * @param context   the context
+     * @param fileName  the name of the file where the object is stored
+     * @param className the class of the object
+     * @return the object
+     */
+    public static Object loadObjectFromFile(Context context, String fileName, Class className) {
+        return loadObjectFromFile(context, null, fileName, className);
+    }
+
+    /**
      * Save object to file.
      *
-     * @param context  the context
-     * @param fileName the file name
-     * @param object   the object
+     * @param context   the context
+     * @param directory the directory in which to save the file
+     * @param fileName  the file name
+     * @param object    the object
+     * @return the boolean
      */
-    public static boolean saveObjectToFile(Context context, String fileName, Object object) {
+    public static boolean saveObjectToFile(Context context, String directory, String fileName, Object object) {
         // Convert the Object to a JSON Object
         Gson gson = new Gson();
         String jsonObject = gson.toJson(object);
 
         // Make sure we have the right permissions
         if (verifyPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_PERMISSION_REQUEST_CODE)) {
-            File path = context.getExternalFilesDir(null);
+            File base = context.getExternalFilesDir(null);
+            File path = base;
+            if (directory != null) {
+                path = new File(base, directory);
+                if (!path.isDirectory());
+                    path.mkdir();
+            }
             File file = new File(path, fileName);
             try(FileOutputStream stream = new FileOutputStream(file)){
                 stream.write(jsonObject.getBytes());
@@ -71,6 +114,17 @@ public final class FileHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * Save object to file.
+     *
+     * @param context  the context
+     * @param fileName the file name
+     * @param object   the object
+     */
+    public static boolean saveObjectToFile(Context context, String fileName, Object object) {
+        return saveObjectToFile(context, null, fileName, object);
     }
 
     /**
