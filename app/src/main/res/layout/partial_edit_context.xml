@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.05"
                     android:textAlignment="textEnd"
-                    android:text="@string/degrees_celsius"/>
+                    android:text="@string/generic_degrees_celsius"/>
             </LinearLayout>
             <TextView
                 android:layout_width="match_parent"

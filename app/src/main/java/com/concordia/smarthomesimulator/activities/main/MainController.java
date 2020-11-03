@@ -28,7 +28,7 @@ import static com.concordia.smarthomesimulator.Constants.*;
 
 public class MainController extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
+    private AppBarConfiguration appBarConfiguration;
     Context context;
     SharedPreferences sharedPreferences;
 
@@ -58,12 +58,12 @@ public class MainController extends AppCompatActivity {
 
         // Passing each menu ID as a set of Ids because each
         // Menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
+        appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_dashboard, R.id.nav_map, R.id.nav_logs)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
@@ -78,7 +78,7 @@ public class MainController extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         // Manage "back" navigation button logic.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
     @Override

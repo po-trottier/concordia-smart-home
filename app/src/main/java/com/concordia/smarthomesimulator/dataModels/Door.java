@@ -1,7 +1,5 @@
 package com.concordia.smarthomesimulator.dataModels;
 
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import com.concordia.smarthomesimulator.R;
 
 public class Door implements IDevice {
