@@ -22,8 +22,8 @@ public class HouseLayout {
         rooms = new ArrayList<>();
 
         // Create the default rooms (Outdoors and Garage)
-        Room garage = new Room(DEFAULT_NAME_GARAGE, new Geometry(-1, -1, 1, 1));
-        Room outdoors = new Room(DEFAULT_NAME_OUTDOORS, new Geometry(-1, -1, 1, 1));
+        Room garage = new Room(DEFAULT_NAME_GARAGE, new Geometry(-1, -1));
+        Room outdoors = new Room(DEFAULT_NAME_OUTDOORS, new Geometry(-1, -1));
         // Add the Garage Door
         Door garageDoor = new Door();
         garageDoor.setGeometry(new Geometry(-1, -1, Orientation.HORIZONTAL));
