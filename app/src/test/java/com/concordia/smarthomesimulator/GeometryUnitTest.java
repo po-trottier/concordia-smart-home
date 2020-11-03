@@ -18,14 +18,6 @@ public class GeometryUnitTest {
     }
 
     @Test
-    public void geometryCanBeCreatedWithParameters() {
-        // Setup
-        Geometry geometry = new Geometry(1, 1);
-        // Test
-        assertNotNull(geometry);
-    }
-
-    @Test
     public void geometryCanBeCreatedWithAllParameters() {
         // Setup
         Geometry geometry = new Geometry(1, 1, 1, 1);
@@ -38,7 +30,7 @@ public class GeometryUnitTest {
         // Setup
         int width = 1;
         int height = 2;
-        Geometry geometry = new Geometry(width, height);
+        Geometry geometry = new Geometry(1, 1, width, height);
         // Test
         assertEquals(geometry.getHeight(), height, EPSILON);
         assertEquals(geometry.getWidth(), width, EPSILON);

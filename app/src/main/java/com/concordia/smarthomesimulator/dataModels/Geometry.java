@@ -17,14 +17,33 @@ public class Geometry {
     /**
      * Instantiates a new Geometry.
      *
-     * @param width  the width
-     * @param height the height
+     * @param x           the x coordinate
+     * @param y           the y coordinate
      */
-    public Geometry(int width, int height) {
-        x = 0;
-        y = 0;
-        this.width = width;
-        this.height = height;
+    public Geometry(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.width = 0;
+        this.height = 0;
+    }
+
+    /**
+     * Instantiates a new Geometry.
+     *
+     * @param x           the x coordinate
+     * @param y           the y coordinate
+     * @param orientation the orientation of the device
+     */
+    public Geometry(int x, int y, Orientation orientation) {
+        this.x = x;
+        this.y = y;
+        if (orientation == Orientation.HORIZONTAL) {
+            this.width = 1;
+            this.height = 0;
+        } else {
+            this.width = 0;
+            this.height = 1;
+        }
     }
 
     /**

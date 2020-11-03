@@ -95,7 +95,7 @@ public class HouseLayoutHelper {
     }
 
     private static HouseLayout loadDemoHouseLayout(Context context) {
-//        DeviceFactory deviceFactory = new DeviceFactory();
+        DeviceFactory deviceFactory = new DeviceFactory();
 
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
@@ -104,19 +104,22 @@ public class HouseLayoutHelper {
         HouseLayout layout = new HouseLayout("Demo Layout", currentUser);
 
         // Create Bedroom
-        Room bedroom = new Room("Bedroom", new Geometry(0,0, 3, 6));
+        Room bedroom = new Room("Bedroom", new Geometry(0,0, 4, 6));
 
-//        Window bedroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
-//        Light bedroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-//        Door bedroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+        Window bedroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW, new Geometry(0,4, Orientation.VERTICAL));
+        Light bedroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT, new Geometry(2, 4));
+        Door bedroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(2,6, Orientation.HORIZONTAL));
 //
-//        bedroomWindow.setIsLocked(true);
-//        bedroomDoor.setIsOpened(true);
+        bedroomWindow.setIsLocked(true);
+        bedroomDoor.setIsOpened(true);
 //
-//        bedroom.addDevices(new ArrayList<>(Arrays.asList(bedroomWindow, bedroomLight, bedroomDoor)));
+        bedroom.addDevices(new ArrayList<>(Arrays.asList(bedroomWindow, bedroomLight, bedroomDoor)));
 
-        Inhabitant person1 = new Inhabitant("Person1");
+        Inhabitant person1 = new Inhabitant("Alex");
         bedroom.addInhabitant(person1);
+
+        Inhabitant person2 = new Inhabitant("Jane");
+        bedroom.addInhabitant(person2);
 
         layout.addRoom(bedroom);
 
@@ -130,13 +133,19 @@ public class HouseLayoutHelper {
 //
 //        kitchen.addDevices(new ArrayList<>(Arrays.asList(kitchenWindow, kitchenLight, kitchenLight2, kitchenDoor)));
 
-        Inhabitant person2 = new Inhabitant("Person2");
-        kitchen.addInhabitant(person2);
+        Inhabitant person3 = new Inhabitant("Billy");
+        kitchen.addInhabitant(person3);
+
+        Inhabitant person4 = new Inhabitant("Mike");
+        kitchen.addInhabitant(person4);
+
+        Inhabitant person5 = new Inhabitant("Jackson");
+        kitchen.addInhabitant(person5);
 
         layout.addRoom(kitchen);
 
         // Create Bathroom
-        Room bathroom = new Room("Bathroom", new Geometry(3, 4, 2, 2));
+        Room bathroom = new Room("Bathroom", new Geometry(4, 4, 2, 2));
 
 //        Window bathroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
 //        Light bathroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
@@ -150,9 +159,9 @@ public class HouseLayoutHelper {
         layout.addRoom(bathroom);
 
         // Add an inhabitant in the Garage
-        Inhabitant person4 = new Inhabitant("Person3");
+        Inhabitant person6 = new Inhabitant("William");
         Room garage = layout.getRoom(DEFAULT_NAME_GARAGE);
-        garage.addInhabitant(person4);
+        garage.addInhabitant(person6);
 
         return layout;
     }

@@ -3,8 +3,11 @@ package com.concordia.smarthomesimulator.fragments.map;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -15,11 +18,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
-import com.concordia.smarthomesimulator.adapters.MapRoomAdapter;
+import com.concordia.smarthomesimulator.controls.CustomHouseLayout;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
-import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,24 +62,34 @@ public class MapController extends Fragment {
             content.removeAllViews();
             content.addView(inflater.inflate(R.layout.fragment_map_with_layout, null, false));
             setMapDetails();
-            setCustomRoomAdapter();
             setEditIntent();
         }
     }
 
     private void setMapDetails() {
-        // TODO: GENERATE LAYOUT
+        ImageView mapView = view.findViewById(R.id.custom_house_layout);
+        CustomHouseLayout houseLayoutDrawable = new CustomHouseLayout(mapModel.getHouseLayout());
+        mapView.setImageDrawable(houseLayoutDrawable);
+//        mapView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                int[] position = new int[2];
+//                v.getLocationOnScreen(position);
+//
+//                int touchX = (int) event.getX();
+//                int touchY = (int) event.getY();
+//
+//                int imageX = touchX - position[0];
+//                int imageY = touchY - position[1];
+//
+//                houseLayoutDrawable.receiveClick(imageX, imageY);
+//
+//                return false;
+//            }
+//        });
 
         TextView layoutName = view.findViewById(R.id.map_layout_name);
         layoutName.setText(mapModel.getHouseLayout().getName());
-    }
-
-    private void setCustomRoomAdapter() {
-        ArrayList<Room> rooms = mapModel.getHouseLayout().getRooms();
-        MapRoomAdapter adapter = new MapRoomAdapter(context, 0, rooms);
-
-        ListView roomList = view.findViewById(R.id.map_room_list);
-        roomList.setAdapter(adapter);
     }
 
     private void setOpenIntent() {
