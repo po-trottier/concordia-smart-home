@@ -92,6 +92,22 @@
                 android:paddingHorizontal="@dimen/activity_horizontal_margin"
                 android:editable="false"
                 android:background="@drawable/rounded_text_field_background"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/away_on_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:thumbTint="@color/primary"
+                    app:trackTint="@color/primaryFaded" />
+                <TextView
+                    android:id="@+id/away_on_off_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

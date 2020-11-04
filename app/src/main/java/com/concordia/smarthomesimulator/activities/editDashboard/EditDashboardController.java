@@ -40,6 +40,8 @@ public class EditDashboardController extends AppCompatActivity {
 
     private EditDashboardModel model;
 
+    private SwitchCompat awayStatusField;
+    private TextView awayStatusText;
     private SwitchCompat statusField;
     private FloatingActionButton saveContext;
     private FloatingActionButton timeScaleMinus;
@@ -93,9 +95,12 @@ public class EditDashboardController extends AppCompatActivity {
 
         // DO NOT PUT BEFORE "fillKnownValues" !
         setupStatusSwitch();
+        setupAwaySwitch();
     }
 
     private void findControls() {
+        awayStatusField = findViewById(R.id.away_on_off);
+        awayStatusText = findViewById(R.id.away_on_off_text);
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
@@ -229,6 +234,29 @@ public class EditDashboardController extends AppCompatActivity {
             }
         });
     }
+
+    private void setupAwaySwitch() {
+        if (awayStatusField.isChecked()) {
+            awayStatusText.setText(getString(R.string.away_mode_on));
+            awayStatusText.setTextColor(getColor(R.color.primary));
+        } else {
+            awayStatusText.setText(getString(R.string.away_mode_off));
+            awayStatusText.setTextColor(getColor(R.color.charcoal));
+        }
+        awayStatusField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (awayStatusField.isChecked()) {
+                    awayStatusText.setText(getString(R.string.away_mode_on));
+                    awayStatusText.setTextColor(getColor(R.color.primary));
+                } else {
+                    awayStatusText.setText(getString(R.string.away_mode_off));
+                    awayStatusText.setTextColor(getColor(R.color.charcoal));
+                }
+            }
+        });
+    }
+
 
     private void setupStatusSwitch() {
         if (statusField.isChecked()) {

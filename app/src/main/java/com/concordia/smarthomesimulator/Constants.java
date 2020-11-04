@@ -8,6 +8,7 @@ public class Constants {
     public static final int READ_PERMISSION_REQUEST_CODE = 1001;
 
     // Keys for Shared Preferences
+    public static final String PREFERENCES_KEY_AWAY_MODE = "awayMode";
     public static final String PREFERENCES_KEY_STATUS = "status";
     public static final String PREFERENCES_KEY_TEMPERATURE = "temperature";
     public static final String PREFERENCES_KEY_USERNAME = "username";
