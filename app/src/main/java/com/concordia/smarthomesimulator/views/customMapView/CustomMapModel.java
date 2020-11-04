@@ -19,7 +19,7 @@ public class CustomMapModel {
     private final static float SPACING = 0.5f;
     private final static float DEVICE_THICKNESS = 0.15f;
 
-    private final static int DEFAULT_SCALING_MAX = 10;
+    private final static float DEFAULT_SCALING_MAX = 10f;
 
     //endregion
 
@@ -37,10 +37,10 @@ public class CustomMapModel {
     private float height;
     private float available;
 
-    private int minX;
-    private int maxX;
-    private int minY;
-    private int maxY;
+    private float minX;
+    private float maxX;
+    private float minY;
+    private float maxY;
 
     //endregion
 
@@ -55,10 +55,10 @@ public class CustomMapModel {
         this.lights = new ArrayList<>();
         this.inhabitants = new ArrayList<>();
         // Default values to insure we have the right range
-        minX = Integer.MAX_VALUE;
-        minY = Integer.MAX_VALUE;
-        maxX = 0;
-        maxY = 0;
+        minX = Float.MAX_VALUE;
+        minY = Float.MAX_VALUE;
+        maxX = 0f;
+        maxY = 0f;
     }
 
     //endregion
@@ -78,7 +78,7 @@ public class CustomMapModel {
         // Get the physical Canvas Size from the device
         this.width = width - (padding * 2);
         this.height = height - (padding * 2);
-        this.available = AVAILABLE_HEIGHT * height;
+        this.available = AVAILABLE_HEIGHT * this.height;
         // Calculate bounds and scaling
         findLayoutBounds(layout);
         calculateScaleFactors();
@@ -285,8 +285,8 @@ public class CustomMapModel {
         maxX = maxX - minX == 0 ? DEFAULT_SCALING_MAX : maxX;
         maxY = maxY - minY == 0 ? DEFAULT_SCALING_MAX : maxY;
         // How many pixels is a "tick" on our layout's scale
-        scaleX = width / (float) (maxX - minX);
-        scaleY = available / (float) (maxY - minY);
+        scaleX = width / (maxX - minX);
+        scaleY = available / (maxY - minY);
     }
 
     //endregion

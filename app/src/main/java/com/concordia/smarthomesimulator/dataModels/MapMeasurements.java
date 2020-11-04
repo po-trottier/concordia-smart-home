@@ -2,19 +2,19 @@ package com.concordia.smarthomesimulator.dataModels;
 
 public class MapMeasurements {
 
-    private float scaleX;
-    private float scaleY;
+    private final float scaleX;
+    private final float scaleY;
 
-    private float width;
-    private float height;
-    private float available;
+    private final float width;
+    private final float height;
+    private final float available;
 
-    private int minX;
-    private int maxX;
-    private int minY;
-    private int maxY;
+    private final float minX;
+    private final float maxX;
+    private final float minY;
+    private final float maxY;
 
-    public MapMeasurements(float width, float height, float available, int minX, int maxX, int minY, int maxY, float scaleX, float scaleY) {
+    public MapMeasurements(float width, float height, float available, float minX, float maxX, float minY, float maxY, float scaleX, float scaleY) {
         this.width = width;
         this.height = height;
         this.available = available;
@@ -48,19 +48,19 @@ public class MapMeasurements {
         return available;
     }
 
-    public int getMinX() {
+    public float getMinX() {
         return minX;
     }
 
-    public int getMaxX() {
+    public float getMaxX() {
         return maxX;
     }
 
-    public int getMinY() {
+    public float getMinY() {
         return minY;
     }
 
-    public int getMaxY() {
+    public float getMaxY() {
         return maxY;
     }
 }

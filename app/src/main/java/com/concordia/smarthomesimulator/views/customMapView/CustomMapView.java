@@ -172,19 +172,7 @@ public class CustomMapView extends View {
     private void drawRooms(ArrayList<Room> rooms) {
         // Draw the Rooms as the "Background"
         for (Room room : rooms) {
-            float[] points = model.getPoints(room);
-            // Draw a filled rectangle and an outline Stroke
-            Paint dynamicPaint = room.getName().equals(DEFAULT_NAME_OUTDOORS) ? fillOutdoorsPaint : fillPaint;
-            canvas.drawRect(points[0], points[1], points[2], points[3], dynamicPaint);
-            canvas.drawRect(points[0], points[1], points[2], points[3], strokePaint);
-            // Center point of the Room
-            float vertical = ((points[1] - points[3]) / 2f) + points[3];
-            float horizontal = ((points[2] - points[0]) / 2f) + points[0];
-            // If there are inhabitant, shift the text up to leave some space
-            if (room.getInhabitants().size() > 0)
-                vertical = vertical - (ICON_SHIFT * measurements.getScaleY());
-            // Write the name of the room
-            canvas.drawText(room.getName(), horizontal, vertical, textPaint);
+            drawRoom(room);
         }
         // Draw Inhabitants and Devices as the "Foreground"
         for (Room room : rooms) {
@@ -252,6 +240,22 @@ public class CustomMapView extends View {
     //endregion
 
     //region Draw Single Shape Methods
+
+    private void drawRoom(Room room) {
+        float[] points = model.getPoints(room);
+        // Draw a filled rectangle and an outline Stroke
+        Paint paint = room.getName().equals(DEFAULT_NAME_OUTDOORS) ? fillOutdoorsPaint : fillPaint;
+        canvas.drawRect(points[0], points[1], points[2], points[3], paint);
+        canvas.drawRect(points[0], points[1], points[2], points[3], strokePaint);
+        // Center point of the Room
+        float vertical = ((points[1] - points[3]) / 2f) + points[3];
+        float horizontal = ((points[2] - points[0]) / 2f) + points[0];
+        // If there are inhabitant, shift the text up to leave some space
+        if (room.getInhabitants().size() > 0)
+            vertical = vertical - (ICON_SHIFT * measurements.getScaleY());
+        // Write the name of the room
+        canvas.drawText(room.getName(), horizontal, vertical, textPaint);
+    }
 
     private void drawInhabitant(Inhabitant inhabitant, float x, float y) {
         // Define coordinates that will cover the circle
