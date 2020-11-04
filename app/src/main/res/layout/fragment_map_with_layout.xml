@@ -18,8 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/map_room_card">
-        <ImageView
-            android:id="@+id/custom_house_layout"
+        <com.concordia.smarthomesimulator.views.customMapView.CustomMapView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"

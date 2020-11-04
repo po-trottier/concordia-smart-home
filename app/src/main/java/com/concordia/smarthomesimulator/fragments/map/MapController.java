@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
-import com.concordia.smarthomesimulator.controls.CustomMapDrawable;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
@@ -64,10 +63,6 @@ public class MapController extends Fragment {
     }
 
     private void setMapDetails() {
-        ImageView mapView = view.findViewById(R.id.custom_house_layout);
-        CustomMapDrawable mapDrawable = new CustomMapDrawable(context, mapModel.getHouseLayout());
-        mapView.setImageDrawable(mapDrawable);
-
         TextView layoutName = view.findViewById(R.id.map_layout_name);
         layoutName.setText(mapModel.getHouseLayout().getName());
     }

@@ -114,6 +114,7 @@ public class HouseLayoutHelper {
 
         bedroomWindow.setIsLocked(true);
         bedroomDoor.setIsOpened(true);
+        bedroomLight2.setIsOpened(true);
 
         bedroom.addDevices(new ArrayList<>(Arrays.asList(
                 bedroomWindow,
@@ -141,6 +142,9 @@ public class HouseLayoutHelper {
         Light kitchenLight2 = (Light) deviceFactory.createDevice(DeviceType.LIGHT, new Geometry(6, 8));
         Door kitchenDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(0,8, Orientation.VERTICAL));
         Door kitchenDoor2 = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(7,6, Orientation.HORIZONTAL));
+
+        kitchenLight2.setIsOpened(true);
+        kitchenWindow2.setIsOpened(true);
 
         kitchen.addDevices(new ArrayList<>(Arrays.asList(
             kitchenWindow,
