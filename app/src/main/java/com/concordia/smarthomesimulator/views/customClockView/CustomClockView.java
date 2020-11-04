@@ -1,22 +1,22 @@
-package com.concordia.smarthomesimulator.controls;
+package com.concordia.smarthomesimulator.views.customClockView;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextClock;
 
-public class CustomTextClock extends TextClock{
+public class CustomClockView extends TextClock{
 
-    public CustomTextClock(Context context) {
+    public CustomClockView(Context context) {
         super(context);
         this.setDesigningText();
     }
 
-    public CustomTextClock(Context context, AttributeSet attrs) {
+    public CustomClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setDesigningText();
     }
 
-    public CustomTextClock(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomClockView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setDesigningText();
     }
