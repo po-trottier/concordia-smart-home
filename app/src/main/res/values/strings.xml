@@ -64,9 +64,23 @@
     <string name="map_opened">Opened</string>
     <string name="map_closed">Closed</string>
     <string name="map_locked">Locked</string>
+    <string name="map_information">Information</string>
+    <string name="map_legend">Legend</string>
+    <string name="map_legend_doors">Doors</string>
+    <string name="map_legend_windows">Windows</string>
+    <string name="map_legend_lights">Lights</string>
+    <string name="map_legend_opened">Opened</string>
+    <string name="map_legend_closed">Closed</string>
+    <string name="map_legend_locked">Locked</string>
+    <string name="map_legend_inhabitants">Inhabitants</string>
+    <string name="map_active_layout">Active House Layout</string>
+    <string name="map_active_layout_name">Layout Name:</string>
+    <string name="map_active_layout_rooms">Number of Rooms:</string>
+    <string name="map_active_layout_devices">Number of Devices:</string>
+    <string name="map_active_layout_rooms_suffix">rooms</string>
+    <string name="map_active_layout_devices_suffix">devices</string>
     <string name="default_room_name">Room</string>
     <string name="default_device_name">Device</string>
-    <string name="title_rooms">Rooms</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
     <string name="title_alert_save_layout">Save the house layout</string>

@@ -277,7 +277,7 @@ public class CustomMapModel {
 
     private void calculateScaleFactors() {
         // Avoid default values
-        if (minX == Integer.MAX_VALUE || minY == Integer.MAX_VALUE) {
+        if (minX == Float.MAX_VALUE || minY == Float.MAX_VALUE) {
             minX = 0;
             minY = 0;
         }
