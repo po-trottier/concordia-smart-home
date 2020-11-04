@@ -17,15 +17,6 @@ public class Userbase {
     private PermissionConfiguration permissionConfiguration;
 
     /**
-     * Instantiates a new Userbase using the context of the caller.
-     *
-     * @param context the context of the caller, used to get permissions to read from external storage
-     */
-    public Userbase(Context context){
-        UserbaseHelper.loadUserbase(context);
-    }
-
-    /**
      * Instantiates a new Userbase using a passed List of users.
      * The default permission configuration is assigned to it.
      *
