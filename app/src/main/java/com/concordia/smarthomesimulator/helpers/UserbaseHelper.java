@@ -1,13 +1,14 @@
 package com.concordia.smarthomesimulator.helpers;
 
 import android.content.Context;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.Userbase;
+import android.content.SharedPreferences;
+import com.concordia.smarthomesimulator.dataModels.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_USERNAME;
 
 public final class UserbaseHelper {
 
@@ -55,6 +56,16 @@ public final class UserbaseHelper {
             }
         }
         return null;
+    }
+
+    public static boolean canLoggedUserInteract(String action, SharedPreferences sharedPreferences, Userbase userbase, Context context){
+        User loggedUser = userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""));
+        if ((loggedUser.getPermission().getBitValue()&sharedPreferences.getInt(action,0)) == sharedPreferences.getInt(action,0)){
+            ActivityLogHelper.add(context, new LogEntry("Permission","User allowed to perform", LogImportance.MINOR));
+            return true;
+        }
+        ActivityLogHelper.add(context, new LogEntry("Permission","User cannot perform", LogImportance.MINOR));
+        return false;
     }
 
     private static Userbase setupDefaultUserbase(Context context){
