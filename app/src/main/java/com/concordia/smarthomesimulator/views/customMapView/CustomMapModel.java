@@ -1,13 +1,19 @@
 package com.concordia.smarthomesimulator.views.customMapView;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.RectF;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import androidx.appcompat.app.AlertDialog;
+import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
 
 import java.util.ArrayList;
 
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_GARAGE;
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
+import static com.concordia.smarthomesimulator.Constants.*;
 
 public class CustomMapModel {
 
@@ -17,7 +23,7 @@ public class CustomMapModel {
     private final static float RESERVED_HEIGHT = 1f - AVAILABLE_HEIGHT;
 
     private final static float SPACING = 0.5f;
-    private final static float DEVICE_THICKNESS = 0.15f;
+    private final static float DEVICE_THICKNESS = 0.25f;
 
     private final static float DEFAULT_SCALING_MAX = 10f;
 
@@ -93,14 +99,14 @@ public class CustomMapModel {
      * @param padding the padding of the view (used to shift the coordinates)
      * @return whether a shape was found or not
      */
-    public boolean queryClick(MotionEvent event, int padding) {
-        if (queryDevices(event, windows, padding))
+    public boolean queryClick(Context context, MotionEvent event, int padding) {
+        if (queryDevices(context, event, windows, padding))
             return true;
-        if (queryDevices(event, doors, padding))
+        if (queryDevices(context, event, doors, padding))
             return true;
-        if (queryDevices(event, lights, padding))
+        if (queryDevices(context, event, lights, padding))
             return true;
-        if (queryInhabitants(event, inhabitants, padding))
+        if (queryInhabitants(context, event, inhabitants, padding))
             return true;
         return false;
     }
@@ -293,7 +299,7 @@ public class CustomMapModel {
 
     //region Click Query Methods
 
-    private boolean queryDevices(MotionEvent event, ArrayList<MapDevice> devices, int padding) {
+    private boolean queryDevices(Context context, MotionEvent event, ArrayList<MapDevice> devices, int padding) {
         // Shift the touch event do match the translation applied to the canvas
         int x = (int) event.getX() - padding;
         int y = (int) event.getY() - padding;
@@ -302,7 +308,7 @@ public class CustomMapModel {
             if (device.getShape().contains(x, y)) {
                 //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    // TODO: Do proper action
+                    showDeviceDialog(context, device.getDevice());
                     return true;
                 }
                 // A known shape was clicked
@@ -312,7 +318,7 @@ public class CustomMapModel {
         return false;
     }
 
-    private boolean queryInhabitants(MotionEvent event, ArrayList<MapInhabitant> inhabitants, int padding) {
+    private boolean queryInhabitants(Context context, MotionEvent event, ArrayList<MapInhabitant> inhabitants, int padding) {
         // Shift the touch event do match the translation applied to the canvas
         int x = (int) event.getX() - padding;
         int y = (int) event.getY() - padding;
@@ -321,7 +327,7 @@ public class CustomMapModel {
             if (inhabitant.getShape().contains(x, y)) {
                 //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    // TODO: Do proper action
+                    showInhabitantDialog(context, inhabitant.getInhabitant());
                     return true;
                 }
                 // A known shape was clicked
@@ -329,6 +335,44 @@ public class CustomMapModel {
             }
         }
         return false;
+    }
+
+    //endregion
+
+    //region ShowDialogs
+
+    private void showDeviceDialog(Context context, IDevice device) {
+        final CustomDeviceAlertView customView = (CustomDeviceAlertView) LayoutInflater.from(context).inflate(R.layout.alert_edit_device, null, false);
+        customView.setDeviceInformation(device);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.alert_map_device_title) + " " + device.getDeviceType().toString().toLowerCase())
+                .setView(customView)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO: Save the layout and re-draw the canvas
+                        // if name == DEFAULT_DEMO || DEFAULT_EMPTY then ask for new name
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
+    private void showInhabitantDialog(Context context, Inhabitant inhabitant) {
+        String message = inhabitant.getName().toUpperCase() + " " + context.getString(R.string.alert_map_inhabitant_text);
+
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        String user = preferences.getString(PREFERENCES_KEY_USERNAME, "");
+        if (inhabitant.getName().equalsIgnoreCase(user))
+            message = context.getString(R.string.alert_map_inhabitant_text_self);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle(R.string.alert_map_inhabitant_title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .create();
+        dialog.show();
     }
 
     //endregion

@@ -123,7 +123,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:text="@string/map_legend_opened"/>
+                    android:text="@string/map_opened"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -139,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:text="@string/map_legend_closed"/>
+                    android:text="@string/map_closed"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -161,7 +161,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:text="@string/map_legend_locked"/>
+                    android:text="@string/map_locked"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

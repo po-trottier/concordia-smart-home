@@ -19,5 +19,8 @@ public class Constants {
     public static final String DEFAULT_NAME_OUTDOORS = "Outdoors";
     public static final String DEFAULT_NAME_GARAGE = "Garage";
 
+    public static final String DEMO_LAYOUT_NAME = "Demo Layout";
+    public static final String EMPTY_LAYOUT_NAME = "Empty Layout";
+
     public static final String DIRECTORY_NAME_LAYOUTS = "layouts";
 }

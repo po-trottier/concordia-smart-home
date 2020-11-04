@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.concordia.smarthomesimulator.Constants.*;
-import static com.concordia.smarthomesimulator.Constants.DIRECTORY_NAME_LAYOUTS;
 
 public class HouseLayoutHelper {
 
@@ -91,7 +90,7 @@ public class HouseLayoutHelper {
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
 
         // Create new House Layout
-        return new HouseLayout("Empty Layout", currentUser);
+        return new HouseLayout(EMPTY_LAYOUT_NAME, currentUser);
     }
 
     private static HouseLayout loadDemoHouseLayout(Context context) {
@@ -101,7 +100,7 @@ public class HouseLayoutHelper {
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
 
         // Create new House Layout
-        HouseLayout layout = new HouseLayout("Demo Layout", currentUser);
+        HouseLayout layout = new HouseLayout(DEMO_LAYOUT_NAME, currentUser);
 
         // Create Bedroom
         Room bedroom = new Room("Bedroom", new Geometry(0,0, 4, 6));

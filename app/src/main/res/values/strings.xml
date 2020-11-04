@@ -64,14 +64,12 @@
     <string name="map_opened">Opened</string>
     <string name="map_closed">Closed</string>
     <string name="map_locked">Locked</string>
+    <string name="map_unlocked">Unlocked</string>
     <string name="map_information">Information</string>
     <string name="map_legend">Legend</string>
     <string name="map_legend_doors">Doors</string>
     <string name="map_legend_windows">Windows</string>
     <string name="map_legend_lights">Lights</string>
-    <string name="map_legend_opened">Opened</string>
-    <string name="map_legend_closed">Closed</string>
-    <string name="map_legend_locked">Locked</string>
     <string name="map_legend_inhabitants">Inhabitants</string>
     <string name="map_active_layout">Active House Layout</string>
     <string name="map_active_layout_name">Layout Name:</string>
@@ -87,7 +85,7 @@
     <string name="text_alert_save_layout">How would you like to call this layout ?</string>
     <string name="field_alert_save_layout">Enter the name here</string>
     <string name="success_alert_save_layout">The house layout was successfully saved.</string>
-    <string name="error_alert_save_layout">There was an error saving the House Layout. Please try again.</string>
+    <string name="error_alert_save_layout">There was an error saving the House Layout. Please try using a different layout name.</string>
     <string name="title_alert_open_layout">Open a house layout</string>
     <string name="text_alert_open_layout">Which layout would you like to open ?</string>
     <string name="title_alert_delete_layout">Delete \"%s\"</string>
@@ -119,6 +117,13 @@
 
     <string name="about_name">Name</string>
     <string name="about_student_id">Student ID</string>
+
+    <string name="alert_map_device_title">Modifying a </string>
+    <string name="alert_map_device_status">Current Status:</string>
+    <string name="alert_map_device_lock_status">Window Lock Status:</string>
+    <string name="alert_map_inhabitant_title">Viewing an inhabitant</string>
+    <string name="alert_map_inhabitant_text">is the selected inhabitant.</string>
+    <string name="alert_map_inhabitant_text_self">YOU are the selected inhabitant.</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>

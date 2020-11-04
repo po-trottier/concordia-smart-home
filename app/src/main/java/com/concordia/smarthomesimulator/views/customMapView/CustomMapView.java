@@ -18,10 +18,10 @@ public class CustomMapView extends View {
 
     //region Constants
 
-    private final static float ICON_SHIFT = 0.3f;
-    private final static float ICON_RADIUS = 30f;
+    private final static float INHABITANT_SHIFT = 0.35f;
+    private final static float INHABITANT_RADIUS = 30f;
 
-    private final static float DEVICE_RADIUS = 25f;
+    private final static float DEVICE_LIGHT_RADIUS = 30f;
 
     //endregion
 
@@ -83,7 +83,7 @@ public class CustomMapView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Did the touch event occur inside a known shape ?
-        if (model.queryClick(event, getPaddingStart()))
+        if (model.queryClick(context, event, getPaddingStart()))
             return true;
         // No known shape was touched, let the original behaviour take place
         return super.onTouchEvent(event);
@@ -158,7 +158,7 @@ public class CustomMapView extends View {
         inhabitantTextPaint.setTextAlign(Paint.Align.CENTER);
         // Paint used to draw lights and doors
         devicePaint = new Paint();
-        devicePaint.setStyle(Paint.Style.FILL);
+        devicePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         // Paint used to draw windows
         deviceStrokePaint = new Paint();
         deviceStrokePaint.setStyle(Paint.Style.STROKE);
@@ -188,7 +188,7 @@ public class CustomMapView extends View {
 
     private void drawInhabitants(ArrayList<Inhabitant> inhabitants, float vertical, float horizontal) {
         // Shift the inhabitants down a little to space them from the Room Name Text
-        vertical = vertical + (ICON_SHIFT * measurements.getScaleY());
+        vertical = vertical + ((INHABITANT_SHIFT / 1.5f) * measurements.getScaleY());
         // If there are more than 1 inhabitants, we need to shift the icons so they don't stack
         float adjustedHorizontal;
         for (int i = 0; i < inhabitants.size(); i++) {
@@ -196,13 +196,13 @@ public class CustomMapView extends View {
             float shift = inhabitants.size() % 2 == 1 ? 1f : 0f;
             if (i < (inhabitants.size() / 2)) {
                 // Inhabitants that are on the left of the center are shifted left
-                adjustedHorizontal = horizontal - (ICON_SHIFT * measurements.getScaleX() * (shift +  (float) (inhabitants.size() / 2) - i));
+                adjustedHorizontal = horizontal - (INHABITANT_SHIFT * measurements.getScaleX() * (shift +  (float) (inhabitants.size() / 2) - i));
             } else if (i > (inhabitants.size() / 2)) {
                 // Inhabitants that are on the right of the center are shifted right
-                adjustedHorizontal = horizontal + (ICON_SHIFT * measurements.getScaleX() * (shift + i - (float) (inhabitants.size() / 2)));
+                adjustedHorizontal = horizontal + (INHABITANT_SHIFT * measurements.getScaleX() * (shift + i - (float) (inhabitants.size() / 2)));
             } else {
                 // Inhabitants that are in the center are only shifted if there's an even number of inhabitants
-                adjustedHorizontal = horizontal + (ICON_SHIFT * measurements.getScaleX() * Math.abs(1 - shift));
+                adjustedHorizontal = horizontal + (INHABITANT_SHIFT * measurements.getScaleX() * Math.abs(1 - shift));
             }
             drawInhabitant(inhabitants.get(i), adjustedHorizontal, vertical);
         }
@@ -252,7 +252,7 @@ public class CustomMapView extends View {
         float horizontal = ((points[2] - points[0]) / 2f) + points[0];
         // If there are inhabitant, shift the text up to leave some space
         if (room.getInhabitants().size() > 0)
-            vertical = vertical - (ICON_SHIFT * measurements.getScaleY());
+            vertical = vertical - (INHABITANT_SHIFT * measurements.getScaleY());
         // Write the name of the room
         canvas.drawText(room.getName(), horizontal, vertical, textPaint);
     }
@@ -274,10 +274,10 @@ public class CustomMapView extends View {
         masked.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST));
         // Draw the new shape
         canvas.drawRect(shape, masked);
-        canvas.drawCircle(x, y, ICON_RADIUS, inhabitantPaint);
+        canvas.drawCircle(x, y, INHABITANT_RADIUS, inhabitantPaint);
         // Add the inhabitant's name's first letter in the middle of the circle
         String firstLetter = String.valueOf(inhabitant.getName().charAt(0)).toUpperCase();
-        canvas.drawText(firstLetter, x, y + (ICON_SHIFT * measurements.getScaleY() / 3), inhabitantTextPaint);
+        canvas.drawText(firstLetter, x, y + (INHABITANT_SHIFT * measurements.getScaleY() / 3), inhabitantTextPaint);
     }
 
     private void drawLight(Light device, float[] points) {
@@ -297,7 +297,7 @@ public class CustomMapView extends View {
         masked.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP));
         // Draw the new shape
         canvas.drawRect(shape, masked);
-        canvas.drawCircle(points[4], points[5], DEVICE_RADIUS, devicePaint);
+        canvas.drawCircle(points[4], points[5], DEVICE_LIGHT_RADIUS, devicePaint);
     }
 
     private void drawWindow(Window device, float[] points) {
