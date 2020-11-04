@@ -91,7 +91,7 @@ public class MainController extends AppCompatActivity {
                 return true;
             case R.id.action_logout:
                 // Save the preferences
-                Userbase userbase = new Userbase(context);
+                Userbase userbase = UserbaseHelper.loadUserbase(context);
                 userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "")).getUserPreferences().receiveFromContext(sharedPreferences);
                 // Save the permission configuration
                 userbase.getPermissionConfiguration().receiveFromContext(sharedPreferences);
