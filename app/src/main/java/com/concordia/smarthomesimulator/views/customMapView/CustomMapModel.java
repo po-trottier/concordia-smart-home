@@ -100,14 +100,18 @@ public class CustomMapModel {
      * @return whether a shape was found or not
      */
     public boolean queryClick(Context context, MotionEvent event, int padding) {
-        if (queryDevices(context, event, windows, padding))
+        if (queryDevices(context, event, windows, padding)) {
             return true;
-        if (queryDevices(context, event, doors, padding))
+        }
+        if (queryDevices(context, event, doors, padding)) {
             return true;
-        if (queryDevices(context, event, lights, padding))
+        }
+        if (queryDevices(context, event, lights, padding)) {
             return true;
-        if (queryInhabitants(context, event, inhabitants, padding))
+        }
+        if (queryInhabitants(context, event, inhabitants, padding)) {
             return true;
+        }
         return false;
     }
 
@@ -202,7 +206,7 @@ public class CustomMapModel {
             // Define a rectangle that is horizontally centered at the top of the garage
             left = (roomX / 2) - ((deviceWidth * scaleX) / 2);
             bottom = roomY - ((deviceHeight * scaleY) / 2);
-            top = roomY + ((deviceHeight * scaleY) / 2);;
+            top = roomY + ((deviceHeight * scaleY) / 2);
             right = (roomX / 2) + ((deviceWidth * scaleX) / 2);
         } else {
             // If this is not the garage door, just draw it where it should be

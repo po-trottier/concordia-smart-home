@@ -13,16 +13,37 @@ import com.concordia.smarthomesimulator.dataModels.DeviceType;
 import com.concordia.smarthomesimulator.dataModels.IDevice;
 import com.concordia.smarthomesimulator.dataModels.Window;
 
+/**
+ * The type Custom device alert view.
+ */
 public class CustomDeviceAlertView extends LinearLayout {
 
+    /**
+     * Instantiates a new Custom device alert view.
+     *
+     * @param context the context
+     */
     public CustomDeviceAlertView(Context context) {
         super(context);
     }
 
+    /**
+     * Instantiates a new Custom device alert view.
+     *
+     * @param context the context
+     * @param attrs   the attrs
+     */
     public CustomDeviceAlertView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * Instantiates a new Custom device alert view.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     */
     public CustomDeviceAlertView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

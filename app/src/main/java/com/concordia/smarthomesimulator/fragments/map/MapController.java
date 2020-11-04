@@ -80,9 +80,9 @@ public class MapController extends Fragment {
     }
 
     private void setEditIntent() {
-        FloatingActionButton fab = view.findViewById(R.id.fab_edit_map);
-        fab.setVisibility(View.VISIBLE);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton editMapFab = view.findViewById(R.id.fab_edit_map);
+        editMapFab.setVisibility(View.VISIBLE);
+        editMapFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityLogHelper.add(context, new LogEntry("House Layout", "Started editing the House Layout.", LogImportance.MINOR));
@@ -137,11 +137,11 @@ public class MapController extends Fragment {
     }
 
     private void hideViews() {
-        FloatingActionButton fab = view.findViewById(R.id.fab_edit_map);
-        fab.setVisibility(View.GONE);
+        FloatingActionButton editMapFab = view.findViewById(R.id.fab_edit_map);
+        editMapFab.setVisibility(View.GONE);
 
-        LinearLayout bottomSheet = view.findViewById(R.id.bottom_sheet);
-        bottomSheet.setVisibility(View.GONE);
+        LinearLayout infoBottomSheet = view.findViewById(R.id.bottom_sheet);
+        infoBottomSheet.setVisibility(View.GONE);
     }
 
     private void fillKnownInformation() {
@@ -164,23 +164,23 @@ public class MapController extends Fragment {
     private void setupOpenDialog() {
         HouseLayout backupLayout = mapModel.getHouseLayout();
         final AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle(getString(R.string.title_alert_open_layout))
-                .setMessage(getString(R.string.text_alert_open_layout))
-                .setView(setupCustomView())
-                .setPositiveButton(R.string.generic_open, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        HouseLayoutHelper.updateSelectedLayout(context, mapModel.getHouseLayout());
-                        updateContent();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mapModel.setHouseLayout(backupLayout);
-                        updateContent();
-                    }
-                }).create();
+            .setTitle(getString(R.string.title_alert_open_layout))
+            .setMessage(getString(R.string.text_alert_open_layout))
+            .setView(setupCustomView())
+            .setPositiveButton(R.string.generic_open, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    HouseLayoutHelper.updateSelectedLayout(context, mapModel.getHouseLayout());
+                    updateContent();
+                }
+            })
+            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mapModel.setHouseLayout(backupLayout);
+                    updateContent();
+                }
+            }).create();
         dialog.show();
     }
 
