@@ -7,20 +7,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
-import com.concordia.smarthomesimulator.controls.CustomMapDrawable;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
+import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -52,24 +56,17 @@ public class MapController extends Fragment {
         mapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
         FrameLayout content = view.findViewById(R.id.map_fragment);
         if (mapModel.getHouseLayout() == null) {
+            hideViews();
             content.removeAllViews();
             content.addView(inflater.inflate(R.layout.fragment_map_no_layout, null, false));
             setOpenIntent();
         } else {
             content.removeAllViews();
             content.addView(inflater.inflate(R.layout.fragment_map_with_layout, null, false));
-            setMapDetails();
+            setBottomSheetBehavior();
+            fillKnownInformation();
             setEditIntent();
         }
-    }
-
-    private void setMapDetails() {
-        ImageView mapView = view.findViewById(R.id.custom_house_layout);
-        CustomMapDrawable mapDrawable = new CustomMapDrawable(context, mapModel.getHouseLayout());
-        mapView.setImageDrawable(mapDrawable);
-
-        TextView layoutName = view.findViewById(R.id.map_layout_name);
-        layoutName.setText(mapModel.getHouseLayout().getName());
     }
 
     private void setOpenIntent() {
@@ -80,6 +77,88 @@ public class MapController extends Fragment {
                 setupOpenDialog();
             }
         });
+    }
+
+    private void setEditIntent() {
+        FloatingActionButton editMapFab = view.findViewById(R.id.fab_edit_map);
+        editMapFab.setVisibility(View.VISIBLE);
+        editMapFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityLogHelper.add(context, new LogEntry("House Layout", "Started editing the House Layout.", LogImportance.MINOR));
+                Intent intent = new Intent(context, EditMapController.class);
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    private void setBottomSheetBehavior() {
+        LinearLayout bottomSheet = view.findViewById(R.id.bottom_sheet);
+        bottomSheet.setVisibility(View.VISIBLE);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+
+        ImageView arrow = bottomSheet.findViewById(R.id.bottom_sheet_arrow);
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                else
+                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                // If this is an intermittent state then ignore it
+                if (newState != BottomSheetBehavior.STATE_COLLAPSED && newState != BottomSheetBehavior.STATE_EXPANDED)
+                    return;
+
+                // If the state hasn't changed don't start the animation
+                if (newState == mapModel.getBottomCardState())
+                    return;
+
+                mapModel.setBottomCardState(newState);
+                
+                int angle = newState == BottomSheetBehavior.STATE_COLLAPSED ? 180 : 0;
+
+                RotateAnimation rotate = new RotateAnimation(angle, 180 - angle, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                rotate.setDuration(300);
+                rotate.setInterpolator(new FastOutSlowInInterpolator());
+                rotate.setFillAfter(true);
+
+                ImageView arrow = bottomSheet.findViewById(R.id.bottom_sheet_arrow);
+                arrow.startAnimation(rotate);
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
+        });
+    }
+
+    private void hideViews() {
+        FloatingActionButton editMapFab = view.findViewById(R.id.fab_edit_map);
+        editMapFab.setVisibility(View.GONE);
+
+        LinearLayout infoBottomSheet = view.findViewById(R.id.bottom_sheet);
+        infoBottomSheet.setVisibility(View.GONE);
+    }
+
+    private void fillKnownInformation() {
+        HouseLayout layout = mapModel.getHouseLayout();
+
+        TextView layoutName = view.findViewById(R.id.information_layout_name);
+        layoutName.setText(layout.getName());
+
+        TextView numberRooms = view.findViewById(R.id.information_number_rooms);
+        numberRooms.setText(layout.getRooms().size() + " " + getString(R.string.map_active_layout_rooms_suffix));
+
+        TextView numberDevices = view.findViewById(R.id.information_number_devices);
+        int deviceCount = 0;
+        for (Room room : layout.getRooms()) {
+            deviceCount += room.getDevices().size();
+        }
+        numberDevices.setText(deviceCount + " " + getString(R.string.map_active_layout_devices_suffix));
     }
 
     private void setupOpenDialog() {
@@ -126,17 +205,5 @@ public class MapController extends Fragment {
         });
 
         return customView;
-    }
-
-    private void setEditIntent() {
-        FloatingActionButton fab = view.findViewById(R.id.fab_edit_map);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ActivityLogHelper.add(context, new LogEntry("House Layout", "Started editing the House Layout.", LogImportance.MINOR));
-                Intent intent = new Intent(context, EditMapController.class);
-                context.startActivity(intent);
-            }
-        });
     }
 }

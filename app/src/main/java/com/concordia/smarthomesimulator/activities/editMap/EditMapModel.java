@@ -6,7 +6,9 @@ import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.FileHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -43,7 +45,19 @@ public class EditMapModel  extends ViewModel {
      * @return whether the layout was saved or not
      */
     public boolean saveHouseLayout(Context context, HouseLayout layout) {
-        String fileName = layout.getName().trim().toLowerCase().replaceAll(" ", "_") + ".json";
+        String trimmedName = layout.getName().trim();
+
+        // Do not allow saving files with the default names
+        if (trimmedName.equalsIgnoreCase(DEMO_LAYOUT_NAME) || trimmedName.equalsIgnoreCase(EMPTY_LAYOUT_NAME))
+            return false;
+
+        String fileName = trimmedName.toLowerCase().replaceAll(" ", "_") + ".json";
+
+        // Do not allow saving files that already exist
+        File[] files = FileHelper.listFilesInDirectory(context, DIRECTORY_NAME_LAYOUTS);
+        if (Arrays.stream(files).anyMatch(file -> file.getName().equalsIgnoreCase(fileName)))
+            return false;
+
         return FileHelper.saveObjectToFile(context, DIRECTORY_NAME_LAYOUTS, fileName, layout);
     }
 

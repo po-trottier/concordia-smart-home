@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"
+    android:elevation="16dp"
+    app:behavior_peekHeight="@dimen/bottom_card_height"
+    app:behavior_hideable="false"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <!--Title-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="16dp">
+        <ImageView
+            android:id="@+id/bottom_sheet_arrow"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:src="@drawable/ic_keyboard_arrow_up"
+            app:tint="@color/primary"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:text="@string/map_information"/>
+    </LinearLayout>
+
+    <!--Separator-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="6dp"
+        android:background="@color/lightGrey"/>
+
+    <!--Legend-->
+    <include layout="@layout/partial_map_information_legend" />
+
+    <!--Separator-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="6dp"
+        android:background="@color/lightGrey"/>
+
+    <!--Legend-->
+    <include layout="@layout/partial_map_information_layout" />
+</LinearLayout>
