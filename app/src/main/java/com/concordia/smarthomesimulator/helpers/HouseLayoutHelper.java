@@ -91,7 +91,7 @@ public class HouseLayoutHelper {
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
 
         // Create new House Layout
-        return new HouseLayout("Empty Layout", 200f, 100f, currentUser);
+        return new HouseLayout("Empty Layout", currentUser);
     }
 
     private static HouseLayout loadDemoHouseLayout(Context context) {
@@ -101,58 +101,89 @@ public class HouseLayoutHelper {
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
 
         // Create new House Layout
-        HouseLayout layout = new HouseLayout("Demo Layout", 6f, 6f, currentUser);
+        HouseLayout layout = new HouseLayout("Demo Layout", currentUser);
 
-        // Create room #1
-        Room bedroom = new Room("Bedroom", new Geometry(2f,2f));
+        // Create Bedroom
+        Room bedroom = new Room("Bedroom", new Geometry(0,0, 4, 6));
 
-        Window bedroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
-        Light bedroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Door bedroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+        Window bedroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW, new Geometry(0,4, Orientation.VERTICAL));
+        Window bedroomWindow2 = (Window) deviceFactory.createDevice(DeviceType.WINDOW, new Geometry(0,2, Orientation.VERTICAL));
+        Door bedroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(2,6, Orientation.HORIZONTAL));
+        Light bedroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT, new Geometry(2, 1));
+        Light bedroomLight2 = (Light) deviceFactory.createDevice(DeviceType.LIGHT, new Geometry(1, 1));
 
         bedroomWindow.setIsLocked(true);
         bedroomDoor.setIsOpened(true);
 
-        bedroom.addDevices(new ArrayList<>(Arrays.asList(bedroomWindow, bedroomLight, bedroomDoor)));
+        bedroom.addDevices(new ArrayList<>(Arrays.asList(
+                bedroomWindow,
+                bedroomWindow2,
+                bedroomDoor,
+                bedroomLight,
+                bedroomLight2
+        )));
+
+        Inhabitant person1 = new Inhabitant("Alex");
+        bedroom.addInhabitant(person1);
+
+        Inhabitant person2 = new Inhabitant("Jane");
+        bedroom.addInhabitant(person2);
 
         layout.addRoom(bedroom);
 
-        // Create room #2
-        Room kitchen = new Room("Kitchen", new Geometry(2f,2f));
+        // Create Kitchen
+        Room kitchen = new Room("Kitchen", new Geometry(0, 6, 8,4));
 
-        Window kitchenWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
-        Light kitchenLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Light kitchenLight2 = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Door kitchenDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+        Window kitchenWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW, new Geometry(2,10, Orientation.HORIZONTAL));
+        Window kitchenWindow2 = (Window) deviceFactory.createDevice(DeviceType.WINDOW, new Geometry(4,10, Orientation.HORIZONTAL));
+        Window kitchenWindow3 = (Window) deviceFactory.createDevice(DeviceType.WINDOW, new Geometry(6,10, Orientation.HORIZONTAL));
+        Light kitchenLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT, new Geometry(2, 8));
+        Light kitchenLight2 = (Light) deviceFactory.createDevice(DeviceType.LIGHT, new Geometry(6, 8));
+        Door kitchenDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(0,8, Orientation.VERTICAL));
+        Door kitchenDoor2 = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(7,6, Orientation.HORIZONTAL));
 
-        kitchen.addDevices(new ArrayList<>(Arrays.asList(kitchenWindow, kitchenLight, kitchenLight2, kitchenDoor)));
+        kitchen.addDevices(new ArrayList<>(Arrays.asList(
+            kitchenWindow,
+            kitchenWindow2,
+            kitchenWindow3,
+            kitchenLight,
+            kitchenLight2,
+            kitchenDoor,
+            kitchenDoor2
+        )));
+
+        Inhabitant person3 = new Inhabitant("Billy");
+        kitchen.addInhabitant(person3);
+
+        Inhabitant person4 = new Inhabitant("Mike");
+        kitchen.addInhabitant(person4);
+
+        Inhabitant person5 = new Inhabitant("Jackson");
+        kitchen.addInhabitant(person5);
 
         layout.addRoom(kitchen);
 
-        // Create room #3
-        Room bathroom = new Room("Bathroom", new Geometry(2f,2f));
+        // Create Bathroom
+        Room bathroom = new Room("Bathroom", new Geometry(4, 4, 2, 2));
 
-        Window bathroomWindow = (Window) deviceFactory.createDevice(DeviceType.WINDOW);
-        Light bathroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT);
-        Door bathroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR);
+        Light bathroomLight = (Light) deviceFactory.createDevice(DeviceType.LIGHT, new Geometry(5, 4));
+        Door bathroomDoor = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(4,4, Orientation.VERTICAL));
+        Door bathroomDoor2 = (Door) deviceFactory.createDevice(DeviceType.DOOR, new Geometry(5,6, Orientation.HORIZONTAL));
 
-        bathroomWindow.setIsLocked(true);
         bathroomDoor.setIsOpened(true);
 
-        bathroom.addDevices(new ArrayList<>(Arrays.asList(bathroomWindow, bathroomLight, bathroomDoor)));
+        bathroom.addDevices(new ArrayList<>(Arrays.asList(
+            bathroomLight,
+            bathroomDoor,
+            bathroomDoor2
+        )));
 
         layout.addRoom(bathroom);
 
-        // Add inhabitants
-        Inhabitant person1 = new Inhabitant("Person1");
-        bedroom.addInhabitant(person1);
-
-        Inhabitant person2 = new Inhabitant("Person2");
-        kitchen.addInhabitant(person2);
-
-        Inhabitant person4 = new Inhabitant("Person3");
+        // Add an inhabitant in the Garage
+        Inhabitant person6 = new Inhabitant("William");
         Room garage = layout.getRoom(DEFAULT_NAME_GARAGE);
-        garage.addInhabitant(person4);
+        garage.addInhabitant(person6);
 
         return layout;
     }

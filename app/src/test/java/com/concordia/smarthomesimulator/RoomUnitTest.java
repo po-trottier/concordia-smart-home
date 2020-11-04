@@ -30,7 +30,7 @@ public class RoomUnitTest {
     @Test
     public void roomReturnProperGeometry() {
         // Setup
-        final Geometry geometry = new Geometry(1f, 2f);
+        final Geometry geometry = new Geometry(1, 2, 3, 4);
         geometry.setX(3);
         geometry.setY(4);
         Room room = new Room("room", geometry);
