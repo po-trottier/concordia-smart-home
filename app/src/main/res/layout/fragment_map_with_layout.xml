@@ -14,47 +14,15 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:background="@color/light"
+        android:paddingBottom="@dimen/bottom_card_height"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/map_room_card">
-        <ImageView
-            android:id="@+id/custom_house_layout"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <com.concordia.smarthomesimulator.views.customMapView.CustomMapView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:padding="16dp"/>
+            android:padding="32dp"/>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/map_room_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lightGrey"/>
-        <TextView
-            android:id="@+id/map_layout_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="24dp"
-            android:textSize="30sp"
-            android:text="@string/title_rooms"/>
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_edit_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_edit"
-        android:tint="@color/white"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
