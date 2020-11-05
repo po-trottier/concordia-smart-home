@@ -77,7 +77,7 @@ public class EditMapController extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // If the previously selected layout is now deleted, select a default layout
-                    ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedHouseLayouts(context);
+                    ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
                     if (layouts.stream().noneMatch(layout -> layout.getName().equals(backupLayout.getName()))) {
                         editMapModel.setHouseLayout(layouts.get(0));
                         HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
@@ -103,11 +103,16 @@ public class EditMapController extends AppCompatActivity {
                     if (layoutName != null) {
                         editMapModel.getHouseLayout().setName(layoutName.getText().toString().trim());
                         HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
-                        if (editMapModel.saveHouseLayout(context, editMapModel.getHouseLayout())) {
-                            Toast.makeText(context, getString(R.string.success_alert_save_layout), Toast.LENGTH_LONG).show();
+                        if (HouseLayoutHelper.isLayoutNameUnique(context, editMapModel.getHouseLayout())) {
+                            if (HouseLayoutHelper.saveHouseLayout(context, editMapModel.getHouseLayout())){
+                                Toast.makeText(context, context.getString(R.string.success_alert_save_layout), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, context.getString(R.string.error_unknown_alert_save_layout), Toast.LENGTH_LONG).show();
+                            }
                             finish();
                         } else {
-                            Toast.makeText(context, getString(R.string.error_alert_save_layout), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, getString(R.string.error_exists_alert_save_layout), Toast.LENGTH_LONG).show();
+                            setupSaveDialog();
                         }
                     }
                 }
@@ -119,7 +124,7 @@ public class EditMapController extends AppCompatActivity {
         final View customView = inflater.inflate(R.layout.alert_open_house_layout, null, false);
         final ListView layoutList = customView.findViewById(R.id.alert_open_layout_list);
 
-        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedHouseLayouts(context);
+        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
         HouseLayoutAdapter adapter = new HouseLayoutAdapter(context, 0, layouts);
         layoutList.setAdapter(adapter);
 

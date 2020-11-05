@@ -69,4 +69,22 @@ public interface IDevice {
      * @return the device type
      */
     public DeviceType getDeviceType();
+
+    /**
+     * Deep copy device.
+     *
+     * @return the device
+     */
+    public IDevice deepCopy();
+
+    /**
+     * Checks if the device is equal an other.
+     *
+     * To perform the check we use the status and geometry.
+     * We therefore assume that there will never be 2 devices on top of each other
+     *
+     * @param other the other device
+     * @return whether the device is equal to the other
+     */
+    public boolean equals(IDevice other);
 }

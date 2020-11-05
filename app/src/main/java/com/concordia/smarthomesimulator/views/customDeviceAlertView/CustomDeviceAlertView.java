@@ -12,11 +12,15 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.DeviceType;
 import com.concordia.smarthomesimulator.dataModels.IDevice;
 import com.concordia.smarthomesimulator.dataModels.Window;
+import com.concordia.smarthomesimulator.factories.DeviceFactory;
 
 /**
  * The type Custom device alert view.
  */
 public class CustomDeviceAlertView extends LinearLayout {
+
+    private DeviceFactory factory;
+    private IDevice device;
 
     /**
      * Instantiates a new Custom device alert view.
@@ -25,6 +29,7 @@ public class CustomDeviceAlertView extends LinearLayout {
      */
     public CustomDeviceAlertView(Context context) {
         super(context);
+        initializeFactory();
     }
 
     /**
@@ -35,6 +40,7 @@ public class CustomDeviceAlertView extends LinearLayout {
      */
     public CustomDeviceAlertView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initializeFactory();
     }
 
     /**
@@ -46,6 +52,38 @@ public class CustomDeviceAlertView extends LinearLayout {
      */
     public CustomDeviceAlertView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initializeFactory();
+    }
+
+    /**
+     * Gets updated device information.
+     *
+     * @return the device information
+     */
+    public IDevice getDeviceInformation() {
+        IDevice newDevice = null;
+
+        switch (device.getDeviceType()) {
+            case LIGHT:
+                newDevice = factory.createDevice(DeviceType.LIGHT, device.getGeometry());
+                break;
+            case DOOR:
+                newDevice = factory.createDevice(DeviceType.DOOR, device.getGeometry());
+                break;
+            case WINDOW:
+                newDevice = factory.createDevice(DeviceType.WINDOW, device.getGeometry());
+                break;
+        }
+
+        CheckBox openedCheckbox = findViewById(R.id.device_status_checkbox);
+        newDevice.setIsOpened(openedCheckbox.isChecked());
+
+        if (newDevice.getDeviceType() == DeviceType.WINDOW) {
+            CheckBox lockedCheckbox = findViewById(R.id.device_lock_checkbox);
+            ((Window) newDevice).setIsLocked(lockedCheckbox.isChecked());
+        }
+
+        return newDevice;
     }
 
     /**
@@ -54,12 +92,18 @@ public class CustomDeviceAlertView extends LinearLayout {
      * @param device the device
      */
     public void setDeviceInformation(IDevice device) {
-        setStatusText(device);
-        setStatusCheckbox(device);
-        setLockLayout(device);
+        this.device = device;
+
+        setStatusText();
+        setStatusCheckbox();
+        setLockLayout();
     }
 
-    private void setStatusText(IDevice device) {
+    private void initializeFactory() {
+        factory = new DeviceFactory();
+    }
+
+    private void setStatusText() {
         int color = device.getIsOpened() ? device.getOpenedTint() : device.getClosedTint();
         int text = device.getIsOpened() ? R.string.map_opened : R.string.map_closed;
 
@@ -68,7 +112,7 @@ public class CustomDeviceAlertView extends LinearLayout {
         statusText.setTextColor(getContext().getColor(color));
     }
 
-    private void setStatusCheckbox(IDevice device) {
+    private void setStatusCheckbox() {
         int color = device.getIsOpened() ? device.getOpenedTint() : device.getClosedTint();
 
         CheckBox statusCheck = findViewById(R.id.device_status_checkbox);
@@ -83,7 +127,7 @@ public class CustomDeviceAlertView extends LinearLayout {
         });
     }
 
-    private void setLockLayout(IDevice device) {
+    private void setLockLayout() {
         if (device.getDeviceType() != DeviceType.WINDOW)
             return;
 

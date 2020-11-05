@@ -11,11 +11,6 @@ public class Light implements IDevice {
         geometry = new Geometry();
     }
 
-    /**
-     * Instantiates a new Light.
-     *
-     * @param geometry the geometry of the device
-     */
     public Light(Geometry geometry) {
         this.geometry = geometry;
     }
@@ -63,5 +58,19 @@ public class Light implements IDevice {
     @Override
     public DeviceType getDeviceType() {
         return DeviceType.LIGHT;
+    }
+
+    @Override
+    public IDevice deepCopy() {
+        Light copy = new Light(geometry);
+        copy.setIsOpened(isOpened);
+        return copy;
+    }
+
+    @Override
+    public boolean equals(IDevice other) {
+        return getDeviceType() == other.getDeviceType()
+            && getIsOpened() == other.getIsOpened()
+            && getGeometry().equals(other.getGeometry());
     }
 }

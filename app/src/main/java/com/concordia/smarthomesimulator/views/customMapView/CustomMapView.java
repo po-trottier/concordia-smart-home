@@ -103,6 +103,18 @@ public class CustomMapView extends View {
 
     //endregion
 
+    //region Public Methods
+
+    /**
+     * Update the view by redrawing the canvas.
+     */
+    public void updateView() {
+        this.layout = HouseLayoutHelper.getSelectedLayout(context);
+        invalidate();
+    }
+
+    //endregion
+
     //region Private Methods
 
     //region Setup Methods

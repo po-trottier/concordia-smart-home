@@ -1,14 +1,19 @@
 package com.concordia.smarthomesimulator.views.customMapView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.RectF;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
 import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
 
 import java.util.ArrayList;
@@ -343,23 +348,45 @@ public class CustomMapModel {
 
     //endregion
 
-    //region ShowDialogs
+    //region Show Dialog Methods
 
     private void showDeviceDialog(Context context, IDevice device) {
+        // Make sure we don't edit the original device
+        IDevice deepCopy = device.deepCopy();
+
         final CustomDeviceAlertView customView = (CustomDeviceAlertView) LayoutInflater.from(context).inflate(R.layout.alert_edit_device, null, false);
-        customView.setDeviceInformation(device);
+        customView.setDeviceInformation(deepCopy);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.alert_map_device_title) + " " + device.getDeviceType().toString().toLowerCase())
-                .setView(customView)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO: Save the layout and re-draw the canvas
-                        // if name == DEFAULT_DEMO || DEFAULT_EMPTY then ask for new name
+            .setTitle(context.getString(R.string.alert_map_device_title) + " " + device.getDeviceType().toString().toLowerCase())
+            .setView(customView)
+            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    HouseLayout layout = HouseLayoutHelper.getSelectedLayout(context);
+                    // We don't know which room the user clicked in so we have to check in all of them
+                    boolean found = false;
+                    for (Room room : layout.getRooms()) {
+                        // Try to find the device that was clicked on in the room
+                        for (IDevice roomDevice : room.getDevices()) {
+                            // If we find it, remove it from the room
+                            if (roomDevice.equals(device)) {
+                                room.removeDevice(roomDevice);
+                                found = true;
+                                break;
+                            }
+                        }
+                        // Only add the modified one if we found the old one first
+                        if (found) {
+                            room.addDevice(customView.getDeviceInformation());
+                            break;
+                        }
                     }
-                })
-                .create();
+                    HouseLayoutHelper.updateSelectedLayout(context, layout);
+                    saveUpdatedLayout(context, layout);
+                }
+            })
+            .create();
         dialog.show();
     }
 
@@ -377,6 +404,58 @@ public class CustomMapModel {
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
         dialog.show();
+    }
+
+    private void showRenameLayoutDialog(Context context, HouseLayout layout) {
+        final View customView = LayoutInflater.from(context).inflate(R.layout.alert_save_house_layout, null, false);
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+            .setTitle(context.getString(R.string.title_alert_save_layout))
+            .setMessage(context.getString(R.string.text_alert_save_layout_default))
+            .setView(customView)
+            .setNegativeButton(android.R.string.no, null)
+            .setPositiveButton(context.getString(R.string.generic_save), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
+                    if (layoutName != null) {
+                        layout.setName(layoutName.getText().toString().trim());
+                        HouseLayoutHelper.updateSelectedLayout(context, layout);
+                        if (HouseLayoutHelper.isLayoutNameUnique(context, layout)) {
+                            saveUpdatedLayout(context, layout);
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.error_exists_alert_save_layout), Toast.LENGTH_LONG).show();
+                            showRenameLayoutDialog(context, layout);
+                        }
+                    }
+                }
+            }).create();
+        dialog.show();
+    }
+
+    //endregion
+
+    //region House Layout Methods
+
+    private void saveUpdatedLayout(Context context, HouseLayout layout) {
+        if (layout.getName().equalsIgnoreCase(DEMO_LAYOUT_NAME) || layout.getName().equalsIgnoreCase(EMPTY_LAYOUT_NAME)) {
+            showRenameLayoutDialog(context, layout);
+            return;
+        }
+
+        if (!HouseLayoutHelper.saveHouseLayout(context, layout)) {
+            Toast.makeText(context, context.getString(R.string.error_unknown_alert_save_layout), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Clear the know shapes
+        windows.clear();
+        doors.clear();
+        lights.clear();
+        inhabitants.clear();
+
+        // Update the canvas
+        CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
+        view.updateView();
     }
 
     //endregion
