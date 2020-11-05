@@ -45,6 +45,14 @@ public class EditDashboardController extends AppCompatActivity {
     private EditText newPasswordField;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
+    private Spinner minimumPermissionsSpinnerWindowAll;
+    private Spinner minimumPermissionsSpinnerWindowLocal;
+    private Spinner minimumPermissionsSpinnerDoorAll;
+    private Spinner minimumPermissionsSpinnerDoorLocal;
+    private Spinner minimumPermissionsSpinnerLightAll;
+    private Spinner minimumPermissionsSpinnerLightLocal;
+    private Spinner minimumPermissionsSpinnerGarage;
+    private Spinner minimumPermissionsSpinnerAwayMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +93,14 @@ public class EditDashboardController extends AppCompatActivity {
         createUserButton = findViewById(R.id.create_button);
         newUsernameField = findViewById(R.id.new_username_field);
         newPasswordField = findViewById(R.id.new_password_field);
+        minimumPermissionsSpinnerWindowAll = findViewById(R.id.minimum_permissions_spinner_window_all);
+        minimumPermissionsSpinnerWindowLocal = findViewById(R.id.minimum_permissions_spinner_window_local);
+        minimumPermissionsSpinnerDoorAll = findViewById(R.id.minimum_permissions_spinner_door_all);
+        minimumPermissionsSpinnerLightLocal = findViewById(R.id.minimum_permissions_spinner_door_local);
+        minimumPermissionsSpinnerDoorLocal = findViewById(R.id.minimum_permissions_spinner_light_all);
+        minimumPermissionsSpinnerLightAll = findViewById(R.id.minimum_permissions_spinner_light_local);
+        minimumPermissionsSpinnerGarage = findViewById(R.id.minimum_permissions_spinner_garage);
+        minimumPermissionsSpinnerAwayMode = findViewById(R.id.minimum_permissions_spinner_away_mode);
     }
 
     private void fillKnownValues() {
@@ -224,6 +240,14 @@ public class EditDashboardController extends AppCompatActivity {
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         editPermissionsSpinner.setAdapter(adapter);
         newPermissionsSpinner.setAdapter(adapter);
+        minimumPermissionsSpinnerWindowAll.setAdapter(adapter);
+        minimumPermissionsSpinnerWindowLocal.setAdapter(adapter);
+        minimumPermissionsSpinnerDoorAll.setAdapter(adapter);
+        minimumPermissionsSpinnerDoorLocal.setAdapter(adapter);
+        minimumPermissionsSpinnerLightAll.setAdapter(adapter);
+        minimumPermissionsSpinnerLightLocal.setAdapter(adapter);
+        minimumPermissionsSpinnerGarage.setAdapter(adapter);
+        minimumPermissionsSpinnerAwayMode.setAdapter(adapter);
     }
 
     private void setupUsernamesSpinner(){
