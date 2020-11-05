@@ -19,6 +19,7 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -188,7 +189,9 @@ public class EditMapController extends AppCompatActivity {
 
     private void fillKnownValues() {
         editMapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
-        // TODO: Fill in values with proper ones
+
+        CustomMapSettingsView settings = findViewById(R.id.edit_map_settings);
+        settings.updateView();
     }
 
     private View setupCustomView() {

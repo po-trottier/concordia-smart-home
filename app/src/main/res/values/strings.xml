@@ -81,6 +81,19 @@
     <string name="default_device_name">Device</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
+    <string name="layout_name_edit_map">House Layout Name</string>
+    <string name="rooms_edit_map">Rooms</string>
+    <string name="devices_edit_map">Devices</string>
+    <string name="inhabitants_edit_map">Inhabitants</string>
+    <string name="remove_room_edit_map">Remove Room</string>
+    <string name="no_room_edit_map">There are no rooms in this layout…</string>
+    <string name="add_room_edit_map">Add a Room</string>
+    <string name="no_device_edit_map">There are no devices in this layout…</string>
+    <string name="add_device_edit_map">Add a Device</string>
+    <string name="no_inhabitant_edit_map">There are no inhabitants in this layout…</string>
+    <string name="add_inhabitant_edit_map">Add an Inhabitant</string>
+    <string name="select_room_edit_map">You must first select a room…</string>
+
     <string name="title_alert_save_layout">Save the house layout</string>
     <string name="text_alert_save_layout">How would you like to call this layout ?</string>
     <string name="text_alert_save_layout_default">The active layout is a default layout and cannot be updated. Please choose a name to rename the layout to.\n</string>
