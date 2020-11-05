@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Userbase {
 
     private List<User> users;
-    private PermissionConfiguration permissionConfiguration;
+    private PermissionsConfiguration permissionsConfiguration;
 
     /**
      * Instantiates a new Userbase using a passed List of users.
@@ -24,7 +24,7 @@ public class Userbase {
      */
     public Userbase(List<User> users){
         this.users = users;
-        this.permissionConfiguration = new PermissionConfiguration();
+        this.permissionsConfiguration = new PermissionsConfiguration();
     }
 
     /**
@@ -32,17 +32,17 @@ public class Userbase {
      *
      * @return the permission configuration
      */
-    public PermissionConfiguration getPermissionConfiguration() {
-        return permissionConfiguration;
+    public PermissionsConfiguration getPermissionConfiguration() {
+        return permissionsConfiguration;
     }
 
     /**
      * Sets permission configuration.
      *
-     * @param permissionConfiguration the permission configuration
+     * @param permissionsConfiguration the permission configuration
      */
-    public void setPermissionConfiguration(PermissionConfiguration permissionConfiguration) {
-        this.permissionConfiguration = permissionConfiguration;
+    public void setPermissionConfiguration(PermissionsConfiguration permissionsConfiguration) {
+        this.permissionsConfiguration = permissionsConfiguration;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Userbase {
      *
      * @param context          the context
      * @param usernameToDelete the username to delete
-     * @return the boolean
+     * @return true if deletion successful
      */
     public boolean deleteUserFromUsernameIfPossible(Context context, String usernameToDelete){
         for (int i = 0; i < users.size(); i++){
@@ -116,7 +116,7 @@ public class Userbase {
      * Checks if the userbase contains this user.
      *
      * @param userToCompare the user to compare
-     * @return the boolean
+     * @return true if it contains the user
      */
     public boolean containsUser(User userToCompare){
         for (User user: getUsers()) {

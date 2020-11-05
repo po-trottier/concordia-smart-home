@@ -2,11 +2,14 @@ package com.concordia.smarthomesimulator.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
+import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_PERMISSIONS;
 import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_USERNAME;
 
 public final class UserbaseHelper {
@@ -57,13 +60,23 @@ public final class UserbaseHelper {
         return null;
     }
 
-    public static boolean canLoggedUserInteract(Action action, SharedPreferences sharedPreferences, Userbase userbase, Context context){
-        User loggedUser = userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""));
-        if ((loggedUser.getPermission().getBitValue()&sharedPreferences.getInt(action.getDescription(),0)) == sharedPreferences.getInt(action.getDescription(),0)){
-            ActivityLogHelper.add(context, new LogEntry("Permission","User allowed to perform", LogImportance.MINOR));
+    public static boolean verifyPermissions(Action action, Context context){
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        int loggedUserPermissions = preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0);
+        int minPermissionsForAction = preferences.getInt(action.getDescription(),0);
+
+        if (loggedUserPermissions == 0 || minPermissionsForAction == 0){
+            // todo proper exception handling for next delivery
+            Toast.makeText(context, "Something is wrong with the preferences",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if ((loggedUserPermissions&minPermissionsForAction) == minPermissionsForAction){
+            ActivityLogHelper.add(context, new LogEntry("Permission",
+                    String.format("User performed permission-restricted action: %s", action.getDescription()), LogImportance.MINOR));
             return true;
         }
-        ActivityLogHelper.add(context, new LogEntry("Permission","User cannot perform", LogImportance.MINOR));
+        Toast.makeText(context, R.string.wrong_permissions,Toast.LENGTH_SHORT).show();
+        ActivityLogHelper.add(context, new LogEntry("Permission",
+                String.format("User was stopped from performing permission-restricted action: %s", action.getDescription()), LogImportance.IMPORTANT));
         return false;
     }
 

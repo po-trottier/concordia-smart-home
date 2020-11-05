@@ -125,6 +125,8 @@
     <string name="alert_map_inhabitant_text">is the selected inhabitant.</string>
     <string name="alert_map_inhabitant_text_self">YOU are the selected inhabitant.</string>
 
+    <string name="wrong_permissions">You do not have the proper permissions to do this.</string>
+
     <string-array name="permissions_spinner">
         <item>Parent</item>
         <item>Child</item>
