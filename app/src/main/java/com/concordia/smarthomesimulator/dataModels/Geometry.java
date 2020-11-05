@@ -1,5 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.Nullable;
+
 /**
  * The type Geometry.
  */
@@ -54,6 +56,19 @@ public class Geometry {
         this.y = y;
         this.width = width;
         this.height = height;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object object) {
+        if (object == null || object.getClass() != Geometry.class) {
+            return false;
+        }
+        Geometry other = (Geometry) object;
+        return x == other.getX()
+            && y == other.getY()
+            && width == other.getWidth()
+            && height == other.getHeight()
+            && orientation.equals(other.getOrientation());
     }
 
     /**

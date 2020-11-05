@@ -13,6 +13,10 @@ import static com.concordia.smarthomesimulator.Constants.*;
 
 public class HouseLayoutHelper {
 
+    //region Public Methods
+
+    //region Memory Operations
+
     /**
      * Update the selected layout.
      *
@@ -38,7 +42,7 @@ public class HouseLayoutHelper {
     public static HouseLayout getSelectedLayout(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String selected = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
-        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedHouseLayouts(context);
+        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
 
         return layouts.stream().filter(layout -> layout.getName().equals(selected)).findFirst().orElse(null);
     }
@@ -49,7 +53,7 @@ public class HouseLayoutHelper {
      * @param context the context
      * @return the list of layouts saved on the device
      */
-    public static ArrayList<HouseLayout> listSavedHouseLayouts(Context context) {
+    public static ArrayList<HouseLayout> listSavedLayouts(Context context) {
         ArrayList<HouseLayout> layouts = new ArrayList<>();
         File[] files = FileHelper.listFilesInDirectory(context, DIRECTORY_NAME_LAYOUTS);
         // Add a new Layout for every saved File
@@ -65,14 +69,36 @@ public class HouseLayoutHelper {
     }
 
     /**
+     * Checks if the house layout name if unique.
+     *
+     * @param context the context
+     * @param layout  the layout to verify
+     * @return whether the layout name is unique or not
+     */
+    public static boolean isLayoutNameUnique(Context context, HouseLayout layout) {
+        String name = layout.getName().trim();
+
+        // If the house layout is one of the 2 defaults it's not unique
+        if (name.equalsIgnoreCase(DEMO_LAYOUT_NAME) || name.equalsIgnoreCase(EMPTY_LAYOUT_NAME)) {
+            return false;
+        }
+
+        // Otherwise make sure it's not in the list of saved layouts
+        return listSavedLayouts(context).stream().noneMatch(saved -> saved.getName().trim().equalsIgnoreCase(name));
+    }
+
+    //endregion
+
+    //region File Operations
+
+    /**
      * Remove a saved house layout's file.
      *
      * @param context the context
      * @param layout  the layout to be removed
-     * @return whether the operation was successful or not
      */
-    public static boolean removeSavedHouseLayout(Context context, HouseLayout layout) {
-        String fileName = layout.getName().trim().toLowerCase().replaceAll(" ", "_") + ".json";
+    public static void removeHouseLayout(Context context, HouseLayout layout) {
+        String fileName = getHouseLayoutFileName(layout);
         File[] files = FileHelper.listFilesInDirectory(context, DIRECTORY_NAME_LAYOUTS);
         File selected = Arrays.stream(files)
                 .filter(file -> file.getName().equalsIgnoreCase(fileName))
@@ -80,10 +106,40 @@ public class HouseLayoutHelper {
                 .orElse(null);
 
         if (selected == null)
-            return false;
+            return;
 
-        return selected.delete();
+        //noinspection ResultOfMethodCallIgnored
+        selected.delete();
     }
+
+    /**
+     * Save a house layout to a file.
+     *
+     * @param context the context
+     * @param layout  the layout to save
+     * @return whether the layout was saved or not
+     */
+    public  static boolean saveHouseLayout(Context context, HouseLayout layout) {
+        String fileName = getHouseLayoutFileName(layout);
+
+        return FileHelper.saveObjectToFile(context, DIRECTORY_NAME_LAYOUTS, fileName, layout);
+    }
+
+    /**
+     * Gets house layout file name based on the layout's name.
+     *
+     * @param layout the layout
+     * @return the house layout file name
+     */
+    public static String getHouseLayoutFileName(HouseLayout layout) {
+        return layout.getName().trim().toLowerCase().replaceAll(" ", "_") + ".json";
+    }
+
+    //endregion
+
+    //endregion
+
+    //region Private Methods
 
     private static HouseLayout createNewHouseLayout(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
@@ -190,4 +246,6 @@ public class HouseLayoutHelper {
 
         return layout;
     }
+
+    //endregion
 }

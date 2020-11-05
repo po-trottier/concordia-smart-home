@@ -83,9 +83,11 @@
     <string name="title_activity_edit_map">Edit House Layout</string>
     <string name="title_alert_save_layout">Save the house layout</string>
     <string name="text_alert_save_layout">How would you like to call this layout ?</string>
+    <string name="text_alert_save_layout_default">The active layout is a default layout and cannot be updated. Please choose a name to rename the layout to.\n</string>
     <string name="field_alert_save_layout">Enter the name here</string>
     <string name="success_alert_save_layout">The house layout was successfully saved.</string>
-    <string name="error_alert_save_layout">There was an error saving the House Layout. Please try using a different layout name.</string>
+    <string name="error_exists_alert_save_layout">A house layout with this name already exists. Please try using a different layout name.</string>
+    <string name="error_unknown_alert_save_layout">Something went wrong while saving the house layout. Please try again later.</string>
     <string name="title_alert_open_layout">Open a house layout</string>
     <string name="text_alert_open_layout">Which layout would you like to open ?</string>
     <string name="title_alert_delete_layout">Delete \"%s\"</string>

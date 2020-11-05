@@ -188,7 +188,7 @@ public class MapController extends Fragment {
         final View customView = LayoutInflater.from(context).inflate(R.layout.alert_open_house_layout, null, false);
         final ListView layoutList = customView.findViewById(R.id.alert_open_layout_list);
 
-        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedHouseLayouts(context);
+        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
 
         HouseLayoutAdapter adapter = new HouseLayoutAdapter(context, 0, layouts);
         layoutList.setAdapter(adapter);
