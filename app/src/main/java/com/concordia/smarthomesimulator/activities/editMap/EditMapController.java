@@ -25,10 +25,16 @@ import java.util.ArrayList;
 
 public class EditMapController extends AppCompatActivity {
 
+    //region Properties
+
     private EditMapModel editMapModel;
 
     private Context context;
     private LayoutInflater inflater;
+
+    //endregion
+
+    //region Overrides
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +51,32 @@ public class EditMapController extends AppCompatActivity {
         setSaveIntent();
     }
 
-    private void fillKnownValues() {
-        editMapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
-        // TODO: Fill in values with proper ones
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.edit_map, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Add appropriate logic for the various Action Bar menu items.
+        switch (item.getItemId()) {
+            case R.id.action_open_layout:
+                setOpenIntent();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //endregion
+
+    //region Private Methods
+
+    //region Intents
 
     private void setSaveIntent() {
         FloatingActionButton saveButton = findViewById(R.id.save_map_file);
@@ -89,6 +117,10 @@ public class EditMapController extends AppCompatActivity {
         dialog.show();
     }
 
+    //endregion
+
+    //region Dialogs
+
     private void setupSaveDialog() {
         final View customView = inflater.inflate(R.layout.alert_save_house_layout, null, false);
         final AlertDialog dialog = new AlertDialog.Builder(context)
@@ -101,15 +133,30 @@ public class EditMapController extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
                     if (layoutName != null) {
-                        editMapModel.getHouseLayout().setName(layoutName.getText().toString().trim());
-                        HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
-                        if (HouseLayoutHelper.isLayoutNameUnique(context, editMapModel.getHouseLayout())) {
-                            if (HouseLayoutHelper.saveHouseLayout(context, editMapModel.getHouseLayout())){
-                                Toast.makeText(context, context.getString(R.string.success_alert_save_layout), Toast.LENGTH_LONG).show();
+                        editMapModel.updateHouseLayoutName(layoutName.getText().toString().trim());
+                        if (!HouseLayoutHelper.isLayoutNameDefault(editMapModel.getHouseLayout())) {
+                            if (HouseLayoutHelper.isLayoutNameUnique(context, editMapModel.getHouseLayout())) {
+                                editMapModel.saveHouseLayout(context);
+                                finish();
                             } else {
-                                Toast.makeText(context, context.getString(R.string.error_unknown_alert_save_layout), Toast.LENGTH_LONG).show();
+                                final AlertDialog confirm = new AlertDialog.Builder(context)
+                                    .setTitle(getString(R.string.title_alert_save_layout_overwrite))
+                                    .setMessage(getString(R.string.text_alert_save_layout_overwrite))
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            setupSaveDialog();
+                                        }
+                                    })
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            editMapModel.saveHouseLayout(context);
+                                            finish();
+                                        }
+                                    }).create();
+                                confirm.show();
                             }
-                            finish();
                         } else {
                             Toast.makeText(context, getString(R.string.error_exists_alert_save_layout), Toast.LENGTH_LONG).show();
                             setupSaveDialog();
@@ -118,6 +165,30 @@ public class EditMapController extends AppCompatActivity {
                 }
             }).create();
         dialog.show();
+    }
+
+    private void setupDeleteDialog(int position, ArrayList<HouseLayout> layouts, HouseLayoutAdapter adapter) {
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle(String.format(getString(R.string.title_alert_delete_layout), layouts.get(position).getName()))
+                .setMessage(getString(R.string.text_alert_delete_layout))
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        editMapModel.deleteHouseLayout(context, layouts, position);
+                        adapter.notifyDataSetChanged();
+                    }
+                }).create();
+        dialog.show();
+    }
+
+    //endregion
+
+    //region Views
+
+    private void fillKnownValues() {
+        editMapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
+        // TODO: Fill in values with proper ones
     }
 
     private View setupCustomView() {
@@ -150,21 +221,6 @@ public class EditMapController extends AppCompatActivity {
         return customView;
     }
 
-    private void setupDeleteDialog(int position, ArrayList<HouseLayout> layouts, HouseLayoutAdapter adapter) {
-        final AlertDialog dialog = new AlertDialog.Builder(context)
-            .setTitle(String.format(getString(R.string.title_alert_delete_layout), layouts.get(position).getName()))
-            .setMessage(getString(R.string.text_alert_delete_layout))
-            .setNegativeButton(android.R.string.no, null)
-            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    editMapModel.deleteHouseLayout(context, layouts, position);
-                    adapter.notifyDataSetChanged();
-                }
-            }).create();
-        dialog.show();
-    }
-
     private void setupToolbar() {
         // Setup the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_secondary);
@@ -184,24 +240,7 @@ public class EditMapController extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.edit_map, menu);
-        return true;
-    }
+    //endregion
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Add appropriate logic for the various Action Bar menu items.
-        switch (item.getItemId()) {
-            case R.id.action_open_layout:
-                setOpenIntent();
-                return true;
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-        }
-    }
+    //endregion
 }

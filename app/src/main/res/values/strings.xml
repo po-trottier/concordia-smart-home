@@ -88,6 +88,8 @@
     <string name="success_alert_save_layout">The house layout was successfully saved.</string>
     <string name="error_exists_alert_save_layout">A house layout with this name already exists. Please try using a different layout name.</string>
     <string name="error_unknown_alert_save_layout">Something went wrong while saving the house layout. Please try again later.</string>
+    <string name="title_alert_save_layout_overwrite">The layout already exists</string>
+    <string name="text_alert_save_layout_overwrite">Are you sure you want to overwrite the selected layout?</string>
     <string name="title_alert_open_layout">Open a house layout</string>
     <string name="text_alert_open_layout">Which layout would you like to open ?</string>
     <string name="title_alert_delete_layout">Delete \"%s\"</string>
