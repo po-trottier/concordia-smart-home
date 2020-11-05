@@ -2,65 +2,43 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.SharedPreferences;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.concordia.smarthomesimulator.Constants.*;
 
 /**
  * Permissions configuration.
- *
+ * <p>
  * This specifies what minimum permissions are required to perform certain actions.
  */
 public class PermissionsConfiguration {
-    private Permissions minToInteractAnyWindow;
-    private Permissions minToInteractLocalWindow;
-    private Permissions minToInteractAnyLight;
-    private Permissions minToInteractLocalLight;
-    private Permissions minToInteractGarage;
-    private Permissions minToChangeAwayMode;
-    private Permissions minToChangePermissionsConfigs;
-    private Permissions minToInteractDoorLock;
+    private Map<Action, Permissions> actionPermissionsMap;
 
     /**
-     * To make a default Permission configuration
+     * To make a default Permission configuration.
+     * More importantly it adds all the keys that depict actions the user can take
      */
     public PermissionsConfiguration() {
-        this.minToInteractAnyWindow = DEFAULT_MIN_TO_INTERACT_ANY_WINDOW;
-        this.minToInteractLocalWindow = DEFAULT_MIN_TO_INTERACT_LOCAL_WINDOW;
-        this.minToInteractAnyLight = DEFAULT_MIN_TO_INTERACT_ANY_LIGHT;
-        this.minToInteractLocalLight = DEFAULT_MIN_TO_INTERACT_LOCAL_LIGHT;
-        this.minToInteractGarage = DEFAULT_MIN_TO_INTERACT_GARAGE;
-        this.minToChangeAwayMode = DEFAULT_MIN_TO_CHANGE_AWAY_MODE;
-        this.minToChangePermissionsConfigs = DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG;
-        this.minToInteractDoorLock = DEFAULT_MIN_TO_INTERACT_DOOR_LOCK;
+        actionPermissionsMap = new HashMap<>();
+        actionPermissionsMap.put(Action.INTERACT_ANY_WINDOW,DEFAULT_MIN_TO_INTERACT_ANY_WINDOW);
+        actionPermissionsMap.put(Action.INTERACT_LOCAL_WINDOW,DEFAULT_MIN_TO_INTERACT_LOCAL_WINDOW);
+        actionPermissionsMap.put(Action.INTERACT_ANY_LIGHT,DEFAULT_MIN_TO_INTERACT_ANY_LIGHT);
+        actionPermissionsMap.put(Action.INTERACT_LOCAL_LIGHT,DEFAULT_MIN_TO_INTERACT_LOCAL_LIGHT);
+        actionPermissionsMap.put(Action.INTERACT_GARAGE,DEFAULT_MIN_TO_INTERACT_GARAGE);
+        actionPermissionsMap.put(Action.CHANGE_AWAY_MODE,DEFAULT_MIN_TO_CHANGE_AWAY_MODE);
+        actionPermissionsMap.put(Action.CHANGE_PERMISSIONS_CONFIG,DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG);
+        actionPermissionsMap.put(Action.INTERACT_DOOR_LOCK,DEFAULT_MIN_TO_INTERACT_DOOR_LOCK);
     }
 
     /**
-     * Constructor used to change the permission configuration. This changes the configs stored in the preferences as well.
+     * Gets action permissions map.
+     * The main use of this is to replace values in the map.
      *
-     * @param minToInteractAnyWindow        the min to interact any window
-     * @param minToInteractLocalWindow      the min to interact local window
-     * @param minToInteractAnyLight         the min to interact any light
-     * @param minToInteractLocalLight       the min to interact local light
-     * @param minToInteractGarage           the min to interact garage
-     * @param minToChangeAwayMode           the min to change away mode
-     * @param minToChangePermissionsConfigs the min to change permissions configs
-     * @param minToInteractDoorLock         the min to interact door lock
-     * @param preferences                   the preferences
+     * @return the action permissions map
      */
-    public PermissionsConfiguration(Permissions minToInteractAnyWindow, Permissions minToInteractLocalWindow,
-                                    Permissions minToInteractAnyLight, Permissions minToInteractLocalLight,
-                                    Permissions minToInteractGarage, Permissions minToChangeAwayMode,
-                                    Permissions minToChangePermissionsConfigs, Permissions minToInteractDoorLock,
-                                    SharedPreferences preferences) {
-        this.minToInteractAnyWindow = minToInteractAnyWindow;
-        this.minToInteractLocalWindow = minToInteractLocalWindow;
-        this.minToInteractAnyLight = minToInteractAnyLight;
-        this.minToInteractLocalLight = minToInteractLocalLight;
-        this.minToInteractGarage = minToInteractGarage;
-        this.minToChangeAwayMode = minToChangeAwayMode;
-        this.minToChangePermissionsConfigs = minToChangePermissionsConfigs;
-        this.minToInteractDoorLock = minToInteractDoorLock;
-        // the parametrized constructor is called when the permission configs are changing, changing the config now
-        sendToContext(preferences);
+    public Map<Action, Permissions> getActionPermissionsMap() {
+        return actionPermissionsMap;
     }
 
     /**
@@ -70,14 +48,11 @@ public class PermissionsConfiguration {
      */
     public void sendToContext(SharedPreferences preferences){
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(Action.INTERACT_ANY_WINDOW.getDescription(), minToInteractAnyWindow.getBitValue());
-        editor.putInt(Action.INTERACT_LOCAL_WINDOW.getDescription(), minToInteractLocalWindow.getBitValue());
-        editor.putInt(Action.INTERACT_ANY_LIGHT.getDescription(), minToInteractAnyLight.getBitValue());
-        editor.putInt(Action.INTERACT_LOCAL_LIGHT.getDescription(), minToInteractLocalLight.getBitValue());
-        editor.putInt(Action.INTERACT_GARAGE.getDescription(), minToInteractGarage.getBitValue());
-        editor.putInt(Action.CHANGE_AWAY_MODE.getDescription(), minToChangeAwayMode.getBitValue());
-        editor.putInt(Action.CHANGE_PERMISSIONS_CONFIG.getDescription(), minToChangePermissionsConfigs.getBitValue());
-        editor.putInt(Action.INTERACT_DOOR_LOCK.getDescription(), minToInteractDoorLock.getBitValue());
+
+        actionPermissionsMap.forEach(
+                (k,v) -> editor.putInt(k.getDescription(), v.getBitValue())
+        );
+
         editor.apply();
     }
 
@@ -87,14 +62,11 @@ public class PermissionsConfiguration {
      * @param preferences the preferences
      */
     public void receiveFromContext(SharedPreferences preferences){
-        minToInteractAnyWindow = Permissions.fromInteger(preferences.getInt(Action.INTERACT_ANY_WINDOW.getDescription(), 0));
-        minToInteractAnyLight= Permissions.fromInteger(preferences.getInt(Action.INTERACT_LOCAL_WINDOW.getDescription(), 0));
-        minToInteractLocalWindow= Permissions.fromInteger(preferences.getInt(Action.INTERACT_ANY_LIGHT.getDescription(), 0));
-        minToInteractGarage= Permissions.fromInteger(preferences.getInt(Action.INTERACT_LOCAL_LIGHT.getDescription(), 0));
-        minToInteractLocalLight= Permissions.fromInteger(preferences.getInt(Action.INTERACT_GARAGE.getDescription(), 0));
-        minToChangeAwayMode= Permissions.fromInteger(preferences.getInt(Action.CHANGE_AWAY_MODE.getDescription(), 0));
-        minToChangePermissionsConfigs= Permissions.fromInteger(preferences.getInt(Action.CHANGE_PERMISSIONS_CONFIG.getDescription(), 0));
-        minToInteractDoorLock= Permissions.fromInteger(preferences.getInt(Action.INTERACT_DOOR_LOCK.getDescription(), 0));
+        actionPermissionsMap.keySet().forEach(
+                action -> actionPermissionsMap.replace(
+                        action,Permissions.fromInteger(preferences.getInt(action.getDescription(), 0))
+                )
+        );
     }
 
 }

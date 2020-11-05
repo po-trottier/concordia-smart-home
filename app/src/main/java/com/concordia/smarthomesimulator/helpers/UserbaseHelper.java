@@ -69,7 +69,8 @@ public final class UserbaseHelper {
             // todo proper exception handling for next delivery
             Toast.makeText(context, "Something is wrong with the preferences",Toast.LENGTH_SHORT).show();
             return false;
-        }else if ((loggedUserPermissions&minPermissionsForAction) == minPermissionsForAction){
+        }
+        if ((loggedUserPermissions & minPermissionsForAction) == minPermissionsForAction){
             ActivityLogHelper.add(context, new LogEntry("Permission",
                     String.format("User performed permission-restricted action: %s", action.getDescription()), LogImportance.MINOR));
             return true;
