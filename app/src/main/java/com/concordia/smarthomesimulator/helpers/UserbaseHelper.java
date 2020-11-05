@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import com.concordia.smarthomesimulator.dataModels.*;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +57,9 @@ public final class UserbaseHelper {
         return null;
     }
 
-    public static boolean canLoggedUserInteract(String action, SharedPreferences sharedPreferences, Userbase userbase, Context context){
+    public static boolean canLoggedUserInteract(Action action, SharedPreferences sharedPreferences, Userbase userbase, Context context){
         User loggedUser = userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, ""));
-        if ((loggedUser.getPermission().getBitValue()&sharedPreferences.getInt(action,0)) == sharedPreferences.getInt(action,0)){
+        if ((loggedUser.getPermission().getBitValue()&sharedPreferences.getInt(action.getDescription(),0)) == sharedPreferences.getInt(action.getDescription(),0)){
             ActivityLogHelper.add(context, new LogEntry("Permission","User allowed to perform", LogImportance.MINOR));
             return true;
         }
