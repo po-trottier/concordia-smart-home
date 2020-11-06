@@ -93,6 +93,8 @@
     <string name="add_room_edit_map">Add a Room</string>
     <string name="add_device_edit_map">Add a Device</string>
     <string name="add_inhabitant_edit_map">Add an Inhabitant</string>
+    <string name="add_inhabitant_invalid">Invalid inhabitant name entered.</string>
+    <string name="add_inhabitant_used">This name is already in use. Please choose a different inhabitant name.</string>
     <string name="no_room_edit_map">There are no rooms in this layout…</string>
     <string name="no_device_edit_map">There are no devices in this room…</string>
     <string name="no_inhabitant_edit_map">There are no inhabitants in this room…</string>
@@ -123,6 +125,7 @@
     <string name="text_alert_room_width">Room Width:</string>
     <string name="text_alert_room_height">Room Height:</string>
     <string name="field_alert_room_hint">Room Name</string>
+    <string name="text_alert_room_empty">Invalid room name entered.</string>
     <string name="text_alert_room_error">The name you have entered is already in use. Please choose a different one.</string>
 
     <string name="title_alert_save_layout">Save the house layout</string>

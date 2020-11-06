@@ -124,6 +124,8 @@ public class EditMapController extends AppCompatActivity {
 
     private void setupSaveDialog() {
         final View customView = inflater.inflate(R.layout.alert_save_house_layout, null, false);
+        final EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
+        layoutName.setText(editMapModel.getHouseLayout().getName().trim());
         final AlertDialog dialog = new AlertDialog.Builder(context)
             .setTitle(getString(R.string.title_alert_save_layout))
             .setMessage(getString(R.string.text_alert_save_layout))
@@ -132,7 +134,6 @@ public class EditMapController extends AppCompatActivity {
             .setPositiveButton(getString(R.string.generic_save), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
                     if (layoutName != null) {
                         editMapModel.updateHouseLayoutName(layoutName.getText().toString().trim());
                         if (!HouseLayoutHelper.isLayoutNameDefault(editMapModel.getHouseLayout())) {

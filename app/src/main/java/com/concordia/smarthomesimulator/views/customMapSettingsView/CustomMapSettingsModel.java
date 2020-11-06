@@ -177,14 +177,14 @@ public class CustomMapSettingsModel {
     public void addInhabitant(Context context, String name) {
         // Verify that the name is valid
         if (name.length() < 1) {
-            Toast.makeText(context, "Invalid inhabitant name entered", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.add_inhabitant_invalid), Toast.LENGTH_LONG).show();
             return;
         }
         Inhabitant inhabitant = new Inhabitant(name);
         // Verify that its name is unique
         ArrayList<Inhabitant> inhabitants =  layout.getAllInhabitants();
         if (inhabitants.stream().anyMatch(i -> i.getName().equalsIgnoreCase(inhabitant.getName()))) {
-            Toast.makeText(context, "Cannot have 2 inhabitants with the same name", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.add_inhabitant_used), Toast.LENGTH_LONG).show();
             return;
         }
         // Add the inhabitant to the room

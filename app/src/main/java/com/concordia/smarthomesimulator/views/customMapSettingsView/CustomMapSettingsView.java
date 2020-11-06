@@ -256,10 +256,20 @@ public class CustomMapSettingsView extends ScrollView {
                             EditText yCoordinate = customView.findViewById(R.id.alert_add_room_y);
                             // Get the values
                             String name = roomName.getText().toString().trim();
-                            int width = Integer.parseInt(roomWidth.getText().toString());
-                            int height = Integer.parseInt(roomHeight.getText().toString());
-                            int x = Integer.parseInt(xCoordinate.getText().toString());
-                            int y = Integer.parseInt(yCoordinate.getText().toString());
+                            String widthText = roomWidth.getText().toString().trim();
+                            String heightText = roomHeight.getText().toString().trim();
+                            String xText = xCoordinate.getText().toString().trim();
+                            String yText = yCoordinate.getText().toString().trim();
+                            // Validate name
+                            if (name.length() < 1) {
+                                Toast.makeText(context, context.getString(R.string.text_alert_room_empty), Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            // Convert the values
+                            int width = Integer.parseInt(widthText.equals("") ? "1" : widthText);
+                            int height = Integer.parseInt(heightText.equals("") ? "1" : heightText);
+                            int x = Integer.parseInt(xText.equals("") ? "0" : xText);
+                            int y = Integer.parseInt(yText.equals("") ? "0" : yText);
                             // Add the room
                             model.addRoom(context, name, x, y, width, height);
                         }
@@ -290,8 +300,10 @@ public class CustomMapSettingsView extends ScrollView {
                             // Get the values from the controls
                             DeviceType type = DeviceType.fromString((String) deviceType.getSelectedItem());
                             Orientation orientation = Orientation.fromString((String) deviceOrientation.getSelectedItem());
-                            int x = Integer.parseInt(xCoordinate.getText().toString());
-                            int y = Integer.parseInt(yCoordinate.getText().toString());
+                            String xText = xCoordinate.getText().toString().trim();
+                            String yText = yCoordinate.getText().toString().trim();
+                            int x = Integer.parseInt(xText.equals("") ? Integer.toString(model.getSelectedRoom().getGeometry().getX()) : xText);
+                            int y = Integer.parseInt(yText.equals("") ? Integer.toString(model.getSelectedRoom().getGeometry().getY()) : yText);
                             // Create the device
                             model.addDevice(context, type, x, y, orientation);
                         }
