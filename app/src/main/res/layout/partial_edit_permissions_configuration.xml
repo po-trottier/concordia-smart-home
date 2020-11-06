@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          tools:ignore="MissingConstraints">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="24sp"
+            android:text="@string/permission_title"/>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="@dimen/card_corner_radius">
+
+      <TableLayout
+              android:id="@+id/simpleTableLayout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:stretchColumns="1">
+
+        <TableRow
+                android:id="@+id/firstRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_window_all"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_window_all"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/secondRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_window_local"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_window_local"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/thirdRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_door_all"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_door_all"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/fourthRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_door_local"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_door_local"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/fifthRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_light_all"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_light_all"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/sixthRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_light_local"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_light_local"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/seventhRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_garage"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_garage"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+
+        <TableRow
+                android:id="@+id/eightRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+          <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="18dip"
+                  android:text="@string/permission_away_mode"
+                  android:textStyle="bold"
+                  android:textSize="16sp" />
+          <Spinner
+                  android:id="@+id/minimum_permissions_spinner_away_mode"
+                  android:layout_width="match_parent"
+                  android:layout_height="40dp"
+                  android:background="@drawable/rounded_text_field_background"/>
+        </TableRow>
+      </TableLayout>
+    </androidx.cardview.widget.CardView>
+  </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
