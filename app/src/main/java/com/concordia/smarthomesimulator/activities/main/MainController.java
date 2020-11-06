@@ -90,14 +90,7 @@ public class MainController extends AppCompatActivity {
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));
                 return true;
             case R.id.action_logout:
-                // Save the preferences
-                Userbase userbase = UserbaseHelper.loadUserbase(context);
-                userbase.getUserFromUsername(sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "")).getUserPreferences().receiveFromContext(sharedPreferences);
-                // Save the permission configuration
-                userbase.getPermissionConfiguration().receiveFromContext(sharedPreferences);
-                UserbaseHelper.saveUserbase(context, userbase);
-                // Remove Logged In User Information
-                UserPreferences.clear(sharedPreferences);
+                saveAndClearUser();
                 // Redirect to the Login Screen
                 ActivityLogHelper.add(context, new LogEntry("Exit","User logged out.", LogImportance.IMPORTANT));
                 MainController.this.startActivity(new Intent(MainController.this, LoginController.class));
@@ -129,5 +122,25 @@ public class MainController extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 break;
         }
+    }
+
+    private void saveAndClearUser() {
+        Userbase userbase = UserbaseHelper.loadUserbase(context);
+        // Make sure the logged in user is in the userbase
+        String username = sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "");
+        String password = sharedPreferences.getString(PREFERENCES_KEY_PASSWORD, "");
+        Permissions permissions = Permissions.fromInteger(sharedPreferences.getInt(PREFERENCES_KEY_PERMISSIONS, 0));
+        User user = userbase.getUserFromUsername(username);
+        // If he's not add him back
+        if (user == null) {
+            user = new User(username, password, permissions);
+            userbase.addUserIfPossible(context, user);
+        }
+        // Save the preferences and permission configuration
+        user.getUserPreferences().receiveFromContext(sharedPreferences);
+        userbase.getPermissionConfiguration().receiveFromContext(sharedPreferences);
+        // Save Userbase and Remove Logged In User Information
+        UserbaseHelper.saveUserbase(context, userbase);
+        UserPreferences.clear(sharedPreferences);
     }
 }

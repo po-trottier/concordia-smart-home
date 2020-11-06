@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
 
 public class Light implements IDevice {
@@ -60,8 +61,9 @@ public class Light implements IDevice {
         return DeviceType.LIGHT;
     }
 
+    @NonNull
     @Override
-    public IDevice deepCopy() {
+    public IDevice clone() {
         Light copy = new Light(geometry);
         copy.setIsOpened(isOpened);
         return copy;

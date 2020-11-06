@@ -1,5 +1,8 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 
 public class Room {
@@ -25,6 +28,14 @@ public class Room {
         this.windows = new ArrayList<>();
         this.doors = new ArrayList<>();
         this.lights = new ArrayList<>();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null || obj.getClass() != Room.class)
+            return false;
+
+        return name.equals(((Room) obj).getName());
     }
 
     /**

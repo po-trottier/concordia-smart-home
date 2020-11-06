@@ -82,6 +82,53 @@
     <string name="title_rooms">Rooms</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
+    <string name="layout_name_edit_map">House Layout Name</string>
+    <string name="rooms_edit_map">Rooms</string>
+    <string name="devices_edit_map">Devices</string>
+    <string name="inhabitants_edit_map">Inhabitants</string>
+    <string name="remove_room_edit_map">Remove Room</string>
+    <string name="room_coordinates_edit_map">Coordinates:</string>
+    <string name="room_default_edit_map">(Default)</string>
+    <string name="inhabitant_you_edit_map">(You)</string>
+
+    <string name="add_room_edit_map">Add a Room</string>
+    <string name="add_device_edit_map">Add a Device</string>
+    <string name="add_inhabitant_edit_map">Add an Inhabitant</string>
+    <string name="add_inhabitant_invalid">Invalid inhabitant name entered.</string>
+    <string name="add_inhabitant_used">This name is already in use. Please choose a different inhabitant name.</string>
+    <string name="no_room_edit_map">There are no rooms in this layout…</string>
+    <string name="no_device_edit_map">There are no devices in this room…</string>
+    <string name="no_inhabitant_edit_map">There are no inhabitants in this room…</string>
+    <string name="select_room_edit_map">You must first select a room…</string>
+
+    <string name="toast_no_remove_device_edit_map">This device cannot be removed from the layout.</string>
+    <string name="title_alert_remove_room_edit_map">Remove the room</string>
+    <string name="text_alert_remove_room_edit_map">Are you sure you want to remove the room from the house layout ?</string>
+    <string name="title_alert_add_room_edit_map">Add a new room</string>
+    <string name="title_alert_add_device_edit_map">Add a new device</string>
+    <string name="title_alert_remove_device_edit_map">Remove the device</string>
+    <string name="text_alert_remove_device_edit_map">Are you sure you want to remove the device from the house layout ?</string>
+    <string name="title_alert_add_inhabitant_edit_map">Add a new inhabitant</string>
+    <string name="title_alert_edit_inhabitant_edit_map">Modify the inhabitant</string>
+    <string name="title_alert_remove_inhabitant_edit_map">Remove the inhabitant</string>
+    <string name="text_alert_remove_inhabitant_edit_map">Are you sure you want to remove the inhabitant from the house layout ?</string>
+    <string name="text_alert_error_inhabitant_edit_map">You must select a destination in order to move the inhabitant</string>
+
+    <string name="text_alert_device_type">Device Type:</string>
+    <string name="text_alert_device_orientation">Orientation:</string>
+    <string name="text_alert_device_x">X Coordinate:</string>
+    <string name="text_alert_device_y">Y Coordinate:</string>
+    <string name="text_alert_device_error">The coordinates you entered were outside the range allowed by the room.</string>
+
+    <string name="text_alert_room_name">Room Name:</string>
+    <string name="text_alert_room_x">X Coordinate:</string>
+    <string name="text_alert_room_y">Y Coordinate:</string>
+    <string name="text_alert_room_width">Room Width:</string>
+    <string name="text_alert_room_height">Room Height:</string>
+    <string name="field_alert_room_hint">Room Name</string>
+    <string name="text_alert_room_empty">Invalid room name entered.</string>
+    <string name="text_alert_room_error">The name you have entered is already in use. Please choose a different one.</string>
+
     <string name="title_alert_save_layout">Save the house layout</string>
     <string name="text_alert_save_layout">How would you like to call this layout ?</string>
     <string name="text_alert_save_layout_default">The active layout is a default layout and cannot be updated. Please choose a name to rename the layout to.\n</string>
@@ -89,6 +136,8 @@
     <string name="success_alert_save_layout">The house layout was successfully saved.</string>
     <string name="error_exists_alert_save_layout">A house layout with this name already exists. Please try using a different layout name.</string>
     <string name="error_unknown_alert_save_layout">Something went wrong while saving the house layout. Please try again later.</string>
+    <string name="title_alert_save_layout_overwrite">The layout already exists</string>
+    <string name="text_alert_save_layout_overwrite">Are you sure you want to overwrite the selected layout?</string>
     <string name="title_alert_open_layout">Open a house layout</string>
     <string name="text_alert_open_layout">Which layout would you like to open ?</string>
     <string name="title_alert_delete_layout">Delete \"%s\"</string>
@@ -110,6 +159,9 @@
     <string name="generic_degrees_celsius">°C</string>
     <string name="generic_save">Save</string>
     <string name="generic_open">Open</string>
+    <string name="generic_add">Add</string>
+    <string name="generic_move">Move</string>
+    <string name="generic_remove">Remove</string>
     <string name="generic_error">An unexpected error occurred. Please try again later.</string>
 
     <string name="dashboard_context">Simulation Context</string>
@@ -146,5 +198,16 @@
         <item>Child</item>
         <item>Guest</item>
         <item>Stranger</item>
+    </string-array>
+
+    <string-array name="device_type_spinner">
+        <item>Light</item>
+        <item>Door</item>
+        <item>Window</item>
+    </string-array>
+
+    <string-array name="device_orientation_spinner">
+        <item>Horizontal</item>
+        <item>Vertical</item>
     </string-array>
 </resources>

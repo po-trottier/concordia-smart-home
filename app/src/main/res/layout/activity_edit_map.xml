@@ -13,18 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
+    <com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView
+        android:id="@+id/edit_map_settings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
-        android:padding="16dp"
+        android:orientation="vertical"
         android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <include layout="@layout/partial_edit_map"/>
+    </com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/save_map_file"
