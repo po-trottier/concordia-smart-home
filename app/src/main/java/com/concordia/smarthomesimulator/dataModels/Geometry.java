@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
@@ -69,6 +70,12 @@ public class Geometry {
             && width == other.getWidth()
             && height == other.getHeight()
             && orientation.equals(other.getOrientation());
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "[" + x + ", " + y + "]";
     }
 
     /**

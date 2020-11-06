@@ -69,6 +69,17 @@ public class HouseLayoutHelper {
     }
 
     /**
+     * Checks if the house layout name is a default name (Demo Layout or Empty Layout).
+     *
+     * @param layout the layout to verify
+     * @return whether the layout name is default or not
+     */
+    public static boolean isLayoutNameDefault(HouseLayout layout) {
+        String name = layout.getName().trim();
+        return name.equalsIgnoreCase(DEMO_LAYOUT_NAME) || name.equalsIgnoreCase(EMPTY_LAYOUT_NAME);
+    }
+
+    /**
      * Checks if the house layout name if unique.
      *
      * @param context the context
@@ -77,12 +88,10 @@ public class HouseLayoutHelper {
      */
     public static boolean isLayoutNameUnique(Context context, HouseLayout layout) {
         String name = layout.getName().trim();
-
         // If the house layout is one of the 2 defaults it's not unique
-        if (name.equalsIgnoreCase(DEMO_LAYOUT_NAME) || name.equalsIgnoreCase(EMPTY_LAYOUT_NAME)) {
+        if (isLayoutNameDefault(layout)) {
             return false;
         }
-
         // Otherwise make sure it's not in the list of saved layouts
         return listSavedLayouts(context).stream().noneMatch(saved -> saved.getName().trim().equalsIgnoreCase(name));
     }

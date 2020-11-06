@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
 
 public class Door implements IDevice {
@@ -60,8 +61,9 @@ public class Door implements IDevice {
         return DeviceType.DOOR;
     }
 
+    @NonNull
     @Override
-    public IDevice deepCopy() {
+    public IDevice clone() {
         Door copy = new Door(geometry);
         copy.setIsOpened(isOpened);
         return copy;

@@ -123,7 +123,7 @@ public class MapController extends Fragment {
                 
                 int angle = newState == BottomSheetBehavior.STATE_COLLAPSED ? 180 : 0;
 
-                RotateAnimation rotate = new RotateAnimation(angle, 180 - angle, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                RotateAnimation rotate = new RotateAnimation(angle, angle + 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 rotate.setDuration(300);
                 rotate.setInterpolator(new FastOutSlowInInterpolator());
                 rotate.setFillAfter(true);
