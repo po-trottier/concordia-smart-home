@@ -6,7 +6,11 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -312,4 +316,10 @@ public class EditDashboardController extends AppCompatActivity {
             });
         }
     }
+
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
+        LinearLayout layout = findViewById(R.id.edit_permissions);
+        //  for(Permissions permission : )
+    }
+}
 }
