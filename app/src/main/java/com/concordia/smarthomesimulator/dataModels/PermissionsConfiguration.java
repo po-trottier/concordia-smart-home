@@ -32,6 +32,19 @@ public class PermissionsConfiguration {
     }
 
     /**
+     * Copy constructor primarily used in the editDashboardModel so the userbase permission config is not edited
+     * before the save button is clicked.
+     *
+     * @param permissionsConfiguration the permissions configuration
+     */
+    public PermissionsConfiguration(PermissionsConfiguration permissionsConfiguration) {
+        this.actionPermissionsMap = new HashMap<>();
+        permissionsConfiguration.actionPermissionsMap.forEach(
+                (k,v) -> this.actionPermissionsMap.put(k,v)
+        );
+    }
+
+    /**
      * Gets action permissions map.
      * The main use of this is to replace values in the map.
      *

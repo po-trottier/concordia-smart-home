@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -34,6 +35,7 @@ public class EditDashboardController extends AppCompatActivity {
 
     private EditDashboardModel editDashboardModel;
     private Userbase userbase;
+    private PermissionsConfiguration localPermissionsConfiguration;
 
     private SwitchCompat statusField;
     private TextView statusText;
@@ -68,6 +70,7 @@ public class EditDashboardController extends AppCompatActivity {
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         userbase = UserbaseHelper.loadUserbase(context);
+        localPermissionsConfiguration = new PermissionsConfiguration(userbase.getPermissionConfiguration());
 
         setupToolbar();
         findControls();
@@ -77,6 +80,7 @@ public class EditDashboardController extends AppCompatActivity {
         setupTimezoneSpinner();
         setupPermissionSpinner();
         setupUsernamesSpinner();
+        setupPermissionConfigurationRows();
         fillKnownValues();
         // DO NOT PUT BEFORE "fillKnownValues" !
         setupStatusSwitch();
@@ -279,6 +283,14 @@ public class EditDashboardController extends AppCompatActivity {
         });
     }
 
+    private void setupPermissionConfigurationRows() {
+
+        for(Map.Entry<Action, Permissions> entry : localPermissionsConfiguration.getActionPermissionsMap().entrySet()) {
+
+        }
+
+    }
+
     private void setUserInformation(User user) {
         editedUsername.setText(user.getUsername());
         editedPassword.setText(user.getPassword());
@@ -317,9 +329,4 @@ public class EditDashboardController extends AppCompatActivity {
         }
     }
 
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
-        LinearLayout layout = findViewById(R.id.edit_permissions);
-        //  for(Permissions permission : )
-    }
-}
 }
