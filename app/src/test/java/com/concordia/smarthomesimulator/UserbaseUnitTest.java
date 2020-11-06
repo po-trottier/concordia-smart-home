@@ -4,18 +4,70 @@ import com.concordia.smarthomesimulator.dataModels.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
 public class UserbaseUnitTest {
     @Test
     public void userbaseCanBeCreated() {
         // Setup
         List<User> users = new ArrayList<>();
-        users.add(new User());
-        Userbase userbase = new Userbase()
+        users.add(new User("a","a",Permissions.STRANGER));
+        Userbase userbase = new Userbase(users);
         // Test
         assertNotNull(userbase);
+    }
+
+    @Test
+    public void userbaseReturnsProperUsernames() {
+        // Setup
+        List<User> users = new ArrayList<>();
+        users.add(new User("a","a",Permissions.STRANGER));
+        users.add(new User("b","b",Permissions.STRANGER));
+        users.add(new User("c","c",Permissions.STRANGER));
+        Userbase userbase = new Userbase(users);
+        // Test
+        List<String> usernames = new ArrayList<>();
+        usernames.add("a");
+        usernames.add("b");
+        usernames.add("c");
+        assertEquals(usernames, userbase.getUsernames());
+    }
+
+    @Test
+    public void userbaseReturnsProperUserFromUsername() {
+        // Setup
+        List<User> users = new ArrayList<>();
+        users.add(new User("a","a",Permissions.STRANGER));
+        users.add(new User("b","b",Permissions.STRANGER));
+        users.add(new User("c","c",Permissions.STRANGER));
+        Userbase userbase = new Userbase(users);
+        // Test
+        assertEquals(new User("a","a",Permissions.STRANGER), userbase.getUserFromUsername("a"));
+    }
+
+    @Test
+    public void userbaseDoesContainUser() {
+        // Setup
+        List<User> users = new ArrayList<>();
+        users.add(new User("a","a",Permissions.STRANGER));
+        users.add(new User("b","b",Permissions.STRANGER));
+        users.add(new User("c","c",Permissions.STRANGER));
+        Userbase userbase = new Userbase(users);
+        // Test
+        assertTrue(userbase.containsUser(new User("c","c",Permissions.STRANGER)));
+    }
+
+    @Test
+    public void userbaseReturnsProperAmountOfSimilarUsers() {
+        // Setup
+        List<User> users = new ArrayList<>();
+        users.add(new User("a","a",Permissions.STRANGER));
+        users.add(new User("c","b",Permissions.STRANGER));
+        users.add(new User("c","c",Permissions.STRANGER));
+        Userbase userbase = new Userbase(users);
+        // Test
+        assertEquals(2, userbase.getNumberOfSimilarUsers(new User("c","d",Permissions.STRANGER)));
     }
 }
