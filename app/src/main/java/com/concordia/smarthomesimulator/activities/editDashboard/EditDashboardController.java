@@ -6,18 +6,29 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
+import com.concordia.smarthomesimulator.activities.main.MainController;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.fragments.map.MapController;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.ObserveHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.interfaces.IObserver;
+import com.concordia.smarthomesimulator.interfaces.ISubject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -25,6 +36,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -33,15 +46,18 @@ import java.util.Map;
 import static android.view.View.inflate;
 import static com.concordia.smarthomesimulator.Constants.*;
 
-public class EditDashboardController extends AppCompatActivity {
+public class EditDashboardController extends AppCompatActivity implements ISubject {
 
     private Context context;
     private SharedPreferences preferences;
 
     private EditDashboardModel model;
 
+    private ArrayList<IObserver> observers;
+
     private SwitchCompat awayStatusField;
     private TextView awayStatusText;
+    private TextView awayDisabledText;
     private SwitchCompat statusField;
     private FloatingActionButton saveContext;
     private FloatingActionButton timeScaleMinus;
@@ -70,6 +86,12 @@ public class EditDashboardController extends AppCompatActivity {
         model = new ViewModelProvider(this).get(EditDashboardModel.class);
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+
+        observers = new ArrayList<IObserver>();
+
+        for(IObserver observer :  ObserveHelper.getInstance().getObservers()){
+            register(observer);
+        }
 
         model.initializeModel(context);
         model.updateSimulationDateTime(preferences);
@@ -101,6 +123,7 @@ public class EditDashboardController extends AppCompatActivity {
     private void findControls() {
         awayStatusField = findViewById(R.id.away_on_off);
         awayStatusText = findViewById(R.id.away_on_off_text);
+        awayDisabledText = findViewById(R.id.away_disable_message);
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
@@ -236,6 +259,45 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupAwaySwitch() {
+        setSwitchRestrictions();
+        setAwayStatus();
+        awayStatusField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"All rooms must be empty", Toast.LENGTH_LONG).show();
+                setSwitchRestrictions();
+                setAwayStatus();
+            }
+        });
+    }
+
+    private void setSwitchRestrictions(){
+        if(!isHouseEmpty()){
+            awayStatusField.setAlpha(.5f);
+            awayStatusField.setEnabled(false);
+            awayDisabledText.setText(getString(R.string.away_disable_message));
+        }
+        else{
+            awayStatusField.setAlpha(1.0f);
+            awayStatusField.setEnabled(true);
+            awayDisabledText.setText("");
+            notifyObserver();
+        }
+    }
+
+    private boolean isHouseEmpty() {
+        ArrayList<Room> rooms = HouseLayoutHelper.getSelectedLayout(context).getRooms();
+        boolean isEmpty = true;
+        for (Room room : rooms) {
+            if (room.getInhabitants().size() != 0) {
+                isEmpty =false;
+                break;
+            }
+        }
+        return isEmpty;
+    }
+
+    private void setAwayStatus(){
         if (awayStatusField.isChecked()) {
             awayStatusText.setText(getString(R.string.away_mode_on));
             awayStatusText.setTextColor(getColor(R.color.primary));
@@ -243,20 +305,7 @@ public class EditDashboardController extends AppCompatActivity {
             awayStatusText.setText(getString(R.string.away_mode_off));
             awayStatusText.setTextColor(getColor(R.color.charcoal));
         }
-        awayStatusField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (awayStatusField.isChecked()) {
-                    awayStatusText.setText(getString(R.string.away_mode_on));
-                    awayStatusText.setTextColor(getColor(R.color.primary));
-                } else {
-                    awayStatusText.setText(getString(R.string.away_mode_off));
-                    awayStatusText.setTextColor(getColor(R.color.charcoal));
-                }
-            }
-        });
     }
-
 
     private void setupStatusSwitch() {
         if (statusField.isChecked()) {
@@ -454,5 +503,22 @@ public class EditDashboardController extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void register(IObserver newObserver) {
+        observers.add(newObserver);
+    }
+
+    @Override
+    public void unregister(IObserver observer) {
+        observers.remove(observers.indexOf(observer));
+    }
+
+    @Override
+    public void notifyObserver() {
+            for(IObserver observer : observers){
+                observer.updateAwayMode(awayStatusField.isChecked());
+            }
     }
 }

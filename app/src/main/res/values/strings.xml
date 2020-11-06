@@ -149,6 +149,7 @@
 
     <string name="title_activity_edit_dashboard">Edit Simulation Context</string>
 
+    <string name="away_disable_message"> Inhabitants in room detected</string>
     <string name="edit_text_away_mode_status">Away Mode</string>
     <string name="away_mode_on">On</string>
     <string name="away_mode_off">Off</string>

@@ -19,17 +19,21 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
+import com.concordia.smarthomesimulator.dataModels.IDevice;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
 import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.concordia.smarthomesimulator.helpers.ObserveHelper;
+import com.concordia.smarthomesimulator.interfaces.IObserver;
+import com.concordia.smarthomesimulator.interfaces.ISubject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MapController extends Fragment {
+public class MapController extends Fragment implements IObserver {
 
     private View view;
     private MapModel mapModel;
@@ -39,10 +43,9 @@ public class MapController extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         mapModel = new ViewModelProvider(this).get(MapModel.class);
-
+        ObserveHelper.getInstance().addObserver(this);
         this.inflater = inflater;
         view = this.inflater.inflate(R.layout.fragment_map, container, false);
-
         return view;
     }
 
@@ -205,5 +208,17 @@ public class MapController extends Fragment {
         });
 
         return customView;
+    }
+
+    @Override
+    public void updateAwayMode(boolean awaymode) {
+        if(awaymode){
+            HouseLayout updatedHouseLayout =  HouseLayoutHelper.getSelectedLayout(context);
+            for(Room room : updatedHouseLayout.getRooms()){
+                for(IDevice device : room.getDevices()){
+                    device.setIsOpened(false);
+                }
+            }
+        }
     }
 }
