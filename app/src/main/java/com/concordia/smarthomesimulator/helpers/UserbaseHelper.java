@@ -1,13 +1,16 @@
 package com.concordia.smarthomesimulator.helpers;
 
 import android.content.Context;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.Userbase;
+import android.content.SharedPreferences;
+import android.widget.Toast;
+import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.*;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_PERMISSIONS;
+import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_USERNAME;
 
 public final class UserbaseHelper {
 
@@ -55,6 +58,27 @@ public final class UserbaseHelper {
             }
         }
         return null;
+    }
+
+    public static boolean verifyPermissions(Action action, Context context){
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        int loggedUserPermissions = preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0);
+        int minPermissionsForAction = preferences.getInt(action.getDescription(),0);
+
+        if (loggedUserPermissions == 0 || minPermissionsForAction == 0){
+            // todo proper exception handling for next delivery
+            Toast.makeText(context, "Something is wrong with the preferences",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if ((loggedUserPermissions & minPermissionsForAction) == minPermissionsForAction){
+            ActivityLogHelper.add(context, new LogEntry("Permission",
+                    String.format("User performed permission-restricted action: %s", action.getDescription()), LogImportance.MINOR));
+            return true;
+        }
+        Toast.makeText(context, R.string.wrong_permissions,Toast.LENGTH_SHORT).show();
+        ActivityLogHelper.add(context, new LogEntry("Permission",
+                String.format("User was stopped from performing permission-restricted action: %s", action.getDescription()), LogImportance.IMPORTANT));
+        return false;
     }
 
     private static Userbase setupDefaultUserbase(Context context){

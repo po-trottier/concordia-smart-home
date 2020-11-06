@@ -6,26 +6,43 @@ import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Userbase.
+ * The userbase contains all the users that can interact with the simulation
+ * along with the permission configuration which specify what each permission is able to do.
+ */
 public class Userbase {
 
     private List<User> users;
-
-    /**
-     * Instantiates a new Userbase using the context of the caller.
-     *
-     * @param context the context of the caller, used to get permissions to read from external storage
-     */
-    public Userbase(Context context){
-        this.users = UserbaseHelper.loadUserbase(context).getUsers();
-    }
+    private PermissionsConfiguration permissionsConfiguration;
 
     /**
      * Instantiates a new Userbase using a passed List of users.
+     * The default permission configuration is assigned to it.
      *
      * @param users the users
      */
     public Userbase(List<User> users){
         this.users = users;
+        this.permissionsConfiguration = new PermissionsConfiguration();
+    }
+
+    /**
+     * Gets permission configuration.
+     *
+     * @return the permission configuration
+     */
+    public PermissionsConfiguration getPermissionConfiguration() {
+        return permissionsConfiguration;
+    }
+
+    /**
+     * Sets permission configuration.
+     *
+     * @param permissionsConfiguration the permission configuration
+     */
+    public void setPermissionConfiguration(PermissionsConfiguration permissionsConfiguration) {
+        this.permissionsConfiguration = permissionsConfiguration;
     }
 
     /**
@@ -66,6 +83,7 @@ public class Userbase {
      *
      * @param context          the context
      * @param usernameToDelete the username to delete
+     * @return true if deletion successful
      */
     public boolean deleteUserFromUsernameIfPossible(Context context, String usernameToDelete){
         for (int i = 0; i < users.size(); i++){
@@ -98,7 +116,7 @@ public class Userbase {
      * Checks if the userbase contains this user.
      *
      * @param userToCompare the user to compare
-     * @return the boolean
+     * @return true if it contains the user
      */
     public boolean containsUser(User userToCompare){
         for (User user: getUsers()) {

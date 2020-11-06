@@ -63,7 +63,7 @@ public class EditDashboardController extends AppCompatActivity {
         editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        userbase = new Userbase(context);
+        userbase = UserbaseHelper.loadUserbase(context);
 
         setupToolbar();
         findControls();

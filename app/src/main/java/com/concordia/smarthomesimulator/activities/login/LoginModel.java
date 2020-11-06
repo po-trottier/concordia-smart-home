@@ -43,7 +43,7 @@ public class LoginModel extends ViewModel {
      * @return the whether the operation was successful or not
      */
     public boolean logUserIn(Context context, SharedPreferences preferences, String username, String password) {
-        Userbase userbase = new Userbase(context);
+        Userbase userbase = UserbaseHelper.loadUserbase(context);
 
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(context, R.string.empty_username_password_fields,Toast.LENGTH_SHORT).show();
@@ -58,6 +58,7 @@ public class LoginModel extends ViewModel {
         }
 
         loggedUser.getUserPreferences().sendToContext(preferences);
+        userbase.getPermissionConfiguration().sendToContext(preferences);
 
         return true;
     }

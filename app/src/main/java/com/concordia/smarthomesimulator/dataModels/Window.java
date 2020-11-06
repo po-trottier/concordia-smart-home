@@ -12,11 +12,6 @@ public class Window implements IDevice {
         geometry = new Geometry();
     }
 
-    /**
-     * Instantiates a new Window.
-     *
-     * @param geometry the geometry of the device
-     */
     public Window(Geometry geometry) {
         this.geometry = geometry;
     }
@@ -64,6 +59,21 @@ public class Window implements IDevice {
     @Override
     public DeviceType getDeviceType() {
         return DeviceType.WINDOW;
+    }
+
+    @Override
+    public IDevice deepCopy() {
+        Window copy = new Window(geometry);
+        copy.setIsOpened(isOpened);
+        copy.setIsLocked(isLocked);
+        return copy;
+    }
+
+    @Override
+    public boolean equals(IDevice other) {
+        return getDeviceType() == other.getDeviceType()
+            && getIsOpened() == other.getIsOpened()
+            && getGeometry().equals(other.getGeometry());
     }
 
     /**

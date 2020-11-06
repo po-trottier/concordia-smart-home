@@ -11,11 +11,6 @@ public class Door implements IDevice {
         geometry = new Geometry();
     }
 
-    /**
-     * Instantiates a new Door.
-     *
-     * @param geometry the geometry of the device
-     */
     public Door(Geometry geometry) {
         this.geometry = geometry;
     }
@@ -63,5 +58,19 @@ public class Door implements IDevice {
     @Override
     public DeviceType getDeviceType() {
         return DeviceType.DOOR;
+    }
+
+    @Override
+    public IDevice deepCopy() {
+        Door copy = new Door(geometry);
+        copy.setIsOpened(isOpened);
+        return copy;
+    }
+
+    @Override
+    public boolean equals(IDevice other) {
+        return getDeviceType() == other.getDeviceType()
+            && getIsOpened() == other.getIsOpened()
+            && getGeometry().equals(other.getGeometry());
     }
 }
