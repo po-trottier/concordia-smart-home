@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
 
 public class Window implements IDevice {
@@ -61,8 +62,9 @@ public class Window implements IDevice {
         return DeviceType.WINDOW;
     }
 
+    @NonNull
     @Override
-    public IDevice deepCopy() {
+    public IDevice clone() {
         Window copy = new Window(geometry);
         copy.setIsOpened(isOpened);
         copy.setIsLocked(isLocked);

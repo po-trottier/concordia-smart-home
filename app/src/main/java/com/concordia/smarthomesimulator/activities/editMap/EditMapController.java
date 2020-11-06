@@ -107,7 +107,7 @@ public class EditMapController extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // If the previously selected layout is now deleted, select a default layout
                     ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
-                    if (layouts.stream().noneMatch(layout -> layout.getName().equals(backupLayout.getName()))) {
+                    if (layouts.stream().noneMatch(layout -> layout.equals(backupLayout))) {
                         editMapModel.setHouseLayout(layouts.get(0));
                         HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
                     } else {
@@ -191,7 +191,7 @@ public class EditMapController extends AppCompatActivity {
         editMapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
 
         CustomMapSettingsView settings = findViewById(R.id.edit_map_settings);
-        settings.updateView();
+        settings.forceUpdateView(editMapModel.getHouseLayout());
     }
 
     private View setupCustomView() {

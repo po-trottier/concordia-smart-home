@@ -352,7 +352,7 @@ public class CustomMapModel {
 
     private void showDeviceDialog(Context context, IDevice device) {
         // Make sure we don't edit the original device
-        IDevice deepCopy = device.deepCopy();
+        IDevice deepCopy = device.clone();
 
         final CustomDeviceAlertView customView = (CustomDeviceAlertView) LayoutInflater.from(context).inflate(R.layout.alert_edit_device, null, false);
         customView.setDeviceInformation(deepCopy);

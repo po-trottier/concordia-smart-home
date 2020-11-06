@@ -1,7 +1,11 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_GARAGE;
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
@@ -35,6 +39,14 @@ public class HouseLayout {
         boolean userExists = currentUser != null && rooms.stream().anyMatch(room -> room.hasInhabitant(currentUser));
         if (!userExists)
             this.getRoom(DEFAULT_NAME_OUTDOORS).addInhabitant(new Inhabitant(currentUser));
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null || obj.getClass() != HouseLayout.class) {
+            return false;
+        }
+        return ((HouseLayout) obj).getName().equalsIgnoreCase(name);
     }
 
     /**
@@ -106,5 +118,22 @@ public class HouseLayout {
                return;
            }
         }
+    }
+
+    /**
+     * Gets all inhabitants in the layout.
+     *
+     * @return the all inhabitants
+     */
+    public ArrayList<Inhabitant> getAllInhabitants() {
+        List<ArrayList<Inhabitant>> inhabitantLists = rooms
+                .stream()
+                .map(Room::getInhabitants)
+                .collect(Collectors.toList());
+        ArrayList<Inhabitant> inhabitants = new ArrayList<>();
+        for (ArrayList<Inhabitant> list : inhabitantLists) {
+            inhabitants.addAll(list);
+        }
+        return inhabitants;
     }
 }

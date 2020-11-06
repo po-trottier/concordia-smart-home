@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="24dp">
+    <EditText
+        android:id="@+id/alert_add_inhabitant_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/rounded_text_field_background"
+        android:hint="@string/field_alert_save_layout"
+        android:textSize="16sp"
+        android:inputType="text"/>
+
+    <LinearLayout
+        android:id="@+id/alert_add_inhabitant_checkbox_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textSize="16sp"
+            android:text="Use your user profile"/>
+        <CheckBox
+            android:id="@+id/alert_add_inhabitant_checkbox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:button="@null"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"/>
+    </LinearLayout>
+</LinearLayout>

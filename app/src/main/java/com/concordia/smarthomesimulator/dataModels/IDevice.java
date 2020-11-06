@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.graphics.drawable.Drawable;
+import androidx.annotation.NonNull;
 
 /**
  * The interface Device.
@@ -75,7 +76,8 @@ public interface IDevice {
      *
      * @return the device
      */
-    public IDevice deepCopy();
+    @NonNull
+    public IDevice clone();
 
     /**
      * Checks if the device is equal an other.

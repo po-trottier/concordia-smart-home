@@ -40,10 +40,10 @@ public enum Permissions {
      * @return the permissions
      */
     public static Permissions fromString(String permissions){
-        switch (permissions.toLowerCase()) {
-            case "parent": return PARENT;
-            case "child": return CHILD;
-            case "guest": return GUEST;
+        switch (permissions.toUpperCase()) {
+            case "PARENT": return PARENT;
+            case "CHILD": return CHILD;
+            case "GUEST": return GUEST;
             default: return STRANGER;
         }
     }
