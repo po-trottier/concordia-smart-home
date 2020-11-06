@@ -79,6 +79,7 @@
     <string name="map_active_layout_devices_suffix">devices</string>
     <string name="default_room_name">Room</string>
     <string name="default_device_name">Device</string>
+    <string name="title_rooms">Rooms</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
     <string name="title_alert_save_layout">Save the house layout</string>
@@ -119,6 +120,17 @@
 
     <string name="about_name">Name</string>
     <string name="about_student_id">Student ID</string>
+
+
+    <string name="permission_title">Edit Command Permissions</string>
+    <string name="permission_window_all">Open/Close Any Window</string>
+    <string name="permission_window_local">Open/Close Local Windows</string>
+    <string name="permission_door_all">Open/Close Any Door</string>
+    <string name="permission_door_local">Open/Close Local Doors</string>
+    <string name="permission_light_all">Turn On/Off Any Light</string>
+    <string name="permission_light_local">Turn On/Off Local Lights</string>
+    <string name="permission_garage">Interact With Garage</string>
+    <string name="permission_away_mode">Set Away Mode</string>
 
     <string name="alert_map_device_title">Modifying a </string>
     <string name="alert_map_device_status">Current Status:</string>
