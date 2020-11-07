@@ -63,8 +63,6 @@ public class EditDashboardController extends AppCompatActivity {
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
 
-    private LayoutInflater inflater;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -414,7 +412,6 @@ public class EditDashboardController extends AppCompatActivity {
         editedUsername.setText(user.getUsername());
         editedPassword.setText(user.getPassword());
         setupPermissionsSpinnerSelection(user.getPermission(), editPermissionsSpinner);
-
     }
 
     private void setupToolbar() {
@@ -435,5 +432,4 @@ public class EditDashboardController extends AppCompatActivity {
             });
         }
     }
-
 }
