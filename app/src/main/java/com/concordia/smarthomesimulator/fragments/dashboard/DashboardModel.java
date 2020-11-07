@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
 
 import static com.concordia.smarthomesimulator.Constants.*;
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_TIME_ZONE;
 
 public class DashboardModel extends ViewModel {
 
@@ -62,8 +62,14 @@ public class DashboardModel extends ViewModel {
      * @param preferences the preferences
      * @return the string
      */
-    public String getTimeZone(SharedPreferences preferences){
-        return preferences.getString(PREFERENCES_KEY_TIME_ZONE, DEFAULT_TIME_ZONE);
+    public LocalDateTime getDateTime(SharedPreferences preferences){
+        LocalDateTime timeNow = LocalDateTime.now();
+        int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
+        int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
+        int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
+        int hour = preferences.getInt(PREFERENCES_KEY_DATETIME_HOUR, timeNow.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_DATETIME_MINUTE, timeNow.getMinute());
+        return LocalDateTime.of(year, month, day, hour, minute);
     }
 
     /**

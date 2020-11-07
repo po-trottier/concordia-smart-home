@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextClock;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +16,7 @@ import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardCo
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.views.customDateTimeView.CustomDateTimeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DashboardController extends Fragment {
@@ -25,12 +25,11 @@ public class DashboardController extends Fragment {
     private View view;
     private Context context;
     private SharedPreferences preferences;
-    private TextView date;
     private TextView status;
     private TextView temperature;
     private TextView user;
     private TextView permissions;
-    private TextClock clock;
+    private CustomDateTimeView clock;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dashboardModel = new ViewModelProvider(this).get(DashboardModel.class);
@@ -54,7 +53,6 @@ public class DashboardController extends Fragment {
     private void findControls() {
         status = view.findViewById(R.id.simulation_status);
         temperature = view.findViewById(R.id.simulation_temperature);
-        date = view.findViewById(R.id.date);
         clock = view.findViewById(R.id.dashboard_clock);
         user = view.findViewById(R.id.text_user_username);
         permissions = view.findViewById(R.id.text_user_permissions);
@@ -65,15 +63,13 @@ public class DashboardController extends Fragment {
         permissions.setText(dashboardModel.getPermissions(context, preferences));
         // Set the Username
         user.setText(dashboardModel.getUsername(preferences));
-        // Set the Date
-        date.setText(dashboardModel.getDate());
-        // Set the Time Zone
-        clock.setTimeZone(dashboardModel.getTimeZone(preferences));
         // Set the Temperature
         temperature.setText(dashboardModel.getTemperature(context, preferences));
         // Set the Simulation Status
         status.setText(dashboardModel.getStatusText(context, preferences));
         status.setTextColor(dashboardModel.getStatusColor(context, preferences));
+        // Set the Date Time
+        clock.setDateTime(dashboardModel.getDateTime(preferences));
     }
 
     private void setupEditIntent() {

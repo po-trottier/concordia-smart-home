@@ -29,7 +29,7 @@
                 layout="@layout/partial_edit_context"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
             <include
                 layout="@layout/partial_edit_user"
                 android:layout_width="match_parent"
@@ -50,6 +50,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_save"
-        android:tint="@color/white"/>
+        android:tint="@android:color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

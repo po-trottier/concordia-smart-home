@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="@dimen/activity_all_margin"
         android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
             android:textAlignment="center"
             android:text="@string/map_no_layout_text"/>
         <Button
@@ -37,7 +37,7 @@
             android:background="@drawable/rounded_button_background"
             android:backgroundTint="@color/primary"
             android:paddingHorizontal="64dp"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:text="@string/map_no_layout_button" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

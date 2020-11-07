@@ -8,10 +8,10 @@
     <EditText
         android:id="@+id/alert_add_inhabitant_name"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/field_height"
         android:layout_marginTop="12dp"
         android:paddingVertical="8dp"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
         android:background="@drawable/rounded_text_field_background"
         android:hint="@string/field_alert_save_layout"
         android:textSize="16sp"

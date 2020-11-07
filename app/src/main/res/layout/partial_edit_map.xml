@@ -4,7 +4,7 @@
     android:gravity="center_horizontal"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:padding="16dp"
+    android:padding="@dimen/activity_all_margin"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -18,16 +18,16 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         app:cardElevation="0dp"
         app:cardCornerRadius="@dimen/card_corner_radius">
         <EditText
             android:id="@+id/edit_map_layout_name"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="16dp"
+            android:layout_height="@dimen/field_height"
+            android:layout_margin="@dimen/activity_all_margin"
             android:inputType="textCapWords"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/activity_horizontal_margin"
             android:background="@drawable/rounded_text_field_background" />
     </androidx.cardview.widget.CardView>
 
@@ -41,13 +41,13 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         app:cardElevation="0dp"
         app:cardCornerRadius="@dimen/card_corner_radius">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/activity_all_margin"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/edit_map_room_empty"
@@ -65,7 +65,7 @@
                 android:id="@+id/edit_map_remove_room"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_marginTop="24dp"
                 android:text="@string/remove_room_edit_map"
                 android:textColor="@color/accent"
@@ -74,10 +74,10 @@
                 android:id="@+id/edit_map_add_room"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_marginTop="8dp"
                 android:text="@string/add_room_edit_map"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:background="@drawable/rounded_button_background"
                 android:backgroundTint="@color/primary"/>
         </LinearLayout>
@@ -93,13 +93,13 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         app:cardElevation="0dp"
         app:cardCornerRadius="@dimen/card_corner_radius">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/activity_all_margin"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/edit_map_device_select"
@@ -123,10 +123,10 @@
                 android:id="@+id/edit_map_add_device"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_marginTop="24dp"
                 android:text="@string/add_device_edit_map"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:background="@drawable/rounded_text_field_background"
                 android:backgroundTint="@color/primaryFaded"/>
         </LinearLayout>
@@ -147,7 +147,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/activity_all_margin"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/edit_map_inhabitant_select"
@@ -171,10 +171,10 @@
                 android:id="@+id/edit_map_add_inhabitant"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/field_height"
                 android:layout_marginTop="24dp"
                 android:text="@string/add_inhabitant_edit_map"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:background="@drawable/rounded_text_field_background"
                 android:backgroundTint="@color/primaryFaded"/>
         </LinearLayout>

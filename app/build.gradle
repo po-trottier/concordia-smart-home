@@ -6,7 +6,7 @@ apply plugin: 'com.android.application'
 
     defaultConfig {
       applicationId "com.concordia.smarthomesimulator"
-      minSdkVersion 24
+      minSdkVersion 26
       targetSdkVersion 30
       versionCode 1
       versionName "1.0"
