@@ -46,9 +46,9 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
 
     private ArrayList<IObserver> observers;
 
+    private LinearLayout awayErrorLayout;
+    private ImageButton awayDisabledHint;
     private SwitchCompat awayStatusField;
-    private TextView awayStatusText;
-    private TextView awayDisabledText;
     private SwitchCompat statusField;
     private FloatingActionButton saveContext;
     private FloatingActionButton timeScaleMinus;
@@ -62,6 +62,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     private EditText newPasswordField;
     private EditText dateField;
     private EditText timeField;
+    private TextView awayStatusText;
     private TextView timeScaleField;
     private TextView statusText;
     private Spinner editPermissionsSpinner;
@@ -78,13 +79,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
-        observers = new ArrayList<>();
-
-        if(ObserverHelper.getInstance().getObservers().size() != 0){
-            for(IObserver observer :  ObserverHelper.getInstance().getObservers()){
-                register(observer);
-            }
-        }
+        initializeObservers();
 
         model.initializeModel(context);
         model.updateSimulationDateTime(preferences);
@@ -130,10 +125,20 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         }
     }
 
+    private void initializeObservers() {
+        observers = new ArrayList<>();
+        if(ObserverHelper.getObservers().size() != 0){
+            for(IObserver observer :  ObserverHelper.getObservers()){
+                register(observer);
+            }
+        }
+    }
+
     private void findControls() {
         awayStatusField = findViewById(R.id.away_on_off);
         awayStatusText = findViewById(R.id.away_on_off_text);
-        awayDisabledText = findViewById(R.id.away_disable_message);
+        awayDisabledHint = findViewById(R.id.away_disable_hint);
+        awayErrorLayout = findViewById(R.id.away_disable_layout);
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
@@ -290,37 +295,45 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     }
 
     private void setAwaySwitchRestrictions(){
+        String error = "";
         if(observers.size() == 0){
             awayStatusField.setAlpha(.5f);
             awayStatusField.setChecked(false);
             awayStatusField.setEnabled(false);
-            awayDisabledText.setText(getString(R.string.missing_house_layout));
+            awayErrorLayout.setVisibility(View.VISIBLE);
+            error = getString(R.string.missing_house_layout);
         }
         else if(!isHouseEmpty()){
             awayStatusField.setAlpha(.5f);
             awayStatusField.setChecked(false);
             awayStatusField.setEnabled(false);
-            awayDisabledText.setText(getString(R.string.away_disable_message));
+            awayErrorLayout.setVisibility(View.VISIBLE);
+            error = getString(R.string.away_disable_message);
         }
         else{
             awayStatusField.setAlpha(1.0f);
             awayStatusField.setEnabled(true);
-            awayDisabledText.setText("");
+            awayErrorLayout.setVisibility(View.GONE);
             notifyObserver();
         }
+        String finalError = error;
+        awayDisabledHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(getString(R.string.away_message_title))
+                    .setMessage(finalError)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .create();
+                dialog.show();
+            }
+        });
     }
 
     private boolean isHouseEmpty() {
         if (observers.size() != 0) {
-            ArrayList<Room> rooms = HouseLayoutHelper.getSelectedLayout(context).getRooms();
-            boolean isEmpty = true;
-            for (Room room : rooms) {
-                if (room.getInhabitants().size() != 0) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            return isEmpty;
+            ArrayList<Inhabitant> inhabitants = HouseLayoutHelper.getSelectedLayout(context).getAllInhabitants();
+            return inhabitants.stream().allMatch(Inhabitant::isIntruder);
         }
         else{
             return false;

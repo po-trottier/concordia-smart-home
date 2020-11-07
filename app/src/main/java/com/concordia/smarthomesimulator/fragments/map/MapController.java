@@ -18,17 +18,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
-import com.concordia.smarthomesimulator.dataModels.HouseLayout;
-import com.concordia.smarthomesimulator.dataModels.IDevice;
-import com.concordia.smarthomesimulator.dataModels.LogEntry;
-import com.concordia.smarthomesimulator.dataModels.LogImportance;
-import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.concordia.smarthomesimulator.helpers.ObserveHelper;
+import com.concordia.smarthomesimulator.helpers.ObserverHelper;
 import com.concordia.smarthomesimulator.interfaces.IObserver;
-import com.concordia.smarthomesimulator.interfaces.ISubject;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -43,9 +38,11 @@ public class MapController extends Fragment implements IObserver {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         mapModel = new ViewModelProvider(this).get(MapModel.class);
-        ObserverHelper.getInstance().addObserver(this);
         this.inflater = inflater;
         view = this.inflater.inflate(R.layout.fragment_map, container, false);
+
+        ObserverHelper.addObserver(this);
+
         return view;
     }
 
@@ -53,6 +50,19 @@ public class MapController extends Fragment implements IObserver {
     public void onResume(){
         updateContent();
         super.onResume();
+    }
+
+    @Override
+    public void updateAwayMode(boolean awayMode) {
+        if(awayMode){
+            HouseLayout updatedHouseLayout =  HouseLayoutHelper.getSelectedLayout(context);
+            for(Room room : updatedHouseLayout.getRooms()){
+                for(IDevice device : room.getDevices()){
+                    device.setIsOpened(false);
+                }
+            }
+            HouseLayoutHelper.saveHouseLayout(context, updatedHouseLayout);
+        }
     }
 
     private void updateContent() {
@@ -208,18 +218,5 @@ public class MapController extends Fragment implements IObserver {
         });
 
         return customView;
-    }
-
-    @Override
-    public void updateAwayMode(boolean awayMode) {
-        if(awayMode){
-            HouseLayout updatedHouseLayout =  HouseLayoutHelper.getSelectedLayout(context);
-            for(Room room : updatedHouseLayout.getRooms()){
-                for(IDevice device : room.getDevices()){
-                    device.setIsOpened(false);
-                }
-            }
-            HouseLayoutHelper.saveHouseLayout(context, updatedHouseLayout);
-        }
     }
 }

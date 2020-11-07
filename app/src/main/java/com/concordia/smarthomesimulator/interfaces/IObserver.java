@@ -9,7 +9,7 @@ public interface IObserver {
     /**
      * Updates the Away mode status
      *
-     * @param awayMode
+     * @param awayMode away mode
      */
      void updateAwayMode(boolean awayMode);
 }
