@@ -74,6 +74,11 @@ public class EditDashboardModel extends ViewModel{
         timeFactor = AVAILABLE_TIME_FACTORS[0];
     }
 
+    /**
+     * Update simulation date and time based on the preferences.
+     *
+     * @param preferences the preferences
+     */
     public void updateSimulationDateTime(SharedPreferences preferences) {
         LocalDateTime timeNow = LocalDateTime.now();
         int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
@@ -84,14 +89,32 @@ public class EditDashboardModel extends ViewModel{
         dateTime = LocalDateTime.of(year, month, day, hour, minute);
     }
 
+    /**
+     * Gets simulation date time.
+     *
+     * @return the simulation date time
+     */
     public LocalDateTime getSimulationDateTime() {
         return dateTime;
     }
 
+    /**
+     * Sets simulation time.
+     *
+     * @param hour   the hour
+     * @param minute the minute
+     */
     public void setSimulationTime(int hour, int minute) {
         dateTime = LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), hour, minute);
     }
 
+    /**
+     * Sets simulation date.
+     *
+     * @param year  the year
+     * @param month the month
+     * @param day   the day
+     */
     public void setSimulationDate(int year, int month, int day) {
         dateTime = LocalDateTime.of(year, month, day, dateTime.getHour(), dateTime.getMinute());
     }
