@@ -1,6 +1,8 @@
 package com.concordia.smarthomesimulator.activities.editDashboard;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -17,9 +19,13 @@ import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
-import java.util.TimeZone;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -32,17 +38,21 @@ public class EditDashboardController extends AppCompatActivity {
     private Userbase userbase;
 
     private SwitchCompat statusField;
-    private TextView statusText;
-    private EditText temperatureField;
     private FloatingActionButton saveContext;
+    private FloatingActionButton timeScaleMinus;
+    private FloatingActionButton timeScalePlus;
     private Button deleteUser;
-    private Spinner timezoneSpinner;
-    private Spinner editPermissionsSpinner;
+    private Button createUserButton;
+    private EditText temperatureField;
     private EditText editedUsername;
     private EditText editedPassword;
-    private Button createUserButton;
     private EditText newUsernameField;
     private EditText newPasswordField;
+    private EditText dateField;
+    private EditText timeField;
+    private TextView timeScaleField;
+    private TextView statusText;
+    private Spinner editPermissionsSpinner;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
 
@@ -59,12 +69,19 @@ public class EditDashboardController extends AppCompatActivity {
 
         setupToolbar();
         findControls();
+
         setSaveIntent();
         setDeleteUserIntent();
         setCreateUserIntent();
-        setupTimezoneSpinner();
+
+        editDashboardModel.updateSimulationDateTime(preferences);
+        setupTimePicker();
+        setupDatePicker();
+        setupTimeFactor();
+
         setupPermissionSpinner();
         setupUsernamesSpinner();
+
         fillKnownValues();
         // DO NOT PUT BEFORE "fillKnownValues" !
         setupStatusSwitch();
@@ -75,7 +92,6 @@ public class EditDashboardController extends AppCompatActivity {
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
         saveContext = findViewById(R.id.save_context_button);
-        timezoneSpinner = findViewById(R.id.timezone_spinner);
         editPermissionsSpinner = findViewById(R.id.edit_permissions_spinner);
         editedUsername = findViewById(R.id.edit_username_field);
         editedPassword = findViewById(R.id.edit_password_field);
@@ -85,6 +101,11 @@ public class EditDashboardController extends AppCompatActivity {
         createUserButton = findViewById(R.id.create_button);
         newUsernameField = findViewById(R.id.new_username_field);
         newPasswordField = findViewById(R.id.new_password_field);
+        timeScaleMinus = findViewById(R.id.time_scale_minus);
+        timeScalePlus = findViewById(R.id.time_scale_plus);
+        timeScaleField = findViewById(R.id.time_scale_text);
+        dateField = findViewById(R.id.date_selector);
+        timeField = findViewById(R.id.time_selector);
     }
 
     private void fillKnownValues() {
@@ -92,9 +113,12 @@ public class EditDashboardController extends AppCompatActivity {
         statusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_STATUS, false));
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
-        // Set the know Time Zone
-        String timeZone = preferences.getString(PREFERENCES_KEY_TIME_ZONE, "");
-        timezoneSpinner.setSelection(editDashboardModel.getTimeZoneIndex(timeZone));
+        // Set the know Date Time
+        LocalDateTime dateTime = editDashboardModel.getSimulationDateTime();
+        dateField.setText(dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+        timeField.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
+        // Set the time scale factor
+        timeScaleField.setText(editDashboardModel.getTimeFactor() + "x");
     }
 
     private void setSaveIntent() {
@@ -115,15 +139,23 @@ public class EditDashboardController extends AppCompatActivity {
                 }
 
                 // Get the Simulation Context Parameters
-                String timezone = timezoneSpinner.getSelectedItem().toString();
                 int temperature = DEFAULT_TEMPERATURE;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
+                LocalDate date =LocalDate.now();
+                LocalTime time = LocalTime.now();
+                try {
+                    date = LocalDate.parse(dateField.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT));
+                    time = LocalTime.parse(timeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                } catch (DateTimeParseException e) {
+                    e.printStackTrace();
+                }
+
                 // Edit the parameters
-                editDashboardModel.editParameters(preferences, statusField.isChecked(), temperature, timezone);
+                editDashboardModel.editParameters(preferences, statusField.isChecked(), temperature, date, time);
 
                 // Close the activity
                 ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
@@ -205,14 +237,73 @@ public class EditDashboardController extends AppCompatActivity {
         });
     }
 
-    private void setupTimezoneSpinner() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-            context,
-            R.layout.support_simple_spinner_dropdown_item,
-            TimeZone.getAvailableIDs()
-        );
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        timezoneSpinner.setAdapter(adapter);
+    private void setupDatePicker() {
+        dateField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalDateTime timeNow = editDashboardModel.getSimulationDateTime();
+                // IMPORTANT: For some reason the month is shifted by 1 in the picker ?
+                // This is why we set the month to be -1 when we initialize the control
+                // and why we set the simulation date to be +1
+                DatePickerDialog timePickerDialog = new DatePickerDialog(
+                    context,
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            editDashboardModel.setSimulationDate(year, month + 1, dayOfMonth);
+                            fillKnownValues();
+                        }
+                    },
+                    timeNow.getYear(),
+                    timeNow.getMonthValue() - 1,
+                    timeNow.getDayOfMonth()
+                );
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void setupTimePicker() {
+        timeField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalDateTime timeNow = editDashboardModel.getSimulationDateTime();
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        context,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                editDashboardModel.setSimulationTime(hourOfDay, minute);
+                                fillKnownValues();
+                            }
+                        },
+                        timeNow.getHour(),
+                        timeNow.getMinute(),
+                        false
+                );
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void setupTimeFactor() {
+        editDashboardModel.setTimeFactor(preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
+
+        timeScaleMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDashboardModel.decreaseTimeFactor();
+                fillKnownValues();
+            }
+        });
+
+        timeScalePlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDashboardModel.increaseTimeFactor();
+                fillKnownValues();
+            }
+        });
     }
 
     private void setupPermissionSpinner(){

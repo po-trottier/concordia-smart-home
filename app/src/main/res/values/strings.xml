@@ -152,7 +152,9 @@
     <string name="simulation_status_started">Started</string>
     <string name="simulation_status_stopped">Stopped</string>
     <string name="edit_text_temperature">Outdoors Temperature</string>
-    <string name="edit_text_timezone">Simulation Time Zone</string>
+    <string name="edit_text_time">Simulation Time</string>
+    <string name="edit_text_date">Simulation Date</string>
+    <string name="edit_text_time_scale">Time Speed (Scaling Factor)</string>
     <string name="edit_context_welcome">Context Parameters</string>
 
     <string name="generic_degrees_celsius">°C</string>
