@@ -1,6 +1,8 @@
 package com.concordia.smarthomesimulator.views.customDateTimeView;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -8,16 +10,20 @@ import com.concordia.smarthomesimulator.R;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import static com.concordia.smarthomesimulator.Constants.DATE_FORMAT;
-import static com.concordia.smarthomesimulator.Constants.TIME_FORMAT;
+import static com.concordia.smarthomesimulator.Constants.*;
 
 /**
  * The type Custom clock view.
  */
 public class CustomDateTimeView extends LinearLayout {
 
-    LocalDateTime dateTime = null;
+    private static final int MINUTE = 60000;
+
+    private final Context context;
+    private LocalDateTime dateTime = null;
 
     /**
      * Instantiates a new Custom clock view.
@@ -26,6 +32,7 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public CustomDateTimeView(Context context) {
         super(context);
+        this.context = context;
     }
 
     /**
@@ -36,6 +43,7 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public CustomDateTimeView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
     }
 
     /**
@@ -47,6 +55,7 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public CustomDateTimeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
     }
 
     /**
@@ -56,19 +65,53 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
-        fillKnowInformation();
+        setClockBehavior();
+        updateView();
     }
 
-    private void fillKnowInformation() {
-        TextView time = findViewById(R.id.dashboard_time);
-        TextView date = findViewById(R.id.dashboard_date);
+    private void setClockBehavior() {
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+        // Set the clock's update rate (i.e. 10x means a period 10 times shorter)
+        // Use millisecond to allow time acceleration of up to 100x
+        float scale = preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE);
+        long period = (long) (MINUTE / scale);
+        // Update the clock time
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                dateTime = dateTime.plusMinutes(1);
+                setPreferences(preferences);
+                updateView();
+            }
+        }, 0, period);
+    }
 
-        if (time == null || date == null) {
-            return;
-        }
+    private void setPreferences(SharedPreferences preferences) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, dateTime.getYear());
+        editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, dateTime.getMonthValue());
+        editor.putInt(PREFERENCES_KEY_DATETIME_DAY, dateTime.getDayOfMonth());
+        editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, dateTime.getHour());
+        editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, dateTime.getMinute());
+        editor.apply();
+    }
 
-        time.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
-        date.setText(dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+    private void updateView() {
+        // Running on UI Thread makes the UI update thread-safe
+        ((Activity) context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView time = findViewById(R.id.dashboard_time);
+                TextView date = findViewById(R.id.dashboard_date);
+                if (time != null) {
+                    time.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
+                }
+                if (date != null) {
+                    date.setText(dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
+                }
+            }
+        });
     }
 }
 

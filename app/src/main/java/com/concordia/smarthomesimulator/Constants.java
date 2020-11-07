@@ -48,7 +48,7 @@ public class Constants {
 
     public static final String DIRECTORY_NAME_LAYOUTS = "layouts";
 
-    public static final float[] AVAILABLE_TIME_FACTORS = { 0.5f, 1f, 1.5f, 2f, 5f, 10f, 50f, 100f };
+    public static final float[] AVAILABLE_TIME_FACTORS = { 0.1f, 0.5f, 1f, 1.5f, 2f, 5f, 10f, 50f, 100f, 200f };
     public static final String DATE_FORMAT = "MMMM d yyyy";
     public static final String TIME_FORMAT = "h:mm a";
 }
