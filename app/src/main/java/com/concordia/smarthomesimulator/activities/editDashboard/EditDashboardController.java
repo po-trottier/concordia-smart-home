@@ -83,7 +83,6 @@ public class EditDashboardController extends AppCompatActivity {
         setSaveIntent();
         setDeleteUserIntent();
         setCreateUserIntent();
-        setupTimezoneSpinner();
         setupPermissionsSpinner();
         setupUsernamesSpinner();
         setupPermissionConfigurationRows();
@@ -92,7 +91,6 @@ public class EditDashboardController extends AppCompatActivity {
         setupDatePicker();
         setupTimeFactor();
 
-        setupPermissionSpinner();
         setupUsernamesSpinner();
 
         fillKnownValues();

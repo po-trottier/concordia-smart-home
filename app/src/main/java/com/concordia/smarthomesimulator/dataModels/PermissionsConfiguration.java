@@ -39,9 +39,11 @@ public class PermissionsConfiguration {
      */
     public PermissionsConfiguration(PermissionsConfiguration permissionsConfiguration) {
         this.actionPermissionsMap = new HashMap<>();
-        permissionsConfiguration.actionPermissionsMap.forEach(
-                (k,v) -> this.actionPermissionsMap.put(k,v)
-        );
+        if (permissionsConfiguration != null) {
+            permissionsConfiguration.actionPermissionsMap.forEach(
+                    (k,v) -> this.actionPermissionsMap.put(k,v)
+            );
+        }
     }
 
     /**
