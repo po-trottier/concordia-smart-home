@@ -257,7 +257,7 @@ public class EditDashboardModel extends ViewModel{
      */
     public void editParameters(SharedPreferences preferences, boolean status, int temperature, LocalDate date, LocalTime time) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awaymode);
+        editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
         editor.putBoolean(PREFERENCES_KEY_STATUS, status);
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, date.getYear());
@@ -267,6 +267,11 @@ public class EditDashboardModel extends ViewModel{
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, time.getMinute());
         editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
         editor.apply();
+    }
+
+    public void editAwayParameter(SharedPreferences preferences, boolean awayMode){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
     }
 
     /**

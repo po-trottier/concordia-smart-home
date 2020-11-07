@@ -1,7 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 public class Inhabitant {
-
+    private final boolean isIntruder;
     private final String name;
 
     /**
@@ -11,6 +11,18 @@ public class Inhabitant {
      */
     public Inhabitant(String name) {
         this.name = name;
+        this.isIntruder = false;
+    }
+
+    /**
+     * Instantiates a new Inhabitant with option of adding as an intruder
+     *
+     * @param name the name
+     * @param isIntruder intruder status
+     */
+    public Inhabitant(String name, boolean isIntruder) {
+        this.name = name;
+        this.isIntruder = isIntruder;
     }
 
     /**
@@ -20,5 +32,14 @@ public class Inhabitant {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Determines if inhabitant is an intruder.
+     *
+     * @return true or false
+     */
+    public boolean isIntruder() {
+        return this.isIntruder;
     }
 }

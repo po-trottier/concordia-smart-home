@@ -6,26 +6,19 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
-import com.concordia.smarthomesimulator.activities.main.MainController;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.fragments.map.MapController;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
-import com.concordia.smarthomesimulator.helpers.ObserveHelper;
+import com.concordia.smarthomesimulator.helpers.ObserverHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IObserver;
 import com.concordia.smarthomesimulator.interfaces.ISubject;
@@ -87,10 +80,12 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
-        observers = new ArrayList<IObserver>();
+        observers = new ArrayList<>();
 
-        for(IObserver observer :  ObserveHelper.getInstance().getObservers()){
-            register(observer);
+        if(ObserverHelper.getInstance().getObservers().size() != 0){
+            for(IObserver observer :  ObserverHelper.getInstance().getObservers()){
+                register(observer);
+            }
         }
 
         model.initializeModel(context);
@@ -147,6 +142,8 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     private void fillKnownValues() {
         // Set the simulation status
         statusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_STATUS, false));
+        // Set the away mode
+        awayStatusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false));
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
         // Set the know Date Time
@@ -259,21 +256,33 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     }
 
     private void setupAwaySwitch() {
-        setSwitchRestrictions();
+        setAwaySwitchRestrictions();
         setAwayStatus();
         awayStatusField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"All rooms must be empty", Toast.LENGTH_LONG).show();
-                setSwitchRestrictions();
+                if(awayStatusField.isChecked()){
+                    ActivityLogHelper.add(context, new LogEntry("Away Mode", "Away mode is activated", LogImportance.IMPORTANT));
+                }
+                else{
+                    ActivityLogHelper.add(context, new LogEntry("Away Mode", "Away mode is deactivated", LogImportance.IMPORTANT));
+                }
+                setAwaySwitchRestrictions();
                 setAwayStatus();
             }
         });
     }
 
-    private void setSwitchRestrictions(){
-        if(!isHouseEmpty()){
+    private void setAwaySwitchRestrictions(){
+        if(observers.size() == 0){
             awayStatusField.setAlpha(.5f);
+            awayStatusField.setChecked(false);
+            awayStatusField.setEnabled(false);
+            awayDisabledText.setText(getString(R.string.missing_house_layout));
+        }
+        else if(!isHouseEmpty()){
+            awayStatusField.setAlpha(.5f);
+            awayStatusField.setChecked(false);
             awayStatusField.setEnabled(false);
             awayDisabledText.setText(getString(R.string.away_disable_message));
         }
@@ -286,15 +295,20 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     }
 
     private boolean isHouseEmpty() {
-        ArrayList<Room> rooms = HouseLayoutHelper.getSelectedLayout(context).getRooms();
-        boolean isEmpty = true;
-        for (Room room : rooms) {
-            if (room.getInhabitants().size() != 0) {
-                isEmpty =false;
-                break;
+        if (observers.size() != 0) {
+            ArrayList<Room> rooms = HouseLayoutHelper.getSelectedLayout(context).getRooms();
+            boolean isEmpty = true;
+            for (Room room : rooms) {
+                if (room.getInhabitants().size() != 0) {
+                    isEmpty = false;
+                    break;
+                }
             }
+            return isEmpty;
         }
-        return isEmpty;
+        else{
+            return false;
+        }
     }
 
     private void setAwayStatus(){

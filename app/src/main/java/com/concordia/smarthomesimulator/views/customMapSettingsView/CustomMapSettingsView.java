@@ -327,7 +327,8 @@ public class CustomMapSettingsView extends ScrollView {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             EditText nameView = customView.findViewById(R.id.alert_add_inhabitant_name);
-                            model.addInhabitant(context, nameView.getText().toString().trim());
+                            CheckBox intruderCheckbox = customView.findViewById(R.id.is_intruder_checkbox);
+                            model.addInhabitant(context, nameView.getText().toString().trim(), intruderCheckbox.isChecked());
                         }
                     })
                     .create();

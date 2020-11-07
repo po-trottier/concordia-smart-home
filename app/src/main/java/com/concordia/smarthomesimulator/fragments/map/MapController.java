@@ -43,7 +43,7 @@ public class MapController extends Fragment implements IObserver {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         mapModel = new ViewModelProvider(this).get(MapModel.class);
-        ObserveHelper.getInstance().addObserver(this);
+        ObserverHelper.getInstance().addObserver(this);
         this.inflater = inflater;
         view = this.inflater.inflate(R.layout.fragment_map, container, false);
         return view;
@@ -211,14 +211,15 @@ public class MapController extends Fragment implements IObserver {
     }
 
     @Override
-    public void updateAwayMode(boolean awaymode) {
-        if(awaymode){
+    public void updateAwayMode(boolean awayMode) {
+        if(awayMode){
             HouseLayout updatedHouseLayout =  HouseLayoutHelper.getSelectedLayout(context);
             for(Room room : updatedHouseLayout.getRooms()){
                 for(IDevice device : room.getDevices()){
                     device.setIsOpened(false);
                 }
             }
+            HouseLayoutHelper.saveHouseLayout(context, updatedHouseLayout);
         }
     }
 }

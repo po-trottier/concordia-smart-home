@@ -169,18 +169,19 @@ public class CustomMapSettingsModel {
     }
 
     /**
-     * Add inhabitant.
+     * Add inhabitant and their intruder status.
      *
      * @param context the context
      * @param name    the name
+     * @param isIntruder intruder status
      */
-    public void addInhabitant(Context context, String name) {
+    public void addInhabitant(Context context, String name, boolean isIntruder) {
         // Verify that the name is valid
         if (name.length() < 1) {
             Toast.makeText(context, context.getString(R.string.add_inhabitant_invalid), Toast.LENGTH_LONG).show();
             return;
         }
-        Inhabitant inhabitant = new Inhabitant(name);
+        Inhabitant inhabitant = new Inhabitant(name, isIntruder);
         // Verify that its name is unique
         ArrayList<Inhabitant> inhabitants =  layout.getAllInhabitants();
         if (inhabitants.stream().anyMatch(i -> i.getName().equalsIgnoreCase(inhabitant.getName()))) {

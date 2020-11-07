@@ -1,5 +1,15 @@
 package com.concordia.smarthomesimulator.interfaces;
 
+/**
+ * This interface is used observe specific actions made by
+ * ISubjects.
+ */
 public interface IObserver {
-    public void updateAwayMode(boolean awaymode);
+
+    /**
+     * Updates the Away mode status
+     *
+     * @param awayMode
+     */
+     void updateAwayMode(boolean awayMode);
 }

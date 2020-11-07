@@ -41,6 +41,8 @@ public class CustomMapView extends View {
     private Paint fillOutdoorsPaint;
     private Paint inhabitantPaint;
     private Paint inhabitantTextPaint;
+    private Paint intruderPaint;
+    private Paint intruderTextPaint;
     private Paint textPaint;
     private Paint devicePaint;
     private Paint deviceStrokePaint;
@@ -168,6 +170,18 @@ public class CustomMapView extends View {
         inhabitantTextPaint.setTextSize(30f);
         inhabitantTextPaint.setSubpixelText(true);
         inhabitantTextPaint.setTextAlign(Paint.Align.CENTER);
+        // Paint used to outline intruders
+        intruderPaint = new Paint();
+        intruderPaint.setStyle(Paint.Style.STROKE);
+        intruderPaint.setStrokeWidth(6f);
+        intruderPaint.setColor(Color.RED);
+        // Paint used to write intruders's names
+        intruderTextPaint = new Paint();
+        intruderTextPaint.setStyle(Paint.Style.FILL);
+        intruderTextPaint.setColor(Color.RED);
+        intruderTextPaint.setTextSize(30f);
+        intruderTextPaint.setSubpixelText(true);
+        intruderTextPaint.setTextAlign(Paint.Align.CENTER);
         // Paint used to draw lights and doors
         devicePaint = new Paint();
         devicePaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -284,12 +298,23 @@ public class CustomMapView extends View {
         masked.setStyle(Paint.Style.FILL);
         masked.setColor(Color.BLACK);
         masked.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST));
+        //Set color for inhabitant
+        Paint shapeColor;
+        Paint textColor;
+        if(inhabitant.isIntruder()){
+             shapeColor = intruderPaint;
+             textColor = intruderTextPaint;
+        }
+        else{
+             shapeColor = inhabitantPaint;
+             textColor = inhabitantTextPaint;
+        }
         // Draw the new shape
         canvas.drawRect(shape, masked);
-        canvas.drawCircle(x, y, INHABITANT_RADIUS, inhabitantPaint);
+        canvas.drawCircle(x, y, INHABITANT_RADIUS, shapeColor);
         // Add the inhabitant's name's first letter in the middle of the circle
         String firstLetter = String.valueOf(inhabitant.getName().charAt(0)).toUpperCase();
-        canvas.drawText(firstLetter, x, y + (INHABITANT_SHIFT * measurements.getScaleY() / 3), inhabitantTextPaint);
+        canvas.drawText(firstLetter, x, y + (INHABITANT_SHIFT * measurements.getScaleY() / 3), textColor);
     }
 
     private void drawLight(Light device, float[] points) {
