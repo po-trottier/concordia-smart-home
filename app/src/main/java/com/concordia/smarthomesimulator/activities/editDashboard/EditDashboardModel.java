@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.UserPreferences;
-import com.concordia.smarthomesimulator.dataModels.Userbase;
+import com.concordia.smarthomesimulator.dataModels.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.TimeZone;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -96,6 +94,19 @@ public class EditDashboardModel extends ViewModel{
 
     public void setSimulationDate(int year, int month, int day) {
         dateTime = LocalDateTime.of(year, month, day, dateTime.getHour(), dateTime.getMinute());
+    }
+
+    /**
+     * Edit local permissions configuration. The userbase's permissionConfiguration will be updated when the user
+     * clicks the save FAB given that the user has permission.
+     *
+     * @param permissions                   the permissions
+     * @param action                        the action
+     * @param localPermissionsConfiguration the local permissions configuration
+     */
+    public void editLocalPermissionsConfiguration(Permissions permissions, Action action, PermissionsConfiguration localPermissionsConfiguration){
+        Map<Action, Permissions> actionPermissionsMapToEdit = localPermissionsConfiguration.getActionPermissionsMap();
+        actionPermissionsMapToEdit.replace(action, permissions);
     }
 
     /**

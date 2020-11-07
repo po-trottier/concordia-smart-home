@@ -168,6 +168,15 @@ public class EditDashboardController extends AppCompatActivity {
                 // Edit the parameters
                 editDashboardModel.editParameters(preferences, statusField.isChecked(), temperature, date, time);
 
+                // Edit the permissions configuration
+                if (UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)){
+                    userbase.setPermissionConfiguration(localPermissionsConfiguration);
+                    userbase.getPermissionConfiguration().sendToContext(preferences);
+                }
+
+                // Saving changes
+                UserbaseHelper.saveUserbase(context, userbase);
+
                 // Close the activity
                 ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
                 finish();
@@ -374,8 +383,7 @@ public class EditDashboardController extends AppCompatActivity {
            permissionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                @Override
                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 Permissions test =  Permissions.fromPosition(position);
-                 test.getBitValue();
+                 editDashboardModel.editLocalPermissionsConfiguration(Permissions.fromPosition(position), entry.getKey(), localPermissionsConfiguration);
                }
                @Override
                public void onNothingSelected(AdapterView<?> parent) { }

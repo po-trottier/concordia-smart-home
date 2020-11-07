@@ -2,7 +2,7 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.SharedPreferences;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -20,15 +20,15 @@ public class PermissionsConfiguration {
      * More importantly it adds all the keys that depict actions the user can take
      */
     public PermissionsConfiguration() {
-        actionPermissionsMap = new HashMap<>();
+        actionPermissionsMap = new LinkedHashMap<>();
         actionPermissionsMap.put(Action.INTERACT_ANY_WINDOW,DEFAULT_MIN_TO_INTERACT_ANY_WINDOW);
         actionPermissionsMap.put(Action.INTERACT_LOCAL_WINDOW,DEFAULT_MIN_TO_INTERACT_LOCAL_WINDOW);
         actionPermissionsMap.put(Action.INTERACT_ANY_LIGHT,DEFAULT_MIN_TO_INTERACT_ANY_LIGHT);
         actionPermissionsMap.put(Action.INTERACT_LOCAL_LIGHT,DEFAULT_MIN_TO_INTERACT_LOCAL_LIGHT);
         actionPermissionsMap.put(Action.INTERACT_GARAGE,DEFAULT_MIN_TO_INTERACT_GARAGE);
         actionPermissionsMap.put(Action.CHANGE_AWAY_MODE,DEFAULT_MIN_TO_CHANGE_AWAY_MODE);
-        actionPermissionsMap.put(Action.CHANGE_PERMISSIONS_CONFIG,DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG);
         actionPermissionsMap.put(Action.INTERACT_DOOR_LOCK,DEFAULT_MIN_TO_INTERACT_DOOR_LOCK);
+        actionPermissionsMap.put(Action.CHANGE_PERMISSIONS_CONFIG,DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG);
     }
 
     /**
@@ -38,7 +38,7 @@ public class PermissionsConfiguration {
      * @param permissionsConfiguration the permissions configuration
      */
     public PermissionsConfiguration(PermissionsConfiguration permissionsConfiguration) {
-        this.actionPermissionsMap = new HashMap<>();
+        this.actionPermissionsMap = new LinkedHashMap<>();
         if (permissionsConfiguration != null) {
             permissionsConfiguration.actionPermissionsMap.forEach(
                     (k,v) -> this.actionPermissionsMap.put(k,v)
