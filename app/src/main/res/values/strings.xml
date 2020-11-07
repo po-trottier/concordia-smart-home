@@ -177,12 +177,12 @@
     <string name="permission_title">Edit Command Permissions</string>
     <string name="permission_window_all">Open/Close Any Window</string>
     <string name="permission_window_local">Open/Close Local Windows</string>
-    <string name="permission_door_all">Lock/Unlock Any Door</string>
-    <string name="permission_door_local">Lock/Unlock Local Doors</string>
-    <string name="permission_light_all">Turn On/Off Any Light</string>
-    <string name="permission_light_local">Turn On/Off Local Lights</string>
-    <string name="permission_garage">Open/Close Garage</string>
-    <string name="permission_away_mode">Set Away Mode</string>
+    <string name="permission_door_all">Lock/Unlock_Any_Door</string>
+    <string name="permission_door_local">Lock/Unlock_Local_Doors</string>
+    <string name="permission_light_all">Turn_On/Off_Any_Light</string>
+    <string name="permission_light_local">Turn_On/Off_Local Lights</string>
+    <string name="permission_garage">Open/Close_Garage</string>
+    <string name="permission_away_mode">Set_Away_Mode</string>
 
     <string name="alert_map_device_title">Modifying a </string>
     <string name="alert_map_device_status">Current Status:</string>

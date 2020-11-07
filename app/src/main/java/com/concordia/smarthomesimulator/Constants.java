@@ -14,14 +14,14 @@ public class Constants {
     public static final String PREFERENCES_KEY_PERMISSIONS = "permissions";
     public static final String PREFERENCES_KEY_LAYOUT = "layout";
     // Actions where the permissions must be checked
-    public static final String PREFERENCES_KEY_ACTION_INTERACT_ANY_WINDOW = "INTERACT_ANY_WINDOW";
-    public static final String PREFERENCES_KEY_ACTION_INTERACT_LOCAL_WINDOW = "INTERACT_LOCAL_WINDOW";
-    public static final String PREFERENCES_KEY_ACTION_INTERACT_ANY_LIGHT = "INTERACT_ANY_LIGHT";
-    public static final String PREFERENCES_KEY_ACTION_INTERACT_LOCAL_LIGHT = "INTERACT_LOCAL_LIGHT";
-    public static final String PREFERENCES_KEY_ACTION_INTERACT_GARAGE = "INTERACT_GARAGE";
-    public static final String PREFERENCES_KEY_ACTION_CHANGE_AWAY_MODE = "CHANGE_AWAY_MODE";
-    public static final String PREFERENCES_KEY_ACTION_CHANGE_PERMISSIONS_CONFIG = "CHANGE_PERMISSIONS_CONFIG";
-    public static final String PREFERENCES_KEY_ACTION_INTERACT_DOOR_LOCK = "INTERACT_DOOR_LOCK";
+    public static final String PREFERENCES_KEY_ACTION_INTERACT_ANY_WINDOW = "Open/Close_Any_Window";
+    public static final String PREFERENCES_KEY_ACTION_INTERACT_LOCAL_WINDOW = "Open/Close_Local_Windows";
+    public static final String PREFERENCES_KEY_ACTION_INTERACT_ANY_LIGHT = "Turn_On/Off_Any_Light";
+    public static final String PREFERENCES_KEY_ACTION_INTERACT_LOCAL_LIGHT = "Turn_On/Off_Local Lights";
+    public static final String PREFERENCES_KEY_ACTION_INTERACT_GARAGE = "Open/Close_Garage";
+    public static final String PREFERENCES_KEY_ACTION_CHANGE_AWAY_MODE = "Set_Away_Mode";
+    public static final String PREFERENCES_KEY_ACTION_CHANGE_PERMISSIONS_CONFIG = "Edit_Permissions_Configuration";
+    public static final String PREFERENCES_KEY_ACTION_INTERACT_DOOR_LOCK = "Lock/Unlock_Doors";
     // Default minimum permissions for the actions specified
     public static final Permissions DEFAULT_MIN_TO_INTERACT_ANY_WINDOW = Permissions.PARENT;
     public static final Permissions DEFAULT_MIN_TO_INTERACT_LOCAL_WINDOW = Permissions.GUEST;

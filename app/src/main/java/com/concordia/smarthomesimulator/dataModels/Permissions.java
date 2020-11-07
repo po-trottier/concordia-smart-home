@@ -48,6 +48,15 @@ public enum Permissions {
         }
     }
 
+    public static Permissions fromPosition(int position){
+        switch (position) {
+            case 0: return PARENT;
+            case 1: return CHILD;
+            case 2: return GUEST;
+            default: return STRANGER;
+        }
+    }
+
     /**
      * Converts integer to permissions.
      *

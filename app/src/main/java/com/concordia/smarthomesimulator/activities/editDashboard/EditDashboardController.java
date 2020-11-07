@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import static android.view.View.inflate;
 import static com.concordia.smarthomesimulator.Constants.*;
 
 public class EditDashboardController extends AppCompatActivity {
@@ -59,6 +61,8 @@ public class EditDashboardController extends AppCompatActivity {
     private Spinner minimumPermissionsSpinnerLightLocal;
     private Spinner minimumPermissionsSpinnerGarage;
     private Spinner minimumPermissionsSpinnerAwayMode;
+
+    private LayoutInflater inflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,14 +105,14 @@ public class EditDashboardController extends AppCompatActivity {
         createUserButton = findViewById(R.id.create_button);
         newUsernameField = findViewById(R.id.new_username_field);
         newPasswordField = findViewById(R.id.new_password_field);
-        minimumPermissionsSpinnerWindowAll = findViewById(R.id.minimum_permissions_spinner_window_all);
-        minimumPermissionsSpinnerWindowLocal = findViewById(R.id.minimum_permissions_spinner_window_local);
-        minimumPermissionsSpinnerDoorAll = findViewById(R.id.minimum_permissions_spinner_door_all);
-        minimumPermissionsSpinnerLightLocal = findViewById(R.id.minimum_permissions_spinner_door_local);
-        minimumPermissionsSpinnerDoorLocal = findViewById(R.id.minimum_permissions_spinner_light_all);
-        minimumPermissionsSpinnerLightAll = findViewById(R.id.minimum_permissions_spinner_light_local);
-        minimumPermissionsSpinnerGarage = findViewById(R.id.minimum_permissions_spinner_garage);
-        minimumPermissionsSpinnerAwayMode = findViewById(R.id.minimum_permissions_spinner_away_mode);
+//        minimumPermissionsSpinnerWindowAll = findViewById(R.id.minimum_permissions_spinner_window_all);
+//        minimumPermissionsSpinnerWindowLocal = findViewById(R.id.minimum_permissions_spinner_window_local);
+//        minimumPermissionsSpinnerDoorAll = findViewById(R.id.minimum_permissions_spinner_door_all);
+//        minimumPermissionsSpinnerLightLocal = findViewById(R.id.minimum_permissions_spinner_door_local);
+//        minimumPermissionsSpinnerDoorLocal = findViewById(R.id.minimum_permissions_spinner_light_all);
+//        minimumPermissionsSpinnerLightAll = findViewById(R.id.minimum_permissions_spinner_light_local);
+//        minimumPermissionsSpinnerGarage = findViewById(R.id.minimum_permissions_spinner_garage);
+//        minimumPermissionsSpinnerAwayMode = findViewById(R.id.minimum_permissions_spinner_away_mode);
     }
 
     private void fillKnownValues() {
@@ -284,17 +288,38 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupPermissionConfigurationRows() {
-
+        TableLayout layout = findViewById(R.id.permissions_configuration_table);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                context,
+                R.layout.support_simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.permissions_spinner)
+        );
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         for(Map.Entry<Action, Permissions> entry : localPermissionsConfiguration.getActionPermissionsMap().entrySet()) {
+           View child = inflate(context, R.layout.generic_permissions_row, null);
 
+           TextView actionName = child.findViewById(R.id.generic_action_name);
+           actionName.setText(entry.getKey().getDescription());
+
+           Spinner actionSpinner = child.findViewById(R.id.generic_permissions_spinner);
+           actionSpinner.setAdapter(adapter);
+
+           setupPermissionsSpinner(entry.getValue());
+           actionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+               @Override
+               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                 Permissions test =  Permissions.fromPosition(position);
+               }
+               @Override
+               public void onNothingSelected(AdapterView<?> parent) { }
+           });
+            layout.addView(child);
         }
 
     }
 
-    private void setUserInformation(User user) {
-        editedUsername.setText(user.getUsername());
-        editedPassword.setText(user.getPassword());
-        switch (user.getPermission()) {
+    private void setupPermissionsSpinner(Permissions permission){
+        switch (permission) {
             case PARENT:
                 editPermissionsSpinner.setSelection(0);
                 break;
@@ -308,6 +333,13 @@ public class EditDashboardController extends AppCompatActivity {
                 editPermissionsSpinner.setSelection(3);
                 break;
         }
+    }
+
+    private void setUserInformation(User user) {
+        editedUsername.setText(user.getUsername());
+        editedPassword.setText(user.getPassword());
+        setupPermissionsSpinner(user.getPermission());
+
     }
 
     private void setupToolbar() {
