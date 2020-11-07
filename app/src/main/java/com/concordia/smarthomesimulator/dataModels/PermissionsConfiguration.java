@@ -1,8 +1,9 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.SharedPreferences;
+import androidx.annotation.Nullable;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -13,22 +14,22 @@ import static com.concordia.smarthomesimulator.Constants.*;
  * This specifies what minimum permissions are required to perform certain actions.
  */
 public class PermissionsConfiguration {
-    private Map<Action, Permissions> actionPermissionsMap;
+    private final Map<Action, Permissions> actionPermissionsMap;
 
     /**
      * To make a default Permission configuration.
      * More importantly it adds all the keys that depict actions the user can take
      */
     public PermissionsConfiguration() {
-        actionPermissionsMap = new HashMap<>();
+        actionPermissionsMap = new LinkedHashMap<>();
         actionPermissionsMap.put(Action.INTERACT_ANY_WINDOW,DEFAULT_MIN_TO_INTERACT_ANY_WINDOW);
         actionPermissionsMap.put(Action.INTERACT_LOCAL_WINDOW,DEFAULT_MIN_TO_INTERACT_LOCAL_WINDOW);
         actionPermissionsMap.put(Action.INTERACT_ANY_LIGHT,DEFAULT_MIN_TO_INTERACT_ANY_LIGHT);
         actionPermissionsMap.put(Action.INTERACT_LOCAL_LIGHT,DEFAULT_MIN_TO_INTERACT_LOCAL_LIGHT);
         actionPermissionsMap.put(Action.INTERACT_GARAGE,DEFAULT_MIN_TO_INTERACT_GARAGE);
         actionPermissionsMap.put(Action.CHANGE_AWAY_MODE,DEFAULT_MIN_TO_CHANGE_AWAY_MODE);
-        actionPermissionsMap.put(Action.CHANGE_PERMISSIONS_CONFIG,DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG);
         actionPermissionsMap.put(Action.INTERACT_DOOR_LOCK,DEFAULT_MIN_TO_INTERACT_DOOR_LOCK);
+        actionPermissionsMap.put(Action.CHANGE_PERMISSIONS_CONFIG,DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG);
     }
 
     /**
@@ -38,10 +39,36 @@ public class PermissionsConfiguration {
      * @param permissionsConfiguration the permissions configuration
      */
     public PermissionsConfiguration(PermissionsConfiguration permissionsConfiguration) {
-        this.actionPermissionsMap = new HashMap<>();
-        permissionsConfiguration.actionPermissionsMap.forEach(
-                (k,v) -> this.actionPermissionsMap.put(k,v)
-        );
+        this.actionPermissionsMap = new LinkedHashMap<>();
+        if (permissionsConfiguration != null) {
+            permissionsConfiguration.actionPermissionsMap.forEach(
+                    (k,v) -> this.actionPermissionsMap.put(k,v)
+            );
+        }
+    }
+
+    public PermissionsConfiguration(Map<Action, Permissions> actionPermissionsMap) {
+        this.actionPermissionsMap = new LinkedHashMap<>();
+        if (actionPermissionsMap != null) {
+            actionPermissionsMap.forEach(
+                    this.actionPermissionsMap::put
+            );
+        }
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null || obj.getClass() != PermissionsConfiguration.class) {
+            return false;
+        }
+        PermissionsConfiguration configuration = (PermissionsConfiguration) obj;
+        for (Map.Entry<Action, Permissions> entry : actionPermissionsMap.entrySet()) {
+            Permissions other = configuration.getActionPermissionsMap().get(entry.getKey());
+            if (other == null || other.getBitValue() != entry.getValue().getBitValue()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

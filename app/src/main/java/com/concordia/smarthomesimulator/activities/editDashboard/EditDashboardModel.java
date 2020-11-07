@@ -4,15 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.Permissions;
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.UserPreferences;
-import com.concordia.smarthomesimulator.dataModels.Userbase;
+import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.TimeZone;
+import java.util.Map;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -21,7 +19,36 @@ public class EditDashboardModel extends ViewModel{
     private float timeFactor = 1f;
     private LocalDateTime dateTime = LocalDateTime.now();
 
+    private Userbase userbase;
+
     public EditDashboardModel() {
+    }
+
+    /**
+     * Initialize model.
+     *
+     * @param context the context
+     */
+    public void initializeModel(Context context) {
+        userbase = UserbaseHelper.loadUserbase(context);
+    }
+
+    /**
+     * Gets userbase.
+     *
+     * @return the userbase
+     */
+    public Userbase getUserbase() {
+        return userbase;
+    }
+
+    /**
+     * Sets userbase.
+     *
+     * @param userbase the userbase
+     */
+    public void setUserbase(Userbase userbase) {
+        this.userbase = userbase;
     }
 
     /**
@@ -76,6 +103,11 @@ public class EditDashboardModel extends ViewModel{
         timeFactor = AVAILABLE_TIME_FACTORS[0];
     }
 
+    /**
+     * Update simulation date and time based on the preferences.
+     *
+     * @param preferences the preferences
+     */
     public void updateSimulationDateTime(SharedPreferences preferences) {
         LocalDateTime timeNow = LocalDateTime.now();
         int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
@@ -86,16 +118,47 @@ public class EditDashboardModel extends ViewModel{
         dateTime = LocalDateTime.of(year, month, day, hour, minute);
     }
 
+    /**
+     * Gets simulation date time.
+     *
+     * @return the simulation date time
+     */
     public LocalDateTime getSimulationDateTime() {
         return dateTime;
     }
 
+    /**
+     * Sets simulation time.
+     *
+     * @param hour   the hour
+     * @param minute the minute
+     */
     public void setSimulationTime(int hour, int minute) {
         dateTime = LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), hour, minute);
     }
 
+    /**
+     * Sets simulation date.
+     *
+     * @param year  the year
+     * @param month the month
+     * @param day   the day
+     */
     public void setSimulationDate(int year, int month, int day) {
         dateTime = LocalDateTime.of(year, month, day, dateTime.getHour(), dateTime.getMinute());
+    }
+
+    /**
+     * Edit local permissions configuration. The userbase's permissionConfiguration will be updated when the user
+     * clicks the save FAB given that the user has permission.
+     *
+     * @param permissions                   the permissions
+     * @param action                        the action
+     */
+    public void editPermissionsConfiguration(Permissions permissions, Action action){
+        Map<Action, Permissions> actionPermissionsMapToEdit = userbase.getPermissionsConfiguration().getActionPermissionsMap();
+        actionPermissionsMapToEdit.replace(action, permissions);
+        userbase.setPermissionConfiguration(new PermissionsConfiguration(actionPermissionsMapToEdit));
     }
 
     /**

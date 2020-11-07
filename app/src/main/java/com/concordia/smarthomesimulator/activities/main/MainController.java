@@ -138,7 +138,7 @@ public class MainController extends AppCompatActivity {
         }
         // Save the preferences and permission configuration
         user.getUserPreferences().receiveFromContext(sharedPreferences);
-        userbase.getPermissionConfiguration().receiveFromContext(sharedPreferences);
+        userbase.getPermissionsConfiguration().receiveFromContext(sharedPreferences);
         // Save Userbase and Remove Logged In User Information
         UserbaseHelper.saveUserbase(context, userbase);
         UserPreferences.clear(sharedPreferences);

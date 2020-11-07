@@ -58,7 +58,7 @@ public class LoginModel extends ViewModel {
         }
 
         loggedUser.getUserPreferences().sendToContext(preferences);
-        userbase.getPermissionConfiguration().sendToContext(preferences);
+        userbase.getPermissionsConfiguration().sendToContext(preferences);
 
         return true;
     }
