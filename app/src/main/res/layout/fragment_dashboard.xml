@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="32dp"
-            android:background="@color/white">
+            android:background="@android:color/white">
             <TextView
                 android:id="@+id/date"
                 android:layout_width="match_parent"
@@ -144,7 +144,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_edit"
-        android:tint="@color/white"
+        android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

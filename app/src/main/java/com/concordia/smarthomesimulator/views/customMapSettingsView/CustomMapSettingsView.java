@@ -195,7 +195,7 @@ public class CustomMapSettingsView extends ScrollView {
         // If the button is positive it's Primary, otherwise it's Danger
         if (isButtonPositive) {
             buttonColor = enabled ? R.color.primary : R.color.primaryFaded;
-            textColor = R.color.white;
+            textColor = android.R.color.white;
         } else {
             strokeWidth = (int) getResources().getDimension(R.dimen.button_stroke_width);
             buttonColor = enabled ? R.color.danger : R.color.dangerFaded;
