@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
-import java.util.TimeZone;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -19,7 +19,36 @@ public class EditDashboardModel extends ViewModel{
     private float timeFactor = 1f;
     private LocalDateTime dateTime = LocalDateTime.now();
 
+    private Userbase userbase;
+
     public EditDashboardModel() {
+    }
+
+    /**
+     * Initialize model.
+     *
+     * @param context the context
+     */
+    public void initializeModel(Context context) {
+        userbase = UserbaseHelper.loadUserbase(context);
+    }
+
+    /**
+     * Gets userbase.
+     *
+     * @return the userbase
+     */
+    public Userbase getUserbase() {
+        return userbase;
+    }
+
+    /**
+     * Sets userbase.
+     *
+     * @param userbase the userbase
+     */
+    public void setUserbase(Userbase userbase) {
+        this.userbase = userbase;
     }
 
     /**
@@ -125,11 +154,11 @@ public class EditDashboardModel extends ViewModel{
      *
      * @param permissions                   the permissions
      * @param action                        the action
-     * @param localPermissionsConfiguration the local permissions configuration
      */
-    public void editLocalPermissionsConfiguration(Permissions permissions, Action action, PermissionsConfiguration localPermissionsConfiguration){
-        Map<Action, Permissions> actionPermissionsMapToEdit = localPermissionsConfiguration.getActionPermissionsMap();
+    public void editPermissionsConfiguration(Permissions permissions, Action action){
+        Map<Action, Permissions> actionPermissionsMapToEdit = userbase.getPermissionsConfiguration().getActionPermissionsMap();
         actionPermissionsMapToEdit.replace(action, permissions);
+        userbase.setPermissionConfiguration(new PermissionsConfiguration(actionPermissionsMapToEdit));
     }
 
     /**

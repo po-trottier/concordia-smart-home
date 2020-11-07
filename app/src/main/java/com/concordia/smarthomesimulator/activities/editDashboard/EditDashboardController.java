@@ -38,9 +38,7 @@ public class EditDashboardController extends AppCompatActivity {
     private Context context;
     private SharedPreferences preferences;
 
-    private EditDashboardModel editDashboardModel;
-    private Userbase userbase;
-    private PermissionsConfiguration localPermissionsConfiguration;
+    private EditDashboardModel model;
 
     private SwitchCompat statusField;
     private FloatingActionButton saveContext;
@@ -67,11 +65,12 @@ public class EditDashboardController extends AppCompatActivity {
         context = this;
 
         setContentView(R.layout.activity_edit_dashboard);
-        editDashboardModel = new ViewModelProvider(this).get(EditDashboardModel.class);
+        model = new ViewModelProvider(this).get(EditDashboardModel.class);
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        userbase = UserbaseHelper.loadUserbase(context);
-        localPermissionsConfiguration = new PermissionsConfiguration(userbase.getPermissionConfiguration());
+
+        model.initializeModel(context);
+        model.updateSimulationDateTime(preferences);
 
         setupToolbar();
         findControls();
@@ -79,10 +78,11 @@ public class EditDashboardController extends AppCompatActivity {
         setSaveIntent();
         setDeleteUserIntent();
         setCreateUserIntent();
+
         setupPermissionsSpinner();
         setupUsernamesSpinner();
         setupPermissionConfigurationRows();
-        editDashboardModel.updateSimulationDateTime(preferences);
+
         setupTimePicker();
         setupDatePicker();
         setupTimeFactor();
@@ -90,6 +90,7 @@ public class EditDashboardController extends AppCompatActivity {
         setupUsernamesSpinner();
 
         fillKnownValues();
+
         // DO NOT PUT BEFORE "fillKnownValues" !
         setupStatusSwitch();
     }
@@ -121,11 +122,11 @@ public class EditDashboardController extends AppCompatActivity {
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
         // Set the know Date Time
-        LocalDateTime dateTime = editDashboardModel.getSimulationDateTime();
+        LocalDateTime dateTime = model.getSimulationDateTime();
         dateField.setText(dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
         timeField.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
         // Set the time scale factor
-        timeScaleField.setText(editDashboardModel.getTimeFactor() + "x");
+        timeScaleField.setText(model.getTimeFactor() + "x");
     }
 
     private void setSaveIntent() {
@@ -138,13 +139,12 @@ public class EditDashboardController extends AppCompatActivity {
                 String permissions = editPermissionsSpinner.getSelectedItem().toString();
                 String oldUsername = usernameSpinner.getSelectedItem().toString();
                 // Edit user if it was changed
-                int feedbackResource = editDashboardModel.editUser(context, preferences, userbase, username, password, permissions, oldUsername);
+                int feedbackResource = model.editUser(context, preferences, model.getUserbase(), username, password, permissions, oldUsername);
                 if (feedbackResource != -1) {
                     String message = getString(feedbackResource);
                     ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 }
-
                 // Get the Simulation Context Parameters
                 int temperature = DEFAULT_TEMPERATURE;
                 try {
@@ -160,19 +160,18 @@ public class EditDashboardController extends AppCompatActivity {
                 } catch (DateTimeParseException e) {
                     e.printStackTrace();
                 }
-
                 // Edit the parameters
-                editDashboardModel.editParameters(preferences, statusField.isChecked(), temperature, date, time);
-
+                model.editParameters(preferences, statusField.isChecked(), temperature, date, time);
                 // Edit the permissions configuration
-                if (UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)){
-                    userbase.setPermissionConfiguration(localPermissionsConfiguration);
-                    userbase.getPermissionConfiguration().sendToContext(preferences);
+                Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
+                // If the permissions were modified check that the user is allowed
+                if (!model.getUserbase().getPermissionsConfiguration().equals(currentUserbase.getPermissionsConfiguration())
+                    && UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)) {
+                    model.getUserbase().setPermissionConfiguration(model.getUserbase().getPermissionsConfiguration());
+                    model.getUserbase().getPermissionsConfiguration().sendToContext(preferences);
                 }
-
                 // Saving changes
-                UserbaseHelper.saveUserbase(context, userbase);
-
+                UserbaseHelper.saveUserbase(context, model.getUserbase());
                 // Close the activity
                 ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
                 finish();
@@ -191,10 +190,10 @@ public class EditDashboardController extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             final String usernameToDelete = usernameSpinner.getSelectedItem().toString();
-                            if (editDashboardModel.hasSelectedSelf(preferences, usernameToDelete)){
+                            if (model.hasSelectedSelf(preferences, usernameToDelete)){
                                 Toast.makeText(context, R.string.delete_logged_user_warning, Toast.LENGTH_LONG).show();
                             } else {
-                                editDashboardModel.deleteUser(context, userbase, usernameToDelete);
+                                model.deleteUser(context, model.getUserbase(), usernameToDelete);
 
                                 String message = getString(R.string.delete_logged_user_success);
                                 ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
@@ -217,7 +216,7 @@ public class EditDashboardController extends AppCompatActivity {
                 String newPassword = newPasswordField.getText().toString();
                 Permissions newPermissions = Permissions.fromString(newPermissionsSpinner.getSelectedItem().toString());
                 // Add the new User
-                int feedbackResource = editDashboardModel.addUser(context, userbase, new User(newUsername, newPassword, newPermissions));
+                int feedbackResource = model.addUser(context, model.getUserbase(), new User(newUsername, newPassword, newPermissions));
                 String message = getString(feedbackResource);
                 ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
@@ -257,7 +256,7 @@ public class EditDashboardController extends AppCompatActivity {
         dateField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalDateTime timeNow = editDashboardModel.getSimulationDateTime();
+                LocalDateTime timeNow = model.getSimulationDateTime();
                 // IMPORTANT: For some reason the month is shifted by 1 in the picker ?
                 // This is why we set the month to be -1 when we initialize the control
                 // and why we set the simulation date to be +1
@@ -266,7 +265,7 @@ public class EditDashboardController extends AppCompatActivity {
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            editDashboardModel.setSimulationDate(year, month + 1, dayOfMonth);
+                            model.setSimulationDate(year, month + 1, dayOfMonth);
                             fillKnownValues();
                         }
                     },
@@ -283,13 +282,13 @@ public class EditDashboardController extends AppCompatActivity {
         timeField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalDateTime timeNow = editDashboardModel.getSimulationDateTime();
+                LocalDateTime timeNow = model.getSimulationDateTime();
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
                         context,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                editDashboardModel.setSimulationTime(hourOfDay, minute);
+                                model.setSimulationTime(hourOfDay, minute);
                                 fillKnownValues();
                             }
                         },
@@ -303,12 +302,12 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupTimeFactor() {
-        editDashboardModel.setTimeFactor(preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
+        model.setTimeFactor(preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
 
         timeScaleMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editDashboardModel.decreaseTimeFactor();
+                model.decreaseTimeFactor();
                 fillKnownValues();
             }
         });
@@ -316,7 +315,7 @@ public class EditDashboardController extends AppCompatActivity {
         timeScalePlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editDashboardModel.increaseTimeFactor();
+                model.increaseTimeFactor();
                 fillKnownValues();
             }
         });
@@ -328,30 +327,27 @@ public class EditDashboardController extends AppCompatActivity {
             R.layout.support_simple_spinner_dropdown_item,
             getResources().getStringArray(R.array.permissions_spinner)
         );
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         editPermissionsSpinner.setAdapter(adapter);
         newPermissionsSpinner.setAdapter(adapter);
     }
 
     private void setupUsernamesSpinner(){
-        Userbase userbase = UserbaseHelper.loadUserbase(context);
-        List<String> users = userbase.getUsernames();
+        List<String> users = model.getUserbase().getUsernames();
         Collections.sort(users);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
             context,
             R.layout.support_simple_spinner_dropdown_item,
             users
         );
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         usernameSpinner.setAdapter(adapter);
 
         // Set known information about the selected User to Edit
-        setUserInformation(userbase.getUserFromUsername(users.get(0)));
+        setUserInformation(model.getUserbase().getUserFromUsername(users.get(0)));
 
         usernameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setUserInformation(userbase.getUserFromUsername(users.get(position)));
+                setUserInformation(model.getUserbase().getUserFromUsername(users.get(position)));
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
@@ -359,32 +355,33 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupPermissionConfigurationRows() {
-        TableLayout layout = findViewById(R.id.permissions_configuration_table);
+        LinearLayout layout = findViewById(R.id.permissions_configuration_table);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                context,
-                R.layout.support_simple_spinner_dropdown_item,
-                getResources().getStringArray(R.array.permissions_spinner)
+            context,
+            R.layout.support_simple_spinner_dropdown_item,
+            getResources().getStringArray(R.array.permissions_spinner)
         );
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        for(Map.Entry<Action, Permissions> entry : localPermissionsConfiguration.getActionPermissionsMap().entrySet()) {
-           View child = inflate(context, R.layout.generic_permissions_row, null);
+        // Add children rows
+        for(Map.Entry<Action, Permissions> entry : model.getUserbase().getPermissionsConfiguration().getActionPermissionsMap().entrySet()) {
+           View child = inflate(context, R.layout.adapter_permissions_row, null);
 
-           TextView actionName = child.findViewById(R.id.generic_action_name);
+           TextView actionName = child.findViewById(R.id.permission_action_name);
            actionName.setText(entry.getKey().getDescription().replace("_", " "));
 
-           Spinner permissionsSpinner = child.findViewById(R.id.generic_permissions_spinner);
+           Spinner permissionsSpinner = child.findViewById(R.id.permission_level_spinner);
            permissionsSpinner.setAdapter(adapter);
 
            setupPermissionsSpinnerSelection(entry.getValue(), permissionsSpinner);
            permissionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                @Override
                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 editDashboardModel.editLocalPermissionsConfiguration(Permissions.fromPosition(position), entry.getKey(), localPermissionsConfiguration);
+                 model.editPermissionsConfiguration(Permissions.fromPosition(position), entry.getKey());
                }
                @Override
                public void onNothingSelected(AdapterView<?> parent) { }
            });
-            layout.addView(child);
+
+           layout.addView(child);
         }
 
     }

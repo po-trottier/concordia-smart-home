@@ -32,7 +32,11 @@ public class Userbase {
      *
      * @return the permission configuration
      */
-    public PermissionsConfiguration getPermissionConfiguration() {
+    public PermissionsConfiguration getPermissionsConfiguration() {
+        // Make sure to create the permissions if they don't exist
+        if (permissionsConfiguration == null) {
+            permissionsConfiguration = new PermissionsConfiguration();
+        }
         return permissionsConfiguration;
     }
 

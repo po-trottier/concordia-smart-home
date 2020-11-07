@@ -64,20 +64,22 @@ public final class UserbaseHelper {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         int loggedUserPermissions = preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0);
         int minPermissionsForAction = preferences.getInt(action.getDescription(),0);
-
+        // Default log message
+        String message = String.format("User was stopped from performing permission-restricted action: %s", action.getDescription());
+        // Something went wrong
         if (loggedUserPermissions == 0 || minPermissionsForAction == 0){
-            // todo proper exception handling for next delivery
-            Toast.makeText(context, "Something is wrong with the preferences",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.generic_error),Toast.LENGTH_SHORT).show();
             return false;
         }
+        // User has required permissions
         if ((loggedUserPermissions & minPermissionsForAction) == minPermissionsForAction){
-            ActivityLogHelper.add(context, new LogEntry("Permission",
-                    String.format("User performed permission-restricted action: %s", action.getDescription()), LogImportance.MINOR));
+            message = String.format("User performed permission-restricted action: %s", action.getDescription());
+            ActivityLogHelper.add(context, new LogEntry("Permission", message, LogImportance.MINOR));
             return true;
         }
-        Toast.makeText(context, String.format("You cannot perform action: %s", action.getDescription()),Toast.LENGTH_SHORT).show();
-        ActivityLogHelper.add(context, new LogEntry("Permission",
-                String.format("User was stopped from performing permission-restricted action: %s", action.getDescription()), LogImportance.IMPORTANT));
+        // USer doesn't have permissions
+        Toast.makeText(context, String.format(context.getString(R.string.permission_edit_not_allows), action.getDescription()),Toast.LENGTH_SHORT).show();
+        ActivityLogHelper.add(context, new LogEntry("Permission", message, LogImportance.IMPORTANT));
         return false;
     }
 

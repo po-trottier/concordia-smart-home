@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.SharedPreferences;
+import androidx.annotation.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import static com.concordia.smarthomesimulator.Constants.*;
  * This specifies what minimum permissions are required to perform certain actions.
  */
 public class PermissionsConfiguration {
-    private Map<Action, Permissions> actionPermissionsMap;
+    private final Map<Action, Permissions> actionPermissionsMap;
 
     /**
      * To make a default Permission configuration.
@@ -44,6 +45,30 @@ public class PermissionsConfiguration {
                     (k,v) -> this.actionPermissionsMap.put(k,v)
             );
         }
+    }
+
+    public PermissionsConfiguration(Map<Action, Permissions> actionPermissionsMap) {
+        this.actionPermissionsMap = new LinkedHashMap<>();
+        if (actionPermissionsMap != null) {
+            actionPermissionsMap.forEach(
+                    this.actionPermissionsMap::put
+            );
+        }
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null || obj.getClass() != PermissionsConfiguration.class) {
+            return false;
+        }
+        PermissionsConfiguration configuration = (PermissionsConfiguration) obj;
+        for (Map.Entry<Action, Permissions> entry : actionPermissionsMap.entrySet()) {
+            Permissions other = configuration.getActionPermissionsMap().get(entry.getKey());
+            if (other == null || other.getBitValue() != entry.getValue().getBitValue()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
