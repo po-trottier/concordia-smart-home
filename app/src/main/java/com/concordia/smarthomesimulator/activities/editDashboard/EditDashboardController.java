@@ -108,9 +108,12 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         setupAwaySwitch();
     }
 
+
     @Override
-    public void register(IObserver newObserver) {
-        observers.add(newObserver);
+    public void register(IObserver newObserver)
+    {
+        ObserverHelper.addObserver(newObserver);
+        observers = ObserverHelper.getObservers();
     }
 
     @Override
@@ -126,9 +129,9 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     }
 
     private void initializeObservers() {
-        observers = new ArrayList<>();
-        if(ObserverHelper.getObservers().size() != 0){
-            for(IObserver observer :  ObserverHelper.getObservers()){
+        observers = ObserverHelper.getObservers();
+        if(observers.size() != 0){
+            for(IObserver observer :  observers){
                 register(observer);
             }
         }
@@ -296,7 +299,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
 
     private void setAwaySwitchRestrictions(){
         String error = "";
-        if(observers.size() == 0){
+        if(HouseLayoutHelper.getSelectedLayout(context) == null){
             awayStatusField.setAlpha(.5f);
             awayStatusField.setChecked(false);
             awayStatusField.setEnabled(false);
@@ -331,7 +334,9 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     }
 
     private boolean isHouseEmpty() {
-        if (observers.size() != 0) {
+        HouseLayout houseLayout = HouseLayoutHelper.getSelectedLayout(context);
+
+        if (houseLayout != null) {
             ArrayList<Inhabitant> inhabitants = HouseLayoutHelper.getSelectedLayout(context).getAllInhabitants();
             return inhabitants.stream().allMatch(Inhabitant::isIntruder);
         }

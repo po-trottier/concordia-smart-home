@@ -21,14 +21,12 @@ import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
-import com.concordia.smarthomesimulator.helpers.ObserverHelper;
-import com.concordia.smarthomesimulator.interfaces.IObserver;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MapController extends Fragment implements IObserver {
+public class MapController extends Fragment {
 
     private View view;
     private MapModel mapModel;
@@ -41,8 +39,6 @@ public class MapController extends Fragment implements IObserver {
         this.inflater = inflater;
         view = this.inflater.inflate(R.layout.fragment_map, container, false);
 
-        ObserverHelper.addObserver(this);
-
         return view;
     }
 
@@ -50,19 +46,6 @@ public class MapController extends Fragment implements IObserver {
     public void onResume(){
         updateContent();
         super.onResume();
-    }
-
-    @Override
-    public void updateAwayMode(boolean awayMode) {
-        if(awayMode){
-            HouseLayout updatedHouseLayout =  HouseLayoutHelper.getSelectedLayout(context);
-            for(Room room : updatedHouseLayout.getRooms()){
-                for(IDevice device : room.getDevices()){
-                    device.setIsOpened(false);
-                }
-            }
-            HouseLayoutHelper.saveHouseLayout(context, updatedHouseLayout);
-        }
     }
 
     private void updateContent() {

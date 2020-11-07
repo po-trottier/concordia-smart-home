@@ -13,13 +13,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
+import com.concordia.smarthomesimulator.dataModels.HouseLayout;
+import com.concordia.smarthomesimulator.dataModels.IDevice;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.LogImportance;
+import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.ObserverHelper;
+import com.concordia.smarthomesimulator.interfaces.IObserver;
 import com.concordia.smarthomesimulator.views.customDateTimeView.CustomDateTimeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class DashboardController extends Fragment {
+public class DashboardController extends Fragment  implements IObserver {
 
     private DashboardModel dashboardModel;
     private View view;
@@ -37,6 +43,8 @@ public class DashboardController extends Fragment {
         context = getActivity();
         preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
+        ObserverHelper.addObserver(this);
+
         findControls();
         setKnownValues();
         setupEditIntent();
@@ -48,6 +56,19 @@ public class DashboardController extends Fragment {
     public void onResume(){
         super.onResume();
         setKnownValues();
+    }
+
+    @Override
+    public void updateAwayMode(boolean awayMode) {
+        if(awayMode){
+            HouseLayout updatedHouseLayout =  HouseLayoutHelper.getSelectedLayout(context);
+            for(Room room : updatedHouseLayout.getRooms()){
+                for(IDevice device : room.getDevices()){
+                    device.setIsOpened(false);
+                }
+            }
+            HouseLayoutHelper.saveHouseLayout(context, updatedHouseLayout);
+        }
     }
 
     private void findControls() {

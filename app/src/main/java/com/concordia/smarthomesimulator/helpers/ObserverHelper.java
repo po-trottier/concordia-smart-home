@@ -28,8 +28,28 @@ public  class ObserverHelper {
     public static void addObserver(IObserver observer){
         if (observers == null) {
             observers = new ArrayList<>();
+            observers.add(observer);
         }
-        observers.add(observer);
+        else if(verifyNewObserver(observer.getClass().toString())){
+            observers.add(observer);
+        }
+    }
+
+    /**
+     * Verifies whether an observer has already been added
+     *
+     * @param className name of the observer
+     * @return boolean true if no duplicate observer
+     */
+    private static boolean verifyNewObserver(String className){
+        boolean verification = true;
+        for(IObserver observer : observers){
+            if(className.equals(observer.getClass().toString())){
+                verification = false;
+                break;
+            }
+        }
+        return verification;
     }
 }
 
