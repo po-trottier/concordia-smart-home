@@ -272,7 +272,7 @@ public class EditDashboardController extends AppCompatActivity {
            View child = inflate(context, R.layout.generic_permissions_row, null);
 
            TextView actionName = child.findViewById(R.id.generic_action_name);
-           actionName.setText(entry.getKey().getDescription());
+           actionName.setText(entry.getKey().getDescription().replace("_", " "));
 
            Spinner permissionsSpinner = child.findViewById(R.id.generic_permissions_spinner);
            permissionsSpinner.setAdapter(adapter);
