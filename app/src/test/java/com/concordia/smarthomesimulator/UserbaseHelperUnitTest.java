@@ -14,11 +14,12 @@ public class UserbaseHelperUnitTest {
     public void userbaseHelperCanGetUserWithCredentials() {
         // Setup
         List<User> users = new ArrayList<>();
+        User userToGet = new User("b","b",Permissions.STRANGER);
         users.add(new User("a","a",Permissions.STRANGER));
-        users.add(new User("b","b",Permissions.STRANGER));
+        users.add(userToGet);
         users.add(new User("c","c",Permissions.STRANGER));
         Userbase userbase = new Userbase(users);
         // Test
-        assertEquals(new User("b","b",Permissions.STRANGER), getUserWithCredentials("b","b", userbase));
+        assertEquals(userToGet, getUserWithCredentials("b","b", userbase));
     }
 }

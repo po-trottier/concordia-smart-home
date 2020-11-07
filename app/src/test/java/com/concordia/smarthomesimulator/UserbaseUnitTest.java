@@ -39,24 +39,26 @@ public class UserbaseUnitTest {
     public void userbaseReturnsProperUserFromUsername() {
         // Setup
         List<User> users = new ArrayList<>();
+        User userToGet = new User("b","b",Permissions.STRANGER);
         users.add(new User("a","a",Permissions.STRANGER));
-        users.add(new User("b","b",Permissions.STRANGER));
+        users.add(userToGet);
         users.add(new User("c","c",Permissions.STRANGER));
         Userbase userbase = new Userbase(users);
         // Test
-        assertEquals(new User("a","a",Permissions.STRANGER), userbase.getUserFromUsername("a"));
+        assertEquals(userToGet, userbase.getUserFromUsername("b"));
     }
 
     @Test
     public void userbaseDoesContainUser() {
         // Setup
         List<User> users = new ArrayList<>();
+        User userToGet = new User("b","b",Permissions.STRANGER);
         users.add(new User("a","a",Permissions.STRANGER));
-        users.add(new User("b","b",Permissions.STRANGER));
+        users.add(userToGet);
         users.add(new User("c","c",Permissions.STRANGER));
         Userbase userbase = new Userbase(users);
         // Test
-        assertTrue(userbase.containsUser(new User("c","c",Permissions.STRANGER)));
+        assertTrue(userbase.containsUser(userToGet));
     }
 
     @Test
