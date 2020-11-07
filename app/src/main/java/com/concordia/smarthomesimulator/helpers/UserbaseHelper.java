@@ -75,7 +75,7 @@ public final class UserbaseHelper {
                     String.format("User performed permission-restricted action: %s", action.getDescription()), LogImportance.MINOR));
             return true;
         }
-        Toast.makeText(context, R.string.wrong_permissions,Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, String.format("You cannot perform action: %s", action.getDescription()),Toast.LENGTH_SHORT).show();
         ActivityLogHelper.add(context, new LogEntry("Permission",
                 String.format("User was stopped from performing permission-restricted action: %s", action.getDescription()), LogImportance.IMPORTANT));
         return false;
