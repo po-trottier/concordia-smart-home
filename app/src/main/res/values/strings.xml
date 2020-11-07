@@ -149,7 +149,7 @@
 
     <string name="title_activity_edit_dashboard">Edit Simulation Context</string>
 
-    <string name="missing_house_layout">You must first open a house layout to use this feature.\n\nYou might also simply need to visit the layout page.</string>
+    <string name="missing_house_layout">You must first open a house layout to use this feature.</string>
     <string name="away_disable_message">Inhabitants were detected in the house layout.\n\nPlease remove any inhabitant from the layout before using this feature."</string>
     <string name="away_message_title">\"Away Mode\" cannot be activated</string>
     <string name="edit_text_away_mode_status">Away Mode</string>
@@ -181,7 +181,6 @@
 
     <string name="about_name">Name</string>
     <string name="about_student_id">Student ID</string>
-
 
     <string name="permission_title">Edit Permissions</string>
     <string name="permission_title_permission_row">Permission</string>

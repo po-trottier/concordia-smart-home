@@ -68,7 +68,7 @@ public final class UserbaseHelper {
         String message = String.format("User was stopped from performing permission-restricted action: %s", action.getDescription());
         // Something went wrong
         if (loggedUserPermissions == 0 || minPermissionsForAction == 0){
-            Toast.makeText(context, context.getString(R.string.generic_error),Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.generic_error_message),Toast.LENGTH_SHORT).show();
             return false;
         }
         // User has required permissions
