@@ -23,7 +23,7 @@
         android:id="@+id/clear_logs_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/activity_all_margin"
         android:src="@drawable/ic_delete_forever"
         android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

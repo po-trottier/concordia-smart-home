@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:gravity="center_vertical"
         android:orientation="horizontal">
         <TextView
@@ -22,7 +22,7 @@
         <Spinner
             android:id="@+id/alert_add_device_type"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/field_height"
             android:layout_weight="0.6"
             android:background="@drawable/rounded_text_field_background"
             android:textSize="16sp"/>
@@ -32,7 +32,7 @@
         android:id="@+id/alert_add_device_orientation_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="gone">
@@ -46,7 +46,7 @@
         <Spinner
             android:id="@+id/alert_add_device_orientation"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/field_height"
             android:layout_weight="0.6"
             android:background="@drawable/rounded_text_field_background"
             android:textSize="16sp"/>
@@ -67,10 +67,10 @@
         <EditText
             android:id="@+id/alert_add_device_x"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/field_height"
             android:layout_weight="0.6"
             android:paddingVertical="8dp"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/activity_horizontal_margin"
             android:background="@drawable/rounded_text_field_background"
             android:textSize="16sp"
             android:inputType="number"
@@ -92,10 +92,10 @@
         <EditText
             android:id="@+id/alert_add_device_y"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/field_height"
             android:layout_weight="0.6"
             android:paddingVertical="8dp"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/activity_horizontal_margin"
             android:background="@drawable/rounded_text_field_background"
             android:textSize="16sp"
             android:inputType="number"

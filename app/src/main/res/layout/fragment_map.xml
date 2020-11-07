@@ -23,7 +23,7 @@
         android:translationY="48dp"
         app:layout_anchor="@id/bottom_sheet"
         app:layout_anchorGravity="top|end"
-        app:elevation="16dp"
+        app:elevation="@dimen/fab_elevation"
         android:src="@drawable/ic_edit"
         android:tint="@android:color/white"
         android:visibility="gone"/>
