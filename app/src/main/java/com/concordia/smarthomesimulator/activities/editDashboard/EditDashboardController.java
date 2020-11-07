@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -29,7 +28,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -115,6 +113,23 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         setupAwaySwitch();
     }
 
+    @Override
+    public void register(IObserver newObserver) {
+        observers.add(newObserver);
+    }
+
+    @Override
+    public void unregister(IObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObserver() {
+        for(IObserver observer : observers){
+            observer.updateAwayMode(awayStatusField.isChecked());
+        }
+    }
+
     private void findControls() {
         awayStatusField = findViewById(R.id.away_on_off);
         awayStatusText = findViewById(R.id.away_on_off_text);
@@ -163,6 +178,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                 String password = editedPassword.getText().toString();
                 String permissions = editPermissionsSpinner.getSelectedItem().toString();
                 String oldUsername = usernameSpinner.getSelectedItem().toString();
+
                 // Edit user if it was changed
                 int feedbackResource = model.editUser(context, preferences, model.getUserbase(), username, password, permissions, oldUsername);
                 if (feedbackResource != -1) {
@@ -186,7 +202,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                     e.printStackTrace();
                 }
                 // Edit the parameters
-                model.editParameters(preferences, statusField.isChecked(), temperature, date, time);
+                model.editParameters(preferences, statusField.isChecked(), awayStatusField.isChecked(), temperature, date, time);
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
@@ -517,22 +533,5 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                 }
             });
         }
-    }
-
-    @Override
-    public void register(IObserver newObserver) {
-        observers.add(newObserver);
-    }
-
-    @Override
-    public void unregister(IObserver observer) {
-        observers.remove(observers.indexOf(observer));
-    }
-
-    @Override
-    public void notifyObserver() {
-            for(IObserver observer : observers){
-                observer.updateAwayMode(awayStatusField.isChecked());
-            }
     }
 }
