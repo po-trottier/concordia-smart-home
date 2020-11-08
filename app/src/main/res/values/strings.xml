@@ -199,8 +199,10 @@
     <string name="wrong_permissions">You do not have the proper permissions to do this.</string>
 
     <string name="intruder_category">Intruder Alerts</string>
-    <string name="intruder_title">Intruder Alerts</string>
+    <string name="intruder_title">Intruder Alert</string>
     <string name="intruder_text">Intruder detected : Contacting authorities %d in minutes</string>
+    <string name="authorities_title">Authorities Contacted</string>
+    <string name="authorities_text">The authorities have been contacted.</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>
