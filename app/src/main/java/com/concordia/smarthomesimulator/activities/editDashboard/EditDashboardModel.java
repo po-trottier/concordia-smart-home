@@ -255,8 +255,9 @@ public class EditDashboardModel extends ViewModel{
      * @param date        the date
      * @param time        the time
      */
-    public void editParameters(SharedPreferences preferences, boolean status, int temperature, LocalDate date, LocalTime time) {
+    public void editParameters(SharedPreferences preferences, boolean status, boolean awayMode, int temperature, LocalDate date, LocalTime time) {
         SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
         editor.putBoolean(PREFERENCES_KEY_STATUS, status);
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, date.getYear());

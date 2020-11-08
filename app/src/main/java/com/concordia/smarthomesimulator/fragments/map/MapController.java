@@ -18,10 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
-import com.concordia.smarthomesimulator.dataModels.HouseLayout;
-import com.concordia.smarthomesimulator.dataModels.LogEntry;
-import com.concordia.smarthomesimulator.dataModels.LogImportance;
-import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -39,7 +36,6 @@ public class MapController extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         mapModel = new ViewModelProvider(this).get(MapModel.class);
-
         this.inflater = inflater;
         view = this.inflater.inflate(R.layout.fragment_map, container, false);
 

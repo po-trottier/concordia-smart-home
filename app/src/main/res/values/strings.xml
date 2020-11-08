@@ -149,6 +149,12 @@
 
     <string name="title_activity_edit_dashboard">Edit Simulation Context</string>
 
+    <string name="missing_house_layout">You must first open a house layout to use this feature.</string>
+    <string name="away_disable_message">Inhabitants were detected in the house layout.\n\nPlease remove any inhabitant from the layout before using this feature."</string>
+    <string name="away_message_title">\"Away Mode\" cannot be activated</string>
+    <string name="edit_text_away_mode_status">Away Mode</string>
+    <string name="away_mode_on">On</string>
+    <string name="away_mode_off">Off</string>
     <string name="edit_text_simulation_status">Simulation Status</string>
     <string name="simulation_status_started">Started</string>
     <string name="simulation_status_stopped">Stopped</string>
@@ -164,7 +170,8 @@
     <string name="generic_add">Add</string>
     <string name="generic_move">Move</string>
     <string name="generic_remove">Remove</string>
-    <string name="generic_error">An unexpected error occurred. Please try again later.</string>
+    <string name="generic_error">Error</string>
+    <string name="generic_error_message">An unexpected error occurred. Please try again later.</string>
 
     <string name="dashboard_context">Simulation Context</string>
     <string name="dashboard_logged_user">Currently Logged In</string>
@@ -174,7 +181,6 @@
 
     <string name="about_name">Name</string>
     <string name="about_student_id">Student ID</string>
-
 
     <string name="permission_title">Edit Permissions</string>
     <string name="permission_title_permission_row">Permission</string>

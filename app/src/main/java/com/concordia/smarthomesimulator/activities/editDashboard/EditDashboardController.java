@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -17,7 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.ObserverHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.interfaces.IObserver;
+import com.concordia.smarthomesimulator.interfaces.ISubject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -25,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +37,18 @@ import java.util.Map;
 import static android.view.View.inflate;
 import static com.concordia.smarthomesimulator.Constants.*;
 
-public class EditDashboardController extends AppCompatActivity {
+public class EditDashboardController extends AppCompatActivity implements ISubject {
 
     private Context context;
     private SharedPreferences preferences;
 
     private EditDashboardModel model;
 
+    private ArrayList<IObserver> observers;
+
+    private LinearLayout awayErrorLayout;
+    private ImageButton awayDisabledHint;
+    private SwitchCompat awayStatusField;
     private SwitchCompat statusField;
     private FloatingActionButton saveContext;
     private FloatingActionButton timeScaleMinus;
@@ -53,6 +62,7 @@ public class EditDashboardController extends AppCompatActivity {
     private EditText newPasswordField;
     private EditText dateField;
     private EditText timeField;
+    private TextView awayStatusText;
     private TextView timeScaleField;
     private TextView statusText;
     private Spinner editPermissionsSpinner;
@@ -68,6 +78,8 @@ public class EditDashboardController extends AppCompatActivity {
         model = new ViewModelProvider(this).get(EditDashboardModel.class);
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+
+        initializeObservers();
 
         model.initializeModel(context);
         model.updateSimulationDateTime(preferences);
@@ -93,9 +105,43 @@ public class EditDashboardController extends AppCompatActivity {
 
         // DO NOT PUT BEFORE "fillKnownValues" !
         setupStatusSwitch();
+        setupAwaySwitch();
+    }
+
+
+    @Override
+    public void register(IObserver newObserver)
+    {
+        ObserverHelper.addObserver(newObserver);
+        observers = ObserverHelper.getObservers();
+    }
+
+    @Override
+    public void unregister(IObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObserver() {
+        for(IObserver observer : observers){
+            observer.updateAwayMode(awayStatusField.isChecked());
+        }
+    }
+
+    private void initializeObservers() {
+        observers = ObserverHelper.getObservers();
+        if(observers.size() != 0){
+            for(IObserver observer :  observers){
+                register(observer);
+            }
+        }
     }
 
     private void findControls() {
+        awayStatusField = findViewById(R.id.away_on_off);
+        awayStatusText = findViewById(R.id.away_on_off_text);
+        awayDisabledHint = findViewById(R.id.away_disable_hint);
+        awayErrorLayout = findViewById(R.id.away_disable_layout);
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
@@ -119,6 +165,8 @@ public class EditDashboardController extends AppCompatActivity {
     private void fillKnownValues() {
         // Set the simulation status
         statusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_STATUS, false));
+        // Set the away mode
+        awayStatusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false));
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
         // Set the know Date Time
@@ -138,6 +186,7 @@ public class EditDashboardController extends AppCompatActivity {
                 String password = editedPassword.getText().toString();
                 String permissions = editPermissionsSpinner.getSelectedItem().toString();
                 String oldUsername = usernameSpinner.getSelectedItem().toString();
+
                 // Edit user if it was changed
                 int feedbackResource = model.editUser(context, preferences, model.getUserbase(), username, password, permissions, oldUsername);
                 if (feedbackResource != -1) {
@@ -161,7 +210,7 @@ public class EditDashboardController extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 // Edit the parameters
-                model.editParameters(preferences, statusField.isChecked(), temperature, date, time);
+                model.editParameters(preferences, statusField.isChecked(), awayStatusField.isChecked(), temperature, date, time);
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
@@ -228,6 +277,82 @@ public class EditDashboardController extends AppCompatActivity {
                 setupUsernamesSpinner();
             }
         });
+    }
+
+    private void setupAwaySwitch() {
+        setAwaySwitchRestrictions();
+        setAwayStatus();
+        awayStatusField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(awayStatusField.isChecked()){
+                    ActivityLogHelper.add(context, new LogEntry("Away Mode", "Away mode is activated", LogImportance.IMPORTANT));
+                }
+                else{
+                    ActivityLogHelper.add(context, new LogEntry("Away Mode", "Away mode is deactivated", LogImportance.IMPORTANT));
+                }
+                setAwaySwitchRestrictions();
+                setAwayStatus();
+            }
+        });
+    }
+
+    private void setAwaySwitchRestrictions(){
+        String error = "";
+        if(HouseLayoutHelper.getSelectedLayout(context) == null){
+            awayStatusField.setAlpha(.5f);
+            awayStatusField.setChecked(false);
+            awayStatusField.setEnabled(false);
+            awayErrorLayout.setVisibility(View.VISIBLE);
+            error = getString(R.string.missing_house_layout);
+        }
+        else if(!isHouseEmpty()){
+            awayStatusField.setAlpha(.5f);
+            awayStatusField.setChecked(false);
+            awayStatusField.setEnabled(false);
+            awayErrorLayout.setVisibility(View.VISIBLE);
+            error = getString(R.string.away_disable_message);
+        }
+        else{
+            awayStatusField.setAlpha(1.0f);
+            awayStatusField.setEnabled(true);
+            awayErrorLayout.setVisibility(View.GONE);
+            notifyObserver();
+        }
+        String finalError = error;
+        awayDisabledHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(getString(R.string.away_message_title))
+                    .setMessage(finalError)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .create();
+                dialog.show();
+            }
+        });
+    }
+
+    private boolean isHouseEmpty() {
+        HouseLayout houseLayout = HouseLayoutHelper.getSelectedLayout(context);
+
+        if (houseLayout != null) {
+            ArrayList<Inhabitant> inhabitants = HouseLayoutHelper.getSelectedLayout(context).getAllInhabitants();
+            return inhabitants.stream().allMatch(Inhabitant::isIntruder);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private void setAwayStatus(){
+        if (awayStatusField.isChecked()) {
+            awayStatusText.setText(getString(R.string.away_mode_on));
+            awayStatusText.setTextColor(getColor(R.color.primary));
+        } else {
+            awayStatusText.setText(getString(R.string.away_mode_off));
+            awayStatusText.setTextColor(getColor(R.color.charcoal));
+        }
     }
 
     private void setupStatusSwitch() {
