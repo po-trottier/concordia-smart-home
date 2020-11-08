@@ -12,38 +12,8 @@ This simulator was developed as a requirement for the SOEN343 course given at Co
 
 ## Documentation
 
-The following documentation will graphically describe the general organisation of the program in the form of a Domain Model diagram, different Class diagrams, and a sequence diagram describing the Simulation context.
-
-#### Default accounts (username, password):  
+__Default accounts (username, password):__  
 - parent, parent  
 - child, child  
 - guest, guest  
-- stranger, stranger  
-
-#### Domain Model
-
-![Domain Model](./documentation/domain-model.png "Domain Model")
-
-#### Sequence diagram (Context of the Simulation)
-
-![Sequence Diagram](./documentation/sequence-diagram.png "Sequence Diagram")
-
-#### Map Model Class Diagram
-
-![Map Model Class Diagram](./documentation/class-map-model.png "Map Model Class Diagram")
-
-#### Login Model Class Diagram
-
-![Login Model Class Diagram](./documentation/class-login-model.png "Login Model Class Diagram")
-
-#### Layout Helper Class Diagram
-
-![Map Model Class Diagram](./documentation/class-map-model.png "Map Model Class Diagram")
-
-#### Log Helper Class Diagram
-
-![Log Model Class Diagram](./documentation/class-log-model.PNG "Log Model Class Diagram")
-
-#### Dashboard Model Class Diagram
-
-![Dashboard Model](./documentation/class-dashboard-model.png "Dashboard Model")
+- stranger, stranger
