@@ -6,11 +6,15 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
@@ -328,7 +332,8 @@ public class CustomMapSettingsView extends ScrollView {
                         public void onClick(DialogInterface dialog, int which) {
                             EditText nameView = customView.findViewById(R.id.alert_add_inhabitant_name);
                             CheckBox intruderCheckbox = customView.findViewById(R.id.is_intruder_checkbox);
-                            model.addInhabitant(context, nameView.getText().toString().trim(), intruderCheckbox.isChecked());
+                            boolean isIntruder = intruderCheckbox.isChecked();
+                            model.addInhabitant(context, nameView.getText().toString().trim(), isIntruder);
                         }
                     })
                     .create();

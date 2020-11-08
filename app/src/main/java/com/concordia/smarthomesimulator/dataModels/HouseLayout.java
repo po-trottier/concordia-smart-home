@@ -14,6 +14,7 @@ public class HouseLayout {
 
     private String name;
     private final ArrayList<Room> rooms;
+    private AwayModeEntry awayModeEntry;
 
     /**
      * Instantiates a new House layout.
@@ -24,7 +25,6 @@ public class HouseLayout {
         this.name = name;
 
         rooms = new ArrayList<>();
-
         // Create the default rooms (Outdoors and Garage)
         Room garage = new Room(DEFAULT_NAME_GARAGE, new Geometry(-1, -1));
         Room outdoors = new Room(DEFAULT_NAME_OUTDOORS, new Geometry(-1, -1));
@@ -118,6 +118,24 @@ public class HouseLayout {
                return;
            }
         }
+    }
+
+    /**
+     * Gets awayModeEntry
+     *
+     * @return awayModeEntry    parameters for away mode
+     */
+    public AwayModeEntry getAwayModeEntry() {
+        return awayModeEntry;
+    }
+
+    /**
+     * Sets awayModeEntry
+     *
+     * @param awayModeEntry     parameters for away mode
+     */
+    public void setAwayModeEntry(AwayModeEntry awayModeEntry) {
+        this.awayModeEntry = awayModeEntry;
     }
 
     /**

@@ -11,5 +11,5 @@ public interface IObserver {
      *
      * @param awayMode away mode
      */
-     void updateAwayMode(boolean awayMode);
+     void updateAwayMode(boolean awayMode, String callTimer);
 }

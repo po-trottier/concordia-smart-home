@@ -19,6 +19,7 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.IntruderNotificationHelper;
 import com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -138,7 +139,10 @@ public class EditMapController extends AppCompatActivity {
                         editMapModel.updateHouseLayoutName(layoutName.getText().toString().trim());
                         if (!HouseLayoutHelper.isLayoutNameDefault(editMapModel.getHouseLayout())) {
                             if (HouseLayoutHelper.isLayoutNameUnique(context, editMapModel.getHouseLayout())) {
-                                editMapModel.saveHouseLayout(context);
+                                 editMapModel.saveHouseLayout(context);
+                                if(HouseLayoutHelper.checkForIntruders(context)){
+                                    IntruderNotificationHelper.notifyIntruder(context);
+                                }
                                 finish();
                             } else {
                                 final AlertDialog confirm = new AlertDialog.Builder(context)
@@ -154,6 +158,9 @@ public class EditMapController extends AppCompatActivity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             editMapModel.saveHouseLayout(context);
+                                            if(HouseLayoutHelper.checkForIntruders(context)){
+                                                IntruderNotificationHelper.notifyIntruder(context);
+                                            }
                                             finish();
                                         }
                                     }).create();

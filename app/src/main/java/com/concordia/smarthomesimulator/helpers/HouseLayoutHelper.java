@@ -2,6 +2,8 @@ package com.concordia.smarthomesimulator.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
 
@@ -130,8 +132,19 @@ public class HouseLayoutHelper {
      */
     public  static boolean saveHouseLayout(Context context, HouseLayout layout) {
         String fileName = getHouseLayoutFileName(layout);
-
         return FileHelper.saveObjectToFile(context, DIRECTORY_NAME_LAYOUTS, fileName, layout);
+    }
+
+    public static boolean checkForIntruders(Context context){
+            boolean verification = false;
+            ArrayList<Inhabitant> inhabitants = HouseLayoutHelper.getSelectedLayout(context).getAllInhabitants();
+            for(Inhabitant inhabitant : inhabitants){
+                if(inhabitant.isIntruder()){
+                    verification = true;
+                    break;
+                }
+            }
+            return verification;
     }
 
     /**

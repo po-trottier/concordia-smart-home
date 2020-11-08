@@ -49,6 +49,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     private LinearLayout awayErrorLayout;
     private ImageButton awayDisabledHint;
     private SwitchCompat awayStatusField;
+    private EditText callTimerField;
     private SwitchCompat statusField;
     private FloatingActionButton saveContext;
     private FloatingActionButton timeScaleMinus;
@@ -123,8 +124,8 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
 
     @Override
     public void notifyObserver() {
-        for(IObserver observer : observers){
-            observer.updateAwayMode(awayStatusField.isChecked());
+         for(IObserver observer : observers){
+            observer.updateAwayMode(awayStatusField.isChecked(), callTimerField.getText().toString());
         }
     }
 
@@ -142,6 +143,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         awayStatusText = findViewById(R.id.away_on_off_text);
         awayDisabledHint = findViewById(R.id.away_disable_hint);
         awayErrorLayout = findViewById(R.id.away_disable_layout);
+        callTimerField = findViewById(R.id.set_Contact_Timer);
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
@@ -167,6 +169,8 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         statusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_STATUS, false));
         // Set the away mode
         awayStatusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false));
+        // Set call timer
+        callTimerField.setText(preferences.getString(PREFERENCES_KEY_CALL_TIMER, "5"));
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
         // Set the know Date Time
@@ -210,7 +214,16 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                     e.printStackTrace();
                 }
                 // Edit the parameters
-                model.editParameters(preferences, statusField.isChecked(), awayStatusField.isChecked(), temperature, date, time);
+                boolean awayFieldIsChecked = awayStatusField.isChecked();
+                editDashboardModel.editParameters(preferences, statusField.isChecked(), awayFieldIsChecked, callTimerField.getText().toString(), temperature, date, time);
+                HouseLayout layout = HouseLayoutHelper.getSelectedLayout(context);
+                layout.setAwayModeEntry(new AwayModeEntry(awayFieldIsChecked, callTimerField.getText().toString()));
+                HouseLayoutHelper.updateSelectedLayout(context,layout);
+                String x = layout.getAwayModeEntry().getCallTimer();
+                // Check for away mode
+                if(awayFieldIsChecked){
+                    notifyObserver();
+                }
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
@@ -317,7 +330,6 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
             awayStatusField.setAlpha(1.0f);
             awayStatusField.setEnabled(true);
             awayErrorLayout.setVisibility(View.GONE);
-            notifyObserver();
         }
         String finalError = error;
         awayDisabledHint.setOnClickListener(new View.OnClickListener() {

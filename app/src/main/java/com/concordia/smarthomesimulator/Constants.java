@@ -9,6 +9,7 @@ public class Constants {
 
     // Keys for Shared Preferences
     public static final String PREFERENCES_KEY_AWAY_MODE = "awayMode";
+    public static final String PREFERENCES_KEY_CALL_TIMER = "callTimer";
     public static final String PREFERENCES_KEY_STATUS = "status";
     public static final String PREFERENCES_KEY_TEMPERATURE = "temperature";
     public static final String PREFERENCES_KEY_USERNAME = "username";

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
+import com.concordia.smarthomesimulator.dataModels.AwayModeEntry;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.IDevice;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
@@ -59,15 +60,16 @@ public class DashboardController extends Fragment  implements IObserver {
     }
 
     @Override
-    public void updateAwayMode(boolean awayMode) {
+    public void updateAwayMode(boolean awayMode, String callTimer) {
         if(awayMode){
             HouseLayout updatedHouseLayout =  HouseLayoutHelper.getSelectedLayout(context);
+            updatedHouseLayout.setAwayModeEntry(new AwayModeEntry(awayMode,callTimer));
             for(Room room : updatedHouseLayout.getRooms()){
                 for(IDevice device : room.getDevices()){
                     device.setIsOpened(false);
                 }
             }
-            HouseLayoutHelper.saveHouseLayout(context, updatedHouseLayout);
+            HouseLayoutHelper.updateSelectedLayout(context, updatedHouseLayout);
         }
     }
 
