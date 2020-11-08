@@ -1,6 +1,6 @@
 package com.concordia.smarthomesimulator;
 
-import com.concordia.smarthomesimulator.dataModels.DeviceType;
+import com.concordia.smarthomesimulator.enums.DeviceType;
 import com.concordia.smarthomesimulator.dataModels.Door;
 import com.concordia.smarthomesimulator.dataModels.Light;
 import com.concordia.smarthomesimulator.dataModels.Window;

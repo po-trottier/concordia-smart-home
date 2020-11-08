@@ -2,11 +2,14 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.concordia.smarthomesimulator.enums.Orientation;
+
+import java.io.Serializable;
 
 /**
  * The type Geometry.
  */
-public class Geometry {
+public class Geometry implements Serializable {
     private int x;
     private int y;
     private int width;

@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.Permissions;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import java.time.LocalDate;
@@ -255,10 +257,11 @@ public class EditDashboardModel extends ViewModel{
      * @param date        the date
      * @param time        the time
      */
-    public void editParameters(SharedPreferences preferences, boolean status, boolean awayMode, int temperature, LocalDate date, LocalTime time) {
+    public void editParameters(SharedPreferences preferences, boolean status, boolean awayMode, int callTimer, int temperature, LocalDate date, LocalTime time) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
         editor.putBoolean(PREFERENCES_KEY_STATUS, status);
+        editor.putInt(PREFERENCES_KEY_CALL_DELAY, callTimer);
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, date.getYear());
         editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, date.getMonthValue());

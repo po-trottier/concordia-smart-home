@@ -1,6 +1,5 @@
 package com.concordia.smarthomesimulator.views.customMapSettingsView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -11,13 +10,14 @@ import android.view.View;
 import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.factories.DeviceFactory;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.enums.Orientation;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -328,7 +328,8 @@ public class CustomMapSettingsView extends ScrollView {
                         public void onClick(DialogInterface dialog, int which) {
                             EditText nameView = customView.findViewById(R.id.alert_add_inhabitant_name);
                             CheckBox intruderCheckbox = customView.findViewById(R.id.is_intruder_checkbox);
-                            model.addInhabitant(context, nameView.getText().toString().trim(), intruderCheckbox.isChecked());
+                            boolean isIntruder = intruderCheckbox.isChecked();
+                            model.addInhabitant(context, nameView.getText().toString().trim(), isIntruder);
                         }
                     })
                     .create();

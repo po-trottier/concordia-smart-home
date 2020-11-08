@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
-import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -98,7 +98,7 @@ public class EditMapController extends AppCompatActivity {
             .setPositiveButton(R.string.generic_open, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
+                    LayoutsHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
                     fillKnownValues();
                 }
             })
@@ -106,10 +106,10 @@ public class EditMapController extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // If the previously selected layout is now deleted, select a default layout
-                    ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
+                    ArrayList<HouseLayout> layouts = LayoutsHelper.listSavedLayouts(context);
                     if (layouts.stream().noneMatch(layout -> layout.equals(backupLayout))) {
                         editMapModel.setHouseLayout(layouts.get(0));
-                        HouseLayoutHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
+                        LayoutsHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
                     } else {
                         editMapModel.setHouseLayout(backupLayout);
                     }
@@ -134,35 +134,33 @@ public class EditMapController extends AppCompatActivity {
             .setPositiveButton(getString(R.string.generic_save), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (layoutName != null) {
-                        editMapModel.updateHouseLayoutName(layoutName.getText().toString().trim());
-                        if (!HouseLayoutHelper.isLayoutNameDefault(editMapModel.getHouseLayout())) {
-                            if (HouseLayoutHelper.isLayoutNameUnique(context, editMapModel.getHouseLayout())) {
-                                editMapModel.saveHouseLayout(context);
-                                finish();
-                            } else {
-                                final AlertDialog confirm = new AlertDialog.Builder(context)
-                                    .setTitle(getString(R.string.title_alert_save_layout_overwrite))
-                                    .setMessage(getString(R.string.text_alert_save_layout_overwrite))
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            setupSaveDialog();
-                                        }
-                                    })
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            editMapModel.saveHouseLayout(context);
-                                            finish();
-                                        }
-                                    }).create();
-                                confirm.show();
-                            }
+                    editMapModel.updateHouseLayoutName(layoutName.getText().toString().trim());
+                    if (!LayoutsHelper.isLayoutNameDefault(editMapModel.getHouseLayout())) {
+                        if (LayoutsHelper.isLayoutNameUnique(context, editMapModel.getHouseLayout())) {
+                            editMapModel.saveHouseLayout(context);
+                            finish();
                         } else {
-                            Toast.makeText(context, getString(R.string.error_exists_alert_save_layout), Toast.LENGTH_LONG).show();
-                            setupSaveDialog();
+                            final AlertDialog confirm = new AlertDialog.Builder(context)
+                                .setTitle(getString(R.string.title_alert_save_layout_overwrite))
+                                .setMessage(getString(R.string.text_alert_save_layout_overwrite))
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        setupSaveDialog();
+                                    }
+                                })
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editMapModel.saveHouseLayout(context);
+                                        finish();
+                                    }
+                                }).create();
+                            confirm.show();
                         }
+                    } else {
+                        Toast.makeText(context, getString(R.string.error_exists_alert_save_layout), Toast.LENGTH_LONG).show();
+                        setupSaveDialog();
                     }
                 }
             }).create();
@@ -189,7 +187,7 @@ public class EditMapController extends AppCompatActivity {
     //region Views
 
     private void fillKnownValues() {
-        editMapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
+        editMapModel.setHouseLayout(LayoutsHelper.getSelectedLayout(context));
 
         CustomMapSettingsView settings = findViewById(R.id.edit_map_settings);
         settings.forceUpdateView(editMapModel.getHouseLayout());
@@ -199,7 +197,7 @@ public class EditMapController extends AppCompatActivity {
         final View customView = inflater.inflate(R.layout.alert_open_house_layout, null, false);
         final ListView layoutList = customView.findViewById(R.id.alert_open_layout_list);
 
-        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
+        ArrayList<HouseLayout> layouts = LayoutsHelper.listSavedLayouts(context);
         HouseLayoutAdapter adapter = new HouseLayoutAdapter(context, 0, layouts);
         layoutList.setAdapter(adapter);
 

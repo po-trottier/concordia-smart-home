@@ -1,8 +1,9 @@
-package com.concordia.smarthomesimulator.dataModels;
+package com.concordia.smarthomesimulator.enums;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
 public enum Action {
+
     INTERACT_ANY_WINDOW(PREFERENCES_KEY_ACTION_INTERACT_ANY_WINDOW),
     INTERACT_LOCAL_WINDOW(PREFERENCES_KEY_ACTION_INTERACT_LOCAL_WINDOW),
     INTERACT_ANY_LIGHT(PREFERENCES_KEY_ACTION_INTERACT_ANY_LIGHT),
@@ -21,6 +22,4 @@ public enum Action {
     public String getDescription() {
         return description;
     }
-
-
 }

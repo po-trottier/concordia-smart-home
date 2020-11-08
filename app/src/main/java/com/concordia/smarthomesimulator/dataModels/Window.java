@@ -2,8 +2,12 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
-public class Window implements IDevice {
+import java.io.Serializable;
+
+public class Window implements IDevice, Serializable {
 
     private boolean isOpened = false;
     private boolean isLocked = false;

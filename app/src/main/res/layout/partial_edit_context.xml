@@ -95,6 +95,40 @@
                         android:src="@drawable/ic_error_outline"/>
                 </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="@string/edit_text_notification_delay"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/set_Contact_Timer"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/rounded_text_field_background"
+                    android:inputType="number"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/context_minutes"/>
+                <TextView
+                    android:id="@+id/context_minutes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/generic_minutes"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,25 +137,31 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:text="@string/edit_text_temperature"/>
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
                 <EditText
                     android:id="@+id/set_temperature"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/field_height"
-                    android:layout_weight="0.95"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:inputType="numberSigned"
                     android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"/>
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/context_degrees_celsius"/>
                 <TextView
+                    android:id="@+id/context_degrees_celsius"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.05"
                     android:textAlignment="textEnd"
-                    android:text="@string/generic_degrees_celsius"/>
-            </LinearLayout>
+                    android:text="@string/generic_degrees_celsius"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

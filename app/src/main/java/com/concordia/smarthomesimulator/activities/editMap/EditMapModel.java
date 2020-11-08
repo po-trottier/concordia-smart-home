@@ -5,7 +5,7 @@ import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 
 import java.util.ArrayList;
 
@@ -48,8 +48,8 @@ public class EditMapModel  extends ViewModel {
      * @param context the context
      */
     public void saveHouseLayout(Context context) {
-        if (HouseLayoutHelper.saveHouseLayout(context, houseLayout)){
-            HouseLayoutHelper.updateSelectedLayout(context, houseLayout);
+        if (LayoutsHelper.saveHouseLayout(context, houseLayout)){
+            LayoutsHelper.updateSelectedLayout(context, houseLayout);
             Toast.makeText(context, context.getString(R.string.success_alert_save_layout), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(context, context.getString(R.string.error_unknown_alert_save_layout), Toast.LENGTH_LONG).show();
@@ -64,7 +64,7 @@ public class EditMapModel  extends ViewModel {
      * @param position the position of the layout to remove
      */
     public void deleteHouseLayout(Context context, ArrayList<HouseLayout> layouts, int position) {
-        HouseLayoutHelper.removeHouseLayout(context, layouts.get(position));
+        LayoutsHelper.removeHouseLayout(context, layouts.get(position));
         layouts.remove(position);
     }
 }

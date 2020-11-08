@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator;
 
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.Permissions;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class UserbaseUnitTest {
     public void userbaseCanBeCreated() {
         // Setup
         List<User> users = new ArrayList<>();
-        users.add(new User("a","a",Permissions.STRANGER));
+        users.add(new User("a","a", Permissions.STRANGER));
         Userbase userbase = new Userbase(users);
         // Test
         assertNotNull(userbase);

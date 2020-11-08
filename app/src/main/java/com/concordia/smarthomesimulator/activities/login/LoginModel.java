@@ -6,10 +6,10 @@ import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
-import com.concordia.smarthomesimulator.dataModels.LogImportance;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -53,7 +53,7 @@ public class LoginModel extends ViewModel {
         User loggedUser = UserbaseHelper.getUserWithCredentials(username, password, userbase);
         if (loggedUser == null){
             Toast.makeText(context, R.string.wrong_credentials_message,Toast.LENGTH_SHORT).show();
-            ActivityLogHelper.add(context, new LogEntry("Login", String.format("Someone tried to login to an account with username \"%s\" but failed.", username), LogImportance.CRITICAL));
+            LogsHelper.add(context, new LogEntry("Login", String.format("Someone tried to login to an account with username \"%s\" but failed.", username), LogImportance.CRITICAL));
             return  false;
         }
 

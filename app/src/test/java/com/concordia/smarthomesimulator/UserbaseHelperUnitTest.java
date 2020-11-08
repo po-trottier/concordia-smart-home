@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator;
 
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.Permissions;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class UserbaseHelperUnitTest {
     public void userbaseHelperCanGetUserWithCredentials() {
         // Setup
         List<User> users = new ArrayList<>();
-        User userToGet = new User("b","b",Permissions.STRANGER);
+        User userToGet = new User("b","b", Permissions.STRANGER);
         users.add(new User("a","a",Permissions.STRANGER));
         users.add(userToGet);
         users.add(new User("c","c",Permissions.STRANGER));

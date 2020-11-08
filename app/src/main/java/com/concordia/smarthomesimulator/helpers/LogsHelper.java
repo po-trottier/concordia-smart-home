@@ -6,15 +6,17 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 // CREDITS : The following methods are based on an Android Studio tutorial video by Coding In Flow
 // URL https://www.youtube.com/watch?v=EcfUkjlL9RI&t=505s
 
-public final class ActivityLogHelper {
+public final class LogsHelper {
 
-    private final static String FILE_NAME = "logs.json";
+    private final static String FILE_NAME = "logs.txt";
 
     /**
      * First call will create the activityLog file inside internal storage.
@@ -33,7 +35,11 @@ public final class ActivityLogHelper {
         logs.add(0, entry);
         ActivityLogs activityLogs = new ActivityLogs(logs);
         // Save to file
-        FileHelper.saveObjectToFile(context, FILE_NAME, activityLogs);
+        try {
+            FilesHelper.saveObjectToFile(context, FILE_NAME, activityLogs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -44,8 +50,13 @@ public final class ActivityLogHelper {
      * @return String Contents of the activityLog file
      */
     public static ArrayList<LogEntry> read(Context context) {
-        ActivityLogs logs = (ActivityLogs) FileHelper.loadObjectFromFile(context, FILE_NAME, ActivityLogs.class);
-        return logs == null ? new ArrayList<LogEntry>() : logs.getAll();
+        ActivityLogs logs = null;
+        try {
+            logs = (ActivityLogs) FilesHelper.loadObjectFromFile(context, FILE_NAME);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return logs == null ? new ArrayList<>() : logs.getAll();
     }
 
     /**
@@ -67,7 +78,7 @@ public final class ActivityLogHelper {
     /**
      * The type ActivityLogs is used internally to help writing JSON data to the logs file. It has no other purpose.
      */
-    private static class ActivityLogs {
+    private static class ActivityLogs implements Serializable {
 
         private final LogEntry[] logs;
 

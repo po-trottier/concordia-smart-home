@@ -1,6 +1,8 @@
 package com.concordia.smarthomesimulator.dataModels;
 
-public class Inhabitant {
+import java.io.Serializable;
+
+public class Inhabitant implements Serializable {
     private final boolean isIntruder;
     private final String name;
 

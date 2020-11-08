@@ -1,8 +1,11 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import com.concordia.smarthomesimulator.enums.LogImportance;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class LogEntry {
+public class LogEntry implements Serializable {
     private final String component;
     private final String message;
     private final LogImportance importance;

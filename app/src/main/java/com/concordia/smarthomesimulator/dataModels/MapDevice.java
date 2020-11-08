@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.graphics.RectF;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 public class MapDevice {
 

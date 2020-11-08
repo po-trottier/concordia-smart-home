@@ -1,6 +1,7 @@
-package com.concordia.smarthomesimulator.dataModels;
+package com.concordia.smarthomesimulator.enums;
 
 public enum DeviceType {
+
     LIGHT,
     DOOR,
     WINDOW;

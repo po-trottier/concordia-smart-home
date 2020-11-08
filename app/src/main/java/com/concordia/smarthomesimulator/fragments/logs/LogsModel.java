@@ -3,7 +3,7 @@ package com.concordia.smarthomesimulator.fragments.logs;
 import android.content.Context;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class LogsModel extends ViewModel {
      * @param context the context
      */
     public void readLogs(Context context) {
-        logs = ActivityLogHelper.read(context);
+        logs = LogsHelper.read(context);
         logs.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
     }
 
@@ -32,7 +32,7 @@ public class LogsModel extends ViewModel {
      */
     public void clearLogs(Context context) {
         logs.clear();
-        ActivityLogHelper.clear(context);
+        LogsHelper.clear(context);
     }
 
     /**

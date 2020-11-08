@@ -2,6 +2,8 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
+import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.Permissions;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

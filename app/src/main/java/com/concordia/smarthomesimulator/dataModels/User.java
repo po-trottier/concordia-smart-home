@@ -1,6 +1,10 @@
 package com.concordia.smarthomesimulator.dataModels;
 
-public class User {
+import com.concordia.smarthomesimulator.enums.Permissions;
+
+import java.io.Serializable;
+
+public class User implements Serializable {
     private final String username;
     private final String password;
     private final Permissions permission;
