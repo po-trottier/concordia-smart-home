@@ -10,20 +10,6 @@ import com.concordia.smarthomesimulator.dataModels.Geometry;
 public interface IDevice {
 
     /**
-     * Gets opened icon.
-     *
-     * @return the opened icon
-     */
-    public int getOpenedIcon();
-
-    /**
-     * Gets closed icon.
-     *
-     * @return the closed icon
-     */
-    public int getClosedIcon();
-
-    /**
      * Gets opened tint.
      *
      * @return the opened tint

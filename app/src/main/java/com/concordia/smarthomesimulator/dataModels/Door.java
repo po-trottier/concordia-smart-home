@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Door implements IDevice, Serializable {
 
     private boolean isOpened = false;
+    private boolean isLocked = false;
     private Geometry geometry;
 
     public Door() {
@@ -18,16 +19,6 @@ public class Door implements IDevice, Serializable {
 
     public Door(Geometry geometry) {
         this.geometry = geometry;
-    }
-
-    @Override
-    public int getOpenedIcon() {
-        return R.drawable.ic_door_open;
-    }
-
-    @Override
-    public int getClosedIcon() {
-        return R.drawable.ic_door;
     }
 
     @Override
@@ -78,5 +69,32 @@ public class Door implements IDevice, Serializable {
         return getDeviceType() == other.getDeviceType()
             && getIsOpened() == other.getIsOpened()
             && getGeometry().equals(other.getGeometry());
+    }
+
+    /**
+     * Gets locked tint.
+     *
+     * @return the locked tint
+     */
+    public int getLockedTint() {
+        return R.color.charcoal;
+    }
+
+    /**
+     * Gets is locked.
+     *
+     * @return is locked
+     */
+    public boolean getIsLocked() {
+        return isLocked;
+    }
+
+    /**
+     * Sets is locked.
+     *
+     * @param isLocked the is locked
+     */
+    public void setIsLocked(boolean isLocked) {
+        this.isLocked = isLocked;
     }
 }

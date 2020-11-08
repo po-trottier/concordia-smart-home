@@ -22,16 +22,6 @@ public class Window implements IDevice, Serializable {
     }
 
     @Override
-    public int getOpenedIcon() {
-        return R.drawable.ic_window_open_variant;
-    }
-
-    @Override
-    public int getClosedIcon() {
-        return R.drawable.ic_window_closed_variant;
-    }
-
-    @Override
     public int getOpenedTint() {
         return R.color.primary;
     }
@@ -80,15 +70,6 @@ public class Window implements IDevice, Serializable {
         return getDeviceType() == other.getDeviceType()
             && getIsOpened() == other.getIsOpened()
             && getGeometry().equals(other.getGeometry());
-    }
-
-    /**
-     * Gets locked icon.
-     *
-     * @return the locked icon
-     */
-    public int getLockedIcon() {
-        return R.drawable.ic_window_locked_variant;
     }
 
     /**

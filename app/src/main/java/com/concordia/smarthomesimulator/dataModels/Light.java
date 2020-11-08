@@ -21,16 +21,6 @@ public class Light implements IDevice, Serializable {
     }
 
     @Override
-    public int getOpenedIcon() {
-        return R.drawable.ic_lightbulb_on;
-    }
-
-    @Override
-    public int getClosedIcon() {
-        return R.drawable.ic_lightbulb_off;
-    }
-
-    @Override
     public int getOpenedTint() {
         return R.color.primary;
     }
