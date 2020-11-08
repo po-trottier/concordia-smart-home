@@ -185,9 +185,10 @@ public class EditDashboardController extends AppCompatActivity {
                 }catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
+                boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
                 // Edit the parameters
-                model.editParameters(preferences, statusField.isChecked(), away, callTimer, temperature, date, time);
+                model.editParameters(preferences, status, away, callTimer, temperature, date, time);
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
@@ -199,7 +200,7 @@ public class EditDashboardController extends AppCompatActivity {
                 // Saving changes
                 UserbaseHelper.saveUserbase(context, model.getUserbase());
                 // Send notification if required
-                if (away && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
+                if (away && status && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
                     NotificationsHelper.sendIntruderNotification(context);
                 }
                 // Close the activity

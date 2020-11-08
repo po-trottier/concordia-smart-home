@@ -22,8 +22,10 @@ public class CustomDateTimeView extends LinearLayout {
 
     private static final int MINUTE = 60000;
 
-    private final Context context;
+    private Context context;
+    private SharedPreferences preferences;
     private LocalDateTime dateTime = null;
+    private Timer timer;
 
     /**
      * Instantiates a new Custom clock view.
@@ -32,7 +34,7 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public CustomDateTimeView(Context context) {
         super(context);
-        this.context = context;
+        initializeView(context);
     }
 
     /**
@@ -43,7 +45,7 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public CustomDateTimeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
+        initializeView(context);
     }
 
     /**
@@ -55,7 +57,7 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public CustomDateTimeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context = context;
+        initializeView(context);
     }
 
     /**
@@ -65,8 +67,15 @@ public class CustomDateTimeView extends LinearLayout {
      */
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
-        setClockBehavior();
+        if (preferences.getBoolean(PREFERENCES_KEY_STATUS, false)) {
+            setClockBehavior();
+        }
         updateView();
+    }
+
+    private void initializeView(Context context) {
+        this.context = context;
+        preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
     }
 
     private void setClockBehavior() {
@@ -76,7 +85,11 @@ public class CustomDateTimeView extends LinearLayout {
         float scale = preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE);
         long period = (long) (MINUTE / scale);
         // Update the clock time
-        Timer timer = new Timer();
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
