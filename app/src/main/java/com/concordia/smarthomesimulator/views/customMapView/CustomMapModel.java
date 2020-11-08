@@ -14,12 +14,14 @@ import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
 
 import java.util.ArrayList;
 
 import static com.concordia.smarthomesimulator.Constants.*;
+import static java.security.AccessController.getContext;
 
 public class CustomMapModel {
 
@@ -317,7 +319,8 @@ public class CustomMapModel {
         for (MapDevice device : devices) {
             if (device.getShape().contains(x, y)) {
                 //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
-                if (event.getAction() == MotionEvent.ACTION_UP) {
+                Action action = Action.fromInteractingDevice(device.getDevice(), context);
+                if (action == null || (event.getAction() == MotionEvent.ACTION_UP && UserbaseHelper.verifyPermissions(action, context))) {
                     showDeviceDialog(context, device.getDevice());
                     return true;
                 }
@@ -395,8 +398,8 @@ public class CustomMapModel {
         String message = inhabitant.getName().toUpperCase() + " " + context.getString(R.string.alert_map_inhabitant_text);
 
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        String user = preferences.getString(PREFERENCES_KEY_USERNAME, "");
-        if (inhabitant.getName().equalsIgnoreCase(user))
+        String username = preferences.getString(PREFERENCES_KEY_USERNAME, "");
+        if (inhabitant.getName().equalsIgnoreCase(username))
             message = context.getString(R.string.alert_map_inhabitant_text_self);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
