@@ -13,7 +13,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
 
@@ -317,11 +319,12 @@ public class CustomMapModel {
         for (MapDevice device : devices) {
             if (device.getShape().contains(x, y)) {
                 //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
+                Action action = Action.fromDevice(device.getDevice(), context);
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    showDeviceDialog(context, device.getDevice());
-                    return true;
+                    if (action == null || UserbaseHelper.verifyPermissions(action, context)) {
+                        showDeviceDialog(context, device.getDevice());
+                    }
                 }
-                // A known shape was clicked
                 return true;
             }
         }
@@ -395,8 +398,8 @@ public class CustomMapModel {
         String message = inhabitant.getName().toUpperCase() + " " + context.getString(R.string.alert_map_inhabitant_text);
 
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        String user = preferences.getString(PREFERENCES_KEY_USERNAME, "");
-        if (inhabitant.getName().equalsIgnoreCase(user))
+        String username = preferences.getString(PREFERENCES_KEY_USERNAME, "");
+        if (inhabitant.getName().equalsIgnoreCase(username))
             message = context.getString(R.string.alert_map_inhabitant_text_self);
 
         final AlertDialog dialog = new AlertDialog.Builder(context)

@@ -44,7 +44,7 @@ public class PermissionsConfiguration {
         this.actionPermissionsMap = new LinkedHashMap<>();
         if (permissionsConfiguration != null) {
             permissionsConfiguration.actionPermissionsMap.forEach(
-                    (k,v) -> this.actionPermissionsMap.put(k,v)
+                    this.actionPermissionsMap::put
             );
         }
     }

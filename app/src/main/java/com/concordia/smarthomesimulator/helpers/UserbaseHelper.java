@@ -72,11 +72,13 @@ public final class UserbaseHelper {
     }
 
     public static boolean verifyPermissions(Action action, Context context){
+        // Default log message
+        String description = action == null ? "Unknown" : action.getDescription();
+        String message = String.format("User was stopped from performing permission-restricted action: %s", description);
+        // Get the preferences
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         int loggedUserPermissions = preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0);
-        int minPermissionsForAction = preferences.getInt(action.getDescription(),0);
-        // Default log message
-        String message = String.format("User was stopped from performing permission-restricted action: %s", action.getDescription());
+        int minPermissionsForAction = preferences.getInt(description,0);
         // Something went wrong
         if (loggedUserPermissions == 0 || minPermissionsForAction == 0){
             Toast.makeText(context, context.getString(R.string.generic_error_message),Toast.LENGTH_SHORT).show();
@@ -84,12 +86,13 @@ public final class UserbaseHelper {
         }
         // User has required permissions
         if ((loggedUserPermissions & minPermissionsForAction) == minPermissionsForAction){
-            message = String.format("User performed permission-restricted action: %s", action.getDescription());
+            message = String.format("User performed permission-restricted action: %s", description);
             LogsHelper.add(context, new LogEntry("Permission", message, LogImportance.MINOR));
             return true;
         }
-        // USer doesn't have permissions
-        Toast.makeText(context, String.format(context.getString(R.string.permission_edit_not_allows), action.getDescription()),Toast.LENGTH_SHORT).show();
+        // User doesn't have permissions
+        String error = String.format(context.getString(R.string.permission_edit_not_allows), description.replace("_", " "));
+        Toast.makeText(context, error,Toast.LENGTH_SHORT).show();
         LogsHelper.add(context, new LogEntry("Permission", message, LogImportance.IMPORTANT));
         return false;
     }

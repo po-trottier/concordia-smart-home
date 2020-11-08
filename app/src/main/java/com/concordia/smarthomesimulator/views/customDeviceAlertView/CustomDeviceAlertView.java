@@ -9,10 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.enums.DeviceType;
-import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.dataModels.Window;
+import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.DeviceType;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
+import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 /**
  * The type Custom device alert view.
