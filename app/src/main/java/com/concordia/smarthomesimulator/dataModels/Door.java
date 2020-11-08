@@ -2,8 +2,12 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
-public class Door implements IDevice {
+import java.io.Serializable;
+
+public class Door implements IDevice, Serializable {
 
     private boolean isOpened = false;
     private Geometry geometry;

@@ -19,8 +19,9 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
 import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
-import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -49,7 +50,7 @@ public class MapController extends Fragment {
     }
 
     private void updateContent() {
-        mapModel.setHouseLayout(HouseLayoutHelper.getSelectedLayout(context));
+        mapModel.setHouseLayout(LayoutsHelper.getSelectedLayout(context));
         FrameLayout content = view.findViewById(R.id.map_fragment);
         if (mapModel.getHouseLayout() == null) {
             hideViews();
@@ -81,7 +82,7 @@ public class MapController extends Fragment {
         editMapFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityLogHelper.add(context, new LogEntry("House Layout", "Started editing the House Layout.", LogImportance.MINOR));
+                LogsHelper.add(context, new LogEntry("House Layout", "Started editing the House Layout.", LogImportance.MINOR));
                 Intent intent = new Intent(context, EditMapController.class);
                 context.startActivity(intent);
             }
@@ -104,7 +105,7 @@ public class MapController extends Fragment {
             }
         });
 
-        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 // If this is an intermittent state then ignore it
@@ -166,7 +167,7 @@ public class MapController extends Fragment {
             .setPositiveButton(R.string.generic_open, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    HouseLayoutHelper.updateSelectedLayout(context, mapModel.getHouseLayout());
+                    LayoutsHelper.updateSelectedLayout(context, mapModel.getHouseLayout());
                     updateContent();
                 }
             })
@@ -184,7 +185,7 @@ public class MapController extends Fragment {
         final View customView = LayoutInflater.from(context).inflate(R.layout.alert_open_house_layout, null, false);
         final ListView layoutList = customView.findViewById(R.id.alert_open_layout_list);
 
-        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
+        ArrayList<HouseLayout> layouts = LayoutsHelper.listSavedLayouts(context);
 
         HouseLayoutAdapter adapter = new HouseLayoutAdapter(context, 0, layouts);
         layoutList.setAdapter(adapter);

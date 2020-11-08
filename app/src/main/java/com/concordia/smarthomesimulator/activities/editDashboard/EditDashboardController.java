@@ -15,12 +15,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
-import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
-import com.concordia.smarthomesimulator.helpers.ObserverHelper;
+import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.helpers.NotificationsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
-import com.concordia.smarthomesimulator.interfaces.IObserver;
-import com.concordia.smarthomesimulator.interfaces.ISubject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -33,23 +34,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-
 import static android.view.View.inflate;
 import static com.concordia.smarthomesimulator.Constants.*;
 
-public class EditDashboardController extends AppCompatActivity implements ISubject {
+public class EditDashboardController extends AppCompatActivity {
 
     private Context context;
     private SharedPreferences preferences;
 
     private EditDashboardModel model;
 
-    private ArrayList<IObserver> observers;
-
     private LinearLayout awayErrorLayout;
     private ImageButton awayDisabledHint;
     private SwitchCompat awayStatusField;
-    private EditText callTimerField;
     private SwitchCompat statusField;
     private FloatingActionButton saveContext;
     private FloatingActionButton timeScaleMinus;
@@ -63,6 +60,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     private EditText newPasswordField;
     private EditText dateField;
     private EditText timeField;
+    private EditText callTimerField;
     private TextView awayStatusText;
     private TextView timeScaleField;
     private TextView statusText;
@@ -79,8 +77,6 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         model = new ViewModelProvider(this).get(EditDashboardModel.class);
 
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-
-        initializeObservers();
 
         model.initializeModel(context);
         model.updateSimulationDateTime(preferences);
@@ -107,35 +103,6 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         // DO NOT PUT BEFORE "fillKnownValues" !
         setupStatusSwitch();
         setupAwaySwitch();
-    }
-
-
-    @Override
-    public void register(IObserver newObserver)
-    {
-        ObserverHelper.addObserver(newObserver);
-        observers = ObserverHelper.getObservers();
-    }
-
-    @Override
-    public void unregister(IObserver observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObserver() {
-         for(IObserver observer : observers){
-            observer.updateAwayMode(awayStatusField.isChecked(), callTimerField.getText().toString());
-        }
-    }
-
-    private void initializeObservers() {
-        observers = ObserverHelper.getObservers();
-        if(observers.size() != 0){
-            for(IObserver observer :  observers){
-                register(observer);
-            }
-        }
     }
 
     private void findControls() {
@@ -170,7 +137,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         // Set the away mode
         awayStatusField.setChecked(preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false));
         // Set call timer
-        callTimerField.setText(preferences.getString(PREFERENCES_KEY_CALL_TIMER, "5"));
+        callTimerField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_CALL_DELAY, DEFAULT_CALL_DELAY)));
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
         // Set the know Date Time
@@ -190,12 +157,11 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                 String password = editedPassword.getText().toString();
                 String permissions = editPermissionsSpinner.getSelectedItem().toString();
                 String oldUsername = usernameSpinner.getSelectedItem().toString();
-
                 // Edit user if it was changed
                 int feedbackResource = model.editUser(context, preferences, model.getUserbase(), username, password, permissions, oldUsername);
                 if (feedbackResource != -1) {
                     String message = getString(feedbackResource);
-                    ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
+                    LogsHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 }
                 // Get the Simulation Context Parameters
@@ -213,17 +179,15 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                 } catch (DateTimeParseException e) {
                     e.printStackTrace();
                 }
-                // Edit the parameters
-                boolean awayFieldIsChecked = awayStatusField.isChecked();
-                editDashboardModel.editParameters(preferences, statusField.isChecked(), awayFieldIsChecked, callTimerField.getText().toString(), temperature, date, time);
-                HouseLayout layout = HouseLayoutHelper.getSelectedLayout(context);
-                layout.setAwayModeEntry(new AwayModeEntry(awayFieldIsChecked, callTimerField.getText().toString()));
-                HouseLayoutHelper.updateSelectedLayout(context,layout);
-                String x = layout.getAwayModeEntry().getCallTimer();
-                // Check for away mode
-                if(awayFieldIsChecked){
-                    notifyObserver();
+                int callTimer = DEFAULT_CALL_DELAY;
+                try {
+                    callTimer = Integer.parseInt(callTimerField.getText().toString());
+                }catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
+                boolean away = awayStatusField.isChecked();
+                // Edit the parameters
+                model.editParameters(preferences, statusField.isChecked(), away, callTimer, temperature, date, time);
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
@@ -234,8 +198,12 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                 }
                 // Saving changes
                 UserbaseHelper.saveUserbase(context, model.getUserbase());
+                // Send notification if required
+                if (away && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
+                    NotificationsHelper.sendIntruderNotification(context);
+                }
                 // Close the activity
-                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
+                LogsHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
                 finish();
             }
         });
@@ -258,7 +226,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                                 model.deleteUser(context, model.getUserbase(), usernameToDelete);
 
                                 String message = getString(R.string.delete_logged_user_success);
-                                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
+                                LogsHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 
                                 setupUsernamesSpinner();
@@ -280,7 +248,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                 // Add the new User
                 int feedbackResource = model.addUser(context, model.getUserbase(), new User(newUsername, newPassword, newPermissions));
                 String message = getString(feedbackResource);
-                ActivityLogHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
+                LogsHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 // Reset the fields
                 newUsernameField.setText("");
@@ -299,10 +267,10 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
             @Override
             public void onClick(View v) {
                 if(awayStatusField.isChecked()){
-                    ActivityLogHelper.add(context, new LogEntry("Away Mode", "Away mode is activated", LogImportance.IMPORTANT));
+                    LogsHelper.add(context, new LogEntry("Away Mode", "Away mode is activated", LogImportance.IMPORTANT));
                 }
                 else{
-                    ActivityLogHelper.add(context, new LogEntry("Away Mode", "Away mode is deactivated", LogImportance.IMPORTANT));
+                    LogsHelper.add(context, new LogEntry("Away Mode", "Away mode is deactivated", LogImportance.IMPORTANT));
                 }
                 setAwaySwitchRestrictions();
                 setAwayStatus();
@@ -312,7 +280,7 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
 
     private void setAwaySwitchRestrictions(){
         String error = "";
-        if(HouseLayoutHelper.getSelectedLayout(context) == null){
+        if(LayoutsHelper.getSelectedLayout(context) == null){
             awayStatusField.setAlpha(.5f);
             awayStatusField.setChecked(false);
             awayStatusField.setEnabled(false);
@@ -346,10 +314,10 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
     }
 
     private boolean isHouseEmpty() {
-        HouseLayout houseLayout = HouseLayoutHelper.getSelectedLayout(context);
+        HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
 
         if (houseLayout != null) {
-            ArrayList<Inhabitant> inhabitants = HouseLayoutHelper.getSelectedLayout(context).getAllInhabitants();
+            ArrayList<Inhabitant> inhabitants = LayoutsHelper.getSelectedLayout(context).getAllInhabitants();
             return inhabitants.stream().allMatch(Inhabitant::isIntruder);
         }
         else{
@@ -440,7 +408,6 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
 
     private void setupTimeFactor() {
         model.setTimeFactor(preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
-
         timeScaleMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -448,7 +415,6 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
                 fillKnownValues();
             }
         });
-
         timeScalePlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -477,10 +443,8 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
             users
         );
         usernameSpinner.setAdapter(adapter);
-
         // Set known information about the selected User to Edit
         setUserInformation(model.getUserbase().getUserFromUsername(users.get(0)));
-
         usernameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -552,7 +516,6 @@ public class EditDashboardController extends AppCompatActivity implements ISubje
         toolbar.setTitle(getString(R.string.title_activity_edit_dashboard));
         toolbar.setTitleTextColor(getColor(R.color.charcoal));
         setSupportActionBar(toolbar);
-
         // Add back button
         if (getSupportActionBar() != null) {
             toolbar.setNavigationIcon(getDrawable(R.drawable.ic_action_back));

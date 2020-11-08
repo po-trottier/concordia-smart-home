@@ -1,21 +1,10 @@
-package com.concordia.smarthomesimulator.dataModels;
+package com.concordia.smarthomesimulator.enums;
 
 public enum Permissions {
-    /**
-     * Parent permissions.
-     */
+
     PARENT(15),
-    /**
-     * Child permissions.
-     */
     CHILD(7),
-    /**
-     * Guest permissions.
-     */
     GUEST(3),
-    /**
-     * Stranger permissions.
-     */
     STRANGER(1);
 
     private final int bitValue;

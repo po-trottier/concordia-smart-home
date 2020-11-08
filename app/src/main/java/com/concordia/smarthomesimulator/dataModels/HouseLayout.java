@@ -1,20 +1,22 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.Nullable;
+import com.concordia.smarthomesimulator.enums.Orientation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_GARAGE;
 import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
 
-public class HouseLayout {
+/**
+ * The house layout is an observer to the rooms inside of it.
+ */
+public class HouseLayout extends Observable implements Observer, Serializable {
 
     private String name;
     private final ArrayList<Room> rooms;
-    private AwayModeEntry awayModeEntry;
 
     /**
      * Instantiates a new House layout.
@@ -37,8 +39,14 @@ public class HouseLayout {
 
         // Add the current user if he's not already in a room
         boolean userExists = currentUser != null && rooms.stream().anyMatch(room -> room.hasInhabitant(currentUser));
-        if (!userExists)
+        if (!userExists) {
             this.getRoom(DEFAULT_NAME_OUTDOORS).addInhabitant(new Inhabitant(currentUser));
+        }
+    }
+
+    @Override
+    public void update(Observable observable, Object arg) {
+        notifyObservers();
     }
 
     @Override
@@ -80,6 +88,15 @@ public class HouseLayout {
     }
 
     /**
+     * Is intruder detected boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isIntruderDetected() {
+        return getAllInhabitants().stream().anyMatch(Inhabitant::isIntruder);
+    }
+
+    /**
      * Sets name.
      *
      * @param name the name
@@ -94,7 +111,9 @@ public class HouseLayout {
      * @param room the room
      */
     public void addRoom(Room room) {
+        room.addObserver(this);
         rooms.add(room);
+        update(room, null);
     }
 
     /**
@@ -103,7 +122,9 @@ public class HouseLayout {
      * @param rooms the rooms
      */
     public void addRooms(ArrayList<Room> rooms) {
-        this.rooms.addAll(rooms);
+        for (Room room : rooms) {
+            addRoom(room);
+        }
     }
 
     /**
@@ -114,28 +135,11 @@ public class HouseLayout {
     public void removeRoom(String name) {
         for(Room room : rooms) {
            if (room.getName().equals(name)) {
+               room.deleteObserver(this);
                rooms.remove(room);
                return;
            }
         }
-    }
-
-    /**
-     * Gets awayModeEntry
-     *
-     * @return awayModeEntry    parameters for away mode
-     */
-    public AwayModeEntry getAwayModeEntry() {
-        return awayModeEntry;
-    }
-
-    /**
-     * Sets awayModeEntry
-     *
-     * @param awayModeEntry     parameters for away mode
-     */
-    public void setAwayModeEntry(AwayModeEntry awayModeEntry) {
-        this.awayModeEntry = awayModeEntry;
     }
 
     /**

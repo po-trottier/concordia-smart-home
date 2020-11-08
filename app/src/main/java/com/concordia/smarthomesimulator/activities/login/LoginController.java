@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.main.MainController;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
-import com.concordia.smarthomesimulator.dataModels.LogImportance;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 
 public class LoginController extends AppCompatActivity {
 
@@ -29,7 +29,7 @@ public class LoginController extends AppCompatActivity {
         preferences = getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
 
         if(loginModel.getIsUserLoggedIn(preferences)) {
-            ActivityLogHelper.add(context, new LogEntry("Login","User was already logged in. Going to the Dashboard.", LogImportance.MINOR));
+            LogsHelper.add(context, new LogEntry("Login","User was already logged in. Going to the Dashboard.", LogImportance.MINOR));
             Intent intent = new Intent(LoginController.this, MainController.class);
             LoginController.this.startActivity(intent);
             finish();
@@ -55,7 +55,7 @@ public class LoginController extends AppCompatActivity {
 
                 if (loginModel.logUserIn(context, preferences, inputUsername, inputPassword)) {
                     // Proceeding to the next activity and logging what happened
-                    ActivityLogHelper.add(context, new LogEntry("Login",String.format("User \"%s\" logged in successfully.", inputUsername), LogImportance.IMPORTANT));
+                    LogsHelper.add(context, new LogEntry("Login",String.format("User \"%s\" logged in successfully.", inputUsername), LogImportance.IMPORTANT));
                     Intent intent = new Intent(LoginController.this, MainController.class);
                     LoginController.this.startActivity(intent);
                     finish();

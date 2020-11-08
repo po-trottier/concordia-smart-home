@@ -1,6 +1,8 @@
 package com.concordia.smarthomesimulator.factories;
 
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 public class DeviceFactory {
 

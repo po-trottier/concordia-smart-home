@@ -3,6 +3,7 @@ package com.concordia.smarthomesimulator.dataModels;
 import android.content.Context;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
  * The userbase contains all the users that can interact with the simulation
  * along with the permission configuration which specify what each permission is able to do.
  */
-public class Userbase {
+public class Userbase implements Serializable {
 
     private List<User> users;
     private PermissionsConfiguration permissionsConfiguration;

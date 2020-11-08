@@ -1,11 +1,13 @@
 package com.concordia.smarthomesimulator.dataModels;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Observable;
 
-public class Room {
+public class Room extends Observable implements Serializable {
 
     private String name;
     private Geometry geometry;
@@ -21,6 +23,8 @@ public class Room {
      * @param geometry the geometry
      */
     public Room (String name, Geometry geometry) {
+        super();
+
         this.name = name;
         this.geometry = geometry;
 
@@ -113,6 +117,7 @@ public class Room {
      */
     public void addInhabitant(Inhabitant inhabitant) {
         inhabitants.add(inhabitant);
+        notifyObservers();
     }
 
     /**
@@ -121,7 +126,9 @@ public class Room {
      * @param inhabitants the inhabitants
      */
     public void addInhabitants(ArrayList<Inhabitant> inhabitants) {
-        this.inhabitants.addAll(inhabitants);
+        for (Inhabitant inhabitant : inhabitants) {
+            addInhabitant(inhabitant);
+        }
     }
 
     /**
@@ -166,6 +173,7 @@ public class Room {
                 return;
             }
         }
+        notifyObservers();
     }
 
     /**

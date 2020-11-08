@@ -8,7 +8,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 import java.util.ArrayList;
 
@@ -111,7 +112,7 @@ public class CustomMapView extends View {
      * Update the view by redrawing the canvas.
      */
     public void updateView() {
-        this.layout = HouseLayoutHelper.getSelectedLayout(context);
+        this.layout = LayoutsHelper.getSelectedLayout(context);
         invalidate();
     }
 
@@ -124,7 +125,7 @@ public class CustomMapView extends View {
     private void initializeView(Context context) {
         this.context = context;
         this.model = new CustomMapModel();
-        this.layout = HouseLayoutHelper.getSelectedLayout(context);
+        this.layout = LayoutsHelper.getSelectedLayout(context);
     }
 
     private void setupCanvas() {

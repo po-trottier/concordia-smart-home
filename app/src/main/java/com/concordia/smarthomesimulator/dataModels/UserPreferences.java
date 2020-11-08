@@ -1,12 +1,14 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.SharedPreferences;
+import com.concordia.smarthomesimulator.enums.Permissions;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
-public class UserPreferences {
+public class UserPreferences implements Serializable {
 
     private String username;
     private String password;

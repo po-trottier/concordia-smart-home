@@ -13,7 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
 
 import java.util.ArrayList;
@@ -363,7 +364,7 @@ public class CustomMapModel {
             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    HouseLayout layout = HouseLayoutHelper.getSelectedLayout(context);
+                    HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
                     // We don't know which room the user clicked in so we have to check in all of them
                     boolean found = false;
                     for (Room room : layout.getRooms()) {
@@ -382,7 +383,7 @@ public class CustomMapModel {
                             break;
                         }
                     }
-                    HouseLayoutHelper.updateSelectedLayout(context, layout);
+                    LayoutsHelper.updateSelectedLayout(context, layout);
                     saveUpdatedLayout(context, layout);
                 }
             })
@@ -419,8 +420,8 @@ public class CustomMapModel {
                     EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
                     if (layoutName != null) {
                         layout.setName(layoutName.getText().toString().trim());
-                        HouseLayoutHelper.updateSelectedLayout(context, layout);
-                        if (HouseLayoutHelper.isLayoutNameUnique(context, layout)) {
+                        LayoutsHelper.updateSelectedLayout(context, layout);
+                        if (LayoutsHelper.isLayoutNameUnique(context, layout)) {
                             saveUpdatedLayout(context, layout);
                         } else {
                             Toast.makeText(context, context.getString(R.string.error_exists_alert_save_layout), Toast.LENGTH_LONG).show();
@@ -442,7 +443,7 @@ public class CustomMapModel {
             return;
         }
 
-        if (!HouseLayoutHelper.saveHouseLayout(context, layout)) {
+        if (!LayoutsHelper.saveHouseLayout(context, layout)) {
             Toast.makeText(context, context.getString(R.string.error_unknown_alert_save_layout), Toast.LENGTH_LONG).show();
             return;
         }

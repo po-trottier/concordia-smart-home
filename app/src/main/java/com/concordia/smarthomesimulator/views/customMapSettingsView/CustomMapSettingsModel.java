@@ -12,8 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.enums.Orientation;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
-import com.concordia.smarthomesimulator.helpers.HouseLayoutHelper;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -69,7 +72,7 @@ public class CustomMapSettingsModel {
      * @param context the context
      */
     public void updateLayout(Context context) {
-        layout = HouseLayoutHelper.getSelectedLayout(context);
+        layout = LayoutsHelper.getSelectedLayout(context);
         if (layout.getRooms().size() > 0) {
             selectedRoom = getOrderedRooms().get(0);
         }

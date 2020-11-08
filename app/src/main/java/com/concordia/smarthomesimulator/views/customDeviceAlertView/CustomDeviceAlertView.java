@@ -9,8 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.DeviceType;
-import com.concordia.smarthomesimulator.dataModels.IDevice;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.dataModels.Window;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
 

@@ -2,18 +2,20 @@ package com.concordia.smarthomesimulator.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.enums.Orientation;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
+import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
-public class HouseLayoutHelper {
+public class LayoutsHelper {
 
     //region Public Methods
 
@@ -28,11 +30,13 @@ public class HouseLayoutHelper {
     public static void updateSelectedLayout(Context context, HouseLayout layout) {
         if (layout == null)
             return;
-
+        // Update the preferences
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PREFERENCES_KEY_LAYOUT, layout.getName());
         editor.apply();
+        // Update the house layout
+        LayoutSingleton.getInstance().setLayout(layout);
     }
 
     /**
@@ -42,11 +46,15 @@ public class HouseLayoutHelper {
      * @return the selected layout
      */
     public static HouseLayout getSelectedLayout(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        String selected = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
-        ArrayList<HouseLayout> layouts = HouseLayoutHelper.listSavedLayouts(context);
+        if (LayoutSingleton.getInstance().getLayout() == null) {
+            SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+            String selection = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
+            ArrayList<HouseLayout> layouts = LayoutsHelper.listSavedLayouts(context);
 
-        return layouts.stream().filter(layout -> layout.getName().equals(selected)).findFirst().orElse(null);
+            HouseLayout selected = layouts.stream().filter(layout -> layout.getName().equals(selection)).findFirst().orElse(null);
+            LayoutSingleton.getInstance().setLayout(selected);
+        }
+        return LayoutSingleton.getInstance().getLayout();
     }
 
     /**
@@ -57,15 +65,22 @@ public class HouseLayoutHelper {
      */
     public static ArrayList<HouseLayout> listSavedLayouts(Context context) {
         ArrayList<HouseLayout> layouts = new ArrayList<>();
-        File[] files = FileHelper.listFilesInDirectory(context, DIRECTORY_NAME_LAYOUTS);
+        File[] files = FilesHelper.listFilesInDirectory(context, DIRECTORY_NAME_LAYOUTS);
         // Add a new Layout for every saved File
         for (File file : files) {
-            HouseLayout layout = (HouseLayout) FileHelper.loadObjectFromFile(context, DIRECTORY_NAME_LAYOUTS, file.getName(), HouseLayout.class);
-            layouts.add(layout);
+            HouseLayout layout = null;
+            try {
+                layout = (HouseLayout) FilesHelper.loadObjectFromFile(context, DIRECTORY_NAME_LAYOUTS, file.getName());
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (layout != null) {
+                layouts.add(layout);
+            }
         }
         // Add the 2 default layouts (Empty and Demo)
-        layouts.add(0, HouseLayoutHelper.createNewHouseLayout(context));
-        layouts.add(1, HouseLayoutHelper.loadDemoHouseLayout(context));
+        layouts.add(0, LayoutsHelper.loadEmptyHouseLayout(context));
+        layouts.add(1, LayoutsHelper.loadDemoHouseLayout(context));
         // Return the full list
         return layouts;
     }
@@ -110,15 +125,14 @@ public class HouseLayoutHelper {
      */
     public static void removeHouseLayout(Context context, HouseLayout layout) {
         String fileName = getHouseLayoutFileName(layout);
-        File[] files = FileHelper.listFilesInDirectory(context, DIRECTORY_NAME_LAYOUTS);
+        File[] files = FilesHelper.listFilesInDirectory(context, DIRECTORY_NAME_LAYOUTS);
         File selected = Arrays.stream(files)
                 .filter(file -> file.getName().equalsIgnoreCase(fileName))
                 .findFirst()
                 .orElse(null);
-
-        if (selected == null)
+        if (selected == null) {
             return;
-
+        }
         //noinspection ResultOfMethodCallIgnored
         selected.delete();
     }
@@ -130,21 +144,14 @@ public class HouseLayoutHelper {
      * @param layout  the layout to save
      * @return whether the layout was saved or not
      */
-    public  static boolean saveHouseLayout(Context context, HouseLayout layout) {
+    public static boolean saveHouseLayout(Context context, HouseLayout layout) {
         String fileName = getHouseLayoutFileName(layout);
-        return FileHelper.saveObjectToFile(context, DIRECTORY_NAME_LAYOUTS, fileName, layout);
-    }
-
-    public static boolean checkForIntruders(Context context){
-            boolean verification = false;
-            ArrayList<Inhabitant> inhabitants = HouseLayoutHelper.getSelectedLayout(context).getAllInhabitants();
-            for(Inhabitant inhabitant : inhabitants){
-                if(inhabitant.isIntruder()){
-                    verification = true;
-                    break;
-                }
-            }
-            return verification;
+        try {
+            return FilesHelper.saveObjectToFile(context, DIRECTORY_NAME_LAYOUTS, fileName, layout);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -154,7 +161,7 @@ public class HouseLayoutHelper {
      * @return the house layout file name
      */
     public static String getHouseLayoutFileName(HouseLayout layout) {
-        return layout.getName().trim().toLowerCase().replaceAll(" ", "_") + ".json";
+        return layout.getName().trim().toLowerCase().replaceAll(" ", "_") + ".txt";
     }
 
     //endregion
@@ -163,7 +170,7 @@ public class HouseLayoutHelper {
 
     //region Private Methods
 
-    private static HouseLayout createNewHouseLayout(Context context) {
+    private static HouseLayout loadEmptyHouseLayout(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, null);
 

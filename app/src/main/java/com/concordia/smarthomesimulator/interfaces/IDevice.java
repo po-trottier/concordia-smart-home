@@ -1,7 +1,8 @@
-package com.concordia.smarthomesimulator.dataModels;
+package com.concordia.smarthomesimulator.interfaces;
 
-import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.dataModels.Geometry;
 
 /**
  * The interface Device.

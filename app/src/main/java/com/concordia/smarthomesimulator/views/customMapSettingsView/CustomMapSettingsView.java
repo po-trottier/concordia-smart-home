@@ -1,27 +1,23 @@
 package com.concordia.smarthomesimulator.views.customMapSettingsView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.factories.DeviceFactory;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.enums.Orientation;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 

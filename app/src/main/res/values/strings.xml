@@ -134,7 +134,7 @@
     <string name="text_alert_save_layout_default">The active layout is a default layout and cannot be updated. Please choose a name to rename the layout to.\n</string>
     <string name="field_alert_save_layout">Enter the name here</string>
     <string name="success_alert_save_layout">The house layout was successfully saved.</string>
-    <string name="error_exists_alert_save_layout">A house layout with this name already exists. Please try using a different layout name.</string>
+    <string name="error_exists_alert_save_layout">A default house layout with this name already exists. Please try using a different layout name.</string>
     <string name="error_unknown_alert_save_layout">Something went wrong while saving the house layout. Please try again later.</string>
     <string name="title_alert_save_layout_overwrite">The layout already exists</string>
     <string name="text_alert_save_layout_overwrite">Are you sure you want to overwrite the selected layout?</string>
@@ -153,6 +153,7 @@
     <string name="away_disable_message">Inhabitants were detected in the house layout.\n\nPlease remove any inhabitant from the layout before using this feature."</string>
     <string name="away_message_title">\"Away Mode\" cannot be activated</string>
     <string name="edit_text_away_mode_status">Away Mode</string>
+    <string name="edit_text_notification_delay">Notification Delay on Detection</string>
     <string name="away_mode_on">On</string>
     <string name="away_mode_off">Off</string>
     <string name="edit_text_simulation_status">Simulation Status</string>
@@ -171,6 +172,7 @@
     <string name="generic_move">Move</string>
     <string name="generic_remove">Remove</string>
     <string name="generic_error">Error</string>
+    <string name="generic_minutes">minutes</string>
     <string name="generic_error_message">An unexpected error occurred. Please try again later.</string>
 
     <string name="dashboard_context">Simulation Context</string>
@@ -195,6 +197,10 @@
     <string name="alert_map_inhabitant_text_self">YOU are the selected inhabitant.</string>
 
     <string name="wrong_permissions">You do not have the proper permissions to do this.</string>
+
+    <string name="intruder_category">Intruder Alerts</string>
+    <string name="intruder_title">Intruder Alerts</string>
+    <string name="intruder_text">Intruder detected : Contacting authorities %d in minutes</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>

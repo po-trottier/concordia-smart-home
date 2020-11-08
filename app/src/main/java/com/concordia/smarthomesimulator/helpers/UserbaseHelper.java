@@ -5,16 +5,19 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.enums.Permissions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_PERMISSIONS;
-import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_USERNAME;
 
 public final class UserbaseHelper {
 
-    private final static String USERS_FILE_NAME = "users.json";
+    private final static String USERS_FILE_NAME = "users.txt";
 
     /**
      * Loads userbase.
@@ -25,7 +28,11 @@ public final class UserbaseHelper {
     public static Userbase loadUserbase(Context context){
         Userbase userbase = null;
         //checking if a user file is present, creating one if it isn't
-        userbase = (Userbase) FileHelper.loadObjectFromFile(context, USERS_FILE_NAME, Userbase.class);
+        try {
+            userbase = (Userbase) FilesHelper.loadObjectFromFile(context, USERS_FILE_NAME);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         if (userbase == null){
             // no record of userbase, creating a default one
             userbase = setupDefaultUserbase(context);
@@ -40,7 +47,11 @@ public final class UserbaseHelper {
      * @param userbase the userbase
      */
     public static void saveUserbase(Context context, Userbase userbase){
-        FileHelper.saveObjectToFile(context, USERS_FILE_NAME, userbase);
+        try {
+            FilesHelper.saveObjectToFile(context, USERS_FILE_NAME, userbase);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -74,18 +85,18 @@ public final class UserbaseHelper {
         // User has required permissions
         if ((loggedUserPermissions & minPermissionsForAction) == minPermissionsForAction){
             message = String.format("User performed permission-restricted action: %s", action.getDescription());
-            ActivityLogHelper.add(context, new LogEntry("Permission", message, LogImportance.MINOR));
+            LogsHelper.add(context, new LogEntry("Permission", message, LogImportance.MINOR));
             return true;
         }
         // USer doesn't have permissions
         Toast.makeText(context, String.format(context.getString(R.string.permission_edit_not_allows), action.getDescription()),Toast.LENGTH_SHORT).show();
-        ActivityLogHelper.add(context, new LogEntry("Permission", message, LogImportance.IMPORTANT));
+        LogsHelper.add(context, new LogEntry("Permission", message, LogImportance.IMPORTANT));
         return false;
     }
 
     private static Userbase setupDefaultUserbase(Context context){
         List<User> users = new ArrayList<>();
-        users.add(new User("parent","parent",Permissions.PARENT));
+        users.add(new User("parent","parent", Permissions.PARENT));
         users.add(new User("child","child", Permissions.CHILD));
         users.add(new User("guest","guest", Permissions.GUEST));
         users.add(new User("stranger","stranger", Permissions.STRANGER));

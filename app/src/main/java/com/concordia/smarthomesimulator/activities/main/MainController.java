@@ -20,7 +20,9 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.about.AboutController;
 import com.concordia.smarthomesimulator.activities.login.LoginController;
 import com.concordia.smarthomesimulator.dataModels.*;
-import com.concordia.smarthomesimulator.helpers.ActivityLogHelper;
+import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.google.android.material.navigation.NavigationView;
 
@@ -86,13 +88,13 @@ public class MainController extends AppCompatActivity {
         // Add appropriate logic for the various Action Bar menu items.
         switch (item.getItemId()) {
             case R.id.action_about:
-                ActivityLogHelper.add(context, new LogEntry("About","Opened the About Page.", LogImportance.MINOR));
+                LogsHelper.add(context, new LogEntry("About","Opened the About Page.", LogImportance.MINOR));
                 MainController.this.startActivity(new Intent(MainController.this, AboutController.class));
                 return true;
             case R.id.action_logout:
                 saveAndClearUser();
                 // Redirect to the Login Screen
-                ActivityLogHelper.add(context, new LogEntry("Exit","User logged out.", LogImportance.IMPORTANT));
+                LogsHelper.add(context, new LogEntry("Exit","User logged out.", LogImportance.IMPORTANT));
                 MainController.this.startActivity(new Intent(MainController.this, LoginController.class));
                 finish();
                 return true;
