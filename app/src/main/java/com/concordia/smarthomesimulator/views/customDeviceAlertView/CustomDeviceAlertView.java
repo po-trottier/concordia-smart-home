@@ -9,12 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.Action;
-import com.concordia.smarthomesimulator.enums.DeviceType;
-import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.dataModels.Window;
+import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.DeviceType;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 /**
  * The type Custom device alert view.
@@ -123,12 +123,8 @@ public class CustomDeviceAlertView extends LinearLayout {
         statusCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Action action = Action.fromInteractingDevice(device, getContext());
-                // action is null if we're trying to interact with a door, anyone can do that.
-                if (action == null || UserbaseHelper.verifyPermissions(action, getContext())){
-                    device.setIsOpened(isChecked);
-                    setDeviceInformation(device);
-                }
+                device.setIsOpened(isChecked);
+                setDeviceInformation(device);
             }
         });
     }

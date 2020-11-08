@@ -58,17 +58,22 @@ public class LayoutSingleton implements Observer {
      * @param layout the layout
      */
     public void setLayout(HouseLayout layout) {
+        boolean update = true;
         if (layout == null) {
             return;
         }
         if (this.layout != null) {
             // Remove the observer from the old layout
             this.layout.deleteObserver(this);
+            // Update if inhabitants changed
+            update = !this.layout.getAllInhabitants().equals(layout.getAllInhabitants());
         }
         // Set the new layout and add the observer
         this.layout = layout;
         this.layout.addObserver(this);
-        update(this.layout, null);
+        if (update) {
+            update(this.layout, null);
+        }
     }
 
     /**

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
@@ -21,7 +22,6 @@ import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDevice
 import java.util.ArrayList;
 
 import static com.concordia.smarthomesimulator.Constants.*;
-import static java.security.AccessController.getContext;
 
 public class CustomMapModel {
 
@@ -319,12 +319,12 @@ public class CustomMapModel {
         for (MapDevice device : devices) {
             if (device.getShape().contains(x, y)) {
                 //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
-                Action action = Action.fromInteractingDevice(device.getDevice(), context);
-                if (action == null || (event.getAction() == MotionEvent.ACTION_UP && UserbaseHelper.verifyPermissions(action, context))) {
-                    showDeviceDialog(context, device.getDevice());
-                    return true;
+                Action action = Action.fromDevice(device.getDevice(), context);
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (action == null || UserbaseHelper.verifyPermissions(action, context)) {
+                        showDeviceDialog(context, device.getDevice());
+                    }
                 }
-                // A known shape was clicked
                 return true;
             }
         }
