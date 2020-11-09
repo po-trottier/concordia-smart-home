@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.adapters;
 
+import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
@@ -19,5 +20,11 @@ public class InhabitantAdapter implements IInhabitant {
     @Override
     public boolean isIntruder() {
         return false;
+    }
+
+    @NonNull
+    @Override
+    public IInhabitant clone() {
+        return new InhabitantAdapter(this.user);
     }
 }

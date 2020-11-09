@@ -84,12 +84,18 @@ public class CustomDeviceAlertView extends LinearLayout {
         newDevice.setIsOpened(openedCheckbox.isChecked());
 
         CheckBox lockedCheckbox = findViewById(R.id.device_lock_checkbox);
+        CheckBox autoLockCheckbox = findViewById(R.id.device_auto_lock_checkbox);
+        CheckBox autoOnCheckbox = findViewById(R.id.device_auto_on_checkbox);
         switch (newDevice.getDeviceType()) {
             case DOOR:
                 ((Door) newDevice).setIsLocked(lockedCheckbox.isChecked());
+                ((Door) newDevice).setAutoLock(autoLockCheckbox.isChecked());
                 break;
             case WINDOW:
                 ((Window) newDevice).setIsLocked(lockedCheckbox.isChecked());
+                break;
+            case LIGHT:
+                ((Light) newDevice).setAutoOn(autoOnCheckbox.isChecked());
                 break;
         }
 

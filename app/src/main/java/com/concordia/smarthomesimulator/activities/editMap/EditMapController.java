@@ -134,6 +134,8 @@ public class EditMapController extends AppCompatActivity {
             .setPositiveButton(getString(R.string.generic_save), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    CustomMapSettingsView settings = findViewById(R.id.edit_map_settings);
+                    editMapModel.setHouseLayout(settings.getTemporaryLayout());
                     editMapModel.updateHouseLayoutName(layoutName.getText().toString().trim());
                     if (!LayoutsHelper.isLayoutNameDefault(editMapModel.getHouseLayout())) {
                         if (LayoutsHelper.isLayoutNameUnique(context, editMapModel.getHouseLayout())) {
@@ -190,7 +192,7 @@ public class EditMapController extends AppCompatActivity {
         editMapModel.setHouseLayout(LayoutsHelper.getSelectedLayout(context));
 
         CustomMapSettingsView settings = findViewById(R.id.edit_map_settings);
-        settings.forceUpdateView(editMapModel.getHouseLayout());
+        settings.forceUpdateView((HouseLayout) editMapModel.getHouseLayout().clone());
     }
 
     private View setupCustomView() {

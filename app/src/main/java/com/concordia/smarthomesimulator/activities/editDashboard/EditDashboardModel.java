@@ -7,7 +7,9 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -273,6 +275,9 @@ public class EditDashboardModel extends ViewModel{
         boolean awayChanged = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false) != awayMode;
         if (awayChanged && UserbaseHelper.verifyPermissions(Action.CHANGE_AWAY_MODE, context)) {
             editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
+            if (awayMode) {
+                setLayoutInAwayMode(context);
+            }
         }
         // Set the other parameters
         editor.putBoolean(PREFERENCES_KEY_STATUS, status);
@@ -297,5 +302,31 @@ public class EditDashboardModel extends ViewModel{
     public boolean hasSelectedSelf(SharedPreferences preferences, String username){
         String loggedUsername = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         return loggedUsername.equalsIgnoreCase(username);
+    }
+
+    private void setLayoutInAwayMode(Context context) {
+        HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+        for (Room room : layout.getRooms()) {
+            if (room.getDevices().size() == 0) {
+                continue;
+            }
+            for (IDevice device : room.getDevices()) {
+                switch (device.getDeviceType()) {
+                    case DOOR:
+                        Door door = (Door) device;
+                        if (door.isAutoLock()) {
+                            door.setIsLocked(true);
+                        }
+                        break;
+                    case WINDOW:
+                        Window window = (Window) device;
+                        window.setIsOpened(false);
+                }
+            }
+        }
+        if (!LayoutsHelper.isLayoutNameDefault(layout)) {
+            LayoutsHelper.saveHouseLayout(context, layout);
+        }
+        LayoutsHelper.updateSelectedLayout(context, layout);
     }
 }

@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
@@ -33,6 +34,33 @@ public class Room extends Observable implements Serializable {
         this.windows = new ArrayList<>();
         this.doors = new ArrayList<>();
         this.lights = new ArrayList<>();
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Light light : lights) {
+            if (light.isAutoOn()) {
+                light.setIsOpened(inhabitants.size() > 0);
+            }
+        }
+        super.notifyObservers();
+    }
+
+    @NonNull
+    @Override
+    protected Object clone() {
+        Room newRoom = new Room(name, geometry);
+        ArrayList<IDevice> newDevices = new ArrayList<>();
+        for (IDevice device : getDevices()) {
+            newDevices.add(device.clone());
+        }
+        ArrayList<IInhabitant> newInhabitants = new ArrayList<>();
+        for (IInhabitant inhabitant : inhabitants) {
+            newInhabitants.add(inhabitant.clone());
+        }
+        newRoom.addDevices(newDevices);
+        newRoom.addInhabitants(newInhabitants);
+        return newRoom;
     }
 
     @Override
@@ -171,7 +199,7 @@ public class Room extends Observable implements Serializable {
         for(IInhabitant inhabitant : inhabitants) {
             if (inhabitant.getName().equals(name)) {
                 inhabitants.remove(inhabitant);
-                return;
+                break;
             }
         }
         notifyObservers();

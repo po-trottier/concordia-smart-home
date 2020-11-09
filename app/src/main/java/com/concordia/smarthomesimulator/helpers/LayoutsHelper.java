@@ -35,6 +35,15 @@ public class LayoutsHelper {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PREFERENCES_KEY_LAYOUT, layout.getName());
         editor.apply();
+        // Update the userbase
+        Userbase userbase = UserbaseHelper.loadUserbase(context);
+        User user = userbase.getUserFromUsername(preferences.getString(PREFERENCES_KEY_USERNAME, ""));
+        if (user != null) {
+            user.getUserPreferences().receiveFromContext(preferences);
+            userbase.deleteUserFromUsernameIfPossible(context, user.getUsername());
+            userbase.addUserIfPossible(context, user);
+            UserbaseHelper.saveUserbase(context, userbase);
+        }
         // Update the house layout
         LayoutSingleton.getInstance().setLayout(layout);
     }

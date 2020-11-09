@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.adapters.InhabitantAdapter;
 import com.concordia.smarthomesimulator.enums.Orientation;
@@ -19,6 +20,7 @@ import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
 public class HouseLayout extends Observable implements Observer, Serializable {
 
     private String name;
+    private String currentUser;
     private final ArrayList<Room> rooms;
 
     /**
@@ -28,6 +30,7 @@ public class HouseLayout extends Observable implements Observer, Serializable {
      */
     public HouseLayout(String name, String currentUser) {
         this.name = name;
+        this.currentUser = currentUser;
 
         rooms = new ArrayList<>();
         // Create the default rooms (Outdoors and Garage)
@@ -43,9 +46,11 @@ public class HouseLayout extends Observable implements Observer, Serializable {
         outdoors.addDevice(outdoorsDoor);
         // Add the Garage Light
         Light garageLight = new Light(new Geometry(-3, -4, Orientation.HORIZONTAL));
+        garageLight.setAutoOn(true);
         garage.addDevice(garageLight);
         // Add Backyard Light
         Light outdoorsLight = new Light(new Geometry(-4, -3, Orientation.HORIZONTAL));
+        outdoorsLight.setAutoOn(true);
         outdoors.addDevice(outdoorsLight);
         // Add the rooms to the layout
         rooms.addAll(new ArrayList<>(Arrays.asList(garage, outdoors)));
@@ -62,6 +67,20 @@ public class HouseLayout extends Observable implements Observer, Serializable {
     @Override
     public void update(Observable observable, Object arg) {
         notifyObservers();
+    }
+
+    @NonNull
+    @Override
+    public Object clone() {
+        HouseLayout newLayout = new HouseLayout(name, currentUser);
+        newLayout.removeRoom(DEFAULT_NAME_GARAGE);
+        newLayout.removeRoom(DEFAULT_NAME_OUTDOORS);
+        ArrayList<Room> newRooms = new ArrayList<>();
+        for (Room room : rooms) {
+            newRooms.add((Room) room.clone());
+        }
+        newLayout.addRooms(newRooms);
+        return newLayout;
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.concordia.smarthomesimulator.interfaces;
 
-import com.concordia.smarthomesimulator.dataModels.User;
-import com.concordia.smarthomesimulator.dataModels.UserPreferences;
-import com.concordia.smarthomesimulator.enums.Permissions;
+import androidx.annotation.NonNull;
 
 public interface IInhabitant {
     /**
@@ -18,4 +16,7 @@ public interface IInhabitant {
      * @return true or false
      */
     public boolean isIntruder();
+
+    @NonNull
+    public IInhabitant clone();
 }

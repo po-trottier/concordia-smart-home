@@ -1,5 +1,6 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 import java.io.Serializable;
@@ -27,6 +28,12 @@ public class Inhabitant implements IInhabitant, Serializable {
     public Inhabitant(String name, boolean isIntruder) {
         this.name = name;
         this.isIntruder = isIntruder;
+    }
+
+    @NonNull
+    @Override
+    public IInhabitant clone() {
+        return new Inhabitant(name, isIntruder);
     }
 
     /**

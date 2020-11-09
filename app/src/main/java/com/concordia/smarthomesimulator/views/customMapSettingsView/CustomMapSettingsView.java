@@ -89,6 +89,15 @@ public class CustomMapSettingsView extends ScrollView {
         setButtonListeners();
     }
 
+    /**
+     * Gets temporary layout.
+     *
+     * @return the temporary layout
+     */
+    public HouseLayout getTemporaryLayout() {
+        return model.getLayout();
+    }
+
     //endregion
 
     //region Private Methods
