@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.Permissions;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import static com.concordia.smarthomesimulator.Constants.*;
  * <p>
  * This specifies what minimum permissions are required to perform certain actions.
  */
-public class PermissionsConfiguration {
+public class PermissionsConfiguration implements Serializable {
     private final Map<Action, Permissions> actionPermissionsMap;
 
     /**

@@ -22,8 +22,10 @@ import com.concordia.smarthomesimulator.activities.login.LoginController;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 import com.google.android.material.navigation.NavigationView;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -48,6 +50,8 @@ public class MainController extends AppCompatActivity {
 
         context = this;
         sharedPreferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+
+        updateSharedPreferences();
 
         // Setup the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -126,6 +130,13 @@ public class MainController extends AppCompatActivity {
         }
     }
 
+    private void updateSharedPreferences() {
+        Userbase userbase = UserbaseHelper.loadUserbase(context);
+        String username = sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "");
+        User user = userbase.getUserFromUsername(username);
+        user.getUserPreferences().sendToContext(sharedPreferences);
+    }
+
     private void saveAndClearUser() {
         Userbase userbase = UserbaseHelper.loadUserbase(context);
         // Make sure the logged in user is in the userbase
@@ -138,11 +149,16 @@ public class MainController extends AppCompatActivity {
             user = new User(username, password, permissions);
             userbase.addUserIfPossible(context, user);
         }
-        // Save the preferences and permission configuration
-        user.getUserPreferences().receiveFromContext(sharedPreferences);
+        // Save the permission configuration
         userbase.getPermissionsConfiguration().receiveFromContext(sharedPreferences);
+        // Update the user preferences
+        user.getUserPreferences().receiveFromContext(sharedPreferences);
+        userbase.deleteUserFromUsernameIfPossible(context, user.getUsername());
+        userbase.addUserIfPossible(context, user);
         // Save Userbase and Remove Logged In User Information
         UserbaseHelper.saveUserbase(context, userbase);
         UserPreferences.clear(sharedPreferences);
+        // Reset the selected layout
+        LayoutSingleton.getInstance().setLayout(null);
     }
 }

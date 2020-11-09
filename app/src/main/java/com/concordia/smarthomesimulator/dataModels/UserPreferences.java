@@ -207,11 +207,11 @@ public class UserPreferences implements Serializable {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PREFERENCES_KEY_USERNAME, username);
         editor.putString(PREFERENCES_KEY_PASSWORD, password);
+        editor.putString(PREFERENCES_KEY_LAYOUT, layout);
+        editor.putBoolean(PREFERENCES_KEY_STATUS, status);
+        editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
         editor.putInt(PREFERENCES_KEY_PERMISSIONS, permissions.getBitValue());
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
-        editor.putBoolean(PREFERENCES_KEY_STATUS, status);
-        editor.putString(PREFERENCES_KEY_LAYOUT, layout);
-        editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, year);
         editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, month);
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, day);

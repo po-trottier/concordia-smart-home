@@ -3,6 +3,7 @@ package com.concordia.smarthomesimulator.singletons;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.interfaces.OnIntruderDetectedListener;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -59,20 +60,19 @@ public class LayoutSingleton implements Observer {
      */
     public void setLayout(HouseLayout layout) {
         boolean update = true;
-        if (layout == null) {
-            return;
-        }
         if (this.layout != null) {
             // Remove the observer from the old layout
             this.layout.deleteObserver(this);
             // Update if inhabitants changed
-            update = !this.layout.getAllInhabitants().equals(layout.getAllInhabitants());
+            update = !this.layout.getAllInhabitants().equals(layout == null ? new ArrayList<>() : layout.getAllInhabitants());
         }
         // Set the new layout and add the observer
         this.layout = layout;
-        this.layout.addObserver(this);
-        if (update) {
-            update(this.layout, null);
+        if (layout != null) {
+            this.layout.addObserver(this);
+            if (update) {
+                update(this.layout, null);
+            }
         }
     }
 
