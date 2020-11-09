@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.Door;
 import com.concordia.smarthomesimulator.dataModels.Window;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.DeviceType;
@@ -22,6 +23,7 @@ import com.concordia.smarthomesimulator.interfaces.IDevice;
 public class CustomDeviceAlertView extends LinearLayout {
 
     private DeviceFactory factory;
+    private Context context;
     private IDevice device;
 
     /**
@@ -31,7 +33,7 @@ public class CustomDeviceAlertView extends LinearLayout {
      */
     public CustomDeviceAlertView(Context context) {
         super(context);
-        initializeFactory();
+        initializeView(context);
     }
 
     /**
@@ -42,7 +44,7 @@ public class CustomDeviceAlertView extends LinearLayout {
      */
     public CustomDeviceAlertView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initializeFactory();
+        initializeView(context);
     }
 
     /**
@@ -54,7 +56,7 @@ public class CustomDeviceAlertView extends LinearLayout {
      */
     public CustomDeviceAlertView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initializeFactory();
+        initializeView(context);
     }
 
     /**
@@ -80,9 +82,14 @@ public class CustomDeviceAlertView extends LinearLayout {
         CheckBox openedCheckbox = findViewById(R.id.device_status_checkbox);
         newDevice.setIsOpened(openedCheckbox.isChecked());
 
-        if (newDevice.getDeviceType() == DeviceType.WINDOW) {
-            CheckBox lockedCheckbox = findViewById(R.id.device_lock_checkbox);
-            ((Window) newDevice).setIsLocked(lockedCheckbox.isChecked());
+        CheckBox lockedCheckbox = findViewById(R.id.device_lock_checkbox);
+        switch (newDevice.getDeviceType()) {
+            case DOOR:
+                ((Door) newDevice).setIsLocked(lockedCheckbox.isChecked());
+                break;
+            case WINDOW:
+                ((Window) newDevice).setIsLocked(lockedCheckbox.isChecked());
+                break;
         }
 
         return newDevice;
@@ -101,7 +108,8 @@ public class CustomDeviceAlertView extends LinearLayout {
         setLockLayout();
     }
 
-    private void initializeFactory() {
+    private void initializeView(Context context) {
+        this.context = context;
         factory = new DeviceFactory();
     }
 
@@ -130,36 +138,73 @@ public class CustomDeviceAlertView extends LinearLayout {
     }
 
     private void setLockLayout() {
-        if (device.getDeviceType() != DeviceType.WINDOW)
+        if (device.getDeviceType() != DeviceType.WINDOW && device.getDeviceType() != DeviceType.DOOR)
             return;
 
         LinearLayout layout = findViewById(R.id.device_lock_layout);
         layout.setVisibility(VISIBLE);
 
-        Window window = (Window) device;
-        setLockText(window);
-        setLockCheckbox(window);
+        setLockText(device);
+        setLockCheckbox(device);
     }
 
-    private void setLockText(Window device) {
-        int color = device.getIsLocked() ? R.color.danger : device.getLockedTint();
-        int text = device.getIsLocked() ? R.string.map_locked : R.string.map_unlocked;
+    private void setLockText(IDevice device) {
+        int color;
+        int text;
+
+        switch (device.getDeviceType()) {
+            case DOOR:
+                color = ((Door) device).getIsLocked() ? R.color.danger : ((Door) device).getLockedTint();
+                text = ((Door) device).getIsLocked() ? R.string.map_locked : R.string.map_unlocked;
+                break;
+            case WINDOW:
+                color = ((Window) device).getIsLocked() ? R.color.danger : ((Window) device).getLockedTint();
+                text = ((Window) device).getIsLocked() ? R.string.map_locked : R.string.map_unlocked;
+                break;
+            default:
+                color = R.color.danger;
+                text = R.string.map_locked;
+        }
 
         TextView statusText = findViewById(R.id.device_lock_text);
         statusText.setText(getContext().getString(text));
         statusText.setTextColor(getContext().getColor(color));
     }
 
-    private void setLockCheckbox(Window device) {
-        int color = device.getIsLocked() ? R.color.danger : device.getLockedTint();
+    private void setLockCheckbox(IDevice device) {
+        int color;
+        boolean locked;
+
+        switch (device.getDeviceType()) {
+            case DOOR:
+                locked = ((Door) device).getIsLocked();
+                color = locked ? R.color.danger : ((Door) device).getLockedTint();
+                break;
+            case WINDOW:
+                locked = ((Window) device).getIsLocked();
+                color = locked ? R.color.danger : ((Window) device).getLockedTint();
+                break;
+            default:
+                color = R.color.danger;
+                locked = true;
+        }
 
         CheckBox statusCheck = findViewById(R.id.device_lock_checkbox);
-        statusCheck.setChecked(device.getIsLocked());
+        statusCheck.setChecked(locked);
         statusCheck.setCompoundDrawableTintList(ColorStateList.valueOf(getContext().getColor(color)));
         statusCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                device.setIsLocked(isChecked);
+                switch (device.getDeviceType()) {
+                    case DOOR:
+                        if (UserbaseHelper.verifyPermissions(Action.INTERACT_DOOR_LOCK, context)) {
+                            ((Door) device).setIsLocked(isChecked);
+                        }
+                        break;
+                    case WINDOW:
+                        ((Window) device).setIsLocked(isChecked);
+                        break;
+                }
                 setDeviceInformation(device);
             }
         });

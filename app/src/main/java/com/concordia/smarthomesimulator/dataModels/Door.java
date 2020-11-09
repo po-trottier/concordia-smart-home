@@ -33,7 +33,7 @@ public class Door implements IDevice, Serializable {
 
     @Override
     public boolean getIsOpened() {
-        return isOpened;
+        return !isLocked && isOpened;
     }
 
     @Override
@@ -61,6 +61,7 @@ public class Door implements IDevice, Serializable {
     public IDevice clone() {
         Door copy = new Door(geometry);
         copy.setIsOpened(isOpened);
+        copy.setIsLocked(isLocked);
         return copy;
     }
 

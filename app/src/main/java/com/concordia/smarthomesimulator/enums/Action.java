@@ -64,13 +64,10 @@ public enum Action {
         }
         // Return the right action
         switch (device.getDeviceType()) {
-            case LIGHT:
-                return sameRoom ? INTERACT_LOCAL_LIGHT : INTERACT_ANY_LIGHT;
-            case WINDOW:
-                return sameRoom ? INTERACT_LOCAL_WINDOW : INTERACT_ANY_WINDOW;
-            default:
-                // No restrictions for opening/closing doors
-                return null;
+            case LIGHT: return sameRoom ? INTERACT_LOCAL_LIGHT : INTERACT_ANY_LIGHT;
+            case WINDOW: return sameRoom ? INTERACT_LOCAL_WINDOW : INTERACT_ANY_WINDOW;
+            case DOOR: return room.getName().equals(DEFAULT_NAME_GARAGE) ? INTERACT_GARAGE : null;
+            default: return null;
         }
     }
 
