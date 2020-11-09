@@ -17,6 +17,7 @@ import com.concordia.smarthomesimulator.enums.Orientation;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -186,7 +187,7 @@ public class CustomMapSettingsModel {
         }
         Inhabitant inhabitant = new Inhabitant(name, isIntruder);
         // Verify that its name is unique
-        ArrayList<Inhabitant> inhabitants =  layout.getAllInhabitants();
+        ArrayList<IInhabitant> inhabitants =  layout.getAllInhabitants();
         if (inhabitants.stream().anyMatch(i -> i.getName().equalsIgnoreCase(inhabitant.getName()))) {
             Toast.makeText(context, context.getString(R.string.add_inhabitant_used), Toast.LENGTH_LONG).show();
             return;
@@ -238,7 +239,7 @@ public class CustomMapSettingsModel {
      * @param context    the context
      * @param inhabitant the inhabitant
      */
-    public void editInhabitant(Context context, Inhabitant inhabitant) {
+    public void editInhabitant(Context context, IInhabitant inhabitant) {
         View customView = setupCustomInhabitantView(context);
         final AlertDialog dialog = new AlertDialog.Builder(context)
             .setTitle(context.getString(R.string.title_alert_edit_inhabitant_edit_map))
@@ -247,7 +248,7 @@ public class CustomMapSettingsModel {
             .setNeutralButton(R.string.generic_remove, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    removeInhabitant(context, inhabitant);
+                    removeInhabitant(inhabitant);
                     // Update the Settings UI
                     CustomMapSettingsView view = ((Activity) context).findViewById(R.id.edit_map_settings);
                     view.updateView();
@@ -261,7 +262,7 @@ public class CustomMapSettingsModel {
                         return;
                     }
                     // Remove from the first room
-                    removeInhabitant(context, inhabitant);
+                    removeInhabitant(inhabitant);
                     // Add to the modified room
                     modifiedRoom.addInhabitant(inhabitant);
                     // Update the layout
@@ -281,7 +282,7 @@ public class CustomMapSettingsModel {
 
     //region Private Methods
 
-    private void removeInhabitant(Context context, Inhabitant inhabitant) {
+    private void removeInhabitant(IInhabitant inhabitant) {
         Room room = null;
         // Find the room the inhabitant is in
         for (Room r : layout.getRooms()) {

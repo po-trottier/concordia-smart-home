@@ -22,6 +22,7 @@ import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.NotificationsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -334,8 +335,8 @@ public class EditDashboardController extends AppCompatActivity {
         HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
 
         if (houseLayout != null) {
-            ArrayList<Inhabitant> inhabitants = LayoutsHelper.getSelectedLayout(context).getAllInhabitants();
-            return inhabitants.stream().allMatch(Inhabitant::isIntruder);
+            ArrayList<IInhabitant> inhabitants = LayoutsHelper.getSelectedLayout(context).getAllInhabitants();
+            return inhabitants.stream().allMatch(IInhabitant::isIntruder);
         }
         else{
             return false;

@@ -17,7 +17,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editMap.EditMapController;
-import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
+import com.concordia.smarthomesimulator.listAdapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;

@@ -52,7 +52,7 @@ public class Constants {
     public static final boolean DEFAULT_STATUS = false;
 
     // Default House Layout Values
-    public static final String DEFAULT_NAME_OUTDOORS = "Outdoors";
+    public static final String DEFAULT_NAME_OUTDOORS = "Backyard";
     public static final String DEFAULT_NAME_GARAGE = "Garage";
 
     // Default House Layout names

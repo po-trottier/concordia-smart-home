@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.LogEntry;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,6 +71,8 @@ public class NotificationsHelper {
         // Send notification
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(id++, builder.build());
+        // Add log
+        LogsHelper.add(context, new LogEntry("Intruder", "An intruder was detected", LogImportance.CRITICAL));
     }
 
     public static void sendAuthoritiesNotification(Context context){
@@ -81,5 +85,7 @@ public class NotificationsHelper {
         // Send notification
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(id++, builder.build());
+        // Add log
+        LogsHelper.add(context, new LogEntry("Intruder", "Authorities were contacted", LogImportance.CRITICAL));
     }
 }

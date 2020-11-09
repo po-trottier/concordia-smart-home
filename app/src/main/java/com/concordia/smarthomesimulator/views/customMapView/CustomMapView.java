@@ -10,6 +10,7 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 import java.util.ArrayList;
 
@@ -213,7 +214,7 @@ public class CustomMapView extends View {
         }
     }
 
-    private void drawInhabitants(ArrayList<Inhabitant> inhabitants, float vertical, float horizontal) {
+    private void drawInhabitants(ArrayList<IInhabitant> inhabitants, float vertical, float horizontal) {
         // Shift the inhabitants down a little to space them from the Room Name Text
         vertical = vertical + ((INHABITANT_SHIFT / 1.5f) * measurements.getScaleY());
         // If there are more than 1 inhabitants, we need to shift the icons so they don't stack
@@ -284,7 +285,7 @@ public class CustomMapView extends View {
         canvas.drawText(room.getName(), horizontal, vertical, textPaint);
     }
 
-    private void drawInhabitant(Inhabitant inhabitant, float x, float y) {
+    private void drawInhabitant(IInhabitant inhabitant, float x, float y) {
         // Define coordinates that will cover the circle
         float left = x - (0.25f * measurements.getScaleX());
         float top = y - (0.3f * measurements.getScaleY());

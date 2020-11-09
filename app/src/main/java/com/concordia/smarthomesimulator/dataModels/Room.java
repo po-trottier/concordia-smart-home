@@ -2,6 +2,7 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class Room extends Observable implements Serializable {
 
     private String name;
     private Geometry geometry;
-    private final ArrayList<Inhabitant> inhabitants;
+    private final ArrayList<IInhabitant> inhabitants;
     private final ArrayList<Door> doors;
     private final ArrayList<Light> lights;
     private final ArrayList<Window> windows;
@@ -65,7 +66,7 @@ public class Room extends Observable implements Serializable {
      *
      * @return the inhabitants
      */
-    public ArrayList<Inhabitant> getInhabitants() {
+    public ArrayList<IInhabitant> getInhabitants() {
         return inhabitants;
     }
 
@@ -115,7 +116,7 @@ public class Room extends Observable implements Serializable {
      *
      * @param inhabitant the inhabitant
      */
-    public void addInhabitant(Inhabitant inhabitant) {
+    public void addInhabitant(IInhabitant inhabitant) {
         inhabitants.add(inhabitant);
         notifyObservers();
     }
@@ -125,8 +126,8 @@ public class Room extends Observable implements Serializable {
      *
      * @param inhabitants the inhabitants
      */
-    public void addInhabitants(ArrayList<Inhabitant> inhabitants) {
-        for (Inhabitant inhabitant : inhabitants) {
+    public void addInhabitants(ArrayList<IInhabitant> inhabitants) {
+        for (IInhabitant inhabitant : inhabitants) {
             addInhabitant(inhabitant);
         }
     }
@@ -167,7 +168,7 @@ public class Room extends Observable implements Serializable {
      * @param name the name
      */
     public void removeInhabitant(String name) {
-        for(Inhabitant inhabitant : inhabitants) {
+        for(IInhabitant inhabitant : inhabitants) {
             if (inhabitant.getName().equals(name)) {
                 inhabitants.remove(inhabitant);
                 return;

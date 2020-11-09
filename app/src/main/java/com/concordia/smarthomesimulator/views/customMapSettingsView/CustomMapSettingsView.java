@@ -16,6 +16,7 @@ import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.DeviceType;
 import com.concordia.smarthomesimulator.enums.Orientation;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 import java.util.ArrayList;
 
@@ -426,7 +427,7 @@ public class CustomMapSettingsView extends ScrollView {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, "");
 
-        for (Inhabitant inhabitant : model.getSelectedRoom().getInhabitants()) {
+        for (IInhabitant inhabitant : model.getSelectedRoom().getInhabitants()) {
             LinearLayout child = (LinearLayout) inflate(context, R.layout.adapter_generic, null);
 
             String inhabitantText = inhabitant.getName();
@@ -459,7 +460,7 @@ public class CustomMapSettingsView extends ScrollView {
         // Create the custom view
         View customView = inflate(context, R.layout.alert_add_inhabitant, null);
         // Get all the inhabitants in the layout
-        ArrayList<Inhabitant> inhabitants =  model.getLayout().getAllInhabitants();
+        ArrayList<IInhabitant> inhabitants =  model.getLayout().getAllInhabitants();
         // Get the currently logged in user
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, "");

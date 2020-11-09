@@ -31,7 +31,6 @@
         android:id="@+id/device_lock_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         android:visibility="gone">
         <TextView
@@ -50,5 +49,56 @@
             android:background="@android:color/transparent"
             android:button="@null"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/device_auto_lock_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="@string/alert_map_device_auto_lock_status"/>
+        <TextView
+            android:id="@+id/device_auto_lock_text"
+            android:textColor="@color/charcoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:id="@+id/device_auto_lock_checkbox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:button="@null"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableTint="@color/grey"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/device_auto_on_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="@string/alert_map_device_auto_on_status"/>
+        <TextView
+            android:id="@+id/device_auto_on_text"
+            android:textColor="@color/charcoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:id="@+id/device_auto_on_checkbox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:button="@null"
+            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableTint="@color/grey"/>
     </LinearLayout>
 </com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView>

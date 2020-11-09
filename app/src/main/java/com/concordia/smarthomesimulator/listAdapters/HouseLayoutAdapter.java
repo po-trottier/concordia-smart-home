@@ -1,4 +1,4 @@
-package com.concordia.smarthomesimulator.adapters;
+package com.concordia.smarthomesimulator.listAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,10 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
-import com.concordia.smarthomesimulator.dataModels.LogEntry;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HouseLayoutAdapter extends ArrayAdapter<ArrayList<HouseLayout>> {
 

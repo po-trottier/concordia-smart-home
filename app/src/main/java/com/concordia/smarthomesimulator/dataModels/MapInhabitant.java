@@ -1,11 +1,12 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.graphics.RectF;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 public class MapInhabitant {
 
     private final RectF shape;
-    private final Inhabitant inhabitant;
+    private final IInhabitant inhabitant;
 
     /**
      * Instantiates a new Map inhabitant.
@@ -13,7 +14,7 @@ public class MapInhabitant {
      * @param shape      the shape
      * @param inhabitant the inhabitant
      */
-    public MapInhabitant(RectF shape, Inhabitant inhabitant) {
+    public MapInhabitant(RectF shape, IInhabitant inhabitant) {
         this.shape = shape;
         this.inhabitant = inhabitant;
     }
@@ -32,7 +33,7 @@ public class MapInhabitant {
      *
      * @return the inhabitant
      */
-    public Inhabitant getInhabitant() {
+    public IInhabitant getInhabitant() {
         return inhabitant;
     }
 }

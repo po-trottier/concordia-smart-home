@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.adapters.ActivityLogsAdapter;
+import com.concordia.smarthomesimulator.listAdapters.ActivityLogsAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 

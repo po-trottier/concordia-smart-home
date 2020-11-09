@@ -1,8 +1,10 @@
 package com.concordia.smarthomesimulator.dataModels;
 
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
+
 import java.io.Serializable;
 
-public class Inhabitant implements Serializable {
+public class Inhabitant implements IInhabitant, Serializable {
     private final boolean isIntruder;
     private final String name;
 

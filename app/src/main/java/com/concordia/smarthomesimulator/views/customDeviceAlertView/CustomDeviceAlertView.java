@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.Door;
+import com.concordia.smarthomesimulator.dataModels.Light;
 import com.concordia.smarthomesimulator.dataModels.Window;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.DeviceType;
@@ -106,6 +107,8 @@ public class CustomDeviceAlertView extends LinearLayout {
         setStatusText();
         setStatusCheckbox();
         setLockLayout();
+        setAutoLockLayout();
+        setAutoOnLayout();
     }
 
     private void initializeView(Context context) {
@@ -144,11 +147,33 @@ public class CustomDeviceAlertView extends LinearLayout {
         LinearLayout layout = findViewById(R.id.device_lock_layout);
         layout.setVisibility(VISIBLE);
 
-        setLockText(device);
-        setLockCheckbox(device);
+        setLockText();
+        setLockCheckbox();
     }
 
-    private void setLockText(IDevice device) {
+    private void setAutoLockLayout() {
+        if (device.getDeviceType() != DeviceType.DOOR)
+            return;
+
+        LinearLayout layout = findViewById(R.id.device_auto_lock_layout);
+        layout.setVisibility(VISIBLE);
+
+        setAutoLockText((Door) device);
+        setAutoLockCheckbox((Door) device);
+    }
+
+    private void setAutoOnLayout() {
+        if (device.getDeviceType() != DeviceType.LIGHT)
+            return;
+
+        LinearLayout layout = findViewById(R.id.device_auto_on_layout);
+        layout.setVisibility(VISIBLE);
+
+        setAutoOnText((Light) device);
+        setAutoOnCheckbox((Light) device);
+    }
+
+    private void setLockText() {
         int color;
         int text;
 
@@ -171,7 +196,7 @@ public class CustomDeviceAlertView extends LinearLayout {
         statusText.setTextColor(getContext().getColor(color));
     }
 
-    private void setLockCheckbox(IDevice device) {
+    private void setLockCheckbox() {
         int color;
         boolean locked;
 
@@ -205,6 +230,44 @@ public class CustomDeviceAlertView extends LinearLayout {
                         ((Window) device).setIsLocked(isChecked);
                         break;
                 }
+                setDeviceInformation(device);
+            }
+        });
+    }
+
+    private void setAutoLockText(Door device) {
+        int text = device.isAutoLock() ? R.string.map_activated : R.string.map_deactivated;
+
+        TextView statusText = findViewById(R.id.device_auto_lock_text);
+        statusText.setText(getContext().getString(text));
+    }
+
+    private void setAutoLockCheckbox(Door device) {
+        CheckBox statusCheck = findViewById(R.id.device_auto_lock_checkbox);
+        statusCheck.setChecked(device.isAutoLock());
+        statusCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                device.setAutoLock(isChecked);
+                setDeviceInformation(device);
+            }
+        });
+    }
+
+    private void setAutoOnText(Light device) {
+        int text = device.isAutoOn() ? R.string.map_activated : R.string.map_deactivated;
+
+        TextView statusText = findViewById(R.id.device_auto_on_text);
+        statusText.setText(getContext().getString(text));
+    }
+
+    private void setAutoOnCheckbox(Light device) {
+        CheckBox statusCheck = findViewById(R.id.device_auto_on_checkbox);
+        statusCheck.setChecked(device.isAutoOn());
+        statusCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                device.setAutoOn(isChecked);
                 setDeviceInformation(device);
             }
         });

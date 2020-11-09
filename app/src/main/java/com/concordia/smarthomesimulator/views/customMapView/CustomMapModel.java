@@ -17,6 +17,7 @@ import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
 
 import java.util.ArrayList;
@@ -202,22 +203,60 @@ public class CustomMapModel {
                 deviceHeight = g.getHeight();
                 break;
         }
-        float left;
-        float top;
-        float right;
-        float bottom;
-        // Garage door is the only device with X < 0
+        float left = 0;
+        float top = 0;
+        float right = 0;
+        float bottom = 0;
+        // Default devices are the only devices with X < 0
         if (g.getX() < 0) {
-            // Find the top right point of the garage
-            float roomX = (((maxX - minX) / 2f) - (SPACING / 4f)) * scaleX;
-            float roomY = height - (height * RESERVED_HEIGHT) + (SPACING * scaleY);
-            // Define a rectangle that is horizontally centered at the top of the garage
-            right = (roomX / 2) + ((deviceWidth * scaleX) / 2);
-            bottom = roomY + ((deviceHeight * scaleY) / 2);
-            left = (roomX / 2) - ((deviceWidth * scaleX) / 2);
-            top = roomY - ((deviceHeight * scaleY) / 2);
+            switch (g.getX()) {
+                // Garage Door
+                case -1:
+                    // Find the top right point of the garage
+                    float garageDoorX = (((maxX - minX) / 2f) - (SPACING / 4f)) * scaleX;
+                    float garageDoorY = height - (height * RESERVED_HEIGHT) + (SPACING * scaleY);
+                    // Define a rectangle that is horizontally centered at the top of the garage
+                    right = (garageDoorX / 2) + ((deviceWidth * scaleX) / 2);
+                    bottom = garageDoorY + ((deviceHeight * scaleY) / 2);
+                    left = (garageDoorX / 2) - ((deviceWidth * scaleX) / 2);
+                    top = garageDoorY - ((deviceHeight * scaleY) / 2);
+                    break;
+                // Backyard Door
+                case -2:
+                    // Find the top right point of the backyard
+                    float backyardDoorX = (maxX + 0.1f) * scaleX;
+                    float backyardDoorY = height - (height * RESERVED_HEIGHT) + (SPACING * scaleY);
+                    // Define a rectangle that is horizontally centered at the top of the garage
+                    right = (backyardDoorX * 0.75f) + ((deviceWidth * scaleX) / 2);
+                    bottom = backyardDoorY + ((deviceHeight * scaleY) / 2);
+                    left = (backyardDoorX  * 0.75f) - ((deviceWidth * scaleX) / 2);
+                    top = backyardDoorY - ((deviceHeight * scaleY) / 2);
+                    break;
+                // Garage Light
+                case -3:
+                    // Find the top right point of the garage
+                    float garageLightX = (((maxX - minX) / 2f) - (SPACING / 4f)) * scaleX;
+                    float garageLightY = height - (height * RESERVED_HEIGHT) + (SPACING * scaleY) + (3.5f * scaleY);
+                    // Define a rectangle that is horizontally centered at the top of the garage
+                    right = (garageLightX / 2) + ((deviceWidth * scaleX) / 2);
+                    bottom = garageLightY + ((deviceHeight * scaleY) / 2);
+                    left = (garageLightX / 2) - ((deviceWidth * scaleX) / 2);
+                    top = garageLightY - ((deviceHeight * scaleY) / 2);
+                    break;
+                // Backyard Light
+                case -4:
+                    // Find the top right point of the backyard
+                    float backyardLightX = (maxX + 0.1f) * scaleX;
+                    float backyardLightY = height - (height * RESERVED_HEIGHT) + (SPACING * scaleY) + (3.5f * scaleY);
+                    // Define a rectangle that is horizontally centered at the top of the garage
+                    right = (backyardLightX * 0.75f) + ((deviceWidth * scaleX) / 2);
+                    bottom = backyardLightY + ((deviceHeight * scaleY) / 2);
+                    left = (backyardLightX  * 0.75f) - ((deviceWidth * scaleX) / 2);
+                    top = backyardLightY - ((deviceHeight * scaleY) / 2);
+                    break;
+            }
         } else {
-            // If this is not the garage door, just draw it where it should be
+            // If this is not a default door, just draw it where it should be
             left = x * scaleX;
             top = available - ((y * scaleY) + (deviceHeight * scaleY));
             right = (x * scaleX) + (deviceWidth * scaleX);
@@ -266,7 +305,7 @@ public class CustomMapModel {
      * @param shape      the shape of the inhabitant
      * @param inhabitant the inhabitant to save
      */
-    public void addInhabitant(RectF shape, Inhabitant inhabitant) {
+    public void addInhabitant(RectF shape, IInhabitant inhabitant) {
         this.inhabitants.add(new MapInhabitant(shape, inhabitant));
     }
 
@@ -394,7 +433,7 @@ public class CustomMapModel {
         dialog.show();
     }
 
-    private void showInhabitantDialog(Context context, Inhabitant inhabitant) {
+    private void showInhabitantDialog(Context context, IInhabitant inhabitant) {
         String message = inhabitant.getName().toUpperCase() + " " + context.getString(R.string.alert_map_inhabitant_text);
 
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);

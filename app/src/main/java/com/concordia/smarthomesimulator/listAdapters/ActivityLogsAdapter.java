@@ -1,4 +1,4 @@
-package com.concordia.smarthomesimulator.adapters;
+package com.concordia.smarthomesimulator.listAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

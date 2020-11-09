@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Light implements IDevice, Serializable {
 
     private boolean isOpened = false;
+    private boolean autoOn = false;
     private Geometry geometry;
 
     public Light() {
@@ -60,6 +61,7 @@ public class Light implements IDevice, Serializable {
     public IDevice clone() {
         Light copy = new Light(geometry);
         copy.setIsOpened(isOpened);
+        copy.setAutoOn(autoOn);
         return copy;
     }
 
@@ -68,5 +70,23 @@ public class Light implements IDevice, Serializable {
         return getDeviceType() == other.getDeviceType()
             && getIsOpened() == other.getIsOpened()
             && getGeometry().equals(other.getGeometry());
+    }
+
+    /**
+     * Is auto on boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isAutoOn() {
+        return autoOn;
+    }
+
+    /**
+     * Sets auto on.
+     *
+     * @param autoOn the auto on
+     */
+    public void setAutoOn(boolean autoOn) {
+        this.autoOn = autoOn;
     }
 }

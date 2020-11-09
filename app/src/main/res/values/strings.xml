@@ -63,6 +63,8 @@
     <string name="map_closed">Closed</string>
     <string name="map_locked">Locked</string>
     <string name="map_unlocked">Unlocked</string>
+    <string name="map_activated">Activated</string>
+    <string name="map_deactivated">Deactivated</string>
     <string name="map_information">Information</string>
     <string name="map_legend">Legend</string>
     <string name="map_legend_doors">Doors</string>
@@ -181,7 +183,9 @@
 
     <string name="alert_map_device_title">Modifying a </string>
     <string name="alert_map_device_status">Current Status:</string>
-    <string name="alert_map_device_lock_status">Window Lock Status:</string>
+    <string name="alert_map_device_lock_status">Lock Status:</string>
+    <string name="alert_map_device_auto_lock_status">Auto-Lock Status:</string>
+    <string name="alert_map_device_auto_on_status">Auto-Activate Status:</string>
     <string name="alert_map_inhabitant_title">Viewing an inhabitant</string>
     <string name="alert_map_inhabitant_text">is the selected inhabitant.</string>
     <string name="alert_map_inhabitant_text_self">YOU are the selected inhabitant.</string>

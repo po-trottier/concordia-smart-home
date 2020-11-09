@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.adapters.HouseLayoutAdapter;
+import com.concordia.smarthomesimulator.listAdapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView;

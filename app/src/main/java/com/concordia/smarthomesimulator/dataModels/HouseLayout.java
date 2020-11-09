@@ -1,7 +1,10 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.Nullable;
+import com.concordia.smarthomesimulator.adapters.InhabitantAdapter;
 import com.concordia.smarthomesimulator.enums.Orientation;
+import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 import java.io.Serializable;
 import java.util.*;
@@ -31,16 +34,28 @@ public class HouseLayout extends Observable implements Observer, Serializable {
         Room garage = new Room(DEFAULT_NAME_GARAGE, new Geometry(-1, -1));
         Room outdoors = new Room(DEFAULT_NAME_OUTDOORS, new Geometry(-1, -1));
         // Add the Garage Door
-        Door garageDoor = new Door();
-        garageDoor.setGeometry(new Geometry(-1, -1, Orientation.HORIZONTAL));
+        Door garageDoor = new Door(new Geometry(-1, -1, Orientation.HORIZONTAL));
+        garageDoor.setAutoLock(true);
         garage.addDevice(garageDoor);
+        // Add Backyard Door
+        Door outdoorsDoor = new Door(new Geometry(-2, -2, Orientation.HORIZONTAL));
+        outdoorsDoor.setAutoLock(true);
+        outdoors.addDevice(outdoorsDoor);
+        // Add the Garage Light
+        Light garageLight = new Light(new Geometry(-3, -4, Orientation.HORIZONTAL));
+        garage.addDevice(garageLight);
+        // Add Backyard Light
+        Light outdoorsLight = new Light(new Geometry(-4, -3, Orientation.HORIZONTAL));
+        outdoors.addDevice(outdoorsLight);
         // Add the rooms to the layout
         rooms.addAll(new ArrayList<>(Arrays.asList(garage, outdoors)));
 
         // Add the current user if he's not already in a room
         boolean userExists = currentUser != null && rooms.stream().anyMatch(room -> room.hasInhabitant(currentUser));
         if (!userExists) {
-            this.getRoom(DEFAULT_NAME_OUTDOORS).addInhabitant(new Inhabitant(currentUser));
+            // Create a dummy user to make the adapter work...
+            User user = new User(currentUser, "", Permissions.STRANGER);
+            this.getRoom(DEFAULT_NAME_OUTDOORS).addInhabitant(new InhabitantAdapter(user));
         }
     }
 
@@ -93,7 +108,7 @@ public class HouseLayout extends Observable implements Observer, Serializable {
      * @return the boolean
      */
     public boolean isIntruderDetected() {
-        return getAllInhabitants().stream().anyMatch(Inhabitant::isIntruder);
+        return getAllInhabitants().stream().anyMatch(IInhabitant::isIntruder);
     }
 
     /**
@@ -147,13 +162,13 @@ public class HouseLayout extends Observable implements Observer, Serializable {
      *
      * @return the all inhabitants
      */
-    public ArrayList<Inhabitant> getAllInhabitants() {
-        List<ArrayList<Inhabitant>> inhabitantLists = rooms
+    public ArrayList<IInhabitant> getAllInhabitants() {
+        List<ArrayList<IInhabitant>> inhabitantLists = rooms
                 .stream()
                 .map(Room::getInhabitants)
                 .collect(Collectors.toList());
-        ArrayList<Inhabitant> inhabitants = new ArrayList<>();
-        for (ArrayList<Inhabitant> list : inhabitantLists) {
+        ArrayList<IInhabitant> inhabitants = new ArrayList<>();
+        for (ArrayList<IInhabitant> list : inhabitantLists) {
             inhabitants.addAll(list);
         }
         return inhabitants;

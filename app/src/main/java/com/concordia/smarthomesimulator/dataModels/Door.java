@@ -11,6 +11,7 @@ public class Door implements IDevice, Serializable {
 
     private boolean isOpened = false;
     private boolean isLocked = false;
+    private boolean autoLock = false;
     private Geometry geometry;
 
     public Door() {
@@ -62,6 +63,7 @@ public class Door implements IDevice, Serializable {
         Door copy = new Door(geometry);
         copy.setIsOpened(isOpened);
         copy.setIsLocked(isLocked);
+        copy.setAutoLock(autoLock);
         return copy;
     }
 
@@ -97,5 +99,23 @@ public class Door implements IDevice, Serializable {
      */
     public void setIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
+    }
+
+    /**
+     * Is auto lock boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isAutoLock() {
+        return autoLock;
+    }
+
+    /**
+     * Sets auto lock.
+     *
+     * @param autoLock the auto lock
+     */
+    public void setAutoLock(boolean autoLock) {
+        this.autoLock = autoLock;
     }
 }
