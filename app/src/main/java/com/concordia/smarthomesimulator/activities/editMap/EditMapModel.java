@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.activities.editMap;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
@@ -8,6 +9,8 @@ import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 
 import java.util.ArrayList;
+
+import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_AWAY_MODE;
 
 public class EditMapModel  extends ViewModel {
 
@@ -66,5 +69,15 @@ public class EditMapModel  extends ViewModel {
     public void deleteHouseLayout(Context context, ArrayList<HouseLayout> layouts, int position) {
         LayoutsHelper.removeHouseLayout(context, layouts.get(position));
         layouts.remove(position);
+    }
+
+    /**
+     * Deactivate away mode.
+     */
+    public void deactivateAwayMode(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, false);
+        editor.apply();
     }
 }

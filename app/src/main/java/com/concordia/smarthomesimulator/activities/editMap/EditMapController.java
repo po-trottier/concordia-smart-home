@@ -98,6 +98,7 @@ public class EditMapController extends AppCompatActivity {
             .setPositiveButton(R.string.generic_open, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    editMapModel.deactivateAwayMode(context);
                     LayoutsHelper.updateSelectedLayout(context, editMapModel.getHouseLayout());
                     fillKnownValues();
                 }
