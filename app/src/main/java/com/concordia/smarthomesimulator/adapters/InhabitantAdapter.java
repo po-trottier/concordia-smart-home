@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
-public class InhabitantAdapter implements IInhabitant {
+import java.io.Serializable;
+
+public class InhabitantAdapter implements IInhabitant, Serializable {
 
     private final User user;
 
