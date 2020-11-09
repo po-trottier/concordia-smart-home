@@ -356,6 +356,14 @@ public class CustomMapView extends View {
     }
 
     private void drawDoor(Door device, float[] points) {
+        if (device.getIsLocked()) {
+            // If the window is locked change the paint color
+            devicePaint.setColor(context.getColor(device.getLockedTint()));
+        } else {
+            // Get the color to use when drawing the device
+            int color = device.getIsOpened() ? device.getOpenedTint() : device.getClosedTint();
+            devicePaint.setColor(context.getColor(color));
+        }
         // Create the rectangle to draw
         RectF shape = new RectF(points[0], points[1], points[2], points[3]);
         // Collect the new shape

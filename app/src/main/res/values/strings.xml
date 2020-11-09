@@ -49,6 +49,7 @@
     <string name="edit_user_welcome_create">Create a New User</string>
     <string name="create_user_successful">User was created successfully!</string>
     <string name="create_user_failed">Another user with the same username already exists.</string>
+    <string name="create_user_invalid">The values entered are invalid. Please make sure you entered a valid username and password.</string>
     <string name="edit_user_select">Select a user</string>
     <string name="edit_text_new_username">Username</string>
     <string name="edit_text_new_password">Password</string>
@@ -58,9 +59,6 @@
     <string name="delete_logged_user_warning">You cannot delete your own account.</string>
     <string name="delete_logged_user_success">The user has been deleted.</string>
 
-    <string name="map_window">Window</string>
-    <string name="map_door">Door</string>
-    <string name="map_light">Light</string>
     <string name="map_opened">Opened</string>
     <string name="map_closed">Closed</string>
     <string name="map_locked">Locked</string>
@@ -77,9 +75,6 @@
     <string name="map_active_layout_devices">Number of Devices:</string>
     <string name="map_active_layout_rooms_suffix">rooms</string>
     <string name="map_active_layout_devices_suffix">devices</string>
-    <string name="default_room_name">Room</string>
-    <string name="default_device_name">Device</string>
-    <string name="title_rooms">Rooms</string>
 
     <string name="title_activity_edit_map">Edit House Layout</string>
     <string name="layout_name_edit_map">House Layout Name</string>
@@ -110,8 +105,6 @@
     <string name="text_alert_remove_device_edit_map">Are you sure you want to remove the device from the house layout ?</string>
     <string name="title_alert_add_inhabitant_edit_map">Add a new inhabitant</string>
     <string name="title_alert_edit_inhabitant_edit_map">Modify the inhabitant</string>
-    <string name="title_alert_remove_inhabitant_edit_map">Remove the inhabitant</string>
-    <string name="text_alert_remove_inhabitant_edit_map">Are you sure you want to remove the inhabitant from the house layout ?</string>
     <string name="text_alert_error_inhabitant_edit_map">You must select a destination in order to move the inhabitant</string>
 
     <string name="text_alert_device_type">Device Type:</string>
@@ -178,9 +171,6 @@
     <string name="dashboard_context">Simulation Context</string>
     <string name="dashboard_logged_user">Currently Logged In</string>
 
-    <string name="edit_layout_upload_success">The image was saved successfully.</string>
-    <string name="edit_layout_upload_error">An error occurred while saving the image. Please try again later.</string>
-
     <string name="about_name">Name</string>
     <string name="about_student_id">Student ID</string>
 
@@ -195,8 +185,6 @@
     <string name="alert_map_inhabitant_title">Viewing an inhabitant</string>
     <string name="alert_map_inhabitant_text">is the selected inhabitant.</string>
     <string name="alert_map_inhabitant_text_self">YOU are the selected inhabitant.</string>
-
-    <string name="wrong_permissions">You do not have the proper permissions to do this.</string>
 
     <string name="intruder_category">Intruder Alerts</string>
     <string name="intruder_title">Intruder Alert</string>

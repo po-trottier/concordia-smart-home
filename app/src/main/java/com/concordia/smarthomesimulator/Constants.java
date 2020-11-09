@@ -30,6 +30,7 @@ public class Constants {
     public static final String PREFERENCES_KEY_ACTION_CHANGE_AWAY_MODE = "Set_Away_Mode";
     public static final String PREFERENCES_KEY_ACTION_CHANGE_PERMISSIONS_CONFIG = "Edit_Permissions_Configuration";
     public static final String PREFERENCES_KEY_ACTION_INTERACT_DOOR_LOCK = "Lock/Unlock_Doors";
+    public static final String PREFERENCES_KEY_ACTION_MODIFY_USERBASE = "Modify_Userbase";
 
     // Default Minimum User Type for Permissions
     public static final Permissions DEFAULT_MIN_TO_INTERACT_ANY_WINDOW = Permissions.PARENT;
@@ -40,6 +41,7 @@ public class Constants {
     public static final Permissions DEFAULT_MIN_TO_CHANGE_AWAY_MODE = Permissions.CHILD;
     public static final Permissions DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG = Permissions.PARENT;
     public static final Permissions DEFAULT_MIN_TO_INTERACT_DOOR_LOCK = Permissions.PARENT;
+    public static final Permissions DEFAULT_MIN_TO_MODIFY_USERBASE = Permissions.PARENT;
 
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;

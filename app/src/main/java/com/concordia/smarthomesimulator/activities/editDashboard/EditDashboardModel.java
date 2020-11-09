@@ -193,7 +193,6 @@ public class EditDashboardModel extends ViewModel{
      * Will edit a user account if the edited account is not similar to another account in the userbase.
      *
      * @param context          the context
-     * @param preferences      the preferences
      * @param userbase         the userbase
      * @param username         the username
      * @param password         the password
@@ -201,7 +200,15 @@ public class EditDashboardModel extends ViewModel{
      * @param previousUsername the previous username
      * @return the int code for the feedback message
      */
-    public int editUser(Context context, SharedPreferences preferences, Userbase userbase, String username, String password, String permissions, String previousUsername){
+    public int editUser(Context context, Userbase userbase, String username, String password, String permissions, String previousUsername){
+        // Validate user permissions
+        if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+            return -1;
+        }
+
+        // Get Preferences
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+
         // Get the Old User
         User oldUser = userbase.getUserFromUsername(previousUsername);
 
@@ -220,12 +227,14 @@ public class EditDashboardModel extends ViewModel{
         User newUser = new User(validUsername, validPassword, validPermissions);
 
         // If we haven't changed the user, then don't do anything
-        if (newUser.equals(oldUser))
+        if (newUser.equals(oldUser)) {
             return -1;
+        }
 
         // Validate that the new user doesn't already exist and that the username is unique
-        if (userbase.getNumberOfSimilarUsers(newUser) > 1 || userbase.containsUser(newUser))
+        if (userbase.getNumberOfSimilarUsers(newUser) > 1 || userbase.containsUser(newUser)) {
             return R.string.edit_conflict;
+        }
 
         // Set the preferences of the new user to that of the old user
         newUser.setUserPreferences(oldUser.getUserPreferences());
@@ -251,15 +260,21 @@ public class EditDashboardModel extends ViewModel{
     /**
      * Edit parameters.
      *
-     * @param preferences the preferences
+     * @param context     the context
      * @param status      the status
      * @param temperature the temperature
      * @param date        the date
      * @param time        the time
      */
-    public void editParameters(SharedPreferences preferences, boolean status, boolean awayMode, int callTimer, int temperature, LocalDate date, LocalTime time) {
+    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, LocalDate date, LocalTime time) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
+        // Verify the permissions if the user changed the away mode
+        boolean awayChanged = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false) != awayMode;
+        if (awayChanged && UserbaseHelper.verifyPermissions(Action.CHANGE_AWAY_MODE, context)) {
+            editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
+        }
+        // Set the other parameters
         editor.putBoolean(PREFERENCES_KEY_STATUS, status);
         editor.putInt(PREFERENCES_KEY_CALL_DELAY, callTimer);
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);

@@ -20,7 +20,8 @@ public enum Action {
     INTERACT_GARAGE(PREFERENCES_KEY_ACTION_INTERACT_GARAGE),
     CHANGE_AWAY_MODE(PREFERENCES_KEY_ACTION_CHANGE_AWAY_MODE),
     CHANGE_PERMISSIONS_CONFIG(PREFERENCES_KEY_ACTION_CHANGE_PERMISSIONS_CONFIG),
-    INTERACT_DOOR_LOCK(PREFERENCES_KEY_ACTION_INTERACT_DOOR_LOCK);
+    INTERACT_DOOR_LOCK(PREFERENCES_KEY_ACTION_INTERACT_DOOR_LOCK),
+    MODIFY_USERBASE(PREFERENCES_KEY_ACTION_MODIFY_USERBASE);
 
     private final String description;
 
@@ -64,13 +65,10 @@ public enum Action {
         }
         // Return the right action
         switch (device.getDeviceType()) {
-            case LIGHT:
-                return sameRoom ? INTERACT_LOCAL_LIGHT : INTERACT_ANY_LIGHT;
-            case WINDOW:
-                return sameRoom ? INTERACT_LOCAL_WINDOW : INTERACT_ANY_WINDOW;
-            default:
-                // No restrictions for opening/closing doors
-                return null;
+            case LIGHT: return sameRoom ? INTERACT_LOCAL_LIGHT : INTERACT_ANY_LIGHT;
+            case WINDOW: return sameRoom ? INTERACT_LOCAL_WINDOW : INTERACT_ANY_WINDOW;
+            case DOOR: return room.getName().equals(DEFAULT_NAME_GARAGE) ? INTERACT_GARAGE : null;
+            default: return null;
         }
     }
 
