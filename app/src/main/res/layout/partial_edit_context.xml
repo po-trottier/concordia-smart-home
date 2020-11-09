@@ -108,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/set_Contact_Timer"
+                    android:id="@+id/set_authorities_Timer"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/field_height"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -128,7 +128,52 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="4dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="@string/edit_text_lights_on"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/set_time_min"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:editable="false"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/context_time_to"
+                    android:text="7:00 PM"/>
+                <TextView
+                    android:id="@+id/context_time_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:text="@string/edit_text_lights_on_to"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/set_time_min"
+                    app:layout_constraintEnd_toStartOf="@id/set_time_max"/>
+                <EditText
+                    android:id="@+id/set_time_max"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:editable="false"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/context_time_to"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="7:00 AM"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

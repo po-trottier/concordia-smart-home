@@ -155,6 +155,8 @@
     <string name="simulation_status_started">Started</string>
     <string name="simulation_status_stopped">Stopped</string>
     <string name="edit_text_temperature">Outdoors Temperature</string>
+    <string name="edit_text_lights_on">Turn Lights On Between</string>
+    <string name="edit_text_lights_on_to">to</string>
     <string name="edit_text_time">Simulation Time</string>
     <string name="edit_text_date">Simulation Date</string>
     <string name="edit_text_time_scale">Time Speed (Scaling Factor)</string>

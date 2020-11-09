@@ -111,7 +111,7 @@ public class EditDashboardController extends AppCompatActivity {
         awayStatusText = findViewById(R.id.away_on_off_text);
         awayDisabledHint = findViewById(R.id.away_disable_hint);
         awayErrorLayout = findViewById(R.id.away_disable_layout);
-        callTimerField = findViewById(R.id.set_Contact_Timer);
+        callTimerField = findViewById(R.id.set_authorities_Timer);
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
