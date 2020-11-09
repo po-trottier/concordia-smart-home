@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.dataModels;
 
 import android.content.Context;
+import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import java.io.Serializable;
@@ -14,8 +15,8 @@ import java.util.stream.Collectors;
  */
 public class Userbase implements Serializable {
 
-    private List<User> users;
-    private PermissionsConfiguration permissionsConfiguration;
+    private final List<User> users;
+    private PermissionsConfiguration permissions;
 
     /**
      * Instantiates a new Userbase using a passed List of users.
@@ -25,7 +26,16 @@ public class Userbase implements Serializable {
      */
     public Userbase(List<User> users){
         this.users = users;
-        this.permissionsConfiguration = new PermissionsConfiguration();
+        this.permissions = new PermissionsConfiguration();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null || obj.getClass() != Userbase.class) {
+            return false;
+        }
+        Userbase userbase = (Userbase) obj;
+        return userbase.getUsers().equals(users) && userbase.getPermissionsConfiguration().equals(permissions);
     }
 
     /**
@@ -35,10 +45,10 @@ public class Userbase implements Serializable {
      */
     public PermissionsConfiguration getPermissionsConfiguration() {
         // Make sure to create the permissions if they don't exist
-        if (permissionsConfiguration == null) {
-            permissionsConfiguration = new PermissionsConfiguration();
+        if (permissions == null) {
+            permissions = new PermissionsConfiguration();
         }
-        return permissionsConfiguration;
+        return permissions;
     }
 
     /**
@@ -47,7 +57,7 @@ public class Userbase implements Serializable {
      * @param permissionsConfiguration the permission configuration
      */
     public void setPermissionConfiguration(PermissionsConfiguration permissionsConfiguration) {
-        this.permissionsConfiguration = permissionsConfiguration;
+        this.permissions = permissionsConfiguration;
     }
 
     /**

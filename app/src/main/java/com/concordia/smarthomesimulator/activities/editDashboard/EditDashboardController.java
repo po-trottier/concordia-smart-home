@@ -158,7 +158,7 @@ public class EditDashboardController extends AppCompatActivity {
                 String permissions = editPermissionsSpinner.getSelectedItem().toString();
                 String oldUsername = usernameSpinner.getSelectedItem().toString();
                 // Edit user if it was changed
-                int feedbackResource = model.editUser(context, preferences, model.getUserbase(), username, password, permissions, oldUsername);
+                int feedbackResource = model.editUser(context, model.getUserbase(), username, password, permissions, oldUsername);
                 if (feedbackResource != -1) {
                     String message = getString(feedbackResource);
                     LogsHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
@@ -188,7 +188,7 @@ public class EditDashboardController extends AppCompatActivity {
                 boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
                 // Edit the parameters
-                model.editParameters(preferences, status, away, callTimer, temperature, date, time);
+                model.editParameters(context, status, away, callTimer, temperature, date, time);
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
@@ -197,8 +197,11 @@ public class EditDashboardController extends AppCompatActivity {
                     model.getUserbase().setPermissionConfiguration(model.getUserbase().getPermissionsConfiguration());
                     model.getUserbase().getPermissionsConfiguration().sendToContext(preferences);
                 }
-                // Saving changes
-                UserbaseHelper.saveUserbase(context, model.getUserbase());
+                // Saving changes if the user has proper rights
+                if (!model.getUserbase().equals(currentUserbase)
+                        && UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                    UserbaseHelper.saveUserbase(context, model.getUserbase());
+                }
                 // Send notification if required
                 if (away && status && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
                     NotificationsHelper.sendIntruderNotification(context);
@@ -214,6 +217,10 @@ public class EditDashboardController extends AppCompatActivity {
         deleteUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Make sure the user has proper permissions
+                if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                    return;
+                }
                 new AlertDialog.Builder(context)
                     .setTitle(getString(R.string.edit_text_delete_user_title))
                     .setMessage(getString(R.string.edit_text_delete_user))
@@ -242,6 +249,10 @@ public class EditDashboardController extends AppCompatActivity {
         createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Make sure the user has proper permissions
+                if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                    return;
+                }
                 // Get the User's information
                 String newUsername = newUsernameField.getText().toString();
                 String newPassword = newPasswordField.getText().toString();
