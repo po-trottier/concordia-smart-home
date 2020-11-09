@@ -238,6 +238,8 @@ public class LayoutsHelper {
 
         kitchenLight2.setIsOpened(true);
         kitchenWindow2.setIsOpened(true);
+        kitchenDoor.setAutoLock(true);
+        kitchenDoor2.setAutoLock(true);
 
         kitchen.addDevices(new ArrayList<>(Arrays.asList(
             kitchenWindow,
