@@ -2,6 +2,7 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.concordia.smarthomesimulator.enums.HAVCStatus;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
@@ -13,6 +14,9 @@ public class Room extends Observable implements Serializable {
 
     private String name;
     private Geometry geometry;
+    private double actualTemperature;
+    private double desiredTemperature;
+    private HAVCStatus havcStatus;
     private final ArrayList<IInhabitant> inhabitants;
     private final ArrayList<Door> doors;
     private final ArrayList<Light> lights;
@@ -29,7 +33,10 @@ public class Room extends Observable implements Serializable {
 
         this.name = name;
         this.geometry = geometry;
-
+        // setting both temps to -999, the timed helper will change it (don't know if that's a good idea)
+        this.actualTemperature = 999;
+        this.desiredTemperature = 999;
+        this.havcStatus = HAVCStatus.OFF;
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
         this.doors = new ArrayList<>();
@@ -69,6 +76,40 @@ public class Room extends Observable implements Serializable {
             return false;
 
         return name.equals(((Room) obj).getName());
+    }
+
+    public HAVCStatus getHavcStatus() {
+        return havcStatus;
+    }
+
+    public void setHavcStatus(HAVCStatus havcStatus) {
+        this.havcStatus = havcStatus;
+    }
+
+    public double getDesiredTemperature() {
+        return desiredTemperature;
+    }
+
+    public void setDesiredTemperature(double desiredTemperature) {
+        this.desiredTemperature = desiredTemperature;
+    }
+
+    /**
+     * Gets temperature.
+     *
+     * @return the temperature
+     */
+    public double getActualTemperature() {
+        return actualTemperature;
+    }
+
+    /**
+     * Sets temperature.
+     *
+     * @param actualTemperature the temperature
+     */
+    public void setActualTemperature(double actualTemperature) {
+        this.actualTemperature = actualTemperature;
     }
 
     /**
