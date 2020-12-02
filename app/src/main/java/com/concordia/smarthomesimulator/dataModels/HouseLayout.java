@@ -11,8 +11,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_GARAGE;
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
+import static com.concordia.smarthomesimulator.Constants.*;
 
 /**
  * The house layout is an observer to the rooms inside of it.
@@ -20,8 +19,9 @@ import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_OUTDOORS;
 public class HouseLayout extends Observable implements Observer, Serializable {
 
     private String name;
-    private String currentUser;
+    private final String currentUser;
     private final ArrayList<Room> rooms;
+    private final ArrayList<HeatingZone> heatingZones;
 
     /**
      * Instantiates a new House layout.
@@ -62,6 +62,11 @@ public class HouseLayout extends Observable implements Observer, Serializable {
             User user = new User(currentUser, "", Permissions.STRANGER);
             this.getRoom(DEFAULT_NAME_OUTDOORS).addInhabitant(new InhabitantAdapter(user));
         }
+
+        heatingZones = new ArrayList<>();
+        // Create a default heating zone
+        HeatingZone zone = new HeatingZone(DEFAULT_NAME_HEATING_ZONE);
+        zone.addRooms(rooms);
     }
 
     @Override
@@ -80,6 +85,11 @@ public class HouseLayout extends Observable implements Observer, Serializable {
             newRooms.add((Room) room.clone());
         }
         newLayout.addRooms(newRooms);
+        ArrayList<HeatingZone> newZones = new ArrayList<>();
+        for (HeatingZone zone : heatingZones) {
+            newZones.add((HeatingZone) zone.clone());
+        }
+        newLayout.addHeatingZones(newZones);
         return newLayout;
     }
 
@@ -122,6 +132,28 @@ public class HouseLayout extends Observable implements Observer, Serializable {
     }
 
     /**
+     * Gets heating zone.
+     *
+     * @param name the heating zone name
+     * @return the heating zone
+     */
+    public HeatingZone getHeatingZone(String name) {
+        return heatingZones.stream()
+            .filter(zone -> zone.getName().equalsIgnoreCase(name))
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
+     * Gets heating zones.
+     *
+     * @return the heating zones
+     */
+    public ArrayList<HeatingZone> getHeatingZones() {
+        return heatingZones;
+    }
+
+    /**
      * Is intruder detected boolean.
      *
      * @return the boolean
@@ -147,6 +179,10 @@ public class HouseLayout extends Observable implements Observer, Serializable {
     public void addRoom(Room room) {
         room.addObserver(this);
         rooms.add(room);
+        heatingZones.stream()
+            .filter(zone -> zone.getName().equalsIgnoreCase(DEFAULT_NAME_HEATING_ZONE))
+            .findFirst()
+            .ifPresent(heatingZone -> heatingZone.addRoom(room));
         update(room, null);
     }
 
@@ -170,10 +206,57 @@ public class HouseLayout extends Observable implements Observer, Serializable {
         for(Room room : rooms) {
            if (room.getName().equals(name)) {
                room.deleteObserver(this);
+               heatingZones.stream()
+                   .filter(zone -> zone.getRoom(name) != null)
+                   .findFirst()
+                   .ifPresent(heatingZone -> heatingZone.removeRoom(name));
                rooms.remove(room);
                return;
            }
         }
+    }
+
+    /**
+     * Add a heating zone.
+     *
+     * @param heatingZone the heating zone
+     */
+    public void addHeatingZone(HeatingZone heatingZone) {
+        heatingZones.add(heatingZone);
+    }
+
+    /**
+     * Add heating zones.
+     *
+     * @param heatingZones the rooms
+     */
+    public void addHeatingZones(ArrayList<HeatingZone> heatingZones) {
+        this.heatingZones.addAll(heatingZones);
+    }
+
+    /**
+     * Remove a room.
+     *
+     * @param name the name
+     */
+    public void removeHeatingZone(String name) {
+        HeatingZone heatingZone = heatingZones.stream()
+            .filter(zone -> zone.getName().equalsIgnoreCase(name))
+            .findFirst()
+            .orElse(null);
+        // Do not allow removing the default zone
+        if (heatingZone == null || heatingZone.getName().equalsIgnoreCase(DEFAULT_NAME_HEATING_ZONE)) {
+            return;
+        }
+        // Transfer all rooms inside the zone to the default zone
+        if (heatingZone.getRooms().size() > 0) {
+            heatingZones.stream()
+                .filter(zone -> zone.getName().equalsIgnoreCase(DEFAULT_NAME_HEATING_ZONE))
+                .findFirst()
+                .ifPresent(zone -> zone.addRooms(heatingZone.getRooms()));
+        }
+        // Remove the actual zone
+        heatingZones.remove(heatingZone);
     }
 
     /**

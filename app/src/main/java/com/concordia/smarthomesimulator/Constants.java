@@ -47,13 +47,15 @@ public class Constants {
 
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;
-    public static final int DEFAULT_TEMPERATURE = 20;
+    public static final int DEFAULT_OUTDOORS_TEMPERATURE = 20;
+    public static final int DEFAULT_INDOORS_TEMPERATURE = 22;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
 
     // Default House Layout Values
     public static final String DEFAULT_NAME_OUTDOORS = "Backyard";
     public static final String DEFAULT_NAME_GARAGE = "Garage";
+    public static final String DEFAULT_NAME_HEATING_ZONE = "Default";
 
     // Default House Layout names
     public static final String DEMO_LAYOUT_NAME = "Demo Layout";
