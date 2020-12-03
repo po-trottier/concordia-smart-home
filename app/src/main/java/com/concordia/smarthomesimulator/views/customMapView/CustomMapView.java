@@ -48,6 +48,7 @@ public class CustomMapView extends View {
     private Paint textPaint;
     private Paint devicePaint;
     private Paint deviceStrokePaint;
+    private Paint temperaturePaint;
 
     //endregion
 
@@ -191,6 +192,10 @@ public class CustomMapView extends View {
         deviceStrokePaint = new Paint();
         deviceStrokePaint.setStyle(Paint.Style.STROKE);
         deviceStrokePaint.setStrokeWidth(6f);
+        // Paint used to draw temperature status
+        temperaturePaint = new Paint();
+        temperaturePaint.setStyle(Paint.Style.FILL);
+        temperaturePaint.setColor(Color.BLACK);
     }
 
     //endregion
@@ -276,13 +281,20 @@ public class CustomMapView extends View {
         canvas.drawRect(points[0], points[1], points[2], points[3], paint);
         canvas.drawRect(points[0], points[1], points[2], points[3], strokePaint);
         // Center point of the Room
-        float vertical = ((points[1] - points[3]) / 2f) + points[3];
+        float nameVertical = ((points[1] - points[3]) / 2f) + points[3];
         float horizontal = ((points[2] - points[0]) / 2f) + points[0];
         // If there are inhabitant, shift the text up to leave some space
-        if (room.getInhabitants().size() > 0)
-            vertical = vertical - (INHABITANT_SHIFT * measurements.getScaleY());
+        if (room.getInhabitants().size() > 0) {
+            nameVertical = nameVertical - (INHABITANT_SHIFT * measurements.getScaleY());
+        }
+        float tempVertical = nameVertical - ((INHABITANT_SHIFT + 0.15f) * measurements.getScaleY());
         // Write the name of the room
-        canvas.drawText(room.getName(), horizontal, vertical, textPaint);
+        canvas.drawText(room.getName(), horizontal, nameVertical, textPaint);
+        // Draw temperature icon
+        Bitmap bitmap = model.convertDrawableToBitmap(model.getVentilationDrawable(context, room));
+        int size = (int) (0.5 * measurements.getScaleX());
+        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, size, size, false);
+        canvas.drawBitmap(scaled, horizontal - ((float) size / 2), tempVertical - ((float)size * 0.8f), temperaturePaint);
     }
 
     private void drawInhabitant(IInhabitant inhabitant, float x, float y) {

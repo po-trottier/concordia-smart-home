@@ -17,8 +17,7 @@ import com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSet
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_INDOORS_TEMPERATURE;
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_NAME_HEATING_ZONE;
+import static com.concordia.smarthomesimulator.Constants.*;
 
 public class CustomHeatingZoneView extends LinearLayout {
     Context context;
@@ -130,10 +129,12 @@ public class CustomHeatingZoneView extends LinearLayout {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             EditText temperatureField = customView.findViewById(R.id.alert_edit_temperature);
-                            double temperature = DEFAULT_INDOORS_TEMPERATURE;
+                            double temperature = DEFAULT_TEMPERATURE;
                             try {
                                 temperature = Double.parseDouble(temperatureField.getText().toString().trim());
                             } catch (NumberFormatException ignored) {}
+                            temperature = Math.min(MAXIMUM_TEMPERATURE, temperature);
+                            temperature = Math.max(MINIMUM_TEMPERATURE, temperature);
                             zone.setDesiredTemperature(temperature);
                             updateView();
                         }

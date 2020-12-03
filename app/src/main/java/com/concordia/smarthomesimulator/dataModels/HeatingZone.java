@@ -21,7 +21,7 @@ public class HeatingZone implements Serializable {
      */
     public HeatingZone(String name) {
         this.name = name;
-        this.desiredTemp = DEFAULT_INDOORS_TEMPERATURE;
+        this.desiredTemp = DEFAULT_TEMPERATURE;
 
         rooms = new ArrayList<>();
     }
