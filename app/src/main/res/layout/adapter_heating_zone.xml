@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.concordia.smarthomesimulator.views.customHeatingZoneView.CustomHeatingZoneView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:id="@+id/adapter_zone_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="?attr/selectableItemBackground">
+        <TextView
+            android:id="@+id/adapter_zone_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/charcoal" />
+        <TextView
+            android:id="@+id/adapter_zone_temperature"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:textSize="16sp"
+            android:textColor="@color/charcoal"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/adapter_zone_rooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical"
+        android:background="@drawable/left_stroke"/>
+
+    <TextView
+        android:id="@+id/adapter_zone_no_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingVertical="12dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/left_stroke"
+        android:textSize="16sp"
+        android:textColor="@color/grey"
+        android:text="@string/add_zone_no_room"/>
+
+</com.concordia.smarthomesimulator.views.customHeatingZoneView.CustomHeatingZoneView>
