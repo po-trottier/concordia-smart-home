@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_TEMPERATURE;
+import static com.concordia.smarthomesimulator.Constants.INITIAL_ROOM_TEMPERATURE;
 
 public class Room extends Observable implements Serializable {
 
@@ -38,8 +38,8 @@ public class Room extends Observable implements Serializable {
         this.geometry = geometry;
         this.ventilationStatus = VentilationStatus.OFF;
 
-        this.desiredTemp = DEFAULT_TEMPERATURE;
-        this.actualTemp = DEFAULT_TEMPERATURE;
+        this.actualTemperature = INITIAL_ROOM_TEMPERATURE;
+        this.desiredTemperature = INITIAL_ROOM_TEMPERATURE;
 
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
