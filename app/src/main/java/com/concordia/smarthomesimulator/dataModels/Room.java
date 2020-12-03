@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import static com.concordia.smarthomesimulator.Constants.INITIAL_ROOM_TEMPERATURE;
+
 public class Room extends Observable implements Serializable {
 
     private String name;
@@ -33,9 +35,9 @@ public class Room extends Observable implements Serializable {
 
         this.name = name;
         this.geometry = geometry;
-        // setting both temps to -999, the timed helper will change it (don't know if that's a good idea)
-        this.actualTemperature = 999;
-        this.desiredTemperature = 999;
+        // setting both temps to some large temperature, the timed helper will change it
+        this.actualTemperature = INITIAL_ROOM_TEMPERATURE;
+        this.desiredTemperature = INITIAL_ROOM_TEMPERATURE;
         this.havcStatus = HAVCStatus.OFF;
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
