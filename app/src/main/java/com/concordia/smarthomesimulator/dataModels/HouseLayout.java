@@ -20,8 +20,8 @@ public class HouseLayout extends Observable implements Observer, Serializable {
 
     private String name;
     private final String currentUser;
-    private final ArrayList<Room> rooms;
-    private final ArrayList<HeatingZone> heatingZones;
+    private ArrayList<Room> rooms;
+    private ArrayList<HeatingZone> heatingZones;
 
     /**
      * Instantiates a new House layout.
@@ -67,6 +67,7 @@ public class HouseLayout extends Observable implements Observer, Serializable {
         // Create a default heating zone
         HeatingZone zone = new HeatingZone(DEFAULT_NAME_HEATING_ZONE);
         zone.addRooms(rooms);
+        heatingZones.add(zone);
     }
 
     @Override
@@ -78,17 +79,16 @@ public class HouseLayout extends Observable implements Observer, Serializable {
     @Override
     public Object clone() {
         HouseLayout newLayout = new HouseLayout(name, currentUser);
-        newLayout.removeRoom(DEFAULT_NAME_GARAGE);
-        newLayout.removeRoom(DEFAULT_NAME_OUTDOORS);
+        newLayout.clearForClone();
         ArrayList<Room> newRooms = new ArrayList<>();
         for (Room room : rooms) {
             newRooms.add((Room) room.clone());
         }
-        newLayout.addRooms(newRooms);
         ArrayList<HeatingZone> newZones = new ArrayList<>();
         for (HeatingZone zone : heatingZones) {
             newZones.add((HeatingZone) zone.clone());
         }
+        newLayout.addRooms(newRooms);
         newLayout.addHeatingZones(newZones);
         return newLayout;
     }
@@ -99,6 +99,16 @@ public class HouseLayout extends Observable implements Observer, Serializable {
             return false;
         }
         return ((HouseLayout) obj).getName().equalsIgnoreCase(name);
+    }
+
+    /**
+     * Clear all heating zones.
+     *
+     * To be used only by the clone operation!
+     */
+    public void clearForClone() {
+        heatingZones = new ArrayList<>();
+        rooms = new ArrayList<>();
     }
 
     /**
