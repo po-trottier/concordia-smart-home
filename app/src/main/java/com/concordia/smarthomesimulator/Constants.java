@@ -47,8 +47,7 @@ public class Constants {
 
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;
-    public static final int DEFAULT_OUTDOORS_TEMPERATURE = 20;
-    public static final int DEFAULT_INDOORS_TEMPERATURE = 22;
+    public static final int DEFAULT_TEMPERATURE = 20;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
 
@@ -68,6 +67,10 @@ public class Constants {
     public static final float[] AVAILABLE_TIME_FACTORS = { 0.1f, 0.5f, 1f, 1.5f, 2f, 5f, 10f, 50f, 100f, 200f };
     public static final String DATE_FORMAT = "MMMM d yyyy";
     public static final String TIME_FORMAT = "h:mm a";
+
+    // Temperature Values
+    public static final double MAXIMUM_TEMPERATURE = 100;
+    public static final double MINIMUM_TEMPERATURE = -100;
 
     // Notifications
     public final static String NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d943f6";
