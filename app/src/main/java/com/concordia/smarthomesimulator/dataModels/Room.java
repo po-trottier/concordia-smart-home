@@ -2,12 +2,16 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.concordia.smarthomesimulator.enums.VentilationStatus;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
+
+import static com.concordia.smarthomesimulator.Constants.DEFAULT_INDOORS_TEMPERATURE;
+import static com.concordia.smarthomesimulator.Constants.DEFAULT_OUTDOORS_TEMPERATURE;
 
 public class Room extends Observable implements Serializable {
 
@@ -16,6 +20,7 @@ public class Room extends Observable implements Serializable {
     private boolean overrideZoneTemp;
     private String name;
     private Geometry geometry;
+    private VentilationStatus ventilationStatus;
     private final ArrayList<IInhabitant> inhabitants;
     private final ArrayList<Door> doors;
     private final ArrayList<Light> lights;
@@ -32,6 +37,10 @@ public class Room extends Observable implements Serializable {
 
         this.name = name;
         this.geometry = geometry;
+        this.ventilationStatus = VentilationStatus.OFF;
+
+        this.desiredTemp = DEFAULT_INDOORS_TEMPERATURE;
+        this.actualTemp = DEFAULT_OUTDOORS_TEMPERATURE;
 
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
@@ -66,6 +75,7 @@ public class Room extends Observable implements Serializable {
         newRoom.setDesiredTemperature(desiredTemp);
         newRoom.setActualTemperature(actualTemp);
         newRoom.setIsTemperatureOverridden(overrideZoneTemp);
+        newRoom.setVentilationStatus(ventilationStatus);
         return newRoom;
     }
 
@@ -93,6 +103,15 @@ public class Room extends Observable implements Serializable {
      */
     public Geometry getGeometry() {
         return geometry;
+    }
+
+    /**
+     * Gets ventilation status.
+     *
+     * @return the ventilation status
+     */
+    public VentilationStatus getVentilationStatus() {
+        return ventilationStatus;
     }
 
     /**
@@ -170,6 +189,15 @@ public class Room extends Observable implements Serializable {
      */
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
+    }
+
+    /**
+     * Sets ventilation status.
+     *
+     * @param ventilationStatus the ventilation status
+     */
+    public void setVentilationStatus(VentilationStatus ventilationStatus) {
+        this.ventilationStatus = ventilationStatus;
     }
 
     /**
