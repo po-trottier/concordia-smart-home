@@ -16,20 +16,11 @@ public class TemperatureHelper {
     private static Timer saveTimer;
     private static final int SECOND_TO_MS = 1000;
 
+    // This should be called whenever the time scale or outside temperature is modified
     public static void adjustTemperature(Context context){
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         double outsideTemperature = preferences.getFloat(PREFERENCES_KEY_TEMPERATURE, DEFAULT_OUTSIDE_TEMPERATURE);
 
-        // Initialize temperature according to preferences
-        for (Room room: LayoutSingleton.getInstance().getLayout().getRooms()){
-            if (room.getActualTemperature() > MAX_ALLOWED_ROOM_TEMPERATURE){
-                room.setActualTemperature(outsideTemperature);
-            }
-
-            if (room.getDesiredTemperature() > MAX_ALLOWED_ROOM_TEMPERATURE){
-                room.setDesiredTemperature(outsideTemperature);
-            }
-        }
         // Create temperatureTimer so that the temperature of each room changes based on their actual temperature, and the desired temperature
         long period = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE,DEFAULT_TIME_SCALE));
         if (temperatureTimer != null) {
@@ -41,6 +32,14 @@ public class TemperatureHelper {
             @Override
             public void run() {
                 for (Room room: LayoutSingleton.getInstance().getLayout().getRooms()){
+                    if (room.getActualTemperature() > MAX_ALLOWED_ROOM_TEMPERATURE){
+                        room.setActualTemperature(outsideTemperature);
+                    }
+
+                    if (room.getDesiredTemperature() > MAX_ALLOWED_ROOM_TEMPERATURE){
+                        room.setDesiredTemperature(outsideTemperature);
+                    }
+
                     double actualTemperature = room.getActualTemperature();
                     double desiredTemperature = room.getDesiredTemperature();
                     HAVCStatus havcStatus = room.getHavcStatus();
