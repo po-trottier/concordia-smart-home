@@ -124,6 +124,26 @@ public class EditDashboardModel extends ViewModel{
         dateTime = LocalDateTime.of(year, month, day, hour, minute);
     }
 
+    public void updateMinDateTime(SharedPreferences preferences) {
+        LocalDateTime timeNow = LocalDateTime.now();
+        int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
+        int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
+        int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
+        int hour = preferences.getInt(PREFERENCES_KEY_MIN_DATETIME_HOUR, timeNow.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MIN_DATETIME_MINUTE, timeNow.getMinute());
+        minDateTime = LocalDateTime.of(year, month, day, hour, minute);
+    }
+
+    public void updateMaxDateTime(SharedPreferences preferences) {
+        LocalDateTime timeNow = LocalDateTime.now();
+        int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
+        int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
+        int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
+        int hour = preferences.getInt(PREFERENCES_KEY_MAX_DATETIME_HOUR, timeNow.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MAX_DATETIME_MINUTE, timeNow.getMinute());
+        maxDateTime = LocalDateTime.of(year, month, day, hour, minute);
+    }
+
     /**
      * Gets lights' minimum date time.
      *
@@ -307,8 +327,9 @@ public class EditDashboardModel extends ViewModel{
      * @param temperature the temperature
      * @param date        the date
      * @param time        the time
+     * @param minTime     the minimum time for lights timer
      */
-    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, LocalDate date, LocalTime time) {
+    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, LocalDate date, LocalTime time, LocalTime minTime, LocalTime maxTime) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         // Verify the permissions if the user changed the away mode
@@ -328,6 +349,10 @@ public class EditDashboardModel extends ViewModel{
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, date.getDayOfMonth());
         editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, time.getHour());
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, time.getMinute());
+        editor.putInt(PREFERENCES_KEY_MIN_DATETIME_HOUR, minTime.getHour());
+        editor.putInt(PREFERENCES_KEY_MIN_DATETIME_MINUTE, minTime.getMinute());
+        editor.putInt(PREFERENCES_KEY_MAX_DATETIME_HOUR, maxTime.getHour());
+        editor.putInt(PREFERENCES_KEY_MAX_DATETIME_MINUTE, maxTime.getMinute());
         editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
         editor.apply();
     }

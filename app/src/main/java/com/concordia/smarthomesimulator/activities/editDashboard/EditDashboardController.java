@@ -80,6 +80,8 @@ public class EditDashboardController extends AppCompatActivity {
 
         model.initializeModel(context);
         model.updateSimulationDateTime(preferences);
+        model.updateMinDateTime(preferences);
+        model.updateMaxDateTime(preferences);
 
         setupToolbar();
         findControls();
@@ -184,9 +186,13 @@ public class EditDashboardController extends AppCompatActivity {
                 }
                 LocalDate date =LocalDate.now();
                 LocalTime time = LocalTime.now();
+                LocalTime minTime = LocalTime.now();
+                LocalTime maxTime = LocalTime.now();
                 try {
                     date = LocalDate.parse(dateField.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT));
                     time = LocalTime.parse(timeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    minTime = LocalTime.parse(minTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    maxTime = LocalTime.parse(maxTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
                 } catch (DateTimeParseException e) {
                     e.printStackTrace();
                 }
@@ -199,7 +205,7 @@ public class EditDashboardController extends AppCompatActivity {
                 boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
                 // Edit the parameters
-                model.editParameters(context, status, away, callTimer, temperature, date, time);
+                model.editParameters(context, status, away, callTimer, temperature, date, time, minTime, maxTime);
                 // Update temperature behaviour of the rooms
                 if (status) {
                     TemperatureHelper.adjustTemperature(context);

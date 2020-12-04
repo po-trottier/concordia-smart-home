@@ -21,6 +21,10 @@ public class Constants {
     public static final String PREFERENCES_KEY_DATETIME_DAY = "day";
     public static final String PREFERENCES_KEY_DATETIME_HOUR = "hour";
     public static final String PREFERENCES_KEY_DATETIME_MINUTE = "minute";
+    public static final String PREFERENCES_KEY_MIN_DATETIME_HOUR = "minHour";
+    public static final String PREFERENCES_KEY_MIN_DATETIME_MINUTE = "minMinute";
+    public static final String PREFERENCES_KEY_MAX_DATETIME_HOUR = "maxHour";
+    public static final String PREFERENCES_KEY_MAX_DATETIME_MINUTE = "maxMinute";
     public static final String PREFERENCES_KEY_TIME_SCALE = "scale";
 
     // Keys for Shared Preferences Actions
