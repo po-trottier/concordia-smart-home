@@ -32,11 +32,11 @@ public class TemperatureHelper {
             @Override
             public void run() {
                 for (Room room: LayoutSingleton.getInstance().getLayout().getRooms()){
-                    if (room.getActualTemperature() > MAX_ALLOWED_ROOM_TEMPERATURE){
+                    if (room.getActualTemperature() > MAXIMUM_TEMPERATURE){
                         room.setActualTemperature(outsideTemperature);
                     }
 
-                    if (room.getDesiredTemperature() > MAX_ALLOWED_ROOM_TEMPERATURE){
+                    if (room.getDesiredTemperature() > MAXIMUM_TEMPERATURE){
                         room.setDesiredTemperature(outsideTemperature);
                     }
 

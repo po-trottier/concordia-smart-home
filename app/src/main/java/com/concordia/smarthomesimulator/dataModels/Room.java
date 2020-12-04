@@ -38,8 +38,8 @@ public class Room extends Observable implements Serializable {
         this.geometry = geometry;
         this.ventilationStatus = VentilationStatus.OFF;
 
-        this.actualTemperature = INITIAL_ROOM_TEMPERATURE;
-        this.desiredTemperature = INITIAL_ROOM_TEMPERATURE;
+        this.actualTemp = INITIAL_ROOM_TEMPERATURE;
+        this.desiredTemp = INITIAL_ROOM_TEMPERATURE;
 
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
