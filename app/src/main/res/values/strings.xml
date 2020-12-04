@@ -208,10 +208,10 @@
     <string name="intruder_text">Intruder detected : Contacting authorities %d in minutes</string>
     <string name="authorities_title">Authorities Contacted</string>
     <string name="authorities_text">The authorities have been contacted.</string>
-    <string name="max_temperature_alert_title">Maximum Temperature Alert!</string>
-    <string name="max_temperature_alert_text">Temperatures have gone over your set maximum limit.</string>
-    <string name="min_temperature_alert_title">Minimum Temperature Alert!</string>
-    <string name="min_temperature_alert_text">Temperatures have gone under your set minimum limit.</string>
+    <string name="max_temperature_alert_title">Maximum Temperature Alert</string>
+    <string name="max_temperature_alert_text">Temperatures over set maximum limit</string>
+    <string name="min_temperature_alert_title">Minimum Temperature Alert</string>
+    <string name="min_temperature_alert_text">Temperatures below set minimum limit</string>
 
 
 

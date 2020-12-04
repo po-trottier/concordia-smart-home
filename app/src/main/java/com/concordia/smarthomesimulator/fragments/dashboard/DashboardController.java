@@ -15,6 +15,7 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
 import com.concordia.smarthomesimulator.dataModels.HeatingZone;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
+import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;
@@ -116,12 +117,24 @@ public class DashboardController extends Fragment {
         layoutInstance.setOnIndoorTemperatureChangeListener(new OnIndoorTemperatureChangeListener() {
             @Override
             public void OnIndoorTemperatureChange() {
-                for (HeatingZone heatingZone: LayoutsHelper.getSelectedLayout(context).getHeatingZones()) {
-                    if(heatingZone.getActualTemperature() > (preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT))){
-                        NotificationsHelper.sendTemperatureAlertNotification(context,context.getString(R.string.max_temperature_alert_title),context.getString(R.string.max_temperature_alert_text));
+                int maxTemperature = preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT);
+                int minTemperature = preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT);
+                String temperatureAlertTitle;
+                String temperatureAlertText;
+                String roomName;
+
+                for (Room room: LayoutsHelper.getSelectedLayout(context).getRooms()) {
+                    if(room.getActualTemperature() > maxTemperature){
+                        temperatureAlertTitle = context.getString(R.string.max_temperature_alert_title);
+                        temperatureAlertText = context.getString(R.string.max_temperature_alert_text);
+                        roomName = room.getName();
+                        NotificationsHelper.sendTemperatureAlertNotification(context,temperatureAlertTitle,temperatureAlertText, roomName);
                     }
-                    else if(heatingZone.getActualTemperature() < (preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT))){
-                        NotificationsHelper.sendTemperatureAlertNotification(context,context.getString(R.string.min_temperature_alert_title),context.getString(R.string.min_temperature_alert_text));
+                    else if(room.getActualTemperature() < minTemperature){
+                        temperatureAlertTitle = context.getString(R.string.min_temperature_alert_title);
+                        temperatureAlertText = context.getString(R.string.min_temperature_alert_text);
+                        roomName = room.getName();
+                        NotificationsHelper.sendTemperatureAlertNotification(context,temperatureAlertTitle,temperatureAlertText, roomName);
                     }
                 }
             }
