@@ -86,39 +86,6 @@ public class Room extends Observable implements Serializable {
         return name.equals(((Room) obj).getName());
     }
 
-    public HAVCStatus getHavcStatus() {
-        return havcStatus;
-    }
-
-    public void setHavcStatus(HAVCStatus havcStatus) {
-        this.havcStatus = havcStatus;
-    }
-
-    public double getDesiredTemperature() {
-        return desiredTemperature;
-    }
-
-    public void setDesiredTemperature(double desiredTemperature) {
-        this.desiredTemperature = desiredTemperature;
-    }
-
-    /**
-     * Gets temperature.
-     *
-     * @return the temperature
-     */
-    public double getActualTemperature() {
-        return actualTemperature;
-    }
-
-    /**
-     * Sets temperature.
-     *
-     * @param actualTemperature the temperature
-     */
-    public void setActualTemperature(double actualTemperature) {
-        this.actualTemperature = actualTemperature;
-    }
 
     /**
      * Gets name.

@@ -49,7 +49,7 @@ public class Constants {
 
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;
-    public static final int DEFAULT_OUTSIDE_TEMPERATURE = 20;
+    public static final int DEFAULT_TEMPERATURE = 20;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
 
