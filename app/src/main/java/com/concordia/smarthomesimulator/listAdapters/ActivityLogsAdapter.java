@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 
 import java.util.ArrayList;
 
@@ -60,11 +61,21 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
         TextView dateTimeText = row.findViewById(R.id.log_date_time_text);
         dateTimeText.setText(entry.getDateTime().toString());
 
-        TextView importanceText = row.findViewById(R.id.log_importance_text);
-        importanceText.setText(entry.getImportance().toString());
+        LogImportance entryImportance = entry.getImportance();
 
+        TextView importanceText = row.findViewById(R.id.log_importance_text);
+        importanceText.setText(entryImportance.toString());
+
+        int textColor = setTextColor(entryImportance);
+        mainText.setTextColor(textColor);
+        importanceText.setTextColor(textColor);
+
+        return row;
+    }
+
+    private int setTextColor(LogImportance logImportance){
         int textColor;
-        switch(entry.getImportance()) {
+        switch(logImportance) {
             case CRITICAL:
                 textColor = getContext().getColor(R.color.danger);;
                 break;
@@ -76,10 +87,6 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
                 textColor = getContext().getColor(R.color.primary);;
                 break;
         }
-
-        mainText.setTextColor(textColor);
-        importanceText.setTextColor(textColor);
-
-        return row;
+        return textColor;
     }
 }
