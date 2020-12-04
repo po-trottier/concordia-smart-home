@@ -53,7 +53,7 @@ public class Constants {
 
     // Related to Smart Heating
     public static final int INITIAL_ROOM_TEMPERATURE = 999;
-    public static final int MAX_ALLOWED_ROOM_TEMPERATURE = 999;
+    public static final int MAX_ALLOWED_ROOM_TEMPERATURE = 100;
     public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED = 0.25;
     public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_OFF = 1;
     public static final double HVAC_TEMPERATURE_CHANGE = 0.1;

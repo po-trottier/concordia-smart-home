@@ -19,10 +19,10 @@ public class TemperatureHelper {
     // This should be called whenever the time scale or outside temperature is modified
     public static void adjustTemperature(Context context){
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
-        double outsideTemperature = preferences.getFloat(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE);
+        double outsideTemperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE);
 
         // Create temperatureTimer so that the temperature of each room changes based on their actual temperature, and the desired temperature
-        long period = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE,DEFAULT_TIME_SCALE));
+        long period = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
         if (temperatureTimer != null) {
             temperatureTimer.cancel();
             temperatureTimer.purge();
