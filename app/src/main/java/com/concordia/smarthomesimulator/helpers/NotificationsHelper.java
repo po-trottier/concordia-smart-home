@@ -88,4 +88,18 @@ public class NotificationsHelper {
         // Add log
         LogsHelper.add(context, new LogEntry("Intruder", "Authorities were contacted", LogImportance.CRITICAL));
     }
+
+    public static void sendTemperatureAlertNotification(Context context, String alertTitle, String alertText){
+        // Build notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
+        builder.setContentTitle(alertTitle);
+        builder.setContentText(alertText);
+        builder.setSmallIcon(R.drawable.ic_home);
+        builder.setAutoCancel(false);
+        // Send notification
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+        managerCompat.notify(id++, builder.build());
+        // Add log
+        LogsHelper.add(context, new LogEntry("Temperature Alert", alertTitle, LogImportance.CRITICAL));
+    }
 }

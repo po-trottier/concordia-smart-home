@@ -1,6 +1,7 @@
 package com.concordia.smarthomesimulator.singletons;
 
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
+import com.concordia.smarthomesimulator.interfaces.OnIndoorTemperatureChangeListener;
 import com.concordia.smarthomesimulator.interfaces.OnIntruderDetectedListener;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class LayoutSingleton implements Observer {
 
     private HouseLayout layout;
     private OnIntruderDetectedListener listener;
+    private OnIndoorTemperatureChangeListener onIndoorTemperatureChangeListener;
 
     private LayoutSingleton() { }
 
@@ -27,6 +29,9 @@ public class LayoutSingleton implements Observer {
         // If an intruder was detected, call the listener's callback
         if (layout != null && layout.isIntruderDetected()) {
             listener.onIntruderDetected();
+        }
+        if(layout!= null){
+            onIndoorTemperatureChangeListener.OnIndoorTemperatureChange();
         }
     }
 
@@ -83,5 +88,14 @@ public class LayoutSingleton implements Observer {
      */
     public void setOnIntruderDetectedListener(OnIntruderDetectedListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Sets on temperature change detected listener.
+     *
+     * @param onIndoorTemperatureChangeListener the listener
+     */
+    public void setOnIndoorTemperatureChangeListener(OnIndoorTemperatureChangeListener onIndoorTemperatureChangeListener) {
+        this.onIndoorTemperatureChangeListener = onIndoorTemperatureChangeListener;
     }
 }

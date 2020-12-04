@@ -4,25 +4,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
+import com.concordia.smarthomesimulator.dataModels.HeatingZone;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.NotificationsHelper;
+import com.concordia.smarthomesimulator.interfaces.OnIndoorTemperatureChangeListener;
 import com.concordia.smarthomesimulator.interfaces.OnIntruderDetectedListener;
+import com.concordia.smarthomesimulator.listAdapters.HouseLayoutAdapter;
 import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 import com.concordia.smarthomesimulator.views.customDateTimeView.CustomDateTimeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static com.concordia.smarthomesimulator.Constants.DEFAULT_MAX_TEMPERATURE_ALERT;
+import static com.concordia.smarthomesimulator.Constants.DEFAULT_MIN_TEMPERATURE_ALERT;
 import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_AWAY_MODE;
+import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_MAX_TEMPERATURE_ALERT;
+import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_MIN_TEMPERATURE_ALERT;
 import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_STATUS;
 
 public class DashboardController extends Fragment {
@@ -94,14 +104,28 @@ public class DashboardController extends Fragment {
 
     private void setupNotifications() {
         NotificationsHelper.createNotificationChannel(context);
-
-        LayoutSingleton.getInstance().setOnIntruderDetectedListener(new OnIntruderDetectedListener() {
+        LayoutSingleton layoutInstance = LayoutSingleton.getInstance();
+        layoutInstance.setOnIntruderDetectedListener(new OnIntruderDetectedListener() {
             @Override
             public void onIntruderDetected() {
                 boolean away = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false);
                 boolean status = preferences.getBoolean(PREFERENCES_KEY_STATUS, false);
                 if (away && status) {
                     NotificationsHelper.sendIntruderNotification(context);
+                }
+            }
+        });
+
+        layoutInstance.setOnIndoorTemperatureChangeListener(new OnIndoorTemperatureChangeListener() {
+            @Override
+            public void OnIndoorTemperatureChange() {
+                for (HeatingZone heatingZone: LayoutsHelper.getSelectedLayout(context).getHeatingZones()) {
+                    if(heatingZone.getDesiredTemperature() > (preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT))){
+                        NotificationsHelper.sendTemperatureAlertNotification(context,context.getString(R.string.max_temperature_alert_title),context.getString(R.string.max_temperature_alert_text));
+                    }
+                    else if(heatingZone.getDesiredTemperature() < (preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT))){
+                        NotificationsHelper.sendTemperatureAlertNotification(context,context.getString(R.string.min_temperature_alert_title),context.getString(R.string.min_temperature_alert_text));
+                    }
                 }
             }
         });
