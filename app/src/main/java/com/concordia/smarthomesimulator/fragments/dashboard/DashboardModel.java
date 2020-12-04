@@ -80,7 +80,7 @@ public class DashboardModel extends ViewModel {
      * @return the temperature
      */
     public String getTemperature(Context context, SharedPreferences preferences) {
-        String tempString = Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_OUTSIDE_TEMPERATURE));
+        String tempString = Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE));
         return tempString + context.getString(R.string.generic_degrees_celsius);
     }
 

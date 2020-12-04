@@ -34,7 +34,7 @@ public class UserPreferences implements Serializable {
         this.username = username;
         this.password = password;
         this.permissions = permissions;
-        this.temperature = DEFAULT_OUTSIDE_TEMPERATURE;
+        this.temperature = DEFAULT_TEMPERATURE;
         this.status = DEFAULT_STATUS;
         this.timeFactor = 1f;
 

@@ -2,7 +2,6 @@ package com.concordia.smarthomesimulator.dataModels;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.concordia.smarthomesimulator.enums.HAVCStatus;
 import com.concordia.smarthomesimulator.enums.VentilationStatus;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
@@ -11,7 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import static com.concordia.smarthomesimulator.Constants.DEFAULT_TEMPERATURE;
+import static com.concordia.smarthomesimulator.Constants.INITIAL_ROOM_TEMPERATURE;
 
 public class Room extends Observable implements Serializable {
 
@@ -37,8 +36,8 @@ public class Room extends Observable implements Serializable {
         this.name = name;
         this.geometry = geometry;
         this.ventilationStatus = VentilationStatus.OFF;
-        this.desiredTemp = DEFAULT_TEMPERATURE;
-        this.actualTemp = DEFAULT_TEMPERATURE;
+        this.desiredTemp = INITIAL_ROOM_TEMPERATURE;
+        this.actualTemp = INITIAL_ROOM_TEMPERATURE;
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
         this.doors = new ArrayList<>();
@@ -84,39 +83,6 @@ public class Room extends Observable implements Serializable {
         return name.equals(((Room) obj).getName());
     }
 
-    public HAVCStatus getHavcStatus() {
-        return havcStatus;
-    }
-
-    public void setHavcStatus(HAVCStatus havcStatus) {
-        this.havcStatus = havcStatus;
-    }
-
-    public double getDesiredTemperature() {
-        return desiredTemperature;
-    }
-
-    public void setDesiredTemperature(double desiredTemperature) {
-        this.desiredTemperature = desiredTemperature;
-    }
-
-    /**
-     * Gets temperature.
-     *
-     * @return the temperature
-     */
-    public double getActualTemperature() {
-        return actualTemperature;
-    }
-
-    /**
-     * Sets temperature.
-     *
-     * @param actualTemperature the temperature
-     */
-    public void setActualTemperature(double actualTemperature) {
-        this.actualTemperature = actualTemperature;
-    }
 
     /**
      * Gets name.

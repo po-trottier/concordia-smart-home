@@ -140,7 +140,7 @@ public class EditDashboardController extends AppCompatActivity {
         // Set call timer
         callTimerField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_CALL_DELAY, DEFAULT_CALL_DELAY)));
         // Set the known temperature
-        temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_OUTSIDE_TEMPERATURE)));
+        temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
         // Set the know Date Time
         LocalDateTime dateTime = model.getSimulationDateTime();
         dateField.setText(dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
@@ -166,7 +166,7 @@ public class EditDashboardController extends AppCompatActivity {
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 }
                 // Get the Simulation Context Parameters
-                int temperature = DEFAULT_OUTSIDE_TEMPERATURE;
+                int temperature = DEFAULT_TEMPERATURE;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
                 } catch (NumberFormatException e) {
