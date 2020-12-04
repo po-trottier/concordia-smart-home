@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -307,6 +310,29 @@ public class CustomMapModel {
      */
     public void addInhabitant(RectF shape, IInhabitant inhabitant) {
         this.inhabitants.add(new MapInhabitant(shape, inhabitant));
+    }
+
+    /**
+     * Convert drawable to bitmap bitmap.
+     *
+     * @param drawable the drawable
+     * @return the bitmap
+     */
+    public Bitmap convertDrawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public Drawable getVentilationDrawable(Context context, Room room) {
+        switch (room.getVentilationStatus()) {
+            case HEATING: return context.getDrawable(R.drawable.ic_whatshot);
+            case COOLING: return context.getDrawable(R.drawable.ic_ac_unit);
+            case PAUSED: return context.getDrawable(R.drawable.ic_pause_circle_outline);
+            default: return context.getDrawable(R.drawable.ic_highlight_off);
+        }
     }
 
     //endregion

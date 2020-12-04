@@ -3,6 +3,7 @@ package com.concordia.smarthomesimulator.dataModels;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.enums.HAVCStatus;
+import com.concordia.smarthomesimulator.enums.VentilationStatus;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
@@ -10,15 +11,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import static com.concordia.smarthomesimulator.Constants.INITIAL_ROOM_TEMPERATURE;
+import static com.concordia.smarthomesimulator.Constants.DEFAULT_TEMPERATURE;
 
 public class Room extends Observable implements Serializable {
 
+    private double desiredTemp;
+    private double actualTemp;
+    private boolean overrideZoneTemp;
     private String name;
     private Geometry geometry;
-    private double actualTemperature;
-    private double desiredTemperature;
-    private HAVCStatus havcStatus;
+    private VentilationStatus ventilationStatus;
     private final ArrayList<IInhabitant> inhabitants;
     private final ArrayList<Door> doors;
     private final ArrayList<Light> lights;
@@ -32,13 +34,11 @@ public class Room extends Observable implements Serializable {
      */
     public Room (String name, Geometry geometry) {
         super();
-
         this.name = name;
         this.geometry = geometry;
-        // setting both temps to some large temperature, the timed helper will change it
-        this.actualTemperature = INITIAL_ROOM_TEMPERATURE;
-        this.desiredTemperature = INITIAL_ROOM_TEMPERATURE;
-        this.havcStatus = HAVCStatus.OFF;
+        this.ventilationStatus = VentilationStatus.OFF;
+        this.desiredTemp = DEFAULT_TEMPERATURE;
+        this.actualTemp = DEFAULT_TEMPERATURE;
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
         this.doors = new ArrayList<>();
@@ -69,6 +69,10 @@ public class Room extends Observable implements Serializable {
         }
         newRoom.addDevices(newDevices);
         newRoom.addInhabitants(newInhabitants);
+        newRoom.setDesiredTemperature(desiredTemp);
+        newRoom.setActualTemperature(actualTemp);
+        newRoom.setIsTemperatureOverridden(overrideZoneTemp);
+        newRoom.setVentilationStatus(ventilationStatus);
         return newRoom;
     }
 
@@ -133,6 +137,15 @@ public class Room extends Observable implements Serializable {
     }
 
     /**
+     * Gets ventilation status.
+     *
+     * @return the ventilation status
+     */
+    public VentilationStatus getVentilationStatus() {
+        return ventilationStatus;
+    }
+
+    /**
      * Gets inhabitants.
      *
      * @return the inhabitants
@@ -152,6 +165,33 @@ public class Room extends Observable implements Serializable {
         devices.addAll(lights);
         devices.addAll(windows);
         return devices;
+    }
+
+    /**
+     * Gets desired temperature.
+     *
+     * @return the desired temperature
+     */
+    public double getDesiredTemperature() {
+        return desiredTemp;
+    }
+
+    /**
+     * Gets actual temperature.
+     *
+     * @return the actual temperature
+     */
+    public double getActualTemperature() {
+        return actualTemp;
+    }
+
+    /**
+     * Is zone temperature overridden by room temperature.
+     *
+     * @return true if the zone temperature is overridden by room temperature
+     */
+    public boolean isTemperatureOverridden() {
+        return overrideZoneTemp;
     }
 
     /**
@@ -180,6 +220,42 @@ public class Room extends Observable implements Serializable {
      */
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
+    }
+
+    /**
+     * Sets ventilation status.
+     *
+     * @param ventilationStatus the ventilation status
+     */
+    public void setVentilationStatus(VentilationStatus ventilationStatus) {
+        this.ventilationStatus = ventilationStatus;
+    }
+
+    /**
+     * Sets desired temperature.
+     *
+     * @param temperature the temperature
+     */
+    public void setDesiredTemperature(double temperature) {
+        desiredTemp = temperature;
+    }
+
+    /**
+     * Sets actual temperature.
+     *
+     * @param temperature the temperature
+     */
+    public void setActualTemperature(double temperature) {
+        actualTemp = temperature;
+    }
+
+    /**
+     * Sets is temperature overridden.
+     *
+     * @param overridden the overridden
+     */
+    public void setIsTemperatureOverridden(boolean overridden) {
+        overrideZoneTemp = overridden;
     }
 
     /**
