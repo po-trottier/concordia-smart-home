@@ -95,7 +95,72 @@
                         android:src="@drawable/ic_error_outline"/>
                 </LinearLayout>
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="4dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="@string/edit_text_summer_temperature"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/set_summer_temperature"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:inputType="numberSigned"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/context_summer_degrees_celsius"/>
+                <TextView
+                    android:id="@+id/context_summer_degrees_celsius"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    android:text="@string/generic_degrees_celsius"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="4dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:text="@string/edit_text_winter_temperature"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/set_winter_temperature"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:inputType="numberSigned"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/context_winter_degrees_celsius"/>
+                <TextView
+                    android:id="@+id/context_winter_degrees_celsius"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    android:text="@string/generic_degrees_celsius"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

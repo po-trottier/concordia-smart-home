@@ -268,7 +268,7 @@ public class EditDashboardModel extends ViewModel{
      * @param date        the date
      * @param time        the time
      */
-    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, int maxAlertTemperature, int minAlertTemperature, LocalDate date, LocalTime time) {
+    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, int summerTemperature, int winterTemperature, int maxAlertTemperature, int minAlertTemperature, LocalDate date, LocalTime time) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         // Verify the permissions if the user changed the away mode
@@ -283,6 +283,8 @@ public class EditDashboardModel extends ViewModel{
         editor.putBoolean(PREFERENCES_KEY_STATUS, status);
         editor.putInt(PREFERENCES_KEY_CALL_DELAY, callTimer);
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
+        editor.putInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, summerTemperature);
+        editor.putInt(PREFERENCES_KEY_WINTER_TEMPERATURE, winterTemperature);
         editor.putInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, maxAlertTemperature);
         editor.putInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, minAlertTemperature);
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);

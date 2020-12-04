@@ -157,6 +157,8 @@
     <string name="away_disable_message">Inhabitants were detected in the house layout.\n\nPlease remove any inhabitant from the layout before using this feature."</string>
     <string name="away_message_title">\"Away Mode\" cannot be activated</string>
     <string name="edit_text_away_mode_status">Away Mode</string>
+    <string name="edit_text_summer_temperature">Away Mode Temperature (Summer)</string>
+    <string name="edit_text_winter_temperature">Away Mode Temperature (Winter)</string>
     <string name="edit_text_notification_delay">Notification Delay on Detection</string>
     <string name="away_mode_on">On</string>
     <string name="away_mode_off">Off</string>
