@@ -120,10 +120,10 @@ public class DashboardController extends Fragment {
             @Override
             public void OnIndoorTemperatureChange() {
                 for (HeatingZone heatingZone: LayoutsHelper.getSelectedLayout(context).getHeatingZones()) {
-                    if(heatingZone.getDesiredTemperature() > (preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT))){
+                    if(heatingZone.getActualTemperature() > (preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT))){
                         NotificationsHelper.sendTemperatureAlertNotification(context,context.getString(R.string.max_temperature_alert_title),context.getString(R.string.max_temperature_alert_text));
                     }
-                    else if(heatingZone.getDesiredTemperature() < (preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT))){
+                    else if(heatingZone.getActualTemperature() < (preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT))){
                         NotificationsHelper.sendTemperatureAlertNotification(context,context.getString(R.string.min_temperature_alert_title),context.getString(R.string.min_temperature_alert_text));
                     }
                 }
