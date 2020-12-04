@@ -55,6 +55,8 @@ public class EditDashboardController extends AppCompatActivity {
     private Button deleteUser;
     private Button createUserButton;
     private EditText temperatureField;
+    private EditText maxAlertTemperatureField;
+    private EditText minAlertTemperatureField;
     private EditText editedUsername;
     private EditText editedPassword;
     private EditText newUsernameField;
@@ -115,6 +117,8 @@ public class EditDashboardController extends AppCompatActivity {
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
+        maxAlertTemperatureField = findViewById(R.id.set_max_temperature_alert);
+        minAlertTemperatureField = findViewById(R.id.set_min_temperature_alert);
         saveContext = findViewById(R.id.save_context_button);
         editPermissionsSpinner = findViewById(R.id.edit_permissions_spinner);
         editedUsername = findViewById(R.id.edit_username_field);
@@ -141,6 +145,10 @@ public class EditDashboardController extends AppCompatActivity {
         callTimerField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_CALL_DELAY, DEFAULT_CALL_DELAY)));
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
+        //Set maximum alert temperature
+        maxAlertTemperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT)));
+        //Set minimum alert temperature
+        minAlertTemperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT)));
         // Set the know Date Time
         LocalDateTime dateTime = model.getSimulationDateTime();
         dateField.setText(dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
@@ -167,8 +175,12 @@ public class EditDashboardController extends AppCompatActivity {
                 }
                 // Get the Simulation Context Parameters
                 int temperature = DEFAULT_TEMPERATURE;
+                int maxAlertTemperature = DEFAULT_MAX_TEMPERATURE_ALERT;
+                int minAlertTemperature = DEFAULT_MIN_TEMPERATURE_ALERT;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
+                    maxAlertTemperature = Integer.parseInt(maxAlertTemperatureField.getText().toString());
+                    minAlertTemperature = Integer.parseInt(minAlertTemperatureField.getText().toString());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -189,7 +201,7 @@ public class EditDashboardController extends AppCompatActivity {
                 boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
                 // Edit the parameters
-                model.editParameters(context, status, away, callTimer, temperature, date, time);
+                model.editParameters(context, status, away, callTimer, temperature, maxAlertTemperature, minAlertTemperature, date, time);
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed

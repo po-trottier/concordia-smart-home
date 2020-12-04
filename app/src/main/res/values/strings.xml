@@ -164,6 +164,8 @@
     <string name="simulation_status_started">Started</string>
     <string name="simulation_status_stopped">Stopped</string>
     <string name="edit_text_temperature">Outdoors Temperature</string>
+    <string name="edit_text_max_temperature_alert">Maximum Temperature Alert</string>
+    <string name="edit_text_min_temperature_alert">Minimum Temperature Alert</string>
     <string name="edit_text_lights_on">Turn Lights On Between</string>
     <string name="edit_text_lights_on_to">to</string>
     <string name="edit_text_time">Simulation Time</string>
