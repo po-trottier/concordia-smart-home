@@ -183,6 +183,12 @@
     <string name="permission_title_level_row">Minimum User Level</string>
     <string name="permission_edit_not_allows">You do not have the permissions to do the following action: %s</string>
 
+    <string name="seasons_title">Select months for each season</string>
+    <string name="winter_start">Winter start</string>
+    <string name="winter_end">Winter end</string>
+    <string name="summer_start">Summer start</string>
+    <string name="summer_end">Summer end</string>
+
     <string name="alert_map_device_title">Modifying a </string>
     <string name="alert_map_device_status">Current Status:</string>
     <string name="alert_map_device_lock_status">Lock Status:</string>
@@ -203,6 +209,21 @@
         <item>Child</item>
         <item>Guest</item>
         <item>Stranger</item>
+    </string-array>
+
+    <string-array name="months_spinner">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 
     <string-array name="device_type_spinner">

@@ -68,6 +68,12 @@ public class EditDashboardController extends AppCompatActivity {
     private Spinner editPermissionsSpinner;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
+    private Spinner winterStartSpinner;
+    private Spinner winterEndSpinner;
+    private Spinner summerStartSpinner;
+    private Spinner summerEndSpinner;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +97,7 @@ public class EditDashboardController extends AppCompatActivity {
 
         setupPermissionsSpinner();
         setupUsernamesSpinner();
+        setupSeasonsSpinner();
         setupPermissionConfigurationRows();
 
         setupTimePicker();
@@ -130,6 +137,11 @@ public class EditDashboardController extends AppCompatActivity {
         timeScaleField = findViewById(R.id.time_scale_text);
         dateField = findViewById(R.id.date_selector);
         timeField = findViewById(R.id.time_selector);
+        winterStartSpinner = findViewById(R.id.winter_start_spinner);
+        winterEndSpinner = findViewById(R.id.winter_end_spinner);
+        summerStartSpinner = findViewById(R.id.summer_start_spinner);
+        summerEndSpinner = findViewById(R.id.summer_end_spinner);
+
     }
 
     private void fillKnownValues() {
@@ -471,6 +483,22 @@ public class EditDashboardController extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+    }
+
+    private void setupSeasonsSpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                context,
+                R.layout.support_simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.months_spinner)
+        );
+        winterStartSpinner.setAdapter(adapter);
+        winterEndSpinner.setAdapter(adapter);
+        summerStartSpinner.setAdapter(adapter);
+        summerEndSpinner.setAdapter(adapter);
+        winterStartSpinner.setSelection(11);
+        winterEndSpinner.setSelection(3);
+        summerStartSpinner.setSelection(4);
+        summerEndSpinner.setSelection(7);
     }
 
     private void setupPermissionConfigurationRows() {
