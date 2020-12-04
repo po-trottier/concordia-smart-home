@@ -22,6 +22,8 @@ public class EditDashboardModel extends ViewModel{
 
     private float timeFactor = 1f;
     private LocalDateTime dateTime = LocalDateTime.now();
+    private LocalDateTime minDateTime = LocalDateTime.now();
+    private LocalDateTime maxDateTime = LocalDateTime.now();
 
     private Userbase userbase;
 
@@ -120,6 +122,44 @@ public class EditDashboardModel extends ViewModel{
         int hour = preferences.getInt(PREFERENCES_KEY_DATETIME_HOUR, timeNow.getHour());
         int minute = preferences.getInt(PREFERENCES_KEY_DATETIME_MINUTE, timeNow.getMinute());
         dateTime = LocalDateTime.of(year, month, day, hour, minute);
+    }
+
+    /**
+     * Gets lights' minimum date time.
+     *
+     * @return the lights' minimum date time
+     */
+    public LocalDateTime getMinDateTime() {
+        return minDateTime;
+    }
+
+    /**
+     * Sets lights' minimum time.
+     *
+     * @param hour   the hour
+     * @param minute the minute
+     */
+    public void setMinDateTime(int hour, int minute) {
+        minDateTime = LocalDateTime.of(minDateTime.getYear(), minDateTime.getMonthValue(), minDateTime.getDayOfMonth(), hour, minute);
+    }
+
+    /**
+     * Gets lights' maximum date time.
+     *
+     * @return the lights' minimum date time
+     */
+    public LocalDateTime getMaxDateTime() {
+        return maxDateTime;
+    }
+
+    /**
+     * Sets lights' maximum time.
+     *
+     * @param hour   the hour
+     * @param minute the minute
+     */
+    public void setMaxDateTime(int hour, int minute) {
+        maxDateTime = LocalDateTime.of(maxDateTime.getYear(), maxDateTime.getMonthValue(), maxDateTime.getDayOfMonth(), hour, minute);
     }
 
     /**

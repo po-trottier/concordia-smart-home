@@ -65,6 +65,8 @@ public class EditDashboardController extends AppCompatActivity {
     private Spinner editPermissionsSpinner;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
+    private EditText minTimeField;
+    private EditText maxTimeField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,8 @@ public class EditDashboardController extends AppCompatActivity {
         setupTimePicker();
         setupDatePicker();
         setupTimeFactor();
+        setupMinTimePicker();
+        setupMaxTimePicker();
 
         setupUsernamesSpinner();
 
@@ -127,6 +131,8 @@ public class EditDashboardController extends AppCompatActivity {
         timeScaleField = findViewById(R.id.time_scale_text);
         dateField = findViewById(R.id.date_selector);
         timeField = findViewById(R.id.time_selector);
+        minTimeField = findViewById(R.id.set_time_min);
+        maxTimeField = findViewById(R.id.set_time_max);
     }
 
     private void fillKnownValues() {
@@ -144,6 +150,10 @@ public class EditDashboardController extends AppCompatActivity {
         timeField.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
         // Set the time scale factor
         timeScaleField.setText(model.getTimeFactor() + "x");
+        LocalDateTime minDateTime = model.getMinDateTime();
+        minTimeField.setText(minDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
+        LocalDateTime maxDateTime = model.getMaxDateTime();
+        maxTimeField.setText(maxDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
     }
 
     private void setSaveIntent() {
@@ -421,6 +431,52 @@ public class EditDashboardController extends AppCompatActivity {
                         },
                         timeNow.getHour(),
                         timeNow.getMinute(),
+                        false
+                );
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void setupMinTimePicker() {
+        minTimeField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalDateTime minTimeNow = model.getMinDateTime();
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        context,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                model.setMinDateTime(hourOfDay, minute);
+                                fillKnownValues();
+                            }
+                        },
+                        minTimeNow.getHour(),
+                        minTimeNow.getMinute(),
+                        false
+                );
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void setupMaxTimePicker() {
+        maxTimeField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalDateTime maxTimeNow = model.getMaxDateTime();
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        context,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                model.setMaxDateTime(hourOfDay, minute);
+                                fillKnownValues();
+                            }
+                        },
+                        maxTimeNow.getHour(),
+                        maxTimeNow.getMinute(),
                         false
                 );
                 timePickerDialog.show();
