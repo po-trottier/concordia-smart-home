@@ -229,7 +229,7 @@ public class UserPreferences implements Serializable {
         username = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         password = preferences.getString(PREFERENCES_KEY_PASSWORD,"");
         permissions = Permissions.fromInteger(preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0));
-        temperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE,DEFAULT_TEMPERATURE);
+        temperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE);
         status = preferences.getBoolean(PREFERENCES_KEY_STATUS, DEFAULT_STATUS);
         layout = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
         timeFactor = preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE);

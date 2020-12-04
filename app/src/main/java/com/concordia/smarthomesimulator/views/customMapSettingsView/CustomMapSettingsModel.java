@@ -89,12 +89,14 @@ public class CustomMapSettingsModel {
      * @return the ordered rooms
      */
     public ArrayList<Room> getOrderedRooms() {
-        Room outdoors = layout.getRoom(DEFAULT_NAME_OUTDOORS);
-        Room garage = layout.getRoom(DEFAULT_NAME_GARAGE);
-        layout.removeRoom(DEFAULT_NAME_OUTDOORS);
-        layout.removeRoom(DEFAULT_NAME_GARAGE);
+        HouseLayout clone = (HouseLayout) layout.clone();
 
-        ArrayList<Room> rooms = layout.getRooms();
+        Room outdoors = clone.getRoom(DEFAULT_NAME_OUTDOORS);
+        Room garage = clone.getRoom(DEFAULT_NAME_GARAGE);
+        clone.removeRoom(DEFAULT_NAME_OUTDOORS);
+        clone.removeRoom(DEFAULT_NAME_GARAGE);
+
+        ArrayList<Room> rooms = clone.getRooms();
         rooms.sort(new SortByName());
 
         rooms.add(garage);
@@ -197,6 +199,20 @@ public class CustomMapSettingsModel {
         // Update the room in the layout
         layout.removeRoom(selectedRoom.getName());
         layout.addRoom(selectedRoom);
+        // Update the UI
+        CustomMapSettingsView view = ((Activity) context).findViewById(R.id.edit_map_settings);
+        view.updateView();
+    }
+
+    public void addHeatingZone(Context context, String name) {
+        // Make sure the zone is unique
+        if (layout.getHeatingZones().stream().anyMatch(i -> i.getName().equalsIgnoreCase(name.trim()))) {
+            Toast.makeText(context, context.getString(R.string.add_zone_unique), Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Add the zone
+        HeatingZone zone = new HeatingZone(name.trim());
+        layout.addHeatingZone(zone);
         // Update the UI
         CustomMapSettingsView view = ((Activity) context).findViewById(R.id.edit_map_settings);
         view.updateView();

@@ -10,13 +10,16 @@ import android.view.View;
 import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.*;
+import com.concordia.smarthomesimulator.dataModels.Geometry;
+import com.concordia.smarthomesimulator.dataModels.HeatingZone;
+import com.concordia.smarthomesimulator.dataModels.HouseLayout;
+import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.DeviceType;
 import com.concordia.smarthomesimulator.enums.Orientation;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
+import com.concordia.smarthomesimulator.views.customHeatingZoneView.CustomHeatingZoneView;
 
 import java.util.ArrayList;
 
@@ -38,10 +41,12 @@ public class CustomMapSettingsView extends ScrollView {
     private LinearLayout roomsListLayout;
     private LinearLayout devicesListLayout;
     private LinearLayout inhabitantsListLayout;
+    private LinearLayout zonesListLayout;
     private Button removeRoomButton;
     private Button addRoomButton;
     private Button addDeviceButton;
     private Button addInhabitantButton;
+    private Button addZoneButton;
 
     //endregion
 
@@ -119,17 +124,22 @@ public class CustomMapSettingsView extends ScrollView {
         roomsListLayout = findViewById(R.id.edit_map_room_list);
         devicesListLayout = findViewById(R.id.edit_map_device_list);
         inhabitantsListLayout = findViewById(R.id.edit_map_inhabitant_list);
+        zonesListLayout = findViewById(R.id.edit_map_zones_list);
         removeRoomButton = findViewById(R.id.edit_map_remove_room);
         addRoomButton = findViewById(R.id.edit_map_add_room);
         addDeviceButton = findViewById(R.id.edit_map_add_device);
         addInhabitantButton = findViewById(R.id.edit_map_add_inhabitant);
+        addZoneButton = findViewById(R.id.edit_map_add_zones);
     }
 
     private void fillKnownValues() {
-        houseLayoutName.setText(model.getLayout().getName());
+        if (houseLayoutName.getText().toString().trim().length() < 1) {
+            houseLayoutName.setText(model.getLayout().getName());
+        }
 
         updateLayoutVisibility();
         addRoomsToList();
+        addZonesToList();
 
         Room room = model.getSelectedRoom();
         if (room != null) {
@@ -151,6 +161,7 @@ public class CustomMapSettingsView extends ScrollView {
         setAddRoomListener();
         setAddDeviceListener();
         setAddInhabitantListener();
+        setAddZoneListener();
     }
 
     private void updateLayoutVisibility() {
@@ -348,6 +359,28 @@ public class CustomMapSettingsView extends ScrollView {
         });
     }
 
+    private void setAddZoneListener() {
+        addZoneButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View customView = inflate(context, R.layout.alert_save_house_layout, null);
+                final AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.add_zones_edit_map))
+                    .setMessage(context.getString(R.string.add_zones_edit_map_message))
+                    .setView(customView)
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(context.getString(R.string.generic_save), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
+                            model.addHeatingZone(context, layoutName.getText().toString().trim());
+                        }
+                    }).create();
+                dialog.show();
+            }
+        });
+    }
+
     //endregion
 
     //region Populate Lists Methods
@@ -433,6 +466,7 @@ public class CustomMapSettingsView extends ScrollView {
         if (model.getSelectedRoom() == null) {
             return;
         }
+
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         String currentUser = preferences.getString(PREFERENCES_KEY_USERNAME, "");
 
@@ -458,6 +492,16 @@ public class CustomMapSettingsView extends ScrollView {
             });
 
             inhabitantsListLayout.addView(child);
+        }
+    }
+
+    private void addZonesToList() {
+        zonesListLayout.removeAllViews();
+
+        for (HeatingZone zone : model.getLayout().getHeatingZones()) {
+            CustomHeatingZoneView child = (CustomHeatingZoneView) inflate(context, R.layout.adapter_heating_zone, null);
+            child.setupView(zone, model.getLayout());
+            zonesListLayout.addView(child);
         }
     }
 

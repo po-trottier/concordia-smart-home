@@ -54,6 +54,7 @@ public class Constants {
     // Default House Layout Values
     public static final String DEFAULT_NAME_OUTDOORS = "Backyard";
     public static final String DEFAULT_NAME_GARAGE = "Garage";
+    public static final String DEFAULT_NAME_HEATING_ZONE = "Default";
 
     // Default House Layout names
     public static final String DEMO_LAYOUT_NAME = "Demo Layout";
@@ -66,6 +67,10 @@ public class Constants {
     public static final float[] AVAILABLE_TIME_FACTORS = { 0.1f, 0.5f, 1f, 1.5f, 2f, 5f, 10f, 50f, 100f, 200f };
     public static final String DATE_FORMAT = "MMMM d yyyy";
     public static final String TIME_FORMAT = "h:mm a";
+
+    // Temperature Values
+    public static final double MAXIMUM_TEMPERATURE = 100;
+    public static final double MINIMUM_TEMPERATURE = -100;
 
     // Notifications
     public final static String NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d943f6";

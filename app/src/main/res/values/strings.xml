@@ -83,6 +83,7 @@
     <string name="rooms_edit_map">Rooms</string>
     <string name="devices_edit_map">Devices</string>
     <string name="inhabitants_edit_map">Inhabitants</string>
+    <string name="heating_zones">Climate Zones</string>
     <string name="remove_room_edit_map">Remove Room</string>
     <string name="room_coordinates_edit_map">Coordinates:</string>
     <string name="room_default_edit_map">(Default)</string>
@@ -91,8 +92,12 @@
     <string name="add_room_edit_map">Add a Room</string>
     <string name="add_device_edit_map">Add a Device</string>
     <string name="add_inhabitant_edit_map">Add an Inhabitant</string>
+    <string name="add_zones_edit_map">Add a Zone</string>
+    <string name="add_zones_edit_map_message">How would you like to call this new climate zone?</string>
     <string name="add_inhabitant_invalid">Invalid inhabitant name entered.</string>
     <string name="add_inhabitant_used">This name is already in use. Please choose a different inhabitant name.</string>
+    <string name="add_zone_unique">This name is already in use. Please choose a different zone name.</string>
+    <string name="add_zone_no_room">No room was added to this zone.</string>
     <string name="no_room_edit_map">There are no rooms in this layout…</string>
     <string name="no_device_edit_map">There are no devices in this room…</string>
     <string name="no_inhabitant_edit_map">There are no inhabitants in this room…</string>
@@ -106,8 +111,11 @@
     <string name="title_alert_remove_device_edit_map">Remove the device</string>
     <string name="text_alert_remove_device_edit_map">Are you sure you want to remove the device from the house layout ?</string>
     <string name="title_alert_add_inhabitant_edit_map">Add a new inhabitant</string>
+    <string name="title_alert_add_zone_edit_map">Add a new climate zone</string>
     <string name="title_alert_edit_inhabitant_edit_map">Modify the inhabitant</string>
     <string name="text_alert_error_inhabitant_edit_map">You must select a destination in order to move the inhabitant</string>
+    <string name="text_alert_edit_temperature">Modify the climate zone</string>
+    <string name="text_alert_move_room">Move the room to a new zone</string>
 
     <string name="text_alert_device_type">Device Type:</string>
     <string name="text_alert_device_orientation">Orientation:</string>
@@ -128,6 +136,7 @@
     <string name="text_alert_save_layout">How would you like to call this layout ?</string>
     <string name="text_alert_save_layout_default">The active layout is a default layout and cannot be updated. Please choose a name to rename the layout to.\n</string>
     <string name="field_alert_save_layout">Enter the name here</string>
+    <string name="field_alert_temperature">Target temperature</string>
     <string name="success_alert_save_layout">The house layout was successfully saved.</string>
     <string name="error_exists_alert_save_layout">A default house layout with this name already exists. Please try using a different layout name.</string>
     <string name="error_unknown_alert_save_layout">Something went wrong while saving the house layout. Please try again later.</string>

@@ -142,6 +142,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         app:cardElevation="0dp"
         app:cardCornerRadius="@dimen/card_corner_radius">
         <LinearLayout
@@ -177,6 +178,42 @@
                 android:textColor="@android:color/white"
                 android:background="@drawable/rounded_text_field_background"
                 android:backgroundTint="@color/primaryFaded"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!--Heating Zones-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textSize="24sp"
+        android:text="@string/heating_zones"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="@dimen/card_corner_radius">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_all_margin"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/edit_map_zones_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_text_field_background" />
+            <Button
+                android:id="@+id/edit_map_add_zones"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/field_height"
+                android:layout_marginTop="24dp"
+                android:text="@string/add_zones_edit_map"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_text_field_background"
+                android:backgroundTint="@color/primary"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
