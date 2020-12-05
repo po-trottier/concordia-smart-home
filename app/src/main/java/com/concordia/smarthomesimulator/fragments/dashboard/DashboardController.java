@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
-import com.concordia.smarthomesimulator.dataModels.HeatingZone;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.LogImportance;

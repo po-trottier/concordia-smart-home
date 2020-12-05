@@ -93,8 +93,9 @@ public class NotificationsHelper {
         // Build notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
         builder.setContentTitle(alertTitle);
-        alertTitle = formatTemperatureAlertString(alertTitle,roomName);
-        alertText = formatTemperatureAlertString(alertText, roomName);
+        String connectorString = context.getString(R.string.in_the_segment_alert_text);
+        alertTitle = formatTemperatureAlertString(alertTitle,connectorString,roomName);
+        alertText = formatTemperatureAlertString(alertText,connectorString,roomName);
         builder.setContentText(alertText);
         builder.setSmallIcon(R.drawable.ic_home);
         builder.setAutoCancel(false);
@@ -105,7 +106,7 @@ public class NotificationsHelper {
         LogsHelper.add(context, new LogEntry("Temperature Alert", alertTitle, LogImportance.CRITICAL));
     }
 
-    private static String formatTemperatureAlertString(String alertString, String roomName){
-        return alertString + " in the " + roomName;
+    private static String formatTemperatureAlertString(String alertString, String connectorString, String roomName){
+        return alertString + " " +  connectorString + " " + roomName;
     }
 }

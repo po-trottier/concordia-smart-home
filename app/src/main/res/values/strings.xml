@@ -212,6 +212,7 @@
     <string name="max_temperature_alert_text">Temperatures over set maximum limit</string>
     <string name="min_temperature_alert_title">Minimum Temperature Alert</string>
     <string name="min_temperature_alert_text">Temperatures below set minimum limit</string>
+    <string name="in_the_segment_alert_text"> in the </string>
 
 
 
