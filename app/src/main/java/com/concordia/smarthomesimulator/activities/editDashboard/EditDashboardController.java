@@ -200,8 +200,13 @@ public class EditDashboardController extends AppCompatActivity {
                 }
                 boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
+                // Getting the season months
+                int winterStart = extractMonth(winterStartSpinner.getSelectedItem().toString());
+                int winterEnd = extractMonth(winterEndSpinner.getSelectedItem().toString());
+                int summerStart = extractMonth(summerStartSpinner.getSelectedItem().toString());
+                int summerEnd = extractMonth(summerEndSpinner.getSelectedItem().toString());
                 // Edit the parameters
-                model.editParameters(context, status, away, callTimer, temperature, date, time);
+                model.editParameters(context, status, away, callTimer, temperature, date, time, winterStart, winterEnd, summerStart, summerEnd);
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
@@ -495,10 +500,10 @@ public class EditDashboardController extends AppCompatActivity {
         winterEndSpinner.setAdapter(adapter);
         summerStartSpinner.setAdapter(adapter);
         summerEndSpinner.setAdapter(adapter);
-        winterStartSpinner.setSelection(11);
-        winterEndSpinner.setSelection(3);
-        summerStartSpinner.setSelection(4);
-        summerEndSpinner.setSelection(7);
+        winterStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START));
+        winterEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END));
+        summerStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START));
+        summerEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END));
     }
 
     private void setupPermissionConfigurationRows() {
@@ -572,5 +577,10 @@ public class EditDashboardController extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private int extractMonth(String month){
+        String numberSection = month.substring(0, month.indexOf(' '));
+        return Integer.parseInt(numberSection);
     }
 }

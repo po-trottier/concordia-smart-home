@@ -22,6 +22,10 @@ public class Constants {
     public static final String PREFERENCES_KEY_DATETIME_HOUR = "hour";
     public static final String PREFERENCES_KEY_DATETIME_MINUTE = "minute";
     public static final String PREFERENCES_KEY_TIME_SCALE = "scale";
+    public static final String PREFERENCES_KEY_WINTER_START = "winterStart";
+    public static final String PREFERENCES_KEY_WINTER_END = "winterEnd";
+    public static final String PREFERENCES_KEY_SUMMER_START = "summerStart";
+    public static final String PREFERENCES_KEY_SUMMER_END = "summerEnd";
 
     // Keys for Shared Preferences Actions
     public static final String PREFERENCES_KEY_ACTION_INTERACT_ANY_WINDOW = "Open/Close_Any_Window";
@@ -50,6 +54,10 @@ public class Constants {
     public static final int DEFAULT_TEMPERATURE = 20;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
+    public static final int DEFAULT_WINTER_START = 11;
+    public static final int DEFAULT_WINTER_END = 3;
+    public static final int DEFAULT_SUMMER_START = 4;
+    public static final int DEFAULT_SUMMER_END = 7;
 
     // Default House Layout Values
     public static final String DEFAULT_NAME_OUTDOORS = "Backyard";

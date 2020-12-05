@@ -22,6 +22,10 @@ public class UserPreferences implements Serializable {
     private int hour;
     private int minute;
     private float timeFactor;
+    private int winterStart;
+    private int winterEnd;
+    private int summerStart;
+    private int summerEnd;
 
     /**
      * Instantiates a new User preferences.
@@ -36,7 +40,11 @@ public class UserPreferences implements Serializable {
         this.permissions = permissions;
         this.temperature = DEFAULT_TEMPERATURE;
         this.status = DEFAULT_STATUS;
-        this.timeFactor = 1f;
+        this.timeFactor = DEFAULT_TIME_SCALE;
+        this.winterStart = DEFAULT_WINTER_START;
+        this. winterEnd = DEFAULT_WINTER_END;
+        this.summerStart = DEFAULT_SUMMER_START;
+        this.summerEnd = DEFAULT_SUMMER_END;
 
         LocalDateTime timeNow = LocalDateTime.now();
         this.year = timeNow.getYear();
@@ -217,6 +225,10 @@ public class UserPreferences implements Serializable {
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, day);
         editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, hour);
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, minute);
+        editor.putInt(PREFERENCES_KEY_WINTER_START, winterStart);
+        editor.putInt(PREFERENCES_KEY_WINTER_END, winterEnd);
+        editor.putInt(PREFERENCES_KEY_SUMMER_START, summerStart);
+        editor.putInt(PREFERENCES_KEY_SUMMER_END, summerEnd);
         editor.apply();
     }
 
@@ -233,6 +245,10 @@ public class UserPreferences implements Serializable {
         status = preferences.getBoolean(PREFERENCES_KEY_STATUS, DEFAULT_STATUS);
         layout = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
         timeFactor = preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE);
+        winterStart = preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START);
+        winterEnd = preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END);
+        summerStart = preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START);
+        summerEnd = preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END);
 
         LocalDateTime timeNow = LocalDateTime.now();
         year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
