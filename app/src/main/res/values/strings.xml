@@ -88,6 +88,7 @@
     <string name="room_coordinates_edit_map">Coordinates:</string>
     <string name="room_default_edit_map">(Default)</string>
     <string name="inhabitant_you_edit_map">(You)</string>
+    <string name="room_override_text">Overridden</string>
 
     <string name="add_room_edit_map">Add a Room</string>
     <string name="add_device_edit_map">Add a Device</string>
@@ -201,6 +202,7 @@
     <string name="alert_map_room_override">Overriding zone target:</string>
     <string name="alert_map_room_ventilation">HVAC status:</string>
     <string name="alert_map_room_edit_title">Modifying the</string>
+    <string name="alert_map_room_edit_target">Target Temperature</string>
 
     <string name="alert_map_device_title">Modifying a</string>
     <string name="alert_map_device_status">Current Status:</string>
