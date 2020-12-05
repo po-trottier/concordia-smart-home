@@ -500,10 +500,10 @@ public class EditDashboardController extends AppCompatActivity {
         winterEndSpinner.setAdapter(adapter);
         summerStartSpinner.setAdapter(adapter);
         summerEndSpinner.setAdapter(adapter);
-        winterStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START));
-        winterEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END));
-        summerStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START));
-        summerEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END));
+        winterStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START) - 1);
+        winterEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END) - 1);
+        summerStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START) - 1);
+        summerEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END) - 1);
     }
 
     private void setupPermissionConfigurationRows() {
