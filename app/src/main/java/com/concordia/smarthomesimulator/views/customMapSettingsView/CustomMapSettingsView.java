@@ -11,12 +11,11 @@ import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
-import com.concordia.smarthomesimulator.dataModels.Geometry;
-import com.concordia.smarthomesimulator.dataModels.HeatingZone;
-import com.concordia.smarthomesimulator.dataModels.HouseLayout;
-import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.Orientation;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 import com.concordia.smarthomesimulator.views.customHeatingZoneView.CustomHeatingZoneView;
@@ -372,8 +371,12 @@ public class CustomMapSettingsView extends ScrollView {
                     .setPositiveButton(context.getString(R.string.generic_save), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            EditText layoutName = customView.findViewById(R.id.alert_save_layout_name);
-                            model.addHeatingZone(context, layoutName.getText().toString().trim());
+                            EditText zoneNameField = customView.findViewById(R.id.alert_save_layout_name);
+                            String zoneName = zoneNameField.getText().toString().trim();
+                            if (model.addHeatingZone(context, zoneName)) {
+                                // Log the action
+                                LogsHelper.add(context, new LogEntry("Map Settings", "Climate Zone added: " + zoneName, LogImportance.IMPORTANT));
+                            }
                         }
                     }).create();
                 dialog.show();

@@ -12,7 +12,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.HeatingZone;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
+import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView;
 
 import java.util.ArrayList;
@@ -117,6 +120,9 @@ public class CustomHeatingZoneView extends LinearLayout {
                                 layout.getHeatingZones().get(0).removeRoom(room.getName());
                                 // Update the view
                                 updateView();
+                                // Log the action
+                                String message = room.getName() + " was moved from zone " + zone.getName() + " to" + selectedZone.getName();
+                                LogsHelper.add(context, new LogEntry("Map Set", message, LogImportance.IMPORTANT));
                             }
                         })
                         .create();
@@ -162,6 +168,8 @@ public class CustomHeatingZoneView extends LinearLayout {
                             }
                             // Update the view
                             updateView();
+                            // Log the action
+                            LogsHelper.add(context, new LogEntry("Map Settings", "Temperature setting changed for zone " + zone.getName(), LogImportance.IMPORTANT));
                         }
                     });
                 if (!zone.getName().equalsIgnoreCase(DEFAULT_NAME_HEATING_ZONE)) {
@@ -170,6 +178,8 @@ public class CustomHeatingZoneView extends LinearLayout {
                         public void onClick(DialogInterface dialog, int which) {
                             layout.removeHeatingZone(zone.getName());
                             updateView();
+                            // Log the action
+                            LogsHelper.add(context, new LogEntry("Map Settings", "Climate Zone removed: " + zone.getName(), LogImportance.IMPORTANT));
                         }
                     });
                 }
