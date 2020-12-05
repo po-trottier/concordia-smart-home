@@ -302,8 +302,9 @@ public class CustomMapSettingsModel {
         Room room = null;
         // Find the room the inhabitant is in
         for (Room r : layout.getRooms()) {
-            if (r.getInhabitants().contains(inhabitant)) {
+            if (r.getInhabitants().stream().anyMatch(i -> i.getName().equalsIgnoreCase(inhabitant.getName()))) {
                 room = r;
+                break;
             }
         }
         // Crash check
@@ -315,6 +316,7 @@ public class CustomMapSettingsModel {
         // Replace the room with the new one
         layout.removeRoom(room.getName());
         layout.addRoom(room);
+        selectedRoom = room;
     }
 
     private View setupCustomInhabitantView(Context context) {

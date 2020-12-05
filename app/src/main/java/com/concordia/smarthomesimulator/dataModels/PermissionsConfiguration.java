@@ -33,6 +33,7 @@ public class PermissionsConfiguration implements Serializable {
         actionPermissionsMap.put(Action.INTERACT_DOOR_LOCK,DEFAULT_MIN_TO_INTERACT_DOOR_LOCK);
         actionPermissionsMap.put(Action.CHANGE_AWAY_MODE,DEFAULT_MIN_TO_CHANGE_AWAY_MODE);
         actionPermissionsMap.put(Action.MODIFY_USERBASE,DEFAULT_MIN_TO_MODIFY_USERBASE);
+        actionPermissionsMap.put(Action.MODIFY_TEMPERATURE,DEFAULT_MIN_TO_MODIFY_TEMPERATURE);
         actionPermissionsMap.put(Action.CHANGE_PERMISSIONS_CONFIG,DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG);
     }
 
@@ -45,18 +46,14 @@ public class PermissionsConfiguration implements Serializable {
     public PermissionsConfiguration(PermissionsConfiguration permissionsConfiguration) {
         this.actionPermissionsMap = new LinkedHashMap<>();
         if (permissionsConfiguration != null) {
-            permissionsConfiguration.actionPermissionsMap.forEach(
-                    this.actionPermissionsMap::put
-            );
+            permissionsConfiguration.actionPermissionsMap.forEach(this.actionPermissionsMap::put);
         }
     }
 
     public PermissionsConfiguration(Map<Action, Permissions> actionPermissionsMap) {
         this.actionPermissionsMap = new LinkedHashMap<>();
         if (actionPermissionsMap != null) {
-            actionPermissionsMap.forEach(
-                    this.actionPermissionsMap::put
-            );
+            actionPermissionsMap.forEach(this.actionPermissionsMap::put);
         }
     }
 
@@ -92,9 +89,7 @@ public class PermissionsConfiguration implements Serializable {
      */
     public void sendToContext(SharedPreferences preferences){
         SharedPreferences.Editor editor = preferences.edit();
-        actionPermissionsMap.forEach(
-            (k,v) -> editor.putInt(k.getDescription(), v.getBitValue())
-        );
+        actionPermissionsMap.forEach((k,v) -> editor.putInt(k.getDescription(), v.getBitValue()));
         editor.apply();
     }
 

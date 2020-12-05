@@ -239,7 +239,7 @@ public class CustomMapSettingsView extends ScrollView {
                 final AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.title_alert_remove_room_edit_map))
                     .setMessage(context.getString(R.string.text_alert_remove_room_edit_map))
-                    .setNegativeButton(android.R.string.no, null)
+                    .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(R.string.generic_remove, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -368,7 +368,7 @@ public class CustomMapSettingsView extends ScrollView {
                     .setTitle(context.getString(R.string.add_zones_edit_map))
                     .setMessage(context.getString(R.string.add_zones_edit_map_message))
                     .setView(customView)
-                    .setNegativeButton(android.R.string.no, null)
+                    .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(context.getString(R.string.generic_save), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
