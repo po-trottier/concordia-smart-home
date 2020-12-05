@@ -3,15 +3,12 @@ package com.concordia.smarthomesimulator.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.LayoutInflater;
-import android.view.View;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.VentilationStatus;
-import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 import com.concordia.smarthomesimulator.views.customMapView.CustomMapView;
 
 import java.util.Timer;
@@ -57,17 +54,18 @@ public class TemperatureHelper {
 
                     double actualTemperature = room.getActualTemperature();
                     double desiredTemperature = room.getDesiredTemperature();
-                    VentilationStatus ventilationStatus = room.getVentilationStatus();
+                    VentilationStatus currentVentStatus = room.getVentilationStatus();
+                    VentilationStatus newVentStatus = actualTemperature > desiredTemperature ? VentilationStatus.COOLING : VentilationStatus.HEATING;
 
                     // Because of unclear requirements, OFF and PAUSED really just mean the same thing since the
                     // HVAC system turns itself on.
-                    switch (ventilationStatus){
+                    switch (currentVentStatus){
                         case OFF:
                         case PAUSED:
                             if (Math.abs(actualTemperature - desiredTemperature) > MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED) {
-                                room.setVentilationStatus(actualTemperature > desiredTemperature ?
-                                        VentilationStatus.COOLING : VentilationStatus.HEATING);
-                                LogsHelper.add(context, new LogEntry("Temperature Change", room.getName() + room.getVentilationStatus(), LogImportance.MINOR));
+                                room.setVentilationStatus(newVentStatus);
+                                LogsHelper.add(context, new LogEntry("Temperature Change",
+                                        room.getName() + newVentStatus.getDescription(), LogImportance.MINOR));
                             } else {
                                 room.setActualTemperature(actualTemperature > outsideTemperature ?
                                         actualTemperature - OUTSIDE_TEMPERATURE_CHANGE : actualTemperature + OUTSIDE_TEMPERATURE_CHANGE);
@@ -78,8 +76,12 @@ public class TemperatureHelper {
                                 room.setVentilationStatus(VentilationStatus.PAUSED);
                             } else {
                                 // In case the desired temp is changed while the ventilation is already running
-                                room.setVentilationStatus(actualTemperature > desiredTemperature ?
-                                        VentilationStatus.COOLING : VentilationStatus.HEATING);
+                                if (currentVentStatus != newVentStatus){
+                                    room.setVentilationStatus(actualTemperature > desiredTemperature ?
+                                            VentilationStatus.COOLING : VentilationStatus.HEATING);
+                                    LogsHelper.add(context, new LogEntry("Temperature Change",
+                                            room.getName() + newVentStatus.getDescription(), LogImportance.MINOR));
+                                }
                                 room.setActualTemperature(actualTemperature > desiredTemperature ?
                                         actualTemperature - HVAC_TEMPERATURE_CHANGE : actualTemperature + HVAC_TEMPERATURE_CHANGE);
                             }
