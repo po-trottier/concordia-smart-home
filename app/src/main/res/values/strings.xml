@@ -222,8 +222,8 @@
     <string name="max_temperature_alert_text">Temperatures are above user-defined maximum</string>
     <string name="min_temperature_alert_title">Minimum Temperature Alert</string>
     <string name="min_temperature_alert_text">Temperatures are below user-defined minimum</string>
-    <string name="in_the_segment_alert_text"> in the </string>
-    <string name="in_zone_segment_alert_text"> in Zone : </string>
+    <string name="in_the_segment_alert_text">in the</string>
+    <string name="in_zone_segment_alert_text">in Zone :</string>
 
 
 
