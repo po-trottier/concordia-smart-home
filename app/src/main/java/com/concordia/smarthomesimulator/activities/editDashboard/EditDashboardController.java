@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -227,6 +228,19 @@ public class EditDashboardController extends AppCompatActivity {
                         && UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
                     UserbaseHelper.saveUserbase(context, model.getUserbase());
                 }
+                // Set away mode temperatures based on season
+                if(away){
+                    HouseLayout houseLayout =  LayoutsHelper.getSelectedLayout(context);
+                    for (Room room: houseLayout.getRooms()) {
+                        if(verifySeason(LocalDate.now())){
+                            room.setDesiredTemperature(preferences.getInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, DEFAULT_SUMMER_TEMPERATURE));
+                        }
+                        else if(!verifySeason(LocalDate.now())){
+                            room.setDesiredTemperature(preferences.getInt(PREFERENCES_KEY_WINTER_TEMPERATURE, DEFAULT_WINTER_TEMPERATURE));
+                        }
+                    }
+                    LayoutsHelper.updateSelectedLayout(context,houseLayout);
+                }
                 // Send notification if required
                 if (away && status && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
                     NotificationsHelper.sendIntruderNotification(context);
@@ -236,6 +250,22 @@ public class EditDashboardController extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private boolean verifySeason(LocalDate date) {
+        boolean season = true;
+        LocalDate summerStart = LocalDate.of( LocalDate.now().getYear(),6, 20);
+        LocalDate summerEnd = LocalDate.of( LocalDate.now().getYear(), 9, 22);
+        LocalDate winterStart = LocalDate.of( LocalDate.now().getYear(),12, 21);
+        LocalDate winterEnd = LocalDate.of( LocalDate.now().getYear(), 3, 21);
+        //Returns true for summer
+        if(date.isAfter(summerStart) && (date.isBefore(summerEnd))){
+            season = true;
+        }
+        else if(date.isAfter(winterStart) && (date.isBefore(winterEnd))){
+            season = false;
+        }
+        return season;
     }
 
     private void setDeleteUserIntent(){
