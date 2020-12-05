@@ -60,15 +60,6 @@ public class HeatingZone implements Serializable {
     }
 
     /**
-     * Gets actual temperature.
-     *
-     * @return the actual temperature
-     */
-    public double getActualTemperature() {
-        return actualTemp;
-    }
-
-    /**
      * Sets actual temperature for zone and all included rooms.
      *
      * @param temperature the temperature
