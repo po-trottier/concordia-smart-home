@@ -1,7 +1,10 @@
 package com.concordia.smarthomesimulator.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.LayoutInflater;
+import android.view.View;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
@@ -9,6 +12,7 @@ import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.VentilationStatus;
 import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
+import com.concordia.smarthomesimulator.views.customMapView.CustomMapView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,7 +67,7 @@ public class TemperatureHelper {
                             if (Math.abs(actualTemperature - desiredTemperature) > MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED) {
                                 room.setVentilationStatus(actualTemperature > desiredTemperature ?
                                         VentilationStatus.COOLING : VentilationStatus.HEATING);
-                                //LogsHelper.add(context, new LogEntry("Temperature Change", room.getName() + "is being cooled" + R.string.menu_dashboard, LogImportance.MINOR));
+                                LogsHelper.add(context, new LogEntry("Temperature Change", room.getName() + room.getVentilationStatus(), LogImportance.MINOR));
                             } else {
                                 room.setActualTemperature(actualTemperature > outsideTemperature ?
                                         actualTemperature - OUTSIDE_TEMPERATURE_CHANGE : actualTemperature + OUTSIDE_TEMPERATURE_CHANGE);
@@ -81,6 +85,9 @@ public class TemperatureHelper {
                             }
                     }
                 }
+                LayoutsHelper.updateSelectedLayout(context, layout);
+                CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
+                if (view != null) view.updateView();
             }
         }, 0, period);
 
