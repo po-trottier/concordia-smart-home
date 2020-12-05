@@ -94,7 +94,7 @@ public class CustomHeatingZoneView extends LinearLayout {
                     final AlertDialog dialog = new AlertDialog.Builder(context)
                         .setTitle(context.getString(R.string.text_alert_move_room))
                         .setView(customView)
-                        .setNegativeButton(android.R.string.no, null)
+                        .setNegativeButton(android.R.string.cancel, null)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
