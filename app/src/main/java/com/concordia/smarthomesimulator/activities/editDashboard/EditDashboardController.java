@@ -18,10 +18,7 @@ import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.Permissions;
-import com.concordia.smarthomesimulator.helpers.LogsHelper;
-import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
-import com.concordia.smarthomesimulator.helpers.NotificationsHelper;
-import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
+import com.concordia.smarthomesimulator.helpers.*;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -169,6 +166,9 @@ public class EditDashboardController extends AppCompatActivity {
                 int temperature = DEFAULT_TEMPERATURE;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
+                    if (Math.abs(temperature) > MAXIMUM_TEMPERATURE){
+                        temperature = DEFAULT_TEMPERATURE;
+                    }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -190,6 +190,10 @@ public class EditDashboardController extends AppCompatActivity {
                 boolean away = awayStatusField.isChecked();
                 // Edit the parameters
                 model.editParameters(context, status, away, callTimer, temperature, date, time);
+                // Update temperature behaviour of the rooms
+                if (status) {
+                    TemperatureHelper.adjustTemperature(context);
+                }
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed

@@ -53,6 +53,14 @@ public class Constants {
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
 
+    // Related to Smart Heating
+    public static final int INITIAL_ROOM_TEMPERATURE = 999;
+    public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED = 0.25;
+    public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_OFF = 1;
+    public static final double HVAC_TEMPERATURE_CHANGE = 0.1;
+    public static final double OUTSIDE_TEMPERATURE_CHANGE = 0.05;
+    public static final long TEMPERATURE_SAVE_INTERVAL = 5000;
+
     // Default House Layout Values
     public static final String DEFAULT_NAME_OUTDOORS = "Backyard";
     public static final String DEFAULT_NAME_GARAGE = "Garage";

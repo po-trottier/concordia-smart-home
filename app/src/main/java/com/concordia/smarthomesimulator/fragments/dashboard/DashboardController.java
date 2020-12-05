@@ -17,14 +17,17 @@ import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.NotificationsHelper;
+import com.concordia.smarthomesimulator.helpers.TemperatureHelper;
 import com.concordia.smarthomesimulator.interfaces.OnIntruderDetectedListener;
 import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 import com.concordia.smarthomesimulator.views.customDateTimeView.CustomDateTimeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_AWAY_MODE;
-import static com.concordia.smarthomesimulator.Constants.PREFERENCES_KEY_STATUS;
+import static com.concordia.smarthomesimulator.Constants.*;
 
+/**
+ * Dashboard controller, which is where the user gets to when starting the app and they're logged in.
+ */
 public class DashboardController extends Fragment {
 
     private DashboardModel dashboardModel;
@@ -42,6 +45,9 @@ public class DashboardController extends Fragment {
         view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         context = getActivity();
         preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
+        if (preferences.getBoolean(PREFERENCES_KEY_STATUS, DEFAULT_STATUS)) {
+            TemperatureHelper.adjustTemperature(context);
+        }
 
         findControls();
         setKnownValues();
