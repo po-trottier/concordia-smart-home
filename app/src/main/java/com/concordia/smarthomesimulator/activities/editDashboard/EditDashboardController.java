@@ -166,7 +166,7 @@ public class EditDashboardController extends AppCompatActivity {
                 int temperature = DEFAULT_TEMPERATURE;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
-                    if (temperature > MAXIMUM_TEMPERATURE){
+                    if (Math.abs(temperature) > MAXIMUM_TEMPERATURE){
                         temperature = DEFAULT_TEMPERATURE;
                     }
                 } catch (NumberFormatException e) {

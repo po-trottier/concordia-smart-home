@@ -10,6 +10,7 @@ import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.dataModels.User;
 import com.concordia.smarthomesimulator.dataModels.Userbase;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;
+import com.concordia.smarthomesimulator.helpers.TemperatureHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -59,7 +60,9 @@ public class LoginModel extends ViewModel {
 
         loggedUser.getUserPreferences().sendToContext(preferences);
         userbase.getPermissionsConfiguration().sendToContext(preferences);
-
+        if (loggedUser.getUserPreferences().getStatus()) {
+            TemperatureHelper.adjustTemperature(context);
+        }
         return true;
     }
 

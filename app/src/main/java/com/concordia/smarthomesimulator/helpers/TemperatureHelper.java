@@ -2,7 +2,11 @@ package com.concordia.smarthomesimulator.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.HouseLayout;
+import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.VentilationStatus;
 import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 
@@ -31,7 +35,9 @@ public class TemperatureHelper {
         temperatureTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                for (Room room: LayoutSingleton.getInstance().getLayout().getRooms()){
+                HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+                if (layout == null) return;
+                for (Room room: layout.getRooms()){
                     if (room.getActualTemperature() > MAXIMUM_TEMPERATURE){
                         room.setActualTemperature(outsideTemperature);
                     }
@@ -43,35 +49,28 @@ public class TemperatureHelper {
                     double actualTemperature = room.getActualTemperature();
                     double desiredTemperature = room.getDesiredTemperature();
                     VentilationStatus ventilationStatus = room.getVentilationStatus();
-                    if (Math.abs(actualTemperature - desiredTemperature) > MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED && ventilationStatus == VentilationStatus.PAUSED){
-                        if (actualTemperature > desiredTemperature){
-                            room.setVentilationStatus(VentilationStatus.COOLING);
-                        } else {
-                            room.setVentilationStatus(VentilationStatus.HEATING);
-                        }
-                    } else if (Math.abs(actualTemperature - desiredTemperature) > MAX_TEMPERATURE_DIFFERENCE_WHEN_OFF && ventilationStatus == VentilationStatus.OFF){
-                        if (actualTemperature > desiredTemperature){
-                            room.setVentilationStatus(VentilationStatus.COOLING);
-                        } else {
-                            room.setVentilationStatus(VentilationStatus.HEATING);
-                        }
-                    } else if (Math.abs(actualTemperature - desiredTemperature) < HVAC_TEMPERATURE_CHANGE &&
-                            (ventilationStatus == VentilationStatus.HEATING || ventilationStatus == VentilationStatus.COOLING)){
-                        room.setVentilationStatus(VentilationStatus.PAUSED);
-                    } else if (ventilationStatus == VentilationStatus.HEATING || ventilationStatus == VentilationStatus.COOLING){
-                        // Actual temperature is getting closer to desired temperature
-                        if (actualTemperature > desiredTemperature){
-                            room.setActualTemperature(actualTemperature - HVAC_TEMPERATURE_CHANGE);
-                        } else {
-                            room.setActualTemperature(actualTemperature + HVAC_TEMPERATURE_CHANGE);
-                        }
-                    } else if (ventilationStatus == VentilationStatus.OFF || ventilationStatus == VentilationStatus.PAUSED){
-                        // Actual temperature is getting closer to outside temperature
-                        if (actualTemperature > outsideTemperature){
-                            room.setActualTemperature(actualTemperature - OUTSIDE_TEMPERATURE_CHANGE);
-                        } else if (actualTemperature < outsideTemperature) {
-                            room.setActualTemperature(actualTemperature + OUTSIDE_TEMPERATURE_CHANGE);
-                        }
+
+                    // Because of unclear requirements, OFF and PAUSED really just mean the same thing since the
+                    // HVAC system turns itself on.
+                    switch (ventilationStatus){
+                        case OFF:
+                        case PAUSED:
+                            if (Math.abs(actualTemperature - desiredTemperature) > MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED) {
+                                room.setVentilationStatus(actualTemperature > desiredTemperature ?
+                                        VentilationStatus.COOLING : VentilationStatus.HEATING);
+                                //LogsHelper.add(context, new LogEntry("Temperature Change", room.getName() + "is being cooled" + R.string.menu_dashboard, LogImportance.MINOR));
+                            } else {
+                                room.setActualTemperature(actualTemperature > outsideTemperature ?
+                                        actualTemperature - OUTSIDE_TEMPERATURE_CHANGE : actualTemperature + OUTSIDE_TEMPERATURE_CHANGE);
+                            }
+                        case COOLING:
+                        case HEATING:
+                            if (Math.abs(actualTemperature - desiredTemperature) < HVAC_TEMPERATURE_CHANGE){
+                                room.setVentilationStatus(VentilationStatus.PAUSED);
+                            } else {
+                                room.setActualTemperature(actualTemperature > desiredTemperature ?
+                                        actualTemperature - HVAC_TEMPERATURE_CHANGE : actualTemperature + HVAC_TEMPERATURE_CHANGE);
+                            }
                     }
                 }
             }
@@ -85,7 +84,10 @@ public class TemperatureHelper {
         saveTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                LayoutsHelper.saveHouseLayout(context, LayoutSingleton.getInstance().getLayout());
+                HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+                if (layout == null) return;
+                LayoutsHelper.saveHouseLayout(context, layout);
+                LayoutsHelper.updateSelectedLayout(context, layout);
             }
         }, 0, TEMPERATURE_SAVE_INTERVAL);
 
