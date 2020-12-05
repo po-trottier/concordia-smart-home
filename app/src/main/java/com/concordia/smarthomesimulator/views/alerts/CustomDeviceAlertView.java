@@ -1,4 +1,4 @@
-package com.concordia.smarthomesimulator.views.customDeviceAlertView;
+package com.concordia.smarthomesimulator.views.alerts;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
