@@ -237,7 +237,7 @@ public class EditDashboardController extends AppCompatActivity {
                 new AlertDialog.Builder(context)
                     .setTitle(getString(R.string.edit_text_delete_user_title))
                     .setMessage(getString(R.string.edit_text_delete_user))
-                    .setNegativeButton(android.R.string.no, null)
+                    .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             final String usernameToDelete = usernameSpinner.getSelectedItem().toString();

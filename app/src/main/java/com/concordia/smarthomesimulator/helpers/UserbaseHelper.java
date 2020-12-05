@@ -74,7 +74,6 @@ public final class UserbaseHelper {
     public static boolean verifyPermissions(Action action, Context context){
         // Default log message
         String description = action == null ? "Unknown" : action.getDescription();
-        String message = String.format("User was stopped from performing permission-restricted action: %s", description);
         // Get the preferences
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         int loggedUserPermissions = preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0);
@@ -86,13 +85,14 @@ public final class UserbaseHelper {
         }
         // User has required permissions
         if ((loggedUserPermissions & minPermissionsForAction) == minPermissionsForAction){
-            message = String.format("User performed permission-restricted action: %s", description);
+            String message = String.format("User performed permission-restricted action: %s", description);
             LogsHelper.add(context, new LogEntry("Permission", message, LogImportance.MINOR));
             return true;
         }
         // User doesn't have permissions
         String error = String.format(context.getString(R.string.permission_edit_not_allows), description.replace("_", " "));
         Toast.makeText(context, error,Toast.LENGTH_SHORT).show();
+        String message = String.format("User was stopped from performing permission-restricted action: %s", description);
         LogsHelper.add(context, new LogEntry("Permission", message, LogImportance.IMPORTANT));
         return false;
     }
