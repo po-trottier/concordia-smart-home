@@ -22,8 +22,8 @@ public class EditDashboardModel extends ViewModel{
 
     private float timeFactor = 1f;
     private LocalDateTime dateTime = LocalDateTime.now();
-    private LocalDateTime minDateTime = LocalDateTime.now();
-    private LocalDateTime maxDateTime = LocalDateTime.now();
+    private LocalTime minLightsTime = DEFAULT_MIN_LIGHTS_TIME;
+    private LocalTime maxLightsTime = DEFAULT_MAX_LIGHTS_TIME;
 
     private Userbase userbase;
 
@@ -124,24 +124,18 @@ public class EditDashboardModel extends ViewModel{
         dateTime = LocalDateTime.of(year, month, day, hour, minute);
     }
 
-    public void updateMinDateTime(SharedPreferences preferences) {
-        LocalDateTime timeNow = LocalDateTime.now();
-        int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
-        int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
-        int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
-        int hour = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, timeNow.getHour());
-        int minute = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, timeNow.getMinute());
-        minDateTime = LocalDateTime.of(year, month, day, hour, minute);
+    public void updateMinLightsTime(SharedPreferences preferences) {
+        LocalTime timeLightsMin = minLightsTime;
+        int hour = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, timeLightsMin.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, timeLightsMin.getMinute());
+        minLightsTime = LocalTime.of(hour, minute);
     }
 
-    public void updateMaxDateTime(SharedPreferences preferences) {
-        LocalDateTime timeNow = LocalDateTime.now();
-        int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
-        int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
-        int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
-        int hour = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, timeNow.getHour());
-        int minute = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, timeNow.getMinute());
-        maxDateTime = LocalDateTime.of(year, month, day, hour, minute);
+    public void updateMaxLightsTime(SharedPreferences preferences) {
+        LocalTime timeLightsMax = maxLightsTime;
+        int hour = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, timeLightsMax.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, timeLightsMax.getMinute());
+        maxLightsTime = LocalTime.of(hour, minute);
     }
 
     /**
@@ -149,8 +143,8 @@ public class EditDashboardModel extends ViewModel{
      *
      * @return the lights' minimum date time
      */
-    public LocalDateTime getMinDateTime() {
-        return minDateTime;
+    public LocalTime getMinLightsTime() {
+        return minLightsTime;
     }
 
     /**
@@ -159,8 +153,8 @@ public class EditDashboardModel extends ViewModel{
      * @param hour   the hour
      * @param minute the minute
      */
-    public void setMinDateTime(int hour, int minute) {
-        minDateTime = LocalDateTime.of(minDateTime.getYear(), minDateTime.getMonthValue(), minDateTime.getDayOfMonth(), hour, minute);
+    public void setMinLightsTime(int hour, int minute) {
+        minLightsTime = LocalTime.of(hour, minute);
     }
 
     /**
@@ -168,8 +162,8 @@ public class EditDashboardModel extends ViewModel{
      *
      * @return the lights' minimum date time
      */
-    public LocalDateTime getMaxDateTime() {
-        return maxDateTime;
+    public LocalTime getMaxLightsTime() {
+        return maxLightsTime;
     }
 
     /**
@@ -178,8 +172,8 @@ public class EditDashboardModel extends ViewModel{
      * @param hour   the hour
      * @param minute the minute
      */
-    public void setMaxDateTime(int hour, int minute) {
-        maxDateTime = LocalDateTime.of(maxDateTime.getYear(), maxDateTime.getMonthValue(), maxDateTime.getDayOfMonth(), hour, minute);
+    public void setMaxLightsTime(int hour, int minute) {
+        maxLightsTime = LocalTime.of(hour, minute);
     }
 
     /**
@@ -327,9 +321,10 @@ public class EditDashboardModel extends ViewModel{
      * @param temperature the temperature
      * @param date        the date
      * @param time        the time
-     * @param minTime     the minimum time for lights timer
+     * @param minLightsTime     the minimum time for lights timer
+     * @param maxLightsTime     the maximum time for lights timer
      */
-    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, LocalDate date, LocalTime time, LocalTime minTime, LocalTime maxTime) {
+    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, LocalDate date, LocalTime time, LocalTime minLightsTime, LocalTime maxLightsTime) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         // Verify the permissions if the user changed the away mode
@@ -349,10 +344,10 @@ public class EditDashboardModel extends ViewModel{
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, date.getDayOfMonth());
         editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, time.getHour());
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, time.getMinute());
-        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, minTime.getHour());
-        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, minTime.getMinute());
-        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, maxTime.getHour());
-        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, maxTime.getMinute());
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, minLightsTime.getHour());
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, minLightsTime.getMinute());
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, maxLightsTime.getHour());
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, maxLightsTime.getMinute());
         editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
         editor.apply();
     }

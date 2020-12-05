@@ -3,6 +3,7 @@ package com.concordia.smarthomesimulator;
 import com.concordia.smarthomesimulator.enums.Permissions;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Constants {
     // Permissions Request Codes
@@ -58,6 +59,8 @@ public class Constants {
     public static final int DEFAULT_TEMPERATURE = 20;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
+    public static final LocalTime DEFAULT_MIN_LIGHTS_TIME = LocalTime.parse("19:00");
+    public static final LocalTime DEFAULT_MAX_LIGHTS_TIME = LocalTime.parse("05:00");
 
     // Related to Smart Heating
     public static final int INITIAL_ROOM_TEMPERATURE = 999;

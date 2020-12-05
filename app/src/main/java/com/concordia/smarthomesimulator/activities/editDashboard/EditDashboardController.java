@@ -80,8 +80,8 @@ public class EditDashboardController extends AppCompatActivity {
 
         model.initializeModel(context);
         model.updateSimulationDateTime(preferences);
-        model.updateMinDateTime(preferences);
-        model.updateMaxDateTime(preferences);
+        model.updateMinLightsTime(preferences);
+        model.updateMaxLightsTime(preferences);
 
         setupToolbar();
         findControls();
@@ -152,10 +152,10 @@ public class EditDashboardController extends AppCompatActivity {
         timeField.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
         // Set the time scale factor
         timeScaleField.setText(model.getTimeFactor() + "x");
-        LocalDateTime minDateTime = model.getMinDateTime();
-        minLightsTimeField.setText(minDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
-        LocalDateTime maxDateTime = model.getMaxDateTime();
-        maxLightsTimeField.setText(maxDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
+        LocalTime minTime = model.getMinLightsTime();
+        minLightsTimeField.setText(minTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
+        LocalTime maxTime = model.getMaxLightsTime();
+        maxLightsTimeField.setText(maxTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
     }
 
     private void setSaveIntent() {
@@ -186,13 +186,13 @@ public class EditDashboardController extends AppCompatActivity {
                 }
                 LocalDate date =LocalDate.now();
                 LocalTime time = LocalTime.now();
-                LocalTime minTime = LocalTime.now();
-                LocalTime maxTime = LocalTime.now();
+                LocalTime minLightsTime = DEFAULT_MIN_LIGHTS_TIME;
+                LocalTime maxLightsTime = DEFAULT_MAX_LIGHTS_TIME;
                 try {
                     date = LocalDate.parse(dateField.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT));
                     time = LocalTime.parse(timeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
-                    minTime = LocalTime.parse(minLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
-                    maxTime = LocalTime.parse(maxLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    minLightsTime = LocalTime.parse(minLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    maxLightsTime = LocalTime.parse(maxLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
                 } catch (DateTimeParseException e) {
                     e.printStackTrace();
                 }
@@ -205,7 +205,7 @@ public class EditDashboardController extends AppCompatActivity {
                 boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
                 // Edit the parameters
-                model.editParameters(context, status, away, callTimer, temperature, date, time, minTime, maxTime);
+                model.editParameters(context, status, away, callTimer, temperature, date, time, minLightsTime, maxLightsTime);
                 // Update temperature behaviour of the rooms
                 if (status) {
                     TemperatureHelper.adjustTemperature(context);
@@ -448,19 +448,19 @@ public class EditDashboardController extends AppCompatActivity {
         minLightsTimeField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalDateTime minTimeNow = model.getMinDateTime();
+                LocalTime minTimeNow = model.getMinLightsTime();
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        context,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                model.setMinDateTime(hourOfDay, minute);
-                                fillKnownValues();
-                            }
-                        },
-                        minTimeNow.getHour(),
-                        minTimeNow.getMinute(),
-                        false
+                    context,
+                    new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            model.setMinLightsTime(hourOfDay, minute);
+                            fillKnownValues();
+                        }
+                    },
+                    minTimeNow.getHour(),
+                    minTimeNow.getMinute(),
+                    false
                 );
                 timePickerDialog.show();
             }
@@ -471,19 +471,19 @@ public class EditDashboardController extends AppCompatActivity {
         maxLightsTimeField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalDateTime maxTimeNow = model.getMaxDateTime();
+                LocalTime maxTimeNow = model.getMaxLightsTime();
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        context,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                model.setMaxDateTime(hourOfDay, minute);
-                                fillKnownValues();
-                            }
-                        },
-                        maxTimeNow.getHour(),
-                        maxTimeNow.getMinute(),
-                        false
+                    context,
+                    new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            model.setMaxLightsTime(hourOfDay, minute);
+                            fillKnownValues();
+                        }
+                    },
+                    maxTimeNow.getHour(),
+                    maxTimeNow.getMinute(),
+                    false
                 );
                 timePickerDialog.show();
             }
