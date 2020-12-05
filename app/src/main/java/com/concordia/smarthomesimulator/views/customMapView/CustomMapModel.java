@@ -21,8 +21,8 @@ import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
-import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
-import com.concordia.smarthomesimulator.views.customRoomAlertView.CustomRoomAlertView;
+import com.concordia.smarthomesimulator.views.alerts.CustomDeviceAlertView;
+import com.concordia.smarthomesimulator.views.alerts.CustomRoomAlertView;
 
 import java.util.ArrayList;
 
@@ -115,14 +115,11 @@ public class CustomMapModel {
      * @return whether a shape was found or not
      */
     public boolean queryClick(Context context, MotionEvent event, int padding) {
-        if (queryRooms(context, event, rooms, padding) ||
-            queryDevices(context, event, windows, padding) ||
-            queryDevices(context, event, doors, padding) ||
-            queryDevices(context, event, lights, padding) ||
-            queryInhabitants(context, event, inhabitants, padding)) {
-            return true;
-        }
-        return false;
+        return queryRooms(context, event, rooms, padding) ||
+               queryDevices(context, event, windows, padding) ||
+               queryDevices(context, event, doors, padding) ||
+               queryDevices(context, event, lights, padding) ||
+               queryInhabitants(context, event, inhabitants, padding);
     }
 
     /**

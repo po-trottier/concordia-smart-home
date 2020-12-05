@@ -1,4 +1,4 @@
-package com.concordia.smarthomesimulator.views.customRoomAlertView;
+package com.concordia.smarthomesimulator.views.alerts;
 
 import android.content.Context;
 import android.util.AttributeSet;
