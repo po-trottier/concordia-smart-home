@@ -15,6 +15,7 @@ import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.views.customMapSettingsView.CustomMapSettingsView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -141,13 +142,25 @@ public class CustomHeatingZoneView extends LinearLayout {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             EditText temperatureField = customView.findViewById(R.id.alert_edit_temperature);
+                            // Make sure the temperature is reasonable
                             double temperature = DEFAULT_TEMPERATURE;
                             try {
                                 temperature = Double.parseDouble(temperatureField.getText().toString().trim());
                             } catch (NumberFormatException ignored) {}
                             temperature = Math.min(MAXIMUM_TEMPERATURE, temperature);
                             temperature = Math.max(MINIMUM_TEMPERATURE, temperature);
+                            // Set the zone temperature
                             zone.setDesiredTemperature(temperature);
+                            // Set the room temperatures
+                            ArrayList<Room> roomsToMove = new ArrayList<>(zone.getRooms());
+                            for (Room room : roomsToMove) {
+                                layout.removeRoom(room.getName());
+                                layout.addRoom(room);
+                                // Make sure to put it back in the right zone
+                                layout.getHeatingZones().get(0).removeRoom(room.getName());
+                                zone.addRoom(room);
+                            }
+                            // Update the view
                             updateView();
                         }
                     });
