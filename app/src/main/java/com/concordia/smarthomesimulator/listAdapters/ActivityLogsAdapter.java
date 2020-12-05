@@ -37,6 +37,13 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
         return items.size();
     }
 
+
+    //REFACTOR : The original issue with this method was that is was quite unnecessarily long. The
+    // getView method originally had a switch case within its body in order to determine the text
+    // color to be applied to the alert based on its importance. This cause the method to be quite
+    // unnecessarily long. To fix this, the switch case was moved to the body of a new method named
+    // setTextColor which takes a log importance as a parameter and returns the appropriate color
+    // for the alert.
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent){

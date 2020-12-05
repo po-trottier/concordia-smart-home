@@ -16,7 +16,7 @@ public class LayoutSingleton implements Observer {
     private static LayoutSingleton instance;
 
     private HouseLayout layout;
-    private OnIntruderDetectedListener listener;
+    private OnIntruderDetectedListener onIntruderDetectedListener;
     private OnIndoorTemperatureChangeListener onIndoorTemperatureChangeListener;
 
     private LayoutSingleton() { }
@@ -28,7 +28,7 @@ public class LayoutSingleton implements Observer {
         HouseLayout layout = (HouseLayout) observable;
         // If an intruder was detected, call the listener's callback
         if (layout != null && layout.isIntruderDetected()) {
-            listener.onIntruderDetected();
+            onIntruderDetectedListener.onIntruderDetected();
         }
         if(layout!= null){
             onIndoorTemperatureChangeListener.OnIndoorTemperatureChange();
@@ -86,8 +86,8 @@ public class LayoutSingleton implements Observer {
      *
      * @param listener the listener
      */
-    public void setOnIntruderDetectedListener(OnIntruderDetectedListener listener) {
-        this.listener = listener;
+    public void setOnIntruderDetectedListener(OnIntruderDetectedListener onIntruderDetectedListener) {
+        this.onIntruderDetectedListener = onIntruderDetectedListener;
     }
 
     /**

@@ -287,7 +287,6 @@ public class EditDashboardModel extends ViewModel{
         editor.putInt(PREFERENCES_KEY_WINTER_TEMPERATURE, winterTemperature);
         editor.putInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, maxAlertTemperature);
         editor.putInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, minAlertTemperature);
-        editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, date.getYear());
         editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, date.getMonthValue());
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, date.getDayOfMonth());
