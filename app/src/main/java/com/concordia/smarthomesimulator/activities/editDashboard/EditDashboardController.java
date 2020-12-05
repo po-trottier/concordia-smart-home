@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -169,9 +168,9 @@ public class EditDashboardController extends AppCompatActivity {
     private void setSaveIntent() {
         saveContext.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 // Get the User's information
-                String username= editedUsername.getText().toString();
+                String username = editedUsername.getText().toString();
                 String password = editedPassword.getText().toString();
                 String permissions = editPermissionsSpinner.getSelectedItem().toString();
                 String oldUsername = usernameSpinner.getSelectedItem().toString();
@@ -197,7 +196,7 @@ public class EditDashboardController extends AppCompatActivity {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-                LocalDate date =LocalDate.now();
+                LocalDate date = LocalDate.now();
                 LocalTime time = LocalTime.now();
                 try {
                     date = LocalDate.parse(dateField.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT));
@@ -208,7 +207,7 @@ public class EditDashboardController extends AppCompatActivity {
                 int callTimer = DEFAULT_CALL_DELAY;
                 try {
                     callTimer = Integer.parseInt(callTimerField.getText().toString());
-                }catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
                 boolean status = statusField.isChecked();
@@ -219,7 +218,7 @@ public class EditDashboardController extends AppCompatActivity {
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
                 if (!model.getUserbase().getPermissionsConfiguration().equals(currentUserbase.getPermissionsConfiguration())
-                    && UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)) {
+                        && UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)) {
                     model.getUserbase().setPermissionConfiguration(model.getUserbase().getPermissionsConfiguration());
                     model.getUserbase().getPermissionsConfiguration().sendToContext(preferences);
                 }
@@ -229,17 +228,16 @@ public class EditDashboardController extends AppCompatActivity {
                     UserbaseHelper.saveUserbase(context, model.getUserbase());
                 }
                 // Set away mode temperatures based on season
-                if(away){
-                    HouseLayout houseLayout =  LayoutsHelper.getSelectedLayout(context);
-                    for (Room room: houseLayout.getRooms()) {
-                        if(verifySeason(LocalDate.now())){
-                            room.setDesiredTemperature(preferences.getInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, DEFAULT_SUMMER_TEMPERATURE));
-                        }
-                        else if(!verifySeason(LocalDate.now())){
-                            room.setDesiredTemperature(preferences.getInt(PREFERENCES_KEY_WINTER_TEMPERATURE, DEFAULT_WINTER_TEMPERATURE));
-                        }
+                if (away) {
+                    HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
+                    int desiredTemperature = preferences.getInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, DEFAULT_SUMMER_TEMPERATURE);
+                    if (!verifySeason(LocalDate.now())) {
+                        desiredTemperature = preferences.getInt(PREFERENCES_KEY_WINTER_TEMPERATURE, DEFAULT_WINTER_TEMPERATURE);
                     }
-                    LayoutsHelper.updateSelectedLayout(context,houseLayout);
+                    for (Room room : houseLayout.getRooms()) {
+                        room.setDesiredTemperature(desiredTemperature);
+                    }
+                    LayoutsHelper.updateSelectedLayout(context, houseLayout);
                 }
                 // Send notification if required
                 if (away && status && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
@@ -256,8 +254,8 @@ public class EditDashboardController extends AppCompatActivity {
         boolean season = true;
         LocalDate summerStart = LocalDate.of( LocalDate.now().getYear(),6, 20);
         LocalDate summerEnd = LocalDate.of( LocalDate.now().getYear(), 9, 22);
-        LocalDate winterStart = LocalDate.of( LocalDate.now().getYear(),12, 21);
-        LocalDate winterEnd = LocalDate.of( LocalDate.now().getYear(), 3, 21);
+        LocalDate winterStart = LocalDate.of( LocalDate.now().getYear(),12, 4);
+        LocalDate winterEnd = LocalDate.of( LocalDate.now().getYear()+1, 3, 21);
         //Returns true for summer
         if(date.isAfter(summerStart) && (date.isBefore(summerEnd))){
             season = true;
