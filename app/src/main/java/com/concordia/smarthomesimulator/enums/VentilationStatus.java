@@ -3,8 +3,8 @@ package com.concordia.smarthomesimulator.enums;
 public enum VentilationStatus {
     HEATING("HEATING"),
     COOLING("COOLING"),
-    PAUSED ("PAUSED"),
-    OFF ("OFF");
+    PAUSED("PAUSED"),
+    OFF("OFF");
 
     private final String name;
 
