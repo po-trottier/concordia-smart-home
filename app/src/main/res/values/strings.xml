@@ -176,6 +176,7 @@
     <string name="generic_open">Open</string>
     <string name="generic_add">Add</string>
     <string name="generic_move">Move</string>
+    <string name="generic_modify">Modify</string>
     <string name="generic_remove">Remove</string>
     <string name="generic_error">Error</string>
     <string name="generic_minutes">minutes</string>
@@ -192,7 +193,14 @@
     <string name="permission_title_level_row">Minimum User Level</string>
     <string name="permission_edit_not_allows">You do not have the permissions to do the following action: %s</string>
 
-    <string name="alert_map_device_title">Modifying a </string>
+    <string name="alert_map_room_title">Inspecting the room</string>
+    <string name="alert_map_room_actual">Actual</string>
+    <string name="alert_map_room_target">Target</string>
+    <string name="alert_map_room_override">Overriding zone target:</string>
+    <string name="alert_map_room_ventilation">HVAC status:</string>
+    <string name="alert_map_room_edit_title">Modifying the</string>
+
+    <string name="alert_map_device_title">Modifying a</string>
     <string name="alert_map_device_status">Current Status:</string>
     <string name="alert_map_device_lock_status">Lock Status:</string>
     <string name="alert_map_device_auto_lock_status">Auto-Lock Status:</string>

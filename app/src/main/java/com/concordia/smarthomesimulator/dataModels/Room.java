@@ -59,7 +59,7 @@ public class Room extends Observable implements Serializable {
 
     @NonNull
     @Override
-    protected Object clone() {
+    public Object clone() {
         Room newRoom = new Room(name, geometry);
         ArrayList<IDevice> newDevices = new ArrayList<>();
         for (IDevice device : getDevices()) {

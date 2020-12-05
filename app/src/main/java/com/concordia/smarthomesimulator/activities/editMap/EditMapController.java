@@ -103,7 +103,7 @@ public class EditMapController extends AppCompatActivity {
                     fillKnownValues();
                 }
             })
-            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // If the previously selected layout is now deleted, select a default layout
@@ -132,7 +132,7 @@ public class EditMapController extends AppCompatActivity {
             .setTitle(getString(R.string.title_alert_save_layout))
             .setMessage(getString(R.string.text_alert_save_layout))
             .setView(customView)
-            .setNegativeButton(android.R.string.no, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(getString(R.string.generic_save), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -147,7 +147,7 @@ public class EditMapController extends AppCompatActivity {
                             final AlertDialog confirm = new AlertDialog.Builder(context)
                                 .setTitle(getString(R.string.title_alert_save_layout_overwrite))
                                 .setMessage(getString(R.string.text_alert_save_layout_overwrite))
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         setupSaveDialog();
@@ -175,7 +175,7 @@ public class EditMapController extends AppCompatActivity {
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(String.format(getString(R.string.title_alert_delete_layout), layouts.get(position).getName()))
                 .setMessage(getString(R.string.text_alert_delete_layout))
-                .setNegativeButton(android.R.string.no, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
