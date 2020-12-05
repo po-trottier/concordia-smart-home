@@ -7,10 +7,13 @@ import java.util.ArrayList;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
+/**
+ * Heating zone, used to set the desired temperature of a group of rooms.
+ * The rooms don't have to be adjacent to be part of the same zone.
+ */
 public class HeatingZone implements Serializable {
 
     private double desiredTemp;
-    private double actualTemp;
     private String name;
     private final ArrayList<Room> rooms;
 
@@ -32,7 +35,6 @@ public class HeatingZone implements Serializable {
         HeatingZone newZone = new HeatingZone(name);
         newZone.addRooms(rooms);
         newZone.setDesiredTemperature(desiredTemp);
-        newZone.setActualTemperature(actualTemp);
         return newZone;
     }
 
@@ -55,20 +57,6 @@ public class HeatingZone implements Serializable {
         for (Room room : rooms) {
             if (!room.isTemperatureOverridden()) {
                 room.setDesiredTemperature(temperature);
-            }
-        }
-    }
-
-    /**
-     * Sets actual temperature for zone and all included rooms.
-     *
-     * @param temperature the temperature
-     */
-    public void setActualTemperature(double temperature) {
-        this.actualTemp = temperature;
-        for (Room room : rooms) {
-            if (!room.isTemperatureOverridden()) {
-                room.setActualTemperature(temperature);
             }
         }
     }
@@ -137,6 +125,11 @@ public class HeatingZone implements Serializable {
         }
     }
 
+    /**
+     * Remove room from a heating zone. If a room is removed from a zone, we must make sure it is added to another zone
+     * All rooms must be in a zone.
+     * @param name the name
+     */
     public void removeRoom(String name) {
         rooms.stream()
             .filter(room -> room.getName().equalsIgnoreCase(name))

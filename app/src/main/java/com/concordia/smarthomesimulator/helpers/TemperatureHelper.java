@@ -20,7 +20,12 @@ public class TemperatureHelper {
     private static Timer saveTimer;
     private static final int SECOND_TO_MS = 1000;
 
-    // This should be called whenever the time scale or outside temperature is modified
+    /**
+     * Adjusts how the HVAC behaves for each room, updating ventilation status and actual temps.
+     * This should be called whenever the time scale or outside temperature is modified
+     *
+     * @param context the context
+     */
     public static void adjustTemperature(Context context){
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         double outsideTemperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE);
@@ -68,6 +73,9 @@ public class TemperatureHelper {
                             if (Math.abs(actualTemperature - desiredTemperature) < HVAC_TEMPERATURE_CHANGE){
                                 room.setVentilationStatus(VentilationStatus.PAUSED);
                             } else {
+                                // In case the desired temp is changed while the ventilation is already running
+                                room.setVentilationStatus(actualTemperature > desiredTemperature ?
+                                        VentilationStatus.COOLING : VentilationStatus.HEATING);
                                 room.setActualTemperature(actualTemperature > desiredTemperature ?
                                         actualTemperature - HVAC_TEMPERATURE_CHANGE : actualTemperature + HVAC_TEMPERATURE_CHANGE);
                             }

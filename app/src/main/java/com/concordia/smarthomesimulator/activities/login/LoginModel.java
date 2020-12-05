@@ -60,9 +60,6 @@ public class LoginModel extends ViewModel {
 
         loggedUser.getUserPreferences().sendToContext(preferences);
         userbase.getPermissionsConfiguration().sendToContext(preferences);
-        if (loggedUser.getUserPreferences().getStatus()) {
-            TemperatureHelper.adjustTemperature(context);
-        }
         return true;
     }
 
