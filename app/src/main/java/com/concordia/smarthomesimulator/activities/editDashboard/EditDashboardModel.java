@@ -129,8 +129,8 @@ public class EditDashboardModel extends ViewModel{
         int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
         int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
         int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
-        int hour = preferences.getInt(PREFERENCES_KEY_MIN_DATETIME_HOUR, timeNow.getHour());
-        int minute = preferences.getInt(PREFERENCES_KEY_MIN_DATETIME_MINUTE, timeNow.getMinute());
+        int hour = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, timeNow.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, timeNow.getMinute());
         minDateTime = LocalDateTime.of(year, month, day, hour, minute);
     }
 
@@ -139,8 +139,8 @@ public class EditDashboardModel extends ViewModel{
         int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
         int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
         int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
-        int hour = preferences.getInt(PREFERENCES_KEY_MAX_DATETIME_HOUR, timeNow.getHour());
-        int minute = preferences.getInt(PREFERENCES_KEY_MAX_DATETIME_MINUTE, timeNow.getMinute());
+        int hour = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, timeNow.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, timeNow.getMinute());
         maxDateTime = LocalDateTime.of(year, month, day, hour, minute);
     }
 
@@ -349,10 +349,10 @@ public class EditDashboardModel extends ViewModel{
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, date.getDayOfMonth());
         editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, time.getHour());
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, time.getMinute());
-        editor.putInt(PREFERENCES_KEY_MIN_DATETIME_HOUR, minTime.getHour());
-        editor.putInt(PREFERENCES_KEY_MIN_DATETIME_MINUTE, minTime.getMinute());
-        editor.putInt(PREFERENCES_KEY_MAX_DATETIME_HOUR, maxTime.getHour());
-        editor.putInt(PREFERENCES_KEY_MAX_DATETIME_MINUTE, maxTime.getMinute());
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, minTime.getHour());
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, minTime.getMinute());
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, maxTime.getHour());
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, maxTime.getMinute());
         editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
         editor.apply();
     }

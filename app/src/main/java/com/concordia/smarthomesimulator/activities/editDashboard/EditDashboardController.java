@@ -65,8 +65,8 @@ public class EditDashboardController extends AppCompatActivity {
     private Spinner editPermissionsSpinner;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
-    private EditText minTimeField;
-    private EditText maxTimeField;
+    private EditText minLightsTimeField;
+    private EditText maxLightsTimeField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +97,8 @@ public class EditDashboardController extends AppCompatActivity {
         setupTimePicker();
         setupDatePicker();
         setupTimeFactor();
-        setupMinTimePicker();
-        setupMaxTimePicker();
+        setupMinLightsTimePicker();
+        setupMaxLightsTimePicker();
 
         setupUsernamesSpinner();
 
@@ -133,8 +133,8 @@ public class EditDashboardController extends AppCompatActivity {
         timeScaleField = findViewById(R.id.time_scale_text);
         dateField = findViewById(R.id.date_selector);
         timeField = findViewById(R.id.time_selector);
-        minTimeField = findViewById(R.id.set_time_min);
-        maxTimeField = findViewById(R.id.set_time_max);
+        minLightsTimeField = findViewById(R.id.set_time_min);
+        maxLightsTimeField = findViewById(R.id.set_time_max);
     }
 
     private void fillKnownValues() {
@@ -153,9 +153,9 @@ public class EditDashboardController extends AppCompatActivity {
         // Set the time scale factor
         timeScaleField.setText(model.getTimeFactor() + "x");
         LocalDateTime minDateTime = model.getMinDateTime();
-        minTimeField.setText(minDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
+        minLightsTimeField.setText(minDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
         LocalDateTime maxDateTime = model.getMaxDateTime();
-        maxTimeField.setText(maxDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
+        maxLightsTimeField.setText(maxDateTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
     }
 
     private void setSaveIntent() {
@@ -191,8 +191,8 @@ public class EditDashboardController extends AppCompatActivity {
                 try {
                     date = LocalDate.parse(dateField.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT));
                     time = LocalTime.parse(timeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
-                    minTime = LocalTime.parse(minTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
-                    maxTime = LocalTime.parse(maxTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    minTime = LocalTime.parse(minLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    maxTime = LocalTime.parse(maxLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
                 } catch (DateTimeParseException e) {
                     e.printStackTrace();
                 }
@@ -444,8 +444,8 @@ public class EditDashboardController extends AppCompatActivity {
         });
     }
 
-    private void setupMinTimePicker() {
-        minTimeField.setOnClickListener(new View.OnClickListener() {
+    private void setupMinLightsTimePicker() {
+        minLightsTimeField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LocalDateTime minTimeNow = model.getMinDateTime();
@@ -467,8 +467,8 @@ public class EditDashboardController extends AppCompatActivity {
         });
     }
 
-    private void setupMaxTimePicker() {
-        maxTimeField.setOnClickListener(new View.OnClickListener() {
+    private void setupMaxLightsTimePicker() {
+        maxLightsTimeField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LocalDateTime maxTimeNow = model.getMaxDateTime();
