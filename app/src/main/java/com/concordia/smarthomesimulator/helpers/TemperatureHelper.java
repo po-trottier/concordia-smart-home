@@ -77,8 +77,7 @@ public class TemperatureHelper {
                             } else {
                                 // In case the desired temp is changed while the ventilation is already running
                                 if (currentVentStatus != newVentStatus){
-                                    room.setVentilationStatus(actualTemperature > desiredTemperature ?
-                                            VentilationStatus.COOLING : VentilationStatus.HEATING);
+                                    room.setVentilationStatus(newVentStatus);
                                     LogsHelper.add(context, new LogEntry("Temperature Change",
                                             room.getName() + newVentStatus.getDescription(), LogImportance.MINOR));
                                 }
