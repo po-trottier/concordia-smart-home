@@ -54,6 +54,7 @@ public class Constants {
     public static final int DEFAULT_MIN_TEMPERATURE_ALERT = 0;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
+    public static final boolean DEFAULT_EXTREME_TEMPERATURE_DETECTION = false;
 
     // Default House Layout Values
     public static final String DEFAULT_NAME_OUTDOORS = "Backyard";

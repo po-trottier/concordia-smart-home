@@ -209,10 +209,11 @@
     <string name="authorities_title">Authorities Contacted</string>
     <string name="authorities_text">The authorities have been contacted.</string>
     <string name="max_temperature_alert_title">Maximum Temperature Alert</string>
-    <string name="max_temperature_alert_text">Temperatures over set maximum limit</string>
+    <string name="max_temperature_alert_text">Temperatures are above user-defined maximum</string>
     <string name="min_temperature_alert_title">Minimum Temperature Alert</string>
-    <string name="min_temperature_alert_text">Temperatures below set minimum limit</string>
+    <string name="min_temperature_alert_text">Temperatures are below user-defined minimum</string>
     <string name="in_the_segment_alert_text"> in the </string>
+    <string name="in_zone_segment_alert_text"> in Zone : </string>
 
 
 

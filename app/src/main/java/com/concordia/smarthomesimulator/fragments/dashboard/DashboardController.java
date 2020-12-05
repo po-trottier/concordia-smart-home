@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.activities.editDashboard.EditDashboardController;
+import com.concordia.smarthomesimulator.dataModels.HeatingZone;
+import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.LogImportance;
@@ -118,25 +120,53 @@ public class DashboardController extends Fragment {
             public void OnIndoorTemperatureChange() {
                 int maxTemperature = preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT);
                 int minTemperature = preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT);
+                String connectorString = context.getString(R.string.in_the_segment_alert_text);
                 String temperatureAlertTitle;
                 String temperatureAlertText;
                 String roomName;
+                String zoneName;
+                HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
 
-                for (Room room: LayoutsHelper.getSelectedLayout(context).getRooms()) {
-                    if(room.getActualTemperature() > maxTemperature){
-                        temperatureAlertTitle = context.getString(R.string.max_temperature_alert_title);
-                        temperatureAlertText = context.getString(R.string.max_temperature_alert_text);
-                        roomName = room.getName();
-                        NotificationsHelper.sendTemperatureAlertNotification(context,temperatureAlertTitle,temperatureAlertText, roomName);
-                    }
-                    else if(room.getActualTemperature() < minTemperature){
-                        temperatureAlertTitle = context.getString(R.string.min_temperature_alert_title);
-                        temperatureAlertText = context.getString(R.string.min_temperature_alert_text);
-                        roomName = room.getName();
-                        NotificationsHelper.sendTemperatureAlertNotification(context,temperatureAlertTitle,temperatureAlertText, roomName);
+                for (HeatingZone heatingZone: LayoutsHelper.getSelectedLayout(context).getHeatingZones()) {
+                    zoneName = heatingZone.getName();
+
+                    for (Room room : heatingZone.getRooms()) {
+                        if (layout.getRoom(room.getName()).getActualTemperature() > maxTemperature) {
+                            temperatureAlertTitle = context.getString(R.string.max_temperature_alert_title);
+                            temperatureAlertText = context.getString(R.string.max_temperature_alert_text);
+                            roomName = room.getName();
+
+                            String alertTitle = formatLogString(temperatureAlertTitle,connectorString,roomName);
+                            LogsHelper.add(context, new LogEntry("Temperature Alert", alertTitle, LogImportance.CRITICAL));
+
+                            if (!heatingZone.isExtremeTempDetected()) {
+                                NotificationsHelper.sendTemperatureAlertNotification(context, temperatureAlertTitle, temperatureAlertText, zoneName);
+                                heatingZone.setExtremeTempDetected(true);
+                            }
+                        }
+                        else if(layout.getRoom(room.getName()).getActualTemperature() < minTemperature){
+                            temperatureAlertTitle = context.getString(R.string.min_temperature_alert_title);
+                            temperatureAlertText = context.getString(R.string.min_temperature_alert_text);
+                            roomName = room.getName();
+
+                            String alertTitle = formatLogString(temperatureAlertTitle,connectorString,roomName);
+                            LogsHelper.add(context, new LogEntry("Temperature Alert", alertTitle, LogImportance.CRITICAL));
+
+                            if(!heatingZone.isExtremeTempDetected()){
+                                NotificationsHelper.sendTemperatureAlertNotification(context,temperatureAlertTitle,temperatureAlertText, zoneName);
+                                heatingZone.setExtremeTempDetected(true);
+                            }
+                        }
+                        else{
+                            heatingZone.setExtremeTempDetected(false);
+                        }
                     }
                 }
             }
         });
+    }
+
+    private static String formatLogString(String alertString, String connectorString, String roomName){
+        return alertString + " " +  connectorString + " " + roomName;
     }
 }
