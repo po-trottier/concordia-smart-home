@@ -15,8 +15,10 @@ import static com.concordia.smarthomesimulator.Constants.DEFAULT_TEMPERATURE;
 public class Room extends Observable implements Serializable {
 
     private double desiredTemp;
+    private double desiredAwayTemp;
     private double actualTemp;
     private boolean overrideZoneTemp;
+    private boolean awayTemperature;
     private String name;
     private Geometry geometry;
     private VentilationStatus ventilationStatus;
@@ -37,6 +39,7 @@ public class Room extends Observable implements Serializable {
         this.geometry = geometry;
         this.ventilationStatus = VentilationStatus.OFF;
         this.desiredTemp = DEFAULT_TEMPERATURE;
+        this.desiredAwayTemp = DEFAULT_TEMPERATURE;
         this.actualTemp = DEFAULT_TEMPERATURE;
         this.inhabitants = new ArrayList<>();
         this.windows = new ArrayList<>();
@@ -69,6 +72,7 @@ public class Room extends Observable implements Serializable {
         newRoom.addDevices(newDevices);
         newRoom.addInhabitants(newInhabitants);
         newRoom.setDesiredTemperature(desiredTemp);
+        newRoom.setDesiredAwayTemperature(desiredAwayTemp);
         newRoom.setActualTemperature(actualTemp);
         newRoom.setIsTemperatureOverridden(overrideZoneTemp);
         newRoom.setVentilationStatus(ventilationStatus);
@@ -139,7 +143,7 @@ public class Room extends Observable implements Serializable {
      * @return the desired temperature
      */
     public double getDesiredTemperature() {
-        return desiredTemp;
+        return awayTemperature ? desiredAwayTemp : desiredTemp;
     }
 
     /**
@@ -207,6 +211,15 @@ public class Room extends Observable implements Serializable {
     }
 
     /**
+     * Sets desired away temperature.
+     *
+     * @param temperature the temperature
+     */
+    public void setDesiredAwayTemperature(double temperature) {
+        this.desiredAwayTemp = temperature;
+    }
+
+    /**
      * Sets actual temperature.
      *
      * @param temperature the temperature
@@ -222,6 +235,15 @@ public class Room extends Observable implements Serializable {
      */
     public void setIsTemperatureOverridden(boolean overridden) {
         overrideZoneTemp = overridden;
+    }
+
+    /**
+     * Sets away temperature.
+     *
+     * @param awayTemperature the away temperature
+     */
+    public void setAwayTemperature(boolean awayTemperature) {
+        this.awayTemperature = awayTemperature;
     }
 
     /**

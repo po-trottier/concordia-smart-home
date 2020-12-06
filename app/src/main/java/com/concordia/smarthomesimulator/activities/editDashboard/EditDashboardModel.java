@@ -11,9 +11,12 @@ import com.concordia.smarthomesimulator.enums.Permissions;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -368,6 +371,22 @@ public class EditDashboardModel extends ViewModel{
     public boolean hasSelectedSelf(SharedPreferences preferences, String username){
         String loggedUsername = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         return loggedUsername.equalsIgnoreCase(username);
+    }
+
+    /**
+     * Is house empty boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isHouseEmpty(Context context) {
+        HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
+        if (houseLayout != null) {
+            ArrayList<IInhabitant> inhabitants = houseLayout.getAllInhabitants();
+            return inhabitants.stream().allMatch(IInhabitant::isIntruder);
+        }
+        else{
+            return false;
+        }
     }
 
     private boolean validateSeasons(ParametersArgument parametersArgument) {

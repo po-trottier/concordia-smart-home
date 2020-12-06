@@ -65,8 +65,8 @@ public class Constants {
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;
     public static final int DEFAULT_TEMPERATURE = 20;
-    public static final int DEFAULT_SUMMER_TEMPERATURE = 19;
-    public static final int DEFAULT_WINTER_TEMPERATURE = 21;
+    public static final int DEFAULT_SUMMER_TEMPERATURE = 20;
+    public static final int DEFAULT_WINTER_TEMPERATURE = 15;
     public static final int DEFAULT_MAX_TEMPERATURE_ALERT = 35;
     public static final int DEFAULT_MIN_TEMPERATURE_ALERT = 0;
     public static final float DEFAULT_TIME_SCALE = 1f;

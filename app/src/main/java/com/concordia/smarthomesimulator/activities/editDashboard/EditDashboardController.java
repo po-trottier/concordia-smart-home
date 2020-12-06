@@ -278,43 +278,18 @@ public class EditDashboardController extends AppCompatActivity {
                         && UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
                     UserbaseHelper.saveUserbase(context, model.getUserbase());
                 }
-                // Set away mode temperatures based on season
-                if (parameters.isAwayMode()) {
-                    HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
-                    int desiredTemperature = preferences.getInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, DEFAULT_SUMMER_TEMPERATURE);
-                    if (!verifySeason(LocalDate.now())) {
-                        desiredTemperature = preferences.getInt(PREFERENCES_KEY_WINTER_TEMPERATURE, DEFAULT_WINTER_TEMPERATURE);
+                // If simulation is running and away mode is on
+                if (parameters.isAwayMode() && parameters.getStatus()) {
+                    // Send notification if required
+                    if (LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
+                        NotificationsHelper.sendIntruderNotification(context);
                     }
-                    for (Room room : houseLayout.getRooms()) {
-                        room.setDesiredTemperature(desiredTemperature);
-                    }
-                    LayoutsHelper.updateSelectedLayout(context, houseLayout);
-                }
-                // Send notification if required
-                if (parameters.isAwayMode() && parameters.getStatus() && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
-                    NotificationsHelper.sendIntruderNotification(context);
                 }
                 // Close the activity
                 LogsHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
                 finish();
             }
         });
-    }
-
-    private boolean verifySeason(LocalDate date) {
-        boolean season = true;
-        LocalDate summerStart = LocalDate.of( LocalDate.now().getYear(),preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START), 20);
-        LocalDate summerEnd = LocalDate.of( LocalDate.now().getYear(), preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END), 22);
-        LocalDate winterStart = LocalDate.of( LocalDate.now().getYear(),preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START), 4);
-        LocalDate winterEnd = LocalDate.of( LocalDate.now().getYear()+1, preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END), 21);
-        //Returns true for summer
-        if(date.isAfter(summerStart) && (date.isBefore(summerEnd))){
-            season = true;
-        }
-        else if(date.isAfter(winterStart) && (date.isBefore(winterEnd))){
-            season = false;
-        }
-        return season;
     }
 
     private void setDeleteUserIntent(){
@@ -407,7 +382,7 @@ public class EditDashboardController extends AppCompatActivity {
             awayErrorLayout.setVisibility(View.VISIBLE);
             error = getString(R.string.missing_house_layout);
         }
-        else if(!isHouseEmpty()){
+        else if(!model.isHouseEmpty(context)){
             awayStatusField.setAlpha(.5f);
             awayStatusField.setChecked(false);
             awayStatusField.setEnabled(false);
@@ -431,18 +406,6 @@ public class EditDashboardController extends AppCompatActivity {
                 dialog.show();
             }
         });
-    }
-
-    private boolean isHouseEmpty() {
-        HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
-
-        if (houseLayout != null) {
-            ArrayList<IInhabitant> inhabitants = LayoutsHelper.getSelectedLayout(context).getAllInhabitants();
-            return inhabitants.stream().allMatch(IInhabitant::isIntruder);
-        }
-        else{
-            return false;
-        }
     }
 
     private void setAwayStatus(){
