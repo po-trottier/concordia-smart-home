@@ -17,7 +17,9 @@ import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
@@ -499,6 +501,8 @@ public class CustomMapModel {
                     // Update the centralized layout
                     LayoutsHelper.updateSelectedLayout(context, layout);
                     saveUpdatedLayout(context, layout);
+                    // Log the action
+                    LogsHelper.add(context, new LogEntry("Map", "Temperature setting changed for " + room.getName(), LogImportance.IMPORTANT));
                 }
             })
             .create();
