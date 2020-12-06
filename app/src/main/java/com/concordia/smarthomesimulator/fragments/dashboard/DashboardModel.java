@@ -57,22 +57,6 @@ public class DashboardModel extends ViewModel {
     }
 
     /**
-     * Get time zone string.
-     *
-     * @param preferences the preferences
-     * @return the string
-     */
-    public LocalDateTime getDateTime(SharedPreferences preferences){
-        LocalDateTime timeNow = LocalDateTime.now();
-        int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, timeNow.getYear());
-        int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, timeNow.getMonthValue());
-        int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
-        int hour = preferences.getInt(PREFERENCES_KEY_DATETIME_HOUR, timeNow.getHour());
-        int minute = preferences.getInt(PREFERENCES_KEY_DATETIME_MINUTE, timeNow.getMinute());
-        return LocalDateTime.of(year, month, day, hour, minute);
-    }
-
-    /**
      * Gets temperature.
      *
      * @param context     the context

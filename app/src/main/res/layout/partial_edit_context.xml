@@ -139,18 +139,19 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText
+                <TextView
                     android:id="@+id/set_time_min"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/field_height"
-                    android:editable="false"
                     android:paddingHorizontal="@dimen/activity_horizontal_margin"
                     android:background="@drawable/rounded_text_field_background"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/context_time_to"/>
-
                 <TextView
                     android:id="@+id/context_time_to"
                     android:layout_width="wrap_content"
@@ -161,13 +162,15 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/set_time_min"
                     app:layout_constraintEnd_toStartOf="@id/set_time_max"/>
-                <EditText
+                <TextView
                     android:id="@+id/set_time_max"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/field_height"
-                    android:editable="false"
                     android:paddingHorizontal="@dimen/activity_horizontal_margin"
                     android:background="@drawable/rounded_text_field_background"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/context_time_to"
@@ -215,13 +218,15 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:text="@string/edit_text_date"/>
-            <EditText
+            <TextView
                 android:id="@+id/date_selector"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/field_height"
                 android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                android:editable="false"
-                android:background="@drawable/rounded_text_field_background"/>
+                android:background="@drawable/rounded_text_field_background"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -230,13 +235,15 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:text="@string/edit_text_time"/>
-            <EditText
+            <TextView
                 android:id="@+id/time_selector"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/field_height"
                 android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                android:editable="false"
-                android:background="@drawable/rounded_text_field_background"/>
+                android:background="@drawable/rounded_text_field_background"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

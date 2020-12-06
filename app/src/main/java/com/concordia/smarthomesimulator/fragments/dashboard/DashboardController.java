@@ -82,7 +82,7 @@ public class DashboardController extends Fragment {
         status.setText(dashboardModel.getStatusText(context, preferences));
         status.setTextColor(dashboardModel.getStatusColor(context, preferences));
         // Set the Date Time
-        clock.setDateTime(dashboardModel.getDateTime(preferences));
+        clock.startClock();
     }
 
     private void setupEditIntent() {

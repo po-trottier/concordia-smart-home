@@ -56,17 +56,17 @@ public class EditDashboardController extends AppCompatActivity {
     private EditText editedPassword;
     private EditText newUsernameField;
     private EditText newPasswordField;
-    private EditText dateField;
-    private EditText timeField;
     private EditText callTimerField;
+    private TextView dateField;
+    private TextView timeField;
     private TextView awayStatusText;
     private TextView timeScaleField;
     private TextView statusText;
+    private TextView minLightsTimeField;
+    private TextView maxLightsTimeField;
     private Spinner editPermissionsSpinner;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
-    private EditText minLightsTimeField;
-    private EditText maxLightsTimeField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,9 +152,10 @@ public class EditDashboardController extends AppCompatActivity {
         timeField.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
         // Set the time scale factor
         timeScaleField.setText(model.getTimeFactor() + "x");
+        // Set the min and max times
         LocalTime minTime = model.getMinLightsTime();
-        minLightsTimeField.setText(minTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
         LocalTime maxTime = model.getMaxLightsTime();
+        minLightsTimeField.setText(minTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
         maxLightsTimeField.setText(maxTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
     }
 

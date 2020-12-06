@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import com.concordia.smarthomesimulator.enums.Permissions;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
