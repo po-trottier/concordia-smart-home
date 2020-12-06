@@ -102,5 +102,6 @@ public class Constants {
     public static final double MINIMUM_TEMPERATURE = -100;
 
     // Notifications
-    public final static String NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d943f6";
+    public final static String INTRUDER_NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d943f6";
+    public final static String TEMPERATURE_NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d94301";
 }

@@ -98,7 +98,7 @@ public class DashboardController extends Fragment {
     }
 
     private void setupNotifications() {
-        NotificationsHelper.createNotificationChannel(context);
+        NotificationsHelper.createNotificationChannels(context);
         LayoutSingleton layoutInstance = LayoutSingleton.getInstance();
         layoutInstance.setOnIntruderDetectedListener(new OnIntruderDetectedListener() {
             @Override
