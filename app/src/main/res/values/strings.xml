@@ -220,6 +220,7 @@
     <string name="seasons_title">Select Seasons Range</string>
     <string name="winter_start">Winter</string>
     <string name="summer_start">Summer</string>
+    <string name="invalid_seasons_range">An invalid seasons range was selected. The parameters will not be saved.</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>
@@ -240,17 +241,17 @@
     </string-array>
 
     <string-array name="months_spinner">
-        <item>1 - January</item>
-        <item>2 - February</item>
-        <item>3 - March</item>
-        <item>4 - April</item>
-        <item>5 - May</item>
-        <item>6 - June</item>
-        <item>7 - July</item>
-        <item>8 - August</item>
-        <item>9 - September</item>
-        <item>10 - October</item>
-        <item>11 - November</item>
-        <item>12 - December</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 </resources>

@@ -2,6 +2,7 @@ package com.concordia.smarthomesimulator.activities.editDashboard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
@@ -290,10 +291,14 @@ public class EditDashboardModel extends ViewModel{
         editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, time.getHour());
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, time.getMinute());
         editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
-        editor.putInt(PREFERENCES_KEY_WINTER_START, winterStart);
-        editor.putInt(PREFERENCES_KEY_WINTER_END, winterEnd);
-        editor.putInt(PREFERENCES_KEY_SUMMER_START, summerStart);
-        editor.putInt(PREFERENCES_KEY_SUMMER_END, summerEnd);
+        if (validateSeasons(winterStart, winterEnd, summerStart, summerEnd)) {
+            editor.putInt(PREFERENCES_KEY_WINTER_START, winterStart);
+            editor.putInt(PREFERENCES_KEY_WINTER_END, winterEnd);
+            editor.putInt(PREFERENCES_KEY_SUMMER_START, summerStart);
+            editor.putInt(PREFERENCES_KEY_SUMMER_END, summerEnd);
+        } else {
+            Toast.makeText(context, context.getString(R.string.invalid_seasons_range), Toast.LENGTH_SHORT).show();
+        }
         editor.apply();
     }
 
@@ -307,6 +312,20 @@ public class EditDashboardModel extends ViewModel{
     public boolean hasSelectedSelf(SharedPreferences preferences, String username){
         String loggedUsername = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         return loggedUsername.equalsIgnoreCase(username);
+    }
+
+    private boolean validateSeasons(int winterStart, int winterEnd, int summerStart, int summerEnd) {
+        // 4 cases: (SS = Summer Start, SE = Summer End, WS = Winter Start, etc.)
+        //  1) SS <= SE <= WS <= WE
+        //  2) SE <= WS <= WE <= SS
+        //  3) WS <= WE <= SS <= SE
+        //  4) WE <= SS <= SE <= WS
+        boolean case1 = summerStart <= summerEnd && summerEnd <= winterStart && winterStart <= winterEnd;
+        boolean case2 = summerEnd <= winterStart && winterStart <= winterEnd && winterEnd <= summerStart;
+        boolean case3 = winterStart <= winterEnd && winterEnd <= summerStart && summerStart <= summerEnd;
+        boolean case4 = winterEnd <= summerStart && summerStart <= summerEnd && summerEnd <= winterStart;
+        // Is any of the cases true ?
+        return case1 || case2 || case3 || case4;
     }
 
     private void setLayoutInAwayMode(Context context) {

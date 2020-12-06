@@ -198,10 +198,10 @@ public class EditDashboardController extends AppCompatActivity {
                 boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
                 // Getting the season months
-                int winterStart = extractMonth(winterStartSpinner.getSelectedItem().toString());
-                int winterEnd = extractMonth(winterEndSpinner.getSelectedItem().toString());
-                int summerStart = extractMonth(summerStartSpinner.getSelectedItem().toString());
-                int summerEnd = extractMonth(summerEndSpinner.getSelectedItem().toString());
+                int winterStart = winterStartSpinner.getSelectedItemPosition() + 1;
+                int winterEnd = winterEndSpinner.getSelectedItemPosition() + 1;
+                int summerStart = summerStartSpinner.getSelectedItemPosition() + 1;
+                int summerEnd = summerEndSpinner.getSelectedItemPosition() + 1;
                 // Edit the parameters
                 model.editParameters(context, status, away, callTimer, temperature, date, time, winterStart, winterEnd, summerStart, summerEnd);
                 // Update temperature behaviour of the rooms
@@ -302,10 +302,9 @@ public class EditDashboardController extends AppCompatActivity {
         awayStatusField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(awayStatusField.isChecked()){
+                if (awayStatusField.isChecked()) {
                     LogsHelper.add(context, new LogEntry("Away Mode", "Away mode is activated", LogImportance.IMPORTANT));
-                }
-                else{
+                } else {
                     LogsHelper.add(context, new LogEntry("Away Mode", "Away mode is deactivated", LogImportance.IMPORTANT));
                 }
                 setAwaySwitchRestrictions();
@@ -492,23 +491,21 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupSeasonsSpinner() {
-        String[] months = getResources().getStringArray(R.array.months_spinner);
-        for (int i = 0; i < months.length; i++) {
-            months[i] = months[i].replaceFirst("\\d+ - ", "");
-        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-            context,
-            R.layout.support_simple_spinner_dropdown_item,
-            months
+                context,
+                R.layout.support_simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.months_spinner)
         );
+        // Set the adapters
         winterStartSpinner.setAdapter(adapter);
         winterEndSpinner.setAdapter(adapter);
         summerStartSpinner.setAdapter(adapter);
         summerEndSpinner.setAdapter(adapter);
-        winterStartSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START) - 1) % 12);
-        winterEndSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END) - 1) % 12);
-        summerStartSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START) - 1) % 12);
-        summerEndSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END) - 1) % 12);
+        // Set the initial values
+        winterStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START) - 1);
+        winterEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END) - 1);
+        summerStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START) - 1);
+        summerEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END) - 1);
     }
 
     private void setupPermissionConfigurationRows() {
@@ -582,10 +579,5 @@ public class EditDashboardController extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private int extractMonth(String month){
-        String numberSection = month.substring(0, month.indexOf(' '));
-        return Integer.parseInt(numberSection);
     }
 }
