@@ -70,8 +70,6 @@ public class EditDashboardController extends AppCompatActivity {
     private Spinner summerStartSpinner;
     private Spinner summerEndSpinner;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +136,6 @@ public class EditDashboardController extends AppCompatActivity {
         winterEndSpinner = findViewById(R.id.winter_end_spinner);
         summerStartSpinner = findViewById(R.id.summer_start_spinner);
         summerEndSpinner = findViewById(R.id.summer_end_spinner);
-
     }
 
     private void fillKnownValues() {
@@ -496,18 +493,18 @@ public class EditDashboardController extends AppCompatActivity {
 
     private void setupSeasonsSpinner() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                context,
-                R.layout.support_simple_spinner_dropdown_item,
-                getResources().getStringArray(R.array.months_spinner)
+            context,
+            R.layout.support_simple_spinner_dropdown_item,
+            getResources().getStringArray(R.array.months_spinner)
         );
         winterStartSpinner.setAdapter(adapter);
         winterEndSpinner.setAdapter(adapter);
         summerStartSpinner.setAdapter(adapter);
         summerEndSpinner.setAdapter(adapter);
-        winterStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START) - 1);
-        winterEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END) - 1);
-        summerStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START) - 1);
-        summerEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END) - 1);
+        winterStartSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START) - 1) % 12);
+        winterEndSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END) - 1) % 12);
+        summerStartSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START) - 1) % 12);
+        summerEndSpinner.setSelection((preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END) - 1) % 12);
     }
 
     private void setupPermissionConfigurationRows() {
