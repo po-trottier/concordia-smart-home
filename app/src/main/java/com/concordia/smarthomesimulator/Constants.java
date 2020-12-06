@@ -71,6 +71,7 @@ public class Constants {
     public static final int DEFAULT_WINTER_END = 3;
     public static final int DEFAULT_SUMMER_START = 5;
     public static final int DEFAULT_SUMMER_END = 8;
+    public static final int DEFAULT_MONTH = 0;
     public static final LocalTime DEFAULT_MIN_LIGHTS_TIME = LocalTime.parse("19:00");
     public static final LocalTime DEFAULT_MAX_LIGHTS_TIME = LocalTime.parse("05:00");
 

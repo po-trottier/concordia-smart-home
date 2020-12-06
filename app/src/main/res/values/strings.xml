@@ -228,6 +228,10 @@
     <string name="in_the_segment_alert_text">in the</string>
     <string name="in_zone_segment_alert_text">in Zone :</string>
 
+    <string name="window_locked_alert_title">Windows cannot be opened!</string>
+    <string name="window_locked_alert_text_end"> have locked windows.</string>
+    <string name="window_locked_alert_text_start">Rooms </string>
+
 
 
 

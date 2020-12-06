@@ -8,8 +8,10 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
+import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -112,5 +114,19 @@ public class NotificationsHelper {
         managerCompat.notify(id++, builder.build());
         // Add log
         LogsHelper.add(context, new LogEntry("Extreme Temperature", content, LogImportance.CRITICAL));
+    }
+
+    public static void sendWindowLockedAlertNotification(Context context, String alertTitle, String alertText){
+        // Build notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, TEMPERATURE_NOTIFICATION_CHANNEL);
+        builder.setContentTitle(alertTitle);
+        builder.setContentText(alertText);
+        builder.setSmallIcon(R.drawable.ic_home);
+        builder.setAutoCancel(false);
+        // Send notification
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+        managerCompat.notify(id++, builder.build());
+        // Add log
+        LogsHelper.add(context, new LogEntry("Window Locked", alertText, LogImportance.IMPORTANT));
     }
 }
