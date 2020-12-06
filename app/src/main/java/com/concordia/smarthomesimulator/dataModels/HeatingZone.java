@@ -16,7 +16,6 @@ public class HeatingZone implements Serializable {
     private double desiredTemp;
     private String name;
     private final ArrayList<Room> rooms;
-    private boolean extremeTempDetected;
 
     /**
      * Instantiates a new Heating zone.
@@ -26,7 +25,6 @@ public class HeatingZone implements Serializable {
     public HeatingZone(String name) {
         this.name = name;
         this.desiredTemp = DEFAULT_TEMPERATURE;
-        this.extremeTempDetected = DEFAULT_EXTREME_TEMPERATURE_DETECTION;
 
         rooms = new ArrayList<>();
     }
@@ -37,26 +35,7 @@ public class HeatingZone implements Serializable {
         HeatingZone newZone = new HeatingZone(name);
         newZone.addRooms(rooms);
         newZone.setDesiredTemperature(desiredTemp);
-        newZone.setExtremeTempDetected(extremeTempDetected);
         return newZone;
-    }
-
-    /**
-     * Gets extreme temperature detection state.
-     *
-     * @return the state
-     */
-    public boolean isExtremeTempDetected() {
-        return extremeTempDetected;
-    }
-
-    /**
-     * Sets state of the extreme temperature detection
-     *
-     * @param extremeTempDetected the state of the extreme temperature detection
-     */
-    public void setExtremeTempDetected(boolean extremeTempDetected) {
-        this.extremeTempDetected = extremeTempDetected;
     }
 
     /**

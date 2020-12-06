@@ -28,16 +28,25 @@ public class NotificationsHelper {
      *
      * @param context the context
      */
-    public static void createNotificationChannel(Context context) {
-        // If the channel was already created we're done
+    public static void createNotificationChannels(Context context) {
         NotificationManager notificationManager = getSystemService(context, NotificationManager.class);
-        if (notificationManager == null || notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL) != null) {
+        if (notificationManager == null) {
             return;
         }
+        // If the channel was already created we're done
+        boolean intruderExists = notificationManager.getNotificationChannel(INTRUDER_NOTIFICATION_CHANNEL) != null;
+        boolean temperatureExists = notificationManager.getNotificationChannel(TEMPERATURE_NOTIFICATION_CHANNEL) != null;
         // Register the channel with the system; you can't change the importance or other notification behaviors after this
-        String category = context.getString(R.string.intruder_category);
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL, category, NotificationManager.IMPORTANCE_HIGH);
-        notificationManager.createNotificationChannel(channel);
+        if (!intruderExists) {
+            String intruderCategory = context.getString(R.string.intruder_category);
+            NotificationChannel intruderChannel = new NotificationChannel(INTRUDER_NOTIFICATION_CHANNEL, intruderCategory, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(intruderChannel);
+        }
+        if (!temperatureExists) {
+            String temperatureCategory = context.getString(R.string.temperature_category);
+            NotificationChannel temperatureChannel = new NotificationChannel(TEMPERATURE_NOTIFICATION_CHANNEL, temperatureCategory, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(temperatureChannel);
+        }
     }
 
     /**
@@ -63,7 +72,7 @@ public class NotificationsHelper {
             }
         }, (long) ((delay * MINUTES_TO_MILLISECONDS) / scale));
         // Build notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, INTRUDER_NOTIFICATION_CHANNEL);
         builder.setContentTitle(context.getString(R.string.intruder_title));
         builder.setContentText(String.format(context.getString(R.string.intruder_text), delay));
         builder.setSmallIcon(R.drawable.ic_home);
@@ -77,7 +86,7 @@ public class NotificationsHelper {
 
     public static void sendAuthoritiesNotification(Context context){
         // Build notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, INTRUDER_NOTIFICATION_CHANNEL);
         builder.setContentTitle(context.getString(R.string.authorities_title));
         builder.setContentText(context.getString(R.string.authorities_text));
         builder.setSmallIcon(R.drawable.ic_home);
@@ -91,19 +100,17 @@ public class NotificationsHelper {
 
     public static void sendTemperatureAlertNotification(Context context, String alertTitle, String alertText, String roomName){
         // Build notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, TEMPERATURE_NOTIFICATION_CHANNEL);
         builder.setContentTitle(alertTitle);
         String connectorString = context.getString(R.string.in_zone_segment_alert_text);
-        alertText = formatTemperatureAlertString(alertText,connectorString,roomName);
-        builder.setContentText(alertText);
+        String content = alertText + " " +  connectorString + " " + roomName;
+        builder.setContentText(content);
         builder.setSmallIcon(R.drawable.ic_home);
         builder.setAutoCancel(false);
         // Send notification
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(id++, builder.build());
-    }
-
-    private static String formatTemperatureAlertString(String alertString, String connectorString, String roomName){
-        return alertString + " " +  connectorString + " " + roomName;
+        // Add log
+        LogsHelper.add(context, new LogEntry("Extreme Temperature", content, LogImportance.CRITICAL));
     }
 }

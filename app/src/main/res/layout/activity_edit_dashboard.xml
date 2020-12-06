@@ -31,6 +31,21 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"/>
             <include
+                layout="@layout/partial_edit_away"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+            <include
+                layout="@layout/partial_edit_seasons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+            <include
+                layout="@layout/partial_edit_misc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+            <include
                 layout="@layout/partial_edit_permissions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

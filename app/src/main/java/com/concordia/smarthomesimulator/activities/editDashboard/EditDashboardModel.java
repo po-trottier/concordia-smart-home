@@ -2,6 +2,7 @@ package com.concordia.smarthomesimulator.activities.editDashboard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 import androidx.lifecycle.ViewModel;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
@@ -11,7 +12,6 @@ import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
@@ -22,6 +22,8 @@ public class EditDashboardModel extends ViewModel{
 
     private float timeFactor = 1f;
     private LocalDateTime dateTime = LocalDateTime.now();
+    private LocalTime minLightsTime = DEFAULT_MIN_LIGHTS_TIME;
+    private LocalTime maxLightsTime = DEFAULT_MAX_LIGHTS_TIME;
 
     private Userbase userbase;
 
@@ -120,6 +122,58 @@ public class EditDashboardModel extends ViewModel{
         int hour = preferences.getInt(PREFERENCES_KEY_DATETIME_HOUR, timeNow.getHour());
         int minute = preferences.getInt(PREFERENCES_KEY_DATETIME_MINUTE, timeNow.getMinute());
         dateTime = LocalDateTime.of(year, month, day, hour, minute);
+    }
+
+    public void updateMinLightsTime(SharedPreferences preferences) {
+        LocalTime timeLightsMin = minLightsTime;
+        int hour = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, timeLightsMin.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, timeLightsMin.getMinute());
+        minLightsTime = LocalTime.of(hour, minute);
+    }
+
+    public void updateMaxLightsTime(SharedPreferences preferences) {
+        LocalTime timeLightsMax = maxLightsTime;
+        int hour = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, timeLightsMax.getHour());
+        int minute = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, timeLightsMax.getMinute());
+        maxLightsTime = LocalTime.of(hour, minute);
+    }
+
+    /**
+     * Gets lights' minimum date time.
+     *
+     * @return the lights' minimum date time
+     */
+    public LocalTime getMinLightsTime() {
+        return minLightsTime;
+    }
+
+    /**
+     * Sets lights' minimum time.
+     *
+     * @param hour   the hour
+     * @param minute the minute
+     */
+    public void setMinLightsTime(int hour, int minute) {
+        minLightsTime = LocalTime.of(hour, minute);
+    }
+
+    /**
+     * Gets lights' maximum date time.
+     *
+     * @return the lights' minimum date time
+     */
+    public LocalTime getMaxLightsTime() {
+        return maxLightsTime;
+    }
+
+    /**
+     * Sets lights' maximum time.
+     *
+     * @param hour   the hour
+     * @param minute the minute
+     */
+    public void setMaxLightsTime(int hour, int minute) {
+        maxLightsTime = LocalTime.of(hour, minute);
     }
 
     /**
@@ -261,38 +315,46 @@ public class EditDashboardModel extends ViewModel{
 
     /**
      * Edit parameters.
-     *
-     * @param context     the context
-     * @param status      the status
-     * @param temperature the temperature
-     * @param date        the date
-     * @param time        the time
+     *  @param context     the context
+     * @param parametersArgument arguments
      */
-    public void editParameters(Context context, boolean status, boolean awayMode, int callTimer, int temperature, int summerTemperature, int winterTemperature, int maxAlertTemperature, int minAlertTemperature, LocalDate date, LocalTime time) {
+    public void editParameters(Context context, ParametersArgument parametersArgument) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         // Verify the permissions if the user changed the away mode
-        boolean awayChanged = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false) != awayMode;
+        boolean awayChanged = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false) != parametersArgument.isAwayMode();
         if (awayChanged && UserbaseHelper.verifyPermissions(Action.CHANGE_AWAY_MODE, context)) {
-            editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, awayMode);
-            if (awayMode) {
+            editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, parametersArgument.isAwayMode());
+            if (parametersArgument.isAwayMode()) {
                 setLayoutInAwayMode(context);
             }
         }
         // Set the other parameters
-        editor.putBoolean(PREFERENCES_KEY_STATUS, status);
-        editor.putInt(PREFERENCES_KEY_CALL_DELAY, callTimer);
-        editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
-        editor.putInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, summerTemperature);
-        editor.putInt(PREFERENCES_KEY_WINTER_TEMPERATURE, winterTemperature);
-        editor.putInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, maxAlertTemperature);
-        editor.putInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, minAlertTemperature);
-        editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, date.getYear());
-        editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, date.getMonthValue());
-        editor.putInt(PREFERENCES_KEY_DATETIME_DAY, date.getDayOfMonth());
-        editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, time.getHour());
-        editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, time.getMinute());
+        editor.putBoolean(PREFERENCES_KEY_STATUS, parametersArgument.getStatus());
+        editor.putInt(PREFERENCES_KEY_CALL_DELAY, parametersArgument.getCallTimer());
+        editor.putInt(PREFERENCES_KEY_TEMPERATURE, parametersArgument.getTemperature());
+        editor.putInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, parametersArgument.getSummerTemperature());
+        editor.putInt(PREFERENCES_KEY_WINTER_TEMPERATURE, parametersArgument.getWinterTemperature());
+        editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, parametersArgument.getDate().getYear());
+        editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, parametersArgument.getDate().getMonthValue());
+        editor.putInt(PREFERENCES_KEY_DATETIME_DAY, parametersArgument.getDate().getDayOfMonth());
+        editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, parametersArgument.getTime().getHour());
+        editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, parametersArgument.getTime().getMinute());
+        editor.putInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, parametersArgument.getMinAlertTemperature());
+        editor.putInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, parametersArgument.getMaxAlertTemperature());
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, parametersArgument.getMinLightsTime().getHour());
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, parametersArgument.getMinLightsTime().getMinute());
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, parametersArgument.getMaxLightsTime().getHour());
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, parametersArgument.getMaxLightsTime().getMinute());
         editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
+        if (validateSeasons(parametersArgument)) {
+            editor.putInt(PREFERENCES_KEY_WINTER_START, parametersArgument.getWinterStart());
+            editor.putInt(PREFERENCES_KEY_WINTER_END, parametersArgument.getWinterEnd());
+            editor.putInt(PREFERENCES_KEY_SUMMER_START, parametersArgument.getSummerStart());
+            editor.putInt(PREFERENCES_KEY_SUMMER_END, parametersArgument.getSummerEnd());
+        } else {
+            Toast.makeText(context, context.getString(R.string.invalid_seasons_range), Toast.LENGTH_SHORT).show();
+        }
         editor.apply();
     }
 
@@ -306,6 +368,25 @@ public class EditDashboardModel extends ViewModel{
     public boolean hasSelectedSelf(SharedPreferences preferences, String username){
         String loggedUsername = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         return loggedUsername.equalsIgnoreCase(username);
+    }
+
+    private boolean validateSeasons(ParametersArgument parametersArgument) {
+        // 4 cases: (SS = Summer Start, SE = Summer End, WS = Winter Start, etc.)
+        //  1) SS <= SE <= WS <= WE
+        //  2) SE <= WS <= WE <= SS
+        //  3) WS <= WE <= SS <= SE
+        //  4) WE <= SS <= SE <= WS
+        int winterStart = parametersArgument.getWinterStart();
+        int winterEnd = parametersArgument.getWinterEnd();
+        int summerStart = parametersArgument.getSummerStart();
+        int summerEnd = parametersArgument.getSummerEnd();
+        // Evaluate the cases
+        boolean case1 = summerStart <= summerEnd && summerEnd <= winterStart && winterStart <= winterEnd;
+        boolean case2 = summerEnd <= winterStart && winterStart <= winterEnd && winterEnd <= summerStart;
+        boolean case3 = winterStart <= winterEnd && winterEnd <= summerStart && summerStart <= summerEnd;
+        boolean case4 = winterEnd <= summerStart && summerStart <= summerEnd && summerEnd <= winterStart;
+        // Is any of the cases true ?
+        return case1 || case2 || case3 || case4;
     }
 
     private void setLayoutInAwayMode(Context context) {

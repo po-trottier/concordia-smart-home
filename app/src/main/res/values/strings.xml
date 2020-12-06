@@ -175,6 +175,8 @@
     <string name="edit_text_date">Simulation Date</string>
     <string name="edit_text_time_scale">Time Speed (Scaling Factor)</string>
     <string name="edit_context_welcome">Context Parameters</string>
+    <string name="edit_context_away">Away Mode</string>
+    <string name="edit_context_misc">Miscellaneous Parameters</string>
 
     <string name="generic_degrees_celsius">°C</string>
     <string name="generic_save">Save</string>
@@ -216,6 +218,7 @@
     <string name="alert_map_inhabitant_text_self">YOU are the selected inhabitant.</string>
 
     <string name="intruder_category">Intruder Alerts</string>
+    <string name="temperature_category">Temperature Alerts</string>
     <string name="intruder_title">Intruder Alert</string>
     <string name="intruder_text">Intruder detected : Contacting authorities %d in minutes</string>
     <string name="authorities_title">Authorities Contacted</string>
@@ -229,6 +232,11 @@
 
 
 
+
+    <string name="seasons_title">Select Seasons Range</string>
+    <string name="winter_start">Winter</string>
+    <string name="summer_start">Summer</string>
+    <string name="invalid_seasons_range">An invalid seasons range was selected. The parameters will not be saved.</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>
@@ -246,5 +254,20 @@
     <string-array name="device_orientation_spinner">
         <item>Horizontal</item>
         <item>Vertical</item>
+    </string-array>
+
+    <string-array name="months_spinner">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 </resources>

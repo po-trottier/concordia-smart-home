@@ -55,6 +55,7 @@ public class LayoutsHelper {
      * @return the selected layout
      */
     public static HouseLayout getSelectedLayout(Context context) {
+        HouseLayout houseLayout;
         if (LayoutSingleton.getInstance().getLayout() == null) {
             SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
             String selection = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
@@ -63,7 +64,13 @@ public class LayoutsHelper {
             HouseLayout selected = layouts.stream().filter(layout -> layout.getName().equals(selection)).findFirst().orElse(null);
             LayoutSingleton.getInstance().setLayout(selected);
         }
-        return LayoutSingleton.getInstance().getLayout();
+        if(LayoutSingleton.getInstance().getLayout() != null){
+            houseLayout = (HouseLayout) LayoutSingleton.getInstance().getLayout().clone();
+        }
+        else{
+            houseLayout = null;
+        }
+        return houseLayout;
     }
 
     /**

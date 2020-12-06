@@ -53,195 +53,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/edit_text_away_mode_status"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/away_on_off"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    app:thumbTint="@color/primary"
-                    app:trackTint="@color/primaryFaded" />
-                <TextView
-                    android:id="@+id/away_on_off_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <LinearLayout
-                    android:id="@+id/away_disable_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end|center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:textAlignment="textEnd"
-                        android:text="@string/generic_error"/>
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/away_disable_hint"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:padding="0dp"
-                        android:tint="@color/danger"
-                        android:src="@drawable/ic_error_outline"/>
-                </LinearLayout>
-            </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/edit_text_summer_temperature"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/set_summer_temperature"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/field_height"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:inputType="numberSigned"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/context_summer_degrees_celsius"/>
-                <TextView
-                    android:id="@+id/context_summer_degrees_celsius"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    android:text="@string/generic_degrees_celsius"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/edit_text_winter_temperature"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/set_winter_temperature"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/field_height"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:inputType="numberSigned"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/context_winter_degrees_celsius"/>
-                <TextView
-                    android:id="@+id/context_winter_degrees_celsius"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    android:text="@string/generic_degrees_celsius"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/edit_text_notification_delay"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/set_authorities_Timer"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/field_height"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"
-                    android:inputType="number"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/context_minutes"/>
-                <TextView
-                    android:id="@+id/context_minutes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/generic_minutes"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/edit_text_lights_on"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/set_time_min"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/field_height"
-                    android:editable="false"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/context_time_to"
-                    android:text="7:00 PM"/>
-                <TextView
-                    android:id="@+id/context_time_to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                    android:text="@string/edit_text_lights_on_to"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/set_time_min"
-                    app:layout_constraintEnd_toStartOf="@id/set_time_max"/>
-                <EditText
-                    android:id="@+id/set_time_max"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/field_height"
-                    android:editable="false"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/context_time_to"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:text="7:00 AM"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginBottom="4dp"
                 android:textStyle="bold"
@@ -279,80 +90,16 @@
                 android:layout_marginBottom="4dp"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:text="@string/edit_text_max_temperature_alert"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/set_max_temperature_alert"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/field_height"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:inputType="numberSigned"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/context__max_alert_degrees_celsius"/>
-                <TextView
-                    android:id="@+id/context__max_alert_degrees_celsius"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    android:text="@string/generic_degrees_celsius"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/edit_text_min_temperature_alert"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/set_min_temperature_alert"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/field_height"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:inputType="numberSigned"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/rounded_text_field_background"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/context_min_alert_degrees_celsius"/>
-                <TextView
-                    android:id="@+id/context_min_alert_degrees_celsius"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    android:text="@string/generic_degrees_celsius"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:text="@string/edit_text_date"/>
-            <EditText
+            <TextView
                 android:id="@+id/date_selector"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/field_height"
                 android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                android:editable="false"
-                android:background="@drawable/rounded_text_field_background"/>
+                android:background="@drawable/rounded_text_field_background"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -361,13 +108,15 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:text="@string/edit_text_time"/>
-            <EditText
+            <TextView
                 android:id="@+id/time_selector"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/field_height"
                 android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                android:editable="false"
-                android:background="@drawable/rounded_text_field_background"/>
+                android:background="@drawable/rounded_text_field_background"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -428,4 +177,4 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-    </LinearLayout>
+</LinearLayout>
