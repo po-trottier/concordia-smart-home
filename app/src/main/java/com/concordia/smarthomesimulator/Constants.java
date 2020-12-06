@@ -29,6 +29,10 @@ public class Constants {
     public static final String PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR = "maxLightsHour";
     public static final String PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE = "maxLightsMinute";
     public static final String PREFERENCES_KEY_TIME_SCALE = "scale";
+    public static final String PREFERENCES_KEY_WINTER_START = "winterStart";
+    public static final String PREFERENCES_KEY_WINTER_END = "winterEnd";
+    public static final String PREFERENCES_KEY_SUMMER_START = "summerStart";
+    public static final String PREFERENCES_KEY_SUMMER_END = "summerEnd";
 
     // Keys for Shared Preferences Actions
     public static final String PREFERENCES_KEY_ACTION_INTERACT_ANY_WINDOW = "Open/Close_Any_Window";
@@ -59,11 +63,14 @@ public class Constants {
     public static final int DEFAULT_TEMPERATURE = 20;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
+    public static final int DEFAULT_WINTER_START = 11;
+    public static final int DEFAULT_WINTER_END = 3;
+    public static final int DEFAULT_SUMMER_START = 5;
+    public static final int DEFAULT_SUMMER_END = 8;
     public static final LocalTime DEFAULT_MIN_LIGHTS_TIME = LocalTime.parse("19:00");
     public static final LocalTime DEFAULT_MAX_LIGHTS_TIME = LocalTime.parse("05:00");
 
     // Related to Smart Heating
-    public static final int INITIAL_ROOM_TEMPERATURE = 999;
     public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED = 0.25;
     public static final double HVAC_TEMPERATURE_CHANGE = 0.1;
     public static final double OUTSIDE_TEMPERATURE_CHANGE = 0.05;

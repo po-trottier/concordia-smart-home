@@ -67,6 +67,10 @@ public class EditDashboardController extends AppCompatActivity {
     private Spinner editPermissionsSpinner;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
+    private Spinner winterStartSpinner;
+    private Spinner winterEndSpinner;
+    private Spinner summerStartSpinner;
+    private Spinner summerEndSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,7 @@ public class EditDashboardController extends AppCompatActivity {
 
         setupPermissionsSpinner();
         setupUsernamesSpinner();
+        setupSeasonsSpinner();
         setupPermissionConfigurationRows();
 
         setupTimePicker();
@@ -135,6 +140,10 @@ public class EditDashboardController extends AppCompatActivity {
         timeField = findViewById(R.id.time_selector);
         minLightsTimeField = findViewById(R.id.set_time_min);
         maxLightsTimeField = findViewById(R.id.set_time_max);
+        winterStartSpinner = findViewById(R.id.winter_start_spinner);
+        winterEndSpinner = findViewById(R.id.winter_end_spinner);
+        summerStartSpinner = findViewById(R.id.summer_start_spinner);
+        summerEndSpinner = findViewById(R.id.summer_end_spinner);
     }
 
     private void fillKnownValues() {
@@ -163,6 +172,10 @@ public class EditDashboardController extends AppCompatActivity {
         saveContext.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                // REFACTOR: Created a parameter object instead of passing all the parameters separately allowed
+                // us to split the previously extremely long method call to a short one. This also makes it clear
+                // when parameters are being modified.
+                ParametersArgument parameters = new ParametersArgument();
                 // Get the User's information
                 String username= editedUsername.getText().toString();
                 String password = editedPassword.getText().toString();
@@ -175,16 +188,21 @@ public class EditDashboardController extends AppCompatActivity {
                     LogsHelper.add(context, new LogEntry("Edit Simulation Context", message, LogImportance.IMPORTANT));
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 }
-                // Get the Simulation Context Parameters
+                // Get the numbers
                 int temperature = DEFAULT_TEMPERATURE;
+                int callTimer = DEFAULT_CALL_DELAY;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
                     if (Math.abs(temperature) > MAXIMUM_TEMPERATURE){
                         temperature = DEFAULT_TEMPERATURE;
+                        callTimer = Integer.parseInt(callTimerField.getText().toString());
                     }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
+                parameters.setTemperature(temperature);
+                parameters.setCallTimer(callTimer);
+                // Get the times and dates
                 LocalDate date =LocalDate.now();
                 LocalTime time = LocalTime.now();
                 LocalTime minLightsTime = DEFAULT_MIN_LIGHTS_TIME;
@@ -197,18 +215,26 @@ public class EditDashboardController extends AppCompatActivity {
                 } catch (DateTimeParseException e) {
                     e.printStackTrace();
                 }
-                int callTimer = DEFAULT_CALL_DELAY;
-                try {
-                    callTimer = Integer.parseInt(callTimerField.getText().toString());
-                }catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-                boolean status = statusField.isChecked();
-                boolean away = awayStatusField.isChecked();
+                parameters.setDate(date);
+                parameters.setTime(time);
+                parameters.setMinLightsTime(minLightsTime);
+                parameters.setMaxLightsTime(maxLightsTime);
+                // Get the booleans
+                parameters.setStatus(statusField.isChecked());
+                parameters.setAwayMode(awayStatusField.isChecked());
+                // Getting the spinners
+                int winterStart = winterStartSpinner.getSelectedItemPosition() + 1;
+                int winterEnd = winterEndSpinner.getSelectedItemPosition() + 1;
+                int summerStart = summerStartSpinner.getSelectedItemPosition() + 1;
+                int summerEnd = summerEndSpinner.getSelectedItemPosition() + 1;
+                parameters.setWinterStart(winterStart);
+                parameters.setWinterEnd(winterEnd);
+                parameters.setSummerStart(summerStart);
+                parameters.setSummerEnd(summerEnd);
                 // Edit the parameters
-                model.editParameters(context, status, away, callTimer, temperature, date, time, minLightsTime, maxLightsTime);
+                model.editParameters(context, parameters);
                 // Update temperature behaviour of the rooms
-                if (status) {
+                if (parameters.getStatus()) {
                     TemperatureHelper.adjustTemperature(context);
                 }
                 // Edit the permissions configuration
@@ -225,7 +251,7 @@ public class EditDashboardController extends AppCompatActivity {
                     UserbaseHelper.saveUserbase(context, model.getUserbase());
                 }
                 // Send notification if required
-                if (away && status && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
+                if (parameters.isAwayMode() && parameters.getStatus() && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
                     NotificationsHelper.sendIntruderNotification(context);
                 }
                 // Close the activity
@@ -305,10 +331,9 @@ public class EditDashboardController extends AppCompatActivity {
         awayStatusField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(awayStatusField.isChecked()){
+                if (awayStatusField.isChecked()) {
                     LogsHelper.add(context, new LogEntry("Away Mode", "Away mode is activated", LogImportance.IMPORTANT));
-                }
-                else{
+                } else {
                     LogsHelper.add(context, new LogEntry("Away Mode", "Away mode is deactivated", LogImportance.IMPORTANT));
                 }
                 setAwaySwitchRestrictions();
@@ -538,6 +563,24 @@ public class EditDashboardController extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+    }
+
+    private void setupSeasonsSpinner() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                context,
+                R.layout.support_simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.months_spinner)
+        );
+        // Set the adapters
+        winterStartSpinner.setAdapter(adapter);
+        winterEndSpinner.setAdapter(adapter);
+        summerStartSpinner.setAdapter(adapter);
+        summerEndSpinner.setAdapter(adapter);
+        // Set the initial values
+        winterStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_START, DEFAULT_WINTER_START) - 1);
+        winterEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_WINTER_END, DEFAULT_WINTER_END) - 1);
+        summerStartSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START) - 1);
+        summerEndSpinner.setSelection(preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END) - 1);
     }
 
     private void setupPermissionConfigurationRows() {

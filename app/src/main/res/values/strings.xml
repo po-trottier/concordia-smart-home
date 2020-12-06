@@ -217,6 +217,11 @@
     <string name="authorities_title">Authorities Contacted</string>
     <string name="authorities_text">The authorities have been contacted.</string>
 
+    <string name="seasons_title">Select Seasons Range</string>
+    <string name="winter_start">Winter</string>
+    <string name="summer_start">Summer</string>
+    <string name="invalid_seasons_range">An invalid seasons range was selected. The parameters will not be saved.</string>
+
     <string-array name="permissions_spinner">
         <item>Parent</item>
         <item>Child</item>
@@ -233,5 +238,20 @@
     <string-array name="device_orientation_spinner">
         <item>Horizontal</item>
         <item>Vertical</item>
+    </string-array>
+
+    <string-array name="months_spinner">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 </resources>
