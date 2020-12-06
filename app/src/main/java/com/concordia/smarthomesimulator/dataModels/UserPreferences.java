@@ -4,7 +4,9 @@ import android.content.SharedPreferences;
 import com.concordia.smarthomesimulator.enums.Permissions;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -22,6 +24,10 @@ public class UserPreferences implements Serializable {
     private int hour;
     private int minute;
     private float timeFactor;
+    private int minLightsHour;
+    private int minLightsMinute;
+    private int maxLightsHour;
+    private int maxLightsMinute;
 
     /**
      * Instantiates a new User preferences.
@@ -37,6 +43,14 @@ public class UserPreferences implements Serializable {
         this.temperature = DEFAULT_TEMPERATURE;
         this.status = DEFAULT_STATUS;
         this.timeFactor = 1f;
+
+        LocalTime timeMinLights = DEFAULT_MIN_LIGHTS_TIME;
+        this.minLightsHour = timeMinLights.getHour();
+        this.minLightsMinute = timeMinLights.getMinute();
+
+        LocalTime timeMaxLights = DEFAULT_MAX_LIGHTS_TIME;
+        this.maxLightsHour = timeMaxLights.getHour();
+        this.maxLightsMinute = timeMaxLights.getMinute();
 
         LocalDateTime timeNow = LocalDateTime.now();
         this.year = timeNow.getYear();
@@ -199,6 +213,48 @@ public class UserPreferences implements Serializable {
     }
 
     /**
+     * Gets minimum lights time.
+     *
+     * @return the minimum lights time
+     */
+    public LocalTime getMinLightsTime() {
+        return LocalTime.of(minLightsHour, minLightsMinute);
+    }
+
+    /**
+     * Sets minimum lights time.
+     *
+
+     * @param minLightsHour the hour
+     * @param minLightsMinute the minute
+     */
+    public void setMinLightsTime(int minLightsHour, int minLightsMinute) {
+        this.minLightsHour = minLightsHour;
+        this.minLightsMinute = minLightsMinute;
+    }
+
+    /**
+     * Gets maximum lights time.
+     *
+     * @return the maximum lights time
+     */
+    public LocalTime getMaxLightsTime() {
+        return LocalTime.of(maxLightsHour, maxLightsMinute);
+    }
+
+    /**
+     * Sets maximum lights time.
+     *
+
+     * @param maxLightsHour the hour
+     * @param maxLightsMinute the minute
+     */
+    public void setMaxLightsTime(int maxLightsHour, int maxLightsMinute) {
+        this.maxLightsHour = maxLightsHour;
+        this.maxLightsMinute = maxLightsMinute;
+    }
+
+    /**
      * Load user preferences.
      *
      * @param preferences the preferences
@@ -217,6 +273,10 @@ public class UserPreferences implements Serializable {
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, day);
         editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, hour);
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, minute);
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, minLightsHour);
+        editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, minLightsMinute);
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, maxLightsHour);
+        editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, maxLightsMinute);
         editor.apply();
     }
 
@@ -240,6 +300,14 @@ public class UserPreferences implements Serializable {
         day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, timeNow.getDayOfMonth());
         hour = preferences.getInt(PREFERENCES_KEY_DATETIME_HOUR, timeNow.getHour());
         minute = preferences.getInt(PREFERENCES_KEY_DATETIME_MINUTE, timeNow.getMinute());
+
+        LocalTime timeMinLights = DEFAULT_MIN_LIGHTS_TIME;
+        minLightsHour = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, timeMinLights.getHour());
+        minLightsMinute = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, timeMinLights.getMinute());
+
+        LocalTime timeMaxLights = DEFAULT_MAX_LIGHTS_TIME;
+        minLightsHour = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, timeMaxLights.getHour());
+        minLightsMinute = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, timeMaxLights.getMinute());
     }
 
     /**
@@ -261,6 +329,10 @@ public class UserPreferences implements Serializable {
         editor.remove(PREFERENCES_KEY_DATETIME_DAY);
         editor.remove(PREFERENCES_KEY_DATETIME_HOUR);
         editor.remove(PREFERENCES_KEY_DATETIME_MINUTE);
+        editor.remove(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR);
+        editor.remove(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE);
+        editor.remove(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR);
+        editor.remove(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE);
         editor.apply();
     }
 }

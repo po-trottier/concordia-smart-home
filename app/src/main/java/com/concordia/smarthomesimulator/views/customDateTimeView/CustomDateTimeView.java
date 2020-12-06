@@ -7,9 +7,17 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.HouseLayout;
+import com.concordia.smarthomesimulator.dataModels.Light;
+import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.interfaces.IDevice;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -96,6 +104,41 @@ public class CustomDateTimeView extends LinearLayout {
                 dateTime = dateTime.plusMinutes(1);
                 setPreferences(preferences);
                 updateView();
+
+                LocalTime defaultMinLightsTime = DEFAULT_MIN_LIGHTS_TIME;
+                int minLightsHour = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, defaultMinLightsTime.getHour());
+                int minLightsMinute = preferences.getInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, defaultMinLightsTime.getMinute());
+
+                    if(dateTime.getHour() == minLightsHour && dateTime.getMinute() == minLightsMinute){
+                        HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+                        for (Room room : layout.getRooms()) {
+                            for (IDevice device : room.getDevices()) {
+                                if (device.getDeviceType() == DeviceType.LIGHT && ((Light) device).isAutoOn()) {
+                                    device.setIsOpened(true);
+                                }
+                            }
+                        }
+                        LayoutsHelper.saveHouseLayout(context, layout);
+                        LayoutsHelper.updateSelectedLayout(context, layout);
+                    }
+
+
+                LocalTime maxLightsTime = DEFAULT_MAX_LIGHTS_TIME;
+                int maxLightsHour = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, maxLightsTime.getHour());
+                int maxLightsMinute = preferences.getInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE, maxLightsTime.getMinute());
+
+                if(dateTime.getHour() == maxLightsHour && dateTime.getMinute() == maxLightsMinute){
+                    HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+                    for (Room room : layout.getRooms()) {
+                        for (IDevice device : room.getDevices()) {
+                            if (device.getDeviceType() == DeviceType.LIGHT && ((Light) device).isAutoOn()) {
+                                device.setIsOpened(false);
+                            }
+                        }
+                    }
+                    LayoutsHelper.saveHouseLayout(context, layout);
+                    LayoutsHelper.updateSelectedLayout(context, layout);
+                }
             }
         }, 0, period);
     }
