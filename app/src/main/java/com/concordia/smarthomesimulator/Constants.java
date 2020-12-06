@@ -2,6 +2,9 @@ package com.concordia.smarthomesimulator;
 
 import com.concordia.smarthomesimulator.enums.Permissions;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 public class Constants {
     // Permissions Request Codes
     public static final int WRITE_PERMISSION_REQUEST_CODE = 1000;
@@ -21,6 +24,10 @@ public class Constants {
     public static final String PREFERENCES_KEY_DATETIME_DAY = "day";
     public static final String PREFERENCES_KEY_DATETIME_HOUR = "hour";
     public static final String PREFERENCES_KEY_DATETIME_MINUTE = "minute";
+    public static final String PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR = "minLightsHour";
+    public static final String PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE = "minLightsMinute";
+    public static final String PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR = "maxLightsHour";
+    public static final String PREFERENCES_KEY_MAX_LIGHTS_TIME_MINUTE = "maxLightsMinute";
     public static final String PREFERENCES_KEY_TIME_SCALE = "scale";
 
     // Keys for Shared Preferences Actions
@@ -52,11 +59,12 @@ public class Constants {
     public static final int DEFAULT_TEMPERATURE = 20;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
+    public static final LocalTime DEFAULT_MIN_LIGHTS_TIME = LocalTime.parse("19:00");
+    public static final LocalTime DEFAULT_MAX_LIGHTS_TIME = LocalTime.parse("05:00");
 
     // Related to Smart Heating
     public static final int INITIAL_ROOM_TEMPERATURE = 999;
     public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED = 0.25;
-    public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_OFF = 1;
     public static final double HVAC_TEMPERATURE_CHANGE = 0.1;
     public static final double OUTSIDE_TEMPERATURE_CHANGE = 0.05;
     public static final long TEMPERATURE_SAVE_INTERVAL = 5000;

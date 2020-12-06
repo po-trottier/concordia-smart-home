@@ -56,12 +56,14 @@ public class EditDashboardController extends AppCompatActivity {
     private EditText editedPassword;
     private EditText newUsernameField;
     private EditText newPasswordField;
-    private EditText dateField;
-    private EditText timeField;
     private EditText callTimerField;
+    private TextView dateField;
+    private TextView timeField;
     private TextView awayStatusText;
     private TextView timeScaleField;
     private TextView statusText;
+    private TextView minLightsTimeField;
+    private TextView maxLightsTimeField;
     private Spinner editPermissionsSpinner;
     private Spinner newPermissionsSpinner;
     private Spinner usernameSpinner;
@@ -78,6 +80,8 @@ public class EditDashboardController extends AppCompatActivity {
 
         model.initializeModel(context);
         model.updateSimulationDateTime(preferences);
+        model.updateMinLightsTime(preferences);
+        model.updateMaxLightsTime(preferences);
 
         setupToolbar();
         findControls();
@@ -93,6 +97,8 @@ public class EditDashboardController extends AppCompatActivity {
         setupTimePicker();
         setupDatePicker();
         setupTimeFactor();
+        setupMinLightsTimePicker();
+        setupMaxLightsTimePicker();
 
         setupUsernamesSpinner();
 
@@ -127,6 +133,8 @@ public class EditDashboardController extends AppCompatActivity {
         timeScaleField = findViewById(R.id.time_scale_text);
         dateField = findViewById(R.id.date_selector);
         timeField = findViewById(R.id.time_selector);
+        minLightsTimeField = findViewById(R.id.set_time_min);
+        maxLightsTimeField = findViewById(R.id.set_time_max);
     }
 
     private void fillKnownValues() {
@@ -144,6 +152,11 @@ public class EditDashboardController extends AppCompatActivity {
         timeField.setText(dateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
         // Set the time scale factor
         timeScaleField.setText(model.getTimeFactor() + "x");
+        // Set the min and max times
+        LocalTime minTime = model.getMinLightsTime();
+        LocalTime maxTime = model.getMaxLightsTime();
+        minLightsTimeField.setText(minTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
+        maxLightsTimeField.setText(maxTime.format((DateTimeFormatter.ofPattern(TIME_FORMAT))));
     }
 
     private void setSaveIntent() {
@@ -174,9 +187,13 @@ public class EditDashboardController extends AppCompatActivity {
                 }
                 LocalDate date =LocalDate.now();
                 LocalTime time = LocalTime.now();
+                LocalTime minLightsTime = DEFAULT_MIN_LIGHTS_TIME;
+                LocalTime maxLightsTime = DEFAULT_MAX_LIGHTS_TIME;
                 try {
                     date = LocalDate.parse(dateField.getText().toString(), DateTimeFormatter.ofPattern(DATE_FORMAT));
                     time = LocalTime.parse(timeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    minLightsTime = LocalTime.parse(minLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
+                    maxLightsTime = LocalTime.parse(maxLightsTimeField.getText().toString(), DateTimeFormatter.ofPattern(TIME_FORMAT));
                 } catch (DateTimeParseException e) {
                     e.printStackTrace();
                 }
@@ -189,7 +206,7 @@ public class EditDashboardController extends AppCompatActivity {
                 boolean status = statusField.isChecked();
                 boolean away = awayStatusField.isChecked();
                 // Edit the parameters
-                model.editParameters(context, status, away, callTimer, temperature, date, time);
+                model.editParameters(context, status, away, callTimer, temperature, date, time, minLightsTime, maxLightsTime);
                 // Update temperature behaviour of the rooms
                 if (status) {
                     TemperatureHelper.adjustTemperature(context);
@@ -422,6 +439,52 @@ public class EditDashboardController extends AppCompatActivity {
                         timeNow.getHour(),
                         timeNow.getMinute(),
                         false
+                );
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void setupMinLightsTimePicker() {
+        minLightsTimeField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalTime minTimeNow = model.getMinLightsTime();
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                    context,
+                    new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            model.setMinLightsTime(hourOfDay, minute);
+                            fillKnownValues();
+                        }
+                    },
+                    minTimeNow.getHour(),
+                    minTimeNow.getMinute(),
+                    false
+                );
+                timePickerDialog.show();
+            }
+        });
+    }
+
+    private void setupMaxLightsTimePicker() {
+        maxLightsTimeField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalTime maxTimeNow = model.getMaxLightsTime();
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                    context,
+                    new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            model.setMaxLightsTime(hourOfDay, minute);
+                            fillKnownValues();
+                        }
+                    },
+                    maxTimeNow.getHour(),
+                    maxTimeNow.getMinute(),
+                    false
                 );
                 timePickerDialog.show();
             }
