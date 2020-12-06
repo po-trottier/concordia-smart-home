@@ -6,7 +6,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +13,6 @@
         android:layout_marginBottom="8dp"
         android:text="@string/seasons_title"
         android:textSize="24sp" />
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,24 +31,39 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:text="@string/winter_start"/>
-            <Spinner
-                android:id="@+id/winter_start_spinner"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/field_height"
-                android:background="@drawable/rounded_text_field_background"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/winter_end"/>
-            <Spinner
-                android:id="@+id/winter_end_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/field_height"
-                android:background="@drawable/rounded_text_field_background"/>
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/winter_start_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/winter_to_text"/>
+                <TextView
+                    android:id="@+id/winter_to_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textSize="16sp"
+                    android:text="@string/edit_text_lights_on_to"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/winter_start_spinner"
+                    app:layout_constraintEnd_toStartOf="@id/winter_end_spinner"/>
+                <Spinner
+                    android:id="@+id/winter_end_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/winter_to_text"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,24 +72,39 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:text="@string/summer_start" />
-            <Spinner
-                android:id="@+id/summer_start_spinner"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/field_height"
-                android:background="@drawable/rounded_text_field_background"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/summer_end"/>
-            <Spinner
-                android:id="@+id/summer_end_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/field_height"
-                android:background="@drawable/rounded_text_field_background"/>
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/summer_start_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/summer_to_text"/>
+                <TextView
+                    android:id="@+id/summer_to_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:textSize="16sp"
+                    android:text="@string/edit_text_lights_on_to"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/summer_start_spinner"
+                    app:layout_constraintEnd_toStartOf="@id/summer_end_spinner"/>
+                <Spinner
+                    android:id="@+id/summer_end_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/field_height"
+                    android:background="@drawable/rounded_text_field_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/summer_to_text"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

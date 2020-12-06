@@ -217,6 +217,10 @@
     <string name="authorities_title">Authorities Contacted</string>
     <string name="authorities_text">The authorities have been contacted.</string>
 
+    <string name="seasons_title">Select Seasons Range</string>
+    <string name="winter_start">Winter</string>
+    <string name="summer_start">Summer</string>
+
     <string-array name="permissions_spinner">
         <item>Parent</item>
         <item>Child</item>

@@ -492,10 +492,14 @@ public class EditDashboardController extends AppCompatActivity {
     }
 
     private void setupSeasonsSpinner() {
+        String[] months = getResources().getStringArray(R.array.months_spinner);
+        for (int i = 0; i < months.length; i++) {
+            months[i] = months[i].replaceFirst("\\d+ - ", "");
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
             context,
             R.layout.support_simple_spinner_dropdown_item,
-            getResources().getStringArray(R.array.months_spinner)
+            months
         );
         winterStartSpinner.setAdapter(adapter);
         winterEndSpinner.setAdapter(adapter);

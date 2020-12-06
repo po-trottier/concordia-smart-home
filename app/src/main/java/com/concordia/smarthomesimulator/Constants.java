@@ -58,8 +58,8 @@ public class Constants {
     public static final boolean DEFAULT_STATUS = false;
     public static final int DEFAULT_WINTER_START = 11;
     public static final int DEFAULT_WINTER_END = 3;
-    public static final int DEFAULT_SUMMER_START = 4;
-    public static final int DEFAULT_SUMMER_END = 7;
+    public static final int DEFAULT_SUMMER_START = 5;
+    public static final int DEFAULT_SUMMER_END = 8;
 
     // Related to Smart Heating
     public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED = 0.25;
