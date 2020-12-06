@@ -1,4 +1,4 @@
-package com.concordia.smarthomesimulator.views.customRoomAlertView;
+package com.concordia.smarthomesimulator.views.alerts;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -66,10 +66,10 @@ public class CustomRoomAlertView extends LinearLayout {
         TextView targetTemp = findViewById(R.id.alert_edit_room_target);
         TextView overrideTemp = findViewById(R.id.alert_edit_room_override);
 
-        actualTemp.setText(room.getActualTemperature() + context.getString(R.string.generic_degrees_celsius));
-        targetTemp.setText(room.getDesiredTemperature() + context.getString(R.string.generic_degrees_celsius));
+        actualTemp.setText(Math.floor(room.getActualTemperature() * 100) / 100 + context.getString(R.string.generic_degrees_celsius));
+        targetTemp.setText(Math.floor(room.getDesiredTemperature() * 100) / 100 + context.getString(R.string.generic_degrees_celsius));
 
-        int color = room.isTemperatureOverridden() ? R.color.accent : R.color.charcoal;
+        int color = room.isTemperatureOverridden() ? R.color.primary : R.color.charcoal;
         overrideTemp.setText(Boolean.toString(room.isTemperatureOverridden()).toUpperCase());
         overrideTemp.setTextColor(context.getColor(color));
     }
@@ -86,7 +86,7 @@ public class CustomRoomAlertView extends LinearLayout {
                 color = R.color.danger;
                 break;
             case PAUSED:
-                color = R.color.accent;
+                color = R.color.accentDark;
                 break;
         }
 

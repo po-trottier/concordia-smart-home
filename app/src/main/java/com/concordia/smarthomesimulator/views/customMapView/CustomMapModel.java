@@ -17,12 +17,16 @@ import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
-import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
-import com.concordia.smarthomesimulator.views.customRoomAlertView.CustomRoomAlertView;
+import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
+import com.concordia.smarthomesimulator.views.alerts.CustomDeviceAlertView;
+import com.concordia.smarthomesimulator.views.alerts.CustomEditRoomAlertView;
+import com.concordia.smarthomesimulator.views.alerts.CustomRoomAlertView;
 
 import java.util.ArrayList;
 
@@ -115,14 +119,11 @@ public class CustomMapModel {
      * @return whether a shape was found or not
      */
     public boolean queryClick(Context context, MotionEvent event, int padding) {
-        if (queryRooms(context, event, rooms, padding) ||
-            queryDevices(context, event, windows, padding) ||
-            queryDevices(context, event, doors, padding) ||
-            queryDevices(context, event, lights, padding) ||
-            queryInhabitants(context, event, inhabitants, padding)) {
-            return true;
-        }
-        return false;
+        return queryRooms(context, event, rooms, padding) ||
+               queryDevices(context, event, windows, padding) ||
+               queryDevices(context, event, doors, padding) ||
+               queryDevices(context, event, lights, padding) ||
+               queryInhabitants(context, event, inhabitants, padding);
     }
 
     /**
@@ -439,7 +440,7 @@ public class CustomMapModel {
     //region Show Dialog Methods
 
     private void showTemperatureDialog(Context context, Room room) {
-        final CustomRoomAlertView customView = (CustomRoomAlertView) LayoutInflater.from(context).inflate(R.layout.alert_edit_room, null, false);
+        final CustomRoomAlertView customView = (CustomRoomAlertView) LayoutInflater.from(context).inflate(R.layout.alert_show_room, null, false);
         customView.setRoomInformation(room);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(context)
@@ -460,16 +461,48 @@ public class CustomMapModel {
     }
 
     private void showTemperatureEditDialog(Context context, Room room) {
+        HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
         // Make sure we don't edit the original device
         Room deepCopy = (Room) room.clone();
-
+        // Get the zone temperature
+        HeatingZone zone = layout.getHeatingZones().stream()
+                .filter(z -> z.getRoom(room.getName()) != null)
+                .findFirst()
+                .orElse(null);
+        if (zone == null) {
+            Toast.makeText(context, context.getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Create the custom view
+        CustomEditRoomAlertView customView = (CustomEditRoomAlertView) LayoutInflater.from(context).inflate(R.layout.alert_edit_room, null, false);
+        customView.setRoomInformation(deepCopy, zone.getDesiredTemperature());
+        // Pop the dialog
         final AlertDialog dialog = new AlertDialog.Builder(context)
             .setTitle(context.getString(R.string.alert_map_room_edit_title) + " " + room.getName())
+            .setView(customView)
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(R.string.generic_save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // TODO: Save the modified room
+                    Room newRoom = customView.getRoomInformation();
+                    // Find the current zone
+                    HeatingZone zone = layout.getHeatingZones().stream()
+                        .filter(z -> z.getRoom(room.getName()) != null)
+                        .findFirst()
+                        .orElse(null);
+                    // Update the local layout
+                    layout.removeRoom(room.getName());
+                    layout.addRoom(newRoom);
+                    // Put the room in the right heating zone
+                    if (zone != null) {
+                        layout.getHeatingZones().get(0).removeRoom(newRoom.getName());
+                        layout.getHeatingZone(zone.getName()).addRoom(newRoom);
+                    }
+                    // Update the centralized layout
+                    LayoutsHelper.updateSelectedLayout(context, layout);
+                    saveUpdatedLayout(context, layout);
+                    // Log the action
+                    LogsHelper.add(context, new LogEntry("Map", "Temperature setting changed for " + room.getName(), LogImportance.IMPORTANT));
                 }
             })
             .create();
@@ -578,6 +611,7 @@ public class CustomMapModel {
         doors.clear();
         lights.clear();
         inhabitants.clear();
+        rooms.clear();
 
         // Update the canvas
         CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
