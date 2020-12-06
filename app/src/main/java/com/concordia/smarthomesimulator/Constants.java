@@ -15,6 +15,8 @@ public class Constants {
     public static final String PREFERENCES_KEY_CALL_DELAY = "callTimer";
     public static final String PREFERENCES_KEY_STATUS = "status";
     public static final String PREFERENCES_KEY_TEMPERATURE = "temperature";
+    public static final String PREFERENCES_KEY_SUMMER_TEMPERATURE = "summerTemperature";
+    public static final String PREFERENCES_KEY_WINTER_TEMPERATURE = "winterTemperature";
     public static final String PREFERENCES_KEY_USERNAME = "username";
     public static final String PREFERENCES_KEY_PASSWORD = "password";
     public static final String PREFERENCES_KEY_PERMISSIONS = "permissions";
@@ -63,6 +65,8 @@ public class Constants {
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;
     public static final int DEFAULT_TEMPERATURE = 20;
+    public static final int DEFAULT_SUMMER_TEMPERATURE = 20;
+    public static final int DEFAULT_WINTER_TEMPERATURE = 15;
     public static final int DEFAULT_MAX_TEMPERATURE_ALERT = 35;
     public static final int DEFAULT_MIN_TEMPERATURE_ALERT = 0;
     public static final float DEFAULT_TIME_SCALE = 1f;
