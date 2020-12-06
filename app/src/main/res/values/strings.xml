@@ -164,13 +164,17 @@
     <string name="edit_text_simulation_status">Simulation Status</string>
     <string name="simulation_status_started">Started</string>
     <string name="simulation_status_stopped">Stopped</string>
-    <string name="edit_text_temperature">Outdoors Temperature</string>
+    <string name="edit_text_temperature">Outdoor Temperature</string>
+    <string name="edit_text_max_temperature_alert">Maximum Temperature Alert</string>
+    <string name="edit_text_min_temperature_alert">Minimum Temperature Alert</string>
     <string name="edit_text_lights_on">Turn Lights On Between</string>
     <string name="edit_text_lights_on_to">to</string>
     <string name="edit_text_time">Simulation Time</string>
     <string name="edit_text_date">Simulation Date</string>
     <string name="edit_text_time_scale">Time Speed (Scaling Factor)</string>
     <string name="edit_context_welcome">Context Parameters</string>
+    <string name="edit_context_away">Away Mode</string>
+    <string name="edit_context_misc">Miscellaneous Parameters</string>
 
     <string name="generic_degrees_celsius">°C</string>
     <string name="generic_save">Save</string>
@@ -212,10 +216,20 @@
     <string name="alert_map_inhabitant_text_self">YOU are the selected inhabitant.</string>
 
     <string name="intruder_category">Intruder Alerts</string>
+    <string name="temperature_category">Temperature Alerts</string>
     <string name="intruder_title">Intruder Alert</string>
     <string name="intruder_text">Intruder detected : Contacting authorities %d in minutes</string>
     <string name="authorities_title">Authorities Contacted</string>
     <string name="authorities_text">The authorities have been contacted.</string>
+    <string name="max_temperature_alert_title">Maximum Temperature Alert</string>
+    <string name="max_temperature_alert_text">Temperatures are above user-defined maximum</string>
+    <string name="min_temperature_alert_title">Minimum Temperature Alert</string>
+    <string name="min_temperature_alert_text">Temperatures are below user-defined minimum</string>
+    <string name="in_the_segment_alert_text">in the</string>
+    <string name="in_zone_segment_alert_text">in Zone :</string>
+
+
+
 
     <string name="seasons_title">Select Seasons Range</string>
     <string name="winter_start">Winter</string>

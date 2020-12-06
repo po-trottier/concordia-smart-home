@@ -316,7 +316,7 @@ public class EditDashboardModel extends ViewModel{
     /**
      * Edit parameters.
      *  @param context     the context
-     * @param parametersArgument
+     * @param parametersArgument arguments
      */
     public void editParameters(Context context, ParametersArgument parametersArgument) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
@@ -338,6 +338,8 @@ public class EditDashboardModel extends ViewModel{
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, parametersArgument.getDate().getDayOfMonth());
         editor.putInt(PREFERENCES_KEY_DATETIME_HOUR, parametersArgument.getTime().getHour());
         editor.putInt(PREFERENCES_KEY_DATETIME_MINUTE, parametersArgument.getTime().getMinute());
+        editor.putInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, parametersArgument.getMinAlertTemperature());
+        editor.putInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, parametersArgument.getMaxAlertTemperature());
         editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR, parametersArgument.getMinLightsTime().getHour());
         editor.putInt(PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE, parametersArgument.getMinLightsTime().getMinute());
         editor.putInt(PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR, parametersArgument.getMaxLightsTime().getHour());

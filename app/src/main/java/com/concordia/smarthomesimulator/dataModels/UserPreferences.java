@@ -17,6 +17,10 @@ public class UserPreferences implements Serializable {
     private Permissions permissions;
     private boolean status;
     private int temperature;
+    private int maxTemperatureAlert;
+    private int minTemperatureAlert;
+    private int summerTemperature;
+    private int winterTemperature;
     private int year;
     private int month;
     private int day;
@@ -44,6 +48,8 @@ public class UserPreferences implements Serializable {
         this.password = password;
         this.permissions = permissions;
         this.temperature = DEFAULT_TEMPERATURE;
+        this.maxTemperatureAlert = DEFAULT_MAX_TEMPERATURE_ALERT;
+        this.minTemperatureAlert = DEFAULT_MIN_TEMPERATURE_ALERT;
         this.status = DEFAULT_STATUS;
         this.timeFactor = DEFAULT_TIME_SCALE;
         this.winterStart = DEFAULT_WINTER_START;
@@ -138,6 +144,34 @@ public class UserPreferences implements Serializable {
     public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
+
+    /**
+     * Gets maximum temperature
+     *
+     * @return the highest temperature permitted before alerting user
+     */
+    public int getMaxTemperatureAlert() { return maxTemperatureAlert; }
+
+    /**
+     * Sets the max temperature
+     *
+     * @param maxTemperatureAlert the highest temperature permitted before alerting user
+     */
+    public void setMaxTemperatureAlert(int maxTemperatureAlert) { this.maxTemperatureAlert = maxTemperatureAlert; }
+
+    /**
+     * Gets minimum temperature
+     *
+     * @return the lowest temperature permitted before alerting user
+     */
+    public int getMinTemperatureAlert() { return minTemperatureAlert; }
+
+    /**
+     * Sets the max temperature
+     *
+     * @param minTemperatureAlert the lowest temperature permitted before alerting user
+     */
+    public void setMinTemperatureAlert(int minTemperatureAlert) { this.minTemperatureAlert = minTemperatureAlert; }
 
     /**
      * Is status boolean.
@@ -275,6 +309,8 @@ public class UserPreferences implements Serializable {
         editor.putFloat(PREFERENCES_KEY_TIME_SCALE, timeFactor);
         editor.putInt(PREFERENCES_KEY_PERMISSIONS, permissions.getBitValue());
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, temperature);
+        editor.putInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT,maxTemperatureAlert);
+        editor.putInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT,minTemperatureAlert);
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, year);
         editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, month);
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, day);
@@ -301,6 +337,8 @@ public class UserPreferences implements Serializable {
         password = preferences.getString(PREFERENCES_KEY_PASSWORD,"");
         permissions = Permissions.fromInteger(preferences.getInt(PREFERENCES_KEY_PERMISSIONS,0));
         temperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE);
+        maxTemperatureAlert = preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT);
+        minTemperatureAlert = preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT);
         status = preferences.getBoolean(PREFERENCES_KEY_STATUS, DEFAULT_STATUS);
         layout = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
         timeFactor = preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE);
@@ -336,6 +374,8 @@ public class UserPreferences implements Serializable {
         editor.remove(PREFERENCES_KEY_PASSWORD);
         editor.remove(PREFERENCES_KEY_PERMISSIONS);
         editor.remove(PREFERENCES_KEY_TEMPERATURE);
+        editor.remove(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT);
+        editor.remove(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT);
         editor.remove(PREFERENCES_KEY_STATUS);
         editor.remove(PREFERENCES_KEY_LAYOUT);
         editor.remove(PREFERENCES_KEY_TIME_SCALE);

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,13 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
         return items.size();
     }
 
+
+    //REFACTOR : The original issue with this method was that is was quite unnecessarily long. The
+    // getView method originally had a switch case within its body in order to determine the text
+    // color to be applied to the alert based on its importance. This cause the method to be quite
+    // unnecessarily long. To fix this, the switch case was moved to the body of a new method named
+    // setTextColor which takes a log importance as a parameter and returns the appropriate color
+    // for the alert.
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -60,11 +68,21 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
         TextView dateTimeText = row.findViewById(R.id.log_date_time_text);
         dateTimeText.setText(entry.getDateTime().toString());
 
-        TextView importanceText = row.findViewById(R.id.log_importance_text);
-        importanceText.setText(entry.getImportance().toString());
+        LogImportance entryImportance = entry.getImportance();
 
+        TextView importanceText = row.findViewById(R.id.log_importance_text);
+        importanceText.setText(entryImportance.toString());
+
+        int textColor = setTextColor(entryImportance);
+        mainText.setTextColor(textColor);
+        importanceText.setTextColor(textColor);
+
+        return row;
+    }
+
+    private int setTextColor(LogImportance logImportance){
         int textColor;
-        switch(entry.getImportance()) {
+        switch(logImportance) {
             case CRITICAL:
                 textColor = getContext().getColor(R.color.danger);;
                 break;
@@ -76,10 +94,6 @@ public class ActivityLogsAdapter extends ArrayAdapter<ArrayList<LogEntry>> {
                 textColor = getContext().getColor(R.color.primary);;
                 break;
         }
-
-        mainText.setTextColor(textColor);
-        importanceText.setTextColor(textColor);
-
-        return row;
+        return textColor;
     }
 }

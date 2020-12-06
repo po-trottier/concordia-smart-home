@@ -24,6 +24,8 @@ public class Constants {
     public static final String PREFERENCES_KEY_DATETIME_DAY = "day";
     public static final String PREFERENCES_KEY_DATETIME_HOUR = "hour";
     public static final String PREFERENCES_KEY_DATETIME_MINUTE = "minute";
+    public static final String PREFERENCES_KEY_MAX_TEMPERATURE_ALERT = "maxAlertTemperature";
+    public static final String PREFERENCES_KEY_MIN_TEMPERATURE_ALERT = "minAlertTemperature";
     public static final String PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR = "minLightsHour";
     public static final String PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE = "minLightsMinute";
     public static final String PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR = "maxLightsHour";
@@ -61,6 +63,8 @@ public class Constants {
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;
     public static final int DEFAULT_TEMPERATURE = 20;
+    public static final int DEFAULT_MAX_TEMPERATURE_ALERT = 35;
+    public static final int DEFAULT_MIN_TEMPERATURE_ALERT = 0;
     public static final float DEFAULT_TIME_SCALE = 1f;
     public static final boolean DEFAULT_STATUS = false;
     public static final int DEFAULT_WINTER_START = 11;
@@ -98,5 +102,6 @@ public class Constants {
     public static final double MINIMUM_TEMPERATURE = -100;
 
     // Notifications
-    public final static String NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d943f6";
+    public final static String INTRUDER_NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d943f6";
+    public final static String TEMPERATURE_NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d94301";
 }

@@ -63,7 +63,7 @@ public class LayoutsHelper {
             HouseLayout selected = layouts.stream().filter(layout -> layout.getName().equals(selection)).findFirst().orElse(null);
             LayoutSingleton.getInstance().setLayout(selected);
         }
-        return LayoutSingleton.getInstance().getLayout();
+        return (HouseLayout) LayoutSingleton.getInstance().getLayout().clone();
     }
 
     /**

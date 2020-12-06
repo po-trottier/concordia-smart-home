@@ -22,7 +22,6 @@ import com.concordia.smarthomesimulator.interfaces.OnIntruderDetectedListener;
 import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 import com.concordia.smarthomesimulator.views.customDateTimeView.CustomDateTimeView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import static com.concordia.smarthomesimulator.Constants.*;
 
 /**
@@ -99,9 +98,9 @@ public class DashboardController extends Fragment {
     }
 
     private void setupNotifications() {
-        NotificationsHelper.createNotificationChannel(context);
-
-        LayoutSingleton.getInstance().setOnIntruderDetectedListener(new OnIntruderDetectedListener() {
+        NotificationsHelper.createNotificationChannels(context);
+        LayoutSingleton layoutInstance = LayoutSingleton.getInstance();
+        layoutInstance.setOnIntruderDetectedListener(new OnIntruderDetectedListener() {
             @Override
             public void onIntruderDetected() {
                 boolean away = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false);
