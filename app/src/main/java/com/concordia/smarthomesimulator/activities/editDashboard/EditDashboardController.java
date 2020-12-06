@@ -207,8 +207,6 @@ public class EditDashboardController extends AppCompatActivity {
                 int summerEnd = extractMonth(summerEndSpinner.getSelectedItem().toString());
                 // Edit the parameters
                 model.editParameters(context, status, away, callTimer, temperature, date, time, winterStart, winterEnd, summerStart, summerEnd);
-
-                model.editParameters(context, status, away, callTimer, temperature, date, time);
                 // Update temperature behaviour of the rooms
                 if (status) {
                     TemperatureHelper.adjustTemperature(context);
