@@ -49,7 +49,11 @@ public class TemperatureHelper {
             String zoneName;
             @Override
             public void run() {
-
+                // Make sure the scale is still valid
+                long newPeriod = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
+                if (newPeriod != period) {
+                    adjustTemperature(context);
+                }
                 HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
                 if (layout == null) return;
                 for (Room room: layout.getRooms()){
@@ -68,7 +72,7 @@ public class TemperatureHelper {
 
                     // Because of unclear requirements, OFF and PAUSED really just mean the same thing since the
                     // HVAC system turns itself on.
-                    switch (currentVentStatus){
+                    switch (currentVentStatus) {
                         case OFF:
                         case PAUSED:
                             if (Math.abs(actualTemperature - desiredTemperature) > MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED) {
@@ -131,7 +135,9 @@ public class TemperatureHelper {
                 }
                 LayoutsHelper.updateSelectedLayout(context, layout);
                 CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
-                if (view != null) view.updateView();
+                if (view != null) {
+                    view.updateView();
+                }
             }
         }, 0, period);
 
