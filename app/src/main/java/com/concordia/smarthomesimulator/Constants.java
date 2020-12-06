@@ -15,8 +15,6 @@ public class Constants {
     public static final String PREFERENCES_KEY_CALL_DELAY = "callTimer";
     public static final String PREFERENCES_KEY_STATUS = "status";
     public static final String PREFERENCES_KEY_TEMPERATURE = "temperature";
-    public static final String PREFERENCES_KEY_MAX_TEMPERATURE_ALERT = "maxAlertTemperature";
-    public static final String PREFERENCES_KEY_MIN_TEMPERATURE_ALERT = "minAlertTemperature";
     public static final String PREFERENCES_KEY_USERNAME = "username";
     public static final String PREFERENCES_KEY_PASSWORD = "password";
     public static final String PREFERENCES_KEY_PERMISSIONS = "permissions";
@@ -26,6 +24,8 @@ public class Constants {
     public static final String PREFERENCES_KEY_DATETIME_DAY = "day";
     public static final String PREFERENCES_KEY_DATETIME_HOUR = "hour";
     public static final String PREFERENCES_KEY_DATETIME_MINUTE = "minute";
+    public static final String PREFERENCES_KEY_MAX_TEMPERATURE_ALERT = "maxAlertTemperature";
+    public static final String PREFERENCES_KEY_MIN_TEMPERATURE_ALERT = "minAlertTemperature";
     public static final String PREFERENCES_KEY_MIN_LIGHTS_TIME_HOUR = "minLightsHour";
     public static final String PREFERENCES_KEY_MIN_LIGHTS_TIME_MINUTE = "minLightsMinute";
     public static final String PREFERENCES_KEY_MAX_LIGHTS_TIME_HOUR = "maxLightsHour";

@@ -213,6 +213,8 @@ public class EditDashboardController extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 parameters.setTemperature(temperature);
+                parameters.setMinAlertTemperature(Math.min(minAlertTemperature, maxAlertTemperature));
+                parameters.setMaxAlertTemperature(Math.max(minAlertTemperature, maxAlertTemperature));
                 parameters.setCallTimer(callTimer);
                 // Get the times and dates
                 LocalDate date =LocalDate.now();

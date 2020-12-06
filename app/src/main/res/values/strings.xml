@@ -173,6 +173,8 @@
     <string name="edit_text_date">Simulation Date</string>
     <string name="edit_text_time_scale">Time Speed (Scaling Factor)</string>
     <string name="edit_context_welcome">Context Parameters</string>
+    <string name="edit_context_away">Away Mode</string>
+    <string name="edit_context_misc">Miscellaneous Parameters</string>
 
     <string name="generic_degrees_celsius">°C</string>
     <string name="generic_save">Save</string>

@@ -17,6 +17,8 @@ public class ParametersArgument {
     private int winterEnd;
     private int summerStart;
     private int summerEnd;
+    private int minAlertTemperature;
+    private int maxAlertTemperature;
     private LocalTime minLightsTime;
     private LocalTime maxLightsTime;
 
@@ -113,6 +115,24 @@ public class ParametersArgument {
      */
     public int getSummerEnd() {
         return summerEnd;
+    }
+
+    /**
+     * Gets min alert temperature.
+     *
+     * @return the min alert temperature
+     */
+    public int getMinAlertTemperature() {
+        return minAlertTemperature;
+    }
+
+    /**
+     * Gets max alert temperature.
+     *
+     * @return the max alert temperature
+     */
+    public int getMaxAlertTemperature() {
+        return maxAlertTemperature;
     }
 
     /**
@@ -221,6 +241,24 @@ public class ParametersArgument {
      */
     public void setSummerEnd(int summerEnd) {
         this.summerEnd = summerEnd;
+    }
+
+    /**
+     * Sets min alert temperature.
+     *
+     * @param minAlertTemperature the min alert temperature
+     */
+    public void setMinAlertTemperature(int minAlertTemperature) {
+        this.minAlertTemperature = minAlertTemperature;
+    }
+
+    /**
+     * Sets max alert temperature.
+     *
+     * @param maxAlertTemperature the max alert temperature
+     */
+    public void setMaxAlertTemperature(int maxAlertTemperature) {
+        this.maxAlertTemperature = maxAlertTemperature;
     }
 
     /**
