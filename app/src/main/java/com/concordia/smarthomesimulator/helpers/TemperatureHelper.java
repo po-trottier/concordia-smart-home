@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.concordia.smarthomesimulator.R;
+import com.concordia.smarthomesimulator.dataModels.HeatingZone;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.Room;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.VentilationStatus;
+import com.concordia.smarthomesimulator.interfaces.OnIndoorTemperatureChangeListener;
 import com.concordia.smarthomesimulator.views.customMapView.CustomMapView;
 
 import java.util.Timer;
@@ -30,7 +32,9 @@ public class TemperatureHelper {
     public static void adjustTemperature(Context context){
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         double outsideTemperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE);
-
+        int maxTemperatureAlert = preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT);
+        int minTemperatureAlert = preferences.getInt(PREFERENCES_KEY_MIN_TEMPERATURE_ALERT, DEFAULT_MIN_TEMPERATURE_ALERT);
+        String connectorString = context.getString(R.string.in_the_segment_alert_text);
         // Create temperatureTimer so that the temperature of each room changes based on their actual temperature, and the desired temperature
         long period = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
         if (temperatureTimer != null) {
@@ -39,8 +43,13 @@ public class TemperatureHelper {
         }
         temperatureTimer = new Timer();
         temperatureTimer.schedule(new TimerTask() {
+            String temperatureAlertTitle;
+            String temperatureAlertText;
+            String roomName;
+            String zoneName;
             @Override
             public void run() {
+
                 HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
                 if (layout == null) return;
                 for (Room room: layout.getRooms()){
@@ -86,6 +95,40 @@ public class TemperatureHelper {
                             }
                     }
                 }
+                for (HeatingZone heatingZone: LayoutsHelper.getSelectedLayout(context).getHeatingZones()) {
+                     zoneName = heatingZone.getName();
+
+                    for (Room room : heatingZone.getRooms()) {
+                        if (layout.getRoom(room.getName()).getActualTemperature() > maxTemperatureAlert) {
+                            temperatureAlertTitle = context.getString(R.string.max_temperature_alert_title);
+                            temperatureAlertText = context.getString(R.string.max_temperature_alert_text);
+                            roomName = room.getName();
+
+                            String alertTitle = formatLogString(temperatureAlertTitle,connectorString,roomName);
+                            LogsHelper.add(context, new LogEntry("Temperature Alert", alertTitle, LogImportance.CRITICAL));
+
+                            if (!heatingZone.isExtremeTempDetected()) {
+                                NotificationsHelper.sendTemperatureAlertNotification(context, temperatureAlertTitle, temperatureAlertText, zoneName);
+                                heatingZone.setExtremeTempDetected(true);
+                            }
+                        }
+                        else if(layout.getRoom(room.getName()).getActualTemperature() < minTemperatureAlert){
+                            temperatureAlertTitle = context.getString(R.string.min_temperature_alert_title);
+                            temperatureAlertText = context.getString(R.string.min_temperature_alert_text);
+                            roomName = room.getName();
+
+                            String alertTitle = formatLogString(temperatureAlertTitle,connectorString,roomName);
+                            if(!heatingZone.isExtremeTempDetected()){
+                                LogsHelper.add(context, new LogEntry("Temperature Alert", alertTitle, LogImportance.CRITICAL));
+                                NotificationsHelper.sendTemperatureAlertNotification(context,temperatureAlertTitle,temperatureAlertText, zoneName);
+                                heatingZone.setExtremeTempDetected(true);
+                            }
+                        }
+                        else{
+                            heatingZone.setExtremeTempDetected(false);
+                        }
+                    }
+                }
                 LayoutsHelper.updateSelectedLayout(context, layout);
                 CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
                 if (view != null) view.updateView();
@@ -107,5 +150,8 @@ public class TemperatureHelper {
             }
         }, 0, TEMPERATURE_SAVE_INTERVAL);
 
+    }
+    private static String formatLogString(String alertString, String connectorString, String roomName){
+        return alertString + " " +  connectorString + " " + roomName;
     }
 }
