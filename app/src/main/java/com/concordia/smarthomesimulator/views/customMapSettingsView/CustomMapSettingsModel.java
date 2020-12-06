@@ -204,11 +204,18 @@ public class CustomMapSettingsModel {
         view.updateView();
     }
 
-    public void addHeatingZone(Context context, String name) {
+    /**
+     * Add heating zone boolean.
+     *
+     * @param context the context
+     * @param name    the name
+     * @return the boolean
+     */
+    public boolean addHeatingZone(Context context, String name) {
         // Make sure the zone is unique
         if (layout.getHeatingZones().stream().anyMatch(i -> i.getName().equalsIgnoreCase(name.trim()))) {
             Toast.makeText(context, context.getString(R.string.add_zone_unique), Toast.LENGTH_LONG).show();
-            return;
+            return false;
         }
         // Add the zone
         HeatingZone zone = new HeatingZone(name.trim());
@@ -216,6 +223,8 @@ public class CustomMapSettingsModel {
         // Update the UI
         CustomMapSettingsView view = ((Activity) context).findViewById(R.id.edit_map_settings);
         view.updateView();
+        // Added successfully
+        return true;
     }
 
     //endregion
@@ -302,8 +311,9 @@ public class CustomMapSettingsModel {
         Room room = null;
         // Find the room the inhabitant is in
         for (Room r : layout.getRooms()) {
-            if (r.getInhabitants().contains(inhabitant)) {
+            if (r.getInhabitants().stream().anyMatch(i -> i.getName().equalsIgnoreCase(inhabitant.getName()))) {
                 room = r;
+                break;
             }
         }
         // Crash check
@@ -315,6 +325,7 @@ public class CustomMapSettingsModel {
         // Replace the room with the new one
         layout.removeRoom(room.getName());
         layout.addRoom(room);
+        selectedRoom = room;
     }
 
     private View setupCustomInhabitantView(Context context) {

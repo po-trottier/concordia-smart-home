@@ -290,11 +290,20 @@ public class CustomMapView extends View {
         float tempVertical = nameVertical - ((INHABITANT_SHIFT + 0.15f) * measurements.getScaleY());
         // Write the name of the room
         canvas.drawText(room.getName(), horizontal, nameVertical, textPaint);
-        // Draw temperature icon
+        // Add an HVAC status icon
+        int size = (int) (0.65 * measurements.getScaleY());
         Bitmap bitmap = model.convertDrawableToBitmap(model.getVentilationDrawable(context, room));
-        int size = (int) (0.5 * measurements.getScaleX());
         Bitmap scaled = Bitmap.createScaledBitmap(bitmap, size, size, false);
-        canvas.drawBitmap(scaled, horizontal - ((float) size / 2), tempVertical - ((float)size * 0.8f), temperaturePaint);
+        // Determine coordinates
+        float left = horizontal - ((float) size / 2);
+        float top = tempVertical - ((float)size * 0.8f);
+        // Collect the new shape if it's not outdoors
+        if (!room.getName().equals(DEFAULT_NAME_OUTDOORS)) {
+            RectF shape = new RectF(left, top, left + size, top + size);
+            model.addRoom(shape, room);
+            // Draw the scaled bitmap
+            canvas.drawBitmap(scaled, left, top, temperaturePaint);
+        }
     }
 
     private void drawInhabitant(IInhabitant inhabitant, float x, float y) {

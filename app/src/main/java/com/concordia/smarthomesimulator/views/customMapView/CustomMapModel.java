@@ -17,11 +17,16 @@ import androidx.appcompat.app.AlertDialog;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
+import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
+import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
-import com.concordia.smarthomesimulator.views.customDeviceAlertView.CustomDeviceAlertView;
+import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
+import com.concordia.smarthomesimulator.views.alerts.CustomDeviceAlertView;
+import com.concordia.smarthomesimulator.views.alerts.CustomEditRoomAlertView;
+import com.concordia.smarthomesimulator.views.alerts.CustomRoomAlertView;
 
 import java.util.ArrayList;
 
@@ -43,6 +48,7 @@ public class CustomMapModel {
 
     //region Properties
 
+    private final ArrayList<MapRoom> rooms;
     private final ArrayList<MapDevice> windows;
     private final ArrayList<MapDevice> doors;
     private final ArrayList<MapDevice> lights;
@@ -68,6 +74,7 @@ public class CustomMapModel {
      * Instantiates a new Custom map model.
      */
     public CustomMapModel() {
+        this.rooms = new ArrayList<>();
         this.windows = new ArrayList<>();
         this.doors = new ArrayList<>();
         this.lights = new ArrayList<>();
@@ -112,19 +119,11 @@ public class CustomMapModel {
      * @return whether a shape was found or not
      */
     public boolean queryClick(Context context, MotionEvent event, int padding) {
-        if (queryDevices(context, event, windows, padding)) {
-            return true;
-        }
-        if (queryDevices(context, event, doors, padding)) {
-            return true;
-        }
-        if (queryDevices(context, event, lights, padding)) {
-            return true;
-        }
-        if (queryInhabitants(context, event, inhabitants, padding)) {
-            return true;
-        }
-        return false;
+        return queryRooms(context, event, rooms, padding) ||
+               queryDevices(context, event, windows, padding) ||
+               queryDevices(context, event, doors, padding) ||
+               queryDevices(context, event, lights, padding) ||
+               queryInhabitants(context, event, inhabitants, padding);
     }
 
     /**
@@ -272,6 +271,10 @@ public class CustomMapModel {
         return new float[] {left, top, right, bottom, midX, midY};
     }
 
+    public void addRoom(RectF shape, Room room) {
+        this.rooms.add(new MapRoom(shape, room));
+    }
+
     /**
      * Add a window to the list of know drawn windows.
      *
@@ -376,6 +379,23 @@ public class CustomMapModel {
 
     //region Click Query Methods
 
+    private boolean queryRooms(Context context, MotionEvent event, ArrayList<MapRoom> rooms, int padding) {
+        // Shift the touch event do match the translation applied to the canvas
+        int x = (int) event.getX() - padding;
+        int y = (int) event.getY() - padding;
+        // See if any of the devices is located on the touch area
+        for (MapRoom room : rooms) {
+            if (room.getShape().contains(x, y)) {
+                //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    showTemperatureDialog(context, room.getRoom());
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean queryDevices(Context context, MotionEvent event, ArrayList<MapDevice> devices, int padding) {
         // Shift the touch event do match the translation applied to the canvas
         int x = (int) event.getX() - padding;
@@ -418,6 +438,76 @@ public class CustomMapModel {
     //endregion
 
     //region Show Dialog Methods
+
+    private void showTemperatureDialog(Context context, Room room) {
+        final CustomRoomAlertView customView = (CustomRoomAlertView) LayoutInflater.from(context).inflate(R.layout.alert_show_room, null, false);
+        customView.setRoomInformation(room);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context)
+            .setTitle(context.getString(R.string.alert_map_room_title))
+            .setView(customView)
+            .setPositiveButton(android.R.string.ok, null);
+        if (UserbaseHelper.verifyPermissions(Action.MODIFY_TEMPERATURE, context)) {
+            // If user has permissions to modify temp, then show the modify button
+            builder.setNeutralButton(R.string.generic_modify, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    showTemperatureEditDialog(context, room);
+                }
+            });
+        }
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showTemperatureEditDialog(Context context, Room room) {
+        HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+        // Make sure we don't edit the original device
+        Room deepCopy = (Room) room.clone();
+        // Get the zone temperature
+        HeatingZone zone = layout.getHeatingZones().stream()
+                .filter(z -> z.getRoom(room.getName()) != null)
+                .findFirst()
+                .orElse(null);
+        if (zone == null) {
+            Toast.makeText(context, context.getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Create the custom view
+        CustomEditRoomAlertView customView = (CustomEditRoomAlertView) LayoutInflater.from(context).inflate(R.layout.alert_edit_room, null, false);
+        customView.setRoomInformation(deepCopy, zone.getDesiredTemperature());
+        // Pop the dialog
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+            .setTitle(context.getString(R.string.alert_map_room_edit_title) + " " + room.getName())
+            .setView(customView)
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(R.string.generic_save, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Room newRoom = customView.getRoomInformation();
+                    // Find the current zone
+                    HeatingZone zone = layout.getHeatingZones().stream()
+                        .filter(z -> z.getRoom(room.getName()) != null)
+                        .findFirst()
+                        .orElse(null);
+                    // Update the local layout
+                    layout.removeRoom(room.getName());
+                    layout.addRoom(newRoom);
+                    // Put the room in the right heating zone
+                    if (zone != null) {
+                        layout.getHeatingZones().get(0).removeRoom(newRoom.getName());
+                        layout.getHeatingZone(zone.getName()).addRoom(newRoom);
+                    }
+                    // Update the centralized layout
+                    LayoutsHelper.updateSelectedLayout(context, layout);
+                    saveUpdatedLayout(context, layout);
+                    // Log the action
+                    LogsHelper.add(context, new LogEntry("Map", "Temperature setting changed for " + room.getName(), LogImportance.IMPORTANT));
+                }
+            })
+            .create();
+        dialog.show();
+    }
 
     private void showDeviceDialog(Context context, IDevice device) {
         // Make sure we don't edit the original device
@@ -481,7 +571,7 @@ public class CustomMapModel {
             .setTitle(context.getString(R.string.title_alert_save_layout))
             .setMessage(context.getString(R.string.text_alert_save_layout_default))
             .setView(customView)
-            .setNegativeButton(android.R.string.no, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(context.getString(R.string.generic_save), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -521,6 +611,7 @@ public class CustomMapModel {
         doors.clear();
         lights.clear();
         inhabitants.clear();
+        rooms.clear();
 
         // Update the canvas
         CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);

@@ -88,6 +88,7 @@
     <string name="room_coordinates_edit_map">Coordinates:</string>
     <string name="room_default_edit_map">(Default)</string>
     <string name="inhabitant_you_edit_map">(You)</string>
+    <string name="room_override_text">Overridden</string>
 
     <string name="add_room_edit_map">Add a Room</string>
     <string name="add_device_edit_map">Add a Device</string>
@@ -176,6 +177,7 @@
     <string name="generic_open">Open</string>
     <string name="generic_add">Add</string>
     <string name="generic_move">Move</string>
+    <string name="generic_modify">Modify</string>
     <string name="generic_remove">Remove</string>
     <string name="generic_error">Error</string>
     <string name="generic_minutes">minutes</string>
@@ -198,7 +200,15 @@
     <string name="summer_start">Summer start</string>
     <string name="summer_end">Summer end</string>
 
-    <string name="alert_map_device_title">Modifying a </string>
+    <string name="alert_map_room_title">Inspecting the room</string>
+    <string name="alert_map_room_actual">Actual</string>
+    <string name="alert_map_room_target">Target</string>
+    <string name="alert_map_room_override">Overriding zone target:</string>
+    <string name="alert_map_room_ventilation">HVAC status:</string>
+    <string name="alert_map_room_edit_title">Modifying the</string>
+    <string name="alert_map_room_edit_target">Target Temperature</string>
+    <string name="alert_map_device_title">Modifying a</string>
+  
     <string name="alert_map_device_status">Current Status:</string>
     <string name="alert_map_device_lock_status">Lock Status:</string>
     <string name="alert_map_device_auto_lock_status">Auto-Lock Status:</string>

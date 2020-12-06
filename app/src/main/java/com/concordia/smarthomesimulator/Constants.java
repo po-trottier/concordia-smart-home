@@ -37,6 +37,7 @@ public class Constants {
     public static final String PREFERENCES_KEY_ACTION_CHANGE_PERMISSIONS_CONFIG = "Edit_Permissions_Configuration";
     public static final String PREFERENCES_KEY_ACTION_INTERACT_DOOR_LOCK = "Lock/Unlock_Doors";
     public static final String PREFERENCES_KEY_ACTION_MODIFY_USERBASE = "Modify_Userbase";
+    public static final String PREFERENCES_KEY_ACTION_MODIFY_TEMPERATURE = "Modify_Temperature";
 
     // Default Minimum User Type for Permissions
     public static final Permissions DEFAULT_MIN_TO_INTERACT_ANY_WINDOW = Permissions.PARENT;
@@ -48,6 +49,7 @@ public class Constants {
     public static final Permissions DEFAULT_MIN_TO_CHANGE_PERMISSIONS_CONFIG = Permissions.PARENT;
     public static final Permissions DEFAULT_MIN_TO_INTERACT_DOOR_LOCK = Permissions.PARENT;
     public static final Permissions DEFAULT_MIN_TO_MODIFY_USERBASE = Permissions.PARENT;
+    public static final Permissions DEFAULT_MIN_TO_MODIFY_TEMPERATURE = Permissions.PARENT;
 
     // Default Simulation Context Values
     public static final int DEFAULT_CALL_DELAY = 5;
@@ -58,6 +60,14 @@ public class Constants {
     public static final int DEFAULT_WINTER_END = 3;
     public static final int DEFAULT_SUMMER_START = 4;
     public static final int DEFAULT_SUMMER_END = 7;
+
+    // Related to Smart Heating
+    public static final int INITIAL_ROOM_TEMPERATURE = 999;
+    public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_PAUSED = 0.25;
+    public static final double MAX_TEMPERATURE_DIFFERENCE_WHEN_OFF = 1;
+    public static final double HVAC_TEMPERATURE_CHANGE = 0.1;
+    public static final double OUTSIDE_TEMPERATURE_CHANGE = 0.05;
+    public static final long TEMPERATURE_SAVE_INTERVAL = 5000;
 
     // Default House Layout Values
     public static final String DEFAULT_NAME_OUTDOORS = "Backyard";
