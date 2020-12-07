@@ -3,10 +3,7 @@ package com.concordia.smarthomesimulator.views.alerts;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.Nullable;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.Door;
@@ -14,6 +11,7 @@ import com.concordia.smarthomesimulator.dataModels.Light;
 import com.concordia.smarthomesimulator.dataModels.Window;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.DeviceType;
+import com.concordia.smarthomesimulator.exceptions.PermissionNotFoundException;
 import com.concordia.smarthomesimulator.factories.DeviceFactory;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
@@ -228,8 +226,12 @@ public class CustomDeviceAlertView extends LinearLayout {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 switch (device.getDeviceType()) {
                     case DOOR:
-                        if (UserbaseHelper.verifyPermissions(Action.INTERACT_DOOR_LOCK, context)) {
-                            ((Door) device).setIsLocked(isChecked);
+                        try {
+                            if (UserbaseHelper.verifyPermissions(Action.INTERACT_DOOR_LOCK, context)) {
+                                ((Door) device).setIsLocked(isChecked);
+                            }
+                        } catch (PermissionNotFoundException ignore) {
+                            Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case WINDOW:

@@ -61,7 +61,7 @@ public class CustomMapSettingsModel {
      * @param layout the layout
      */
     public void setLayout(HouseLayout layout) {
-        this.layout = (HouseLayout) layout.clone();
+        this.layout = layout;
         if (layout.getRooms().size() > 0) {
             selectedRoom = getOrderedRooms().get(0);
         }
@@ -73,7 +73,7 @@ public class CustomMapSettingsModel {
      * @param context the context
      */
     public void updateLayout(Context context) {
-        layout = (HouseLayout) LayoutsHelper.getSelectedLayout(context).clone();
+        layout = LayoutsHelper.getSelectedLayout(context);
         if (layout.getRooms().size() > 0) {
             selectedRoom = getOrderedRooms().get(0);
         }

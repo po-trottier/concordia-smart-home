@@ -8,6 +8,7 @@ import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.exceptions.PermissionNotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public final class UserbaseHelper {
         return null;
     }
 
-    public static boolean verifyPermissions(Action action, Context context){
+    public static boolean verifyPermissions(Action action, Context context) throws PermissionNotFoundException {
         // Default log message
         String description = action == null ? "Unknown" : action.getDescription();
         // Get the preferences
@@ -80,8 +81,7 @@ public final class UserbaseHelper {
         int minPermissionsForAction = preferences.getInt(description,0);
         // Something went wrong
         if (loggedUserPermissions == 0 || minPermissionsForAction == 0){
-            Toast.makeText(context, context.getString(R.string.generic_error_message),Toast.LENGTH_SHORT).show();
-            return false;
+            throw new PermissionNotFoundException();
         }
         // User has required permissions
         if ((loggedUserPermissions & minPermissionsForAction) == minPermissionsForAction){

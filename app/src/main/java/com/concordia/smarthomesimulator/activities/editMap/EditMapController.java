@@ -24,6 +24,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import static com.concordia.smarthomesimulator.Constants.DEMO_LAYOUT_NAME;
+import static com.concordia.smarthomesimulator.Constants.EMPTY_LAYOUT_NAME;
+
 public class EditMapController extends AppCompatActivity {
 
     //region Properties
@@ -219,6 +222,11 @@ public class EditMapController extends AppCompatActivity {
         layoutList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                boolean isDemo = layouts.get(position).getName().equalsIgnoreCase(DEMO_LAYOUT_NAME);
+                boolean isEmpty = layouts.get(position).getName().equalsIgnoreCase(EMPTY_LAYOUT_NAME);
+                if (isDemo || isEmpty) {
+                    return false;
+                }
                 setupDeleteDialog(position, layouts, adapter);
                 return true;
             }
