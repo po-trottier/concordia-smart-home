@@ -206,7 +206,9 @@
     <string name="alert_map_room_override">Overriding zone target:</string>
     <string name="alert_map_room_ventilation">HVAC status:</string>
     <string name="alert_map_room_edit_title">Modifying the</string>
-    <string name="alert_map_room_edit_target">Target Temperature</string>
+    <string name="alert_map_room_edit_target_morning">Target Temperature (Morning)</string>
+    <string name="alert_map_room_edit_target_day">Target Temperature (Afternoon)</string>
+    <string name="alert_map_room_edit_target_night">Target Temperature (Night)</string>
 
     <string name="alert_map_device_title">Modifying a</string>
     <string name="alert_map_device_status">Current Status:</string>
