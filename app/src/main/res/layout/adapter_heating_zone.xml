@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.concordia.smarthomesimulator.views.customHeatingZoneView.CustomHeatingZoneView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -54,4 +54,4 @@
         android:textColor="@color/grey"
         android:text="@string/add_zone_no_room"/>
 
-</com.concordia.smarthomesimulator.views.customHeatingZoneView.CustomHeatingZoneView>
+</LinearLayout>

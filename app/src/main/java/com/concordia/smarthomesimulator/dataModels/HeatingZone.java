@@ -54,11 +54,6 @@ public class HeatingZone implements Serializable {
      */
     public void setDesiredTemperature(double temperature) {
         this.desiredTemp = temperature;
-        for (Room room : rooms) {
-            if (!room.isTemperatureOverridden()) {
-                room.setDesiredTemperature(temperature);
-            }
-        }
     }
 
     /**
