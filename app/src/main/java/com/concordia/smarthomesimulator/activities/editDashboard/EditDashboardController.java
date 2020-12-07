@@ -18,6 +18,7 @@ import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.exceptions.PermissionNotFoundException;
 import com.concordia.smarthomesimulator.helpers.*;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -268,15 +269,19 @@ public class EditDashboardController extends AppCompatActivity {
                 // Edit the permissions configuration
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
-                if (!model.getUserbase().getPermissionsConfiguration().equals(currentUserbase.getPermissionsConfiguration())
-                        && UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)) {
-                    model.getUserbase().setPermissionConfiguration(model.getUserbase().getPermissionsConfiguration());
-                    model.getUserbase().getPermissionsConfiguration().sendToContext(preferences);
-                }
-                // Saving changes if the user has proper rights
-                if (!model.getUserbase().equals(currentUserbase)
-                        && UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
-                    UserbaseHelper.saveUserbase(context, model.getUserbase());
+                try {
+                    if (!model.getUserbase().getPermissionsConfiguration().equals(currentUserbase.getPermissionsConfiguration())
+                            && UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)) {
+                        model.getUserbase().setPermissionConfiguration(model.getUserbase().getPermissionsConfiguration());
+                        model.getUserbase().getPermissionsConfiguration().sendToContext(preferences);
+                    }
+                    // Saving changes if the user has proper rights
+                    if (!model.getUserbase().equals(currentUserbase)
+                            && UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                        UserbaseHelper.saveUserbase(context, model.getUserbase());
+                    }
+                } catch (PermissionNotFoundException ignore) {
+                    Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
                 }
                 // If simulation is running and away mode is on
                 if (parameters.isAwayMode() && parameters.getStatus()) {
@@ -297,7 +302,12 @@ public class EditDashboardController extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Make sure the user has proper permissions
-                if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                try {
+                    if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                        return;
+                    }
+                } catch (PermissionNotFoundException ignore) {
+                    Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 new AlertDialog.Builder(context)
@@ -329,7 +339,12 @@ public class EditDashboardController extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Make sure the user has proper permissions
-                if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                try {
+                    if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                        return;
+                    }
+                } catch (PermissionNotFoundException ignore) {
+                    Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Get the User's information

@@ -8,6 +8,7 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.exceptions.PermissionNotFoundException;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
@@ -261,7 +262,12 @@ public class EditDashboardModel extends ViewModel{
      */
     public int editUser(Context context, Userbase userbase, String username, String password, String permissions, String previousUsername){
         // Validate user permissions
-        if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+        try {
+            if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                return -1;
+            }
+        } catch (PermissionNotFoundException ignore) {
+            Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
             return -1;
         }
 
@@ -326,11 +332,15 @@ public class EditDashboardModel extends ViewModel{
         SharedPreferences.Editor editor = preferences.edit();
         // Verify the permissions if the user changed the away mode
         boolean awayChanged = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false) != parametersArgument.isAwayMode();
-        if (awayChanged && UserbaseHelper.verifyPermissions(Action.CHANGE_AWAY_MODE, context)) {
-            editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, parametersArgument.isAwayMode());
-            if (parametersArgument.isAwayMode()) {
-                setLayoutInAwayMode(context);
+        try {
+            if (awayChanged && UserbaseHelper.verifyPermissions(Action.CHANGE_AWAY_MODE, context)) {
+                editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, parametersArgument.isAwayMode());
+                if (parametersArgument.isAwayMode()) {
+                    setLayoutInAwayMode(context);
+                }
             }
+        } catch (PermissionNotFoundException ignore) {
+            Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
         }
         // Set the other parameters
         editor.putBoolean(PREFERENCES_KEY_STATUS, parametersArgument.getStatus());

@@ -230,13 +230,12 @@
     <string name="in_the_segment_alert_text">in the</string>
     <string name="in_zone_segment_alert_text">in Zone :</string>
 
-
-
-
     <string name="seasons_title">Select Seasons Range</string>
     <string name="winter_start">Winter</string>
     <string name="summer_start">Summer</string>
     <string name="invalid_seasons_range">An invalid seasons range was selected. The parameters will not be saved.</string>
+
+    <string name="permission_error">An error occurred when evaluating the permissions.</string>
 
     <string-array name="permissions_spinner">
         <item>Parent</item>

@@ -18,6 +18,7 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.LogImportance;
+import com.concordia.smarthomesimulator.exceptions.PermissionNotFoundException;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
@@ -406,8 +407,12 @@ public class CustomMapModel {
                 //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
                 Action action = Action.fromDevice(device.getDevice(), context);
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (action == null || UserbaseHelper.verifyPermissions(action, context)) {
-                        showDeviceDialog(context, device.getDevice());
+                    try {
+                        if (action == null || UserbaseHelper.verifyPermissions(action, context)) {
+                            showDeviceDialog(context, device.getDevice());
+                        }
+                    } catch (PermissionNotFoundException ignore) {
+                        Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
                     }
                 }
                 return true;
@@ -447,14 +452,18 @@ public class CustomMapModel {
             .setTitle(context.getString(R.string.alert_map_room_title))
             .setView(customView)
             .setPositiveButton(android.R.string.ok, null);
-        if (UserbaseHelper.verifyPermissions(Action.MODIFY_TEMPERATURE, context)) {
-            // If user has permissions to modify temp, then show the modify button
-            builder.setNeutralButton(R.string.generic_modify, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    showTemperatureEditDialog(context, room);
-                }
-            });
+        try {
+            if (UserbaseHelper.verifyPermissions(Action.MODIFY_TEMPERATURE, context)) {
+                // If user has permissions to modify temp, then show the modify button
+                builder.setNeutralButton(R.string.generic_modify, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showTemperatureEditDialog(context, room);
+                    }
+                });
+            }
+        } catch (PermissionNotFoundException ignore) {
+            Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
         }
         AlertDialog dialog = builder.create();
         dialog.show();
