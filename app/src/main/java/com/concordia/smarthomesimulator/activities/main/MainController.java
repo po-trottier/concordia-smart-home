@@ -134,7 +134,11 @@ public class MainController extends AppCompatActivity {
         Userbase userbase = UserbaseHelper.loadUserbase(context);
         String username = sharedPreferences.getString(PREFERENCES_KEY_USERNAME, "");
         User user = userbase.getUserFromUsername(username);
-        user.getUserPreferences().sendToContext(sharedPreferences);
+        if (user != null) {
+            user.getUserPreferences().sendToContext(sharedPreferences);
+        } else {
+            Toast.makeText(context, context.getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void saveAndClearUser() {

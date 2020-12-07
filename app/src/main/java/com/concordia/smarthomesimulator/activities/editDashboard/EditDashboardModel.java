@@ -8,12 +8,16 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.Action;
 import com.concordia.smarthomesimulator.enums.Permissions;
+import com.concordia.smarthomesimulator.exceptions.PermissionNotFoundException;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -258,7 +262,12 @@ public class EditDashboardModel extends ViewModel{
      */
     public int editUser(Context context, Userbase userbase, String username, String password, String permissions, String previousUsername){
         // Validate user permissions
-        if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+        try {
+            if (!UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
+                return -1;
+            }
+        } catch (PermissionNotFoundException ignore) {
+            Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
             return -1;
         }
 
@@ -323,16 +332,22 @@ public class EditDashboardModel extends ViewModel{
         SharedPreferences.Editor editor = preferences.edit();
         // Verify the permissions if the user changed the away mode
         boolean awayChanged = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false) != parametersArgument.isAwayMode();
-        if (awayChanged && UserbaseHelper.verifyPermissions(Action.CHANGE_AWAY_MODE, context)) {
-            editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, parametersArgument.isAwayMode());
-            if (parametersArgument.isAwayMode()) {
-                setLayoutInAwayMode(context);
+        try {
+            if (awayChanged && UserbaseHelper.verifyPermissions(Action.CHANGE_AWAY_MODE, context)) {
+                editor.putBoolean(PREFERENCES_KEY_AWAY_MODE, parametersArgument.isAwayMode());
+                if (parametersArgument.isAwayMode()) {
+                    setLayoutInAwayMode(context);
+                }
             }
+        } catch (PermissionNotFoundException ignore) {
+            Toast.makeText(context, context.getString(R.string.permission_error), Toast.LENGTH_SHORT).show();
         }
         // Set the other parameters
         editor.putBoolean(PREFERENCES_KEY_STATUS, parametersArgument.getStatus());
         editor.putInt(PREFERENCES_KEY_CALL_DELAY, parametersArgument.getCallTimer());
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, parametersArgument.getTemperature());
+        editor.putInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, parametersArgument.getSummerTemperature());
+        editor.putInt(PREFERENCES_KEY_WINTER_TEMPERATURE, parametersArgument.getWinterTemperature());
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, parametersArgument.getDate().getYear());
         editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, parametersArgument.getDate().getMonthValue());
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, parametersArgument.getDate().getDayOfMonth());
@@ -366,6 +381,22 @@ public class EditDashboardModel extends ViewModel{
     public boolean hasSelectedSelf(SharedPreferences preferences, String username){
         String loggedUsername = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         return loggedUsername.equalsIgnoreCase(username);
+    }
+
+    /**
+     * Is house empty boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isHouseEmpty(Context context) {
+        HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
+        if (houseLayout != null) {
+            ArrayList<IInhabitant> inhabitants = houseLayout.getAllInhabitants();
+            return inhabitants.stream().allMatch(IInhabitant::isIntruder);
+        }
+        else{
+            return false;
+        }
     }
 
     private boolean validateSeasons(ParametersArgument parametersArgument) {
