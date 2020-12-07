@@ -3,11 +3,9 @@ package com.concordia.smarthomesimulator;
 import com.concordia.smarthomesimulator.dataModels.Geometry;
 import com.concordia.smarthomesimulator.dataModels.HeatingZone;
 import com.concordia.smarthomesimulator.dataModels.Room;
-import com.concordia.smarthomesimulator.helpers.TemperatureHelper;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 import static org.junit.Assert.*;
