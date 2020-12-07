@@ -58,27 +58,32 @@ public class TemperatureHelper {
         temperatureTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                // Make sure the scale is still valid
-                long newPeriod = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
-                if (newPeriod != period) {
-                    adjustTemperature(context);
-                }
-                // Get the current layout
-                HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
-                // Update room temperature and make sure none are extreme
-                if (layout == null) {
-                    return;
-                }
-                updateRoomTemperatures(context, preferences, layout);
-                notifyWindowLocked(context);
-                notifyExtremeTemperatures(context, preferences, layout);
-                // Update the layout with the modifications
-                LayoutsHelper.updateSelectedLayout(context, layout);
-                // Update the Map UI if it's visible
-                CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
-                if (view != null) {
-                    view.updateView();
-                }
+            // Make sure simulation is still running
+            boolean status = preferences.getBoolean(PREFERENCES_KEY_STATUS, false);
+            if (!status) {
+                return;
+            }
+            // Make sure the scale is still valid
+            long newPeriod = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
+            if (newPeriod != period) {
+                adjustTemperature(context);
+            }
+            // Get the current layout
+            HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+            // Update room temperature and make sure none are extreme
+            if (layout == null) {
+                return;
+            }
+            updateRoomTemperatures(context, preferences, layout);
+            notifyWindowLocked(context);
+            notifyExtremeTemperatures(context, preferences, layout);
+            // Update the layout with the modifications
+            LayoutsHelper.updateSelectedLayout(context, layout);
+            // Update the Map UI if it's visible
+            CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
+            if (view != null) {
+                view.updateView();
+            }
             }
         }, 0, period);
     }
@@ -222,6 +227,7 @@ public class TemperatureHelper {
                 window.setIsOpened(true);
             }
         }
+        room.setVentilationStatus(VentilationStatus.OFF);
         if (anyWindowLocked){
             roomNamesWithLockedWindows.add(room.getName());
         } else {
