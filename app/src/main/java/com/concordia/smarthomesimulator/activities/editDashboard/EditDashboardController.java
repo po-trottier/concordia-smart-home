@@ -52,6 +52,8 @@ public class EditDashboardController extends AppCompatActivity {
     private Button deleteUser;
     private Button createUserButton;
     private EditText temperatureField;
+    private EditText summerTemperatureField;
+    private EditText winterTemperatureField;
     private EditText maxAlertTemperatureField;
     private EditText minAlertTemperatureField;
     private EditText editedUsername;
@@ -125,6 +127,8 @@ public class EditDashboardController extends AppCompatActivity {
         statusField = findViewById(R.id.on_off);
         statusText = findViewById(R.id.on_off_text);
         temperatureField = findViewById(R.id.set_temperature);
+        summerTemperatureField = findViewById(R.id.set_summer_temperature);
+        winterTemperatureField = findViewById(R.id.set_winter_temperature);
         maxAlertTemperatureField = findViewById(R.id.set_max_temperature_alert);
         minAlertTemperatureField = findViewById(R.id.set_min_temperature_alert);
         saveContext = findViewById(R.id.save_context_button);
@@ -159,6 +163,10 @@ public class EditDashboardController extends AppCompatActivity {
         callTimerField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_CALL_DELAY, DEFAULT_CALL_DELAY)));
         // Set the known temperature
         temperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE)));
+        //Set desired temperature for away mode during the summer
+        summerTemperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, DEFAULT_SUMMER_TEMPERATURE)));
+        //Set desired temperature for away mode during the winter
+        winterTemperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_WINTER_TEMPERATURE, DEFAULT_WINTER_TEMPERATURE)));
         //Set maximum alert temperature
         maxAlertTemperatureField.setText(Integer.toString(preferences.getInt(PREFERENCES_KEY_MAX_TEMPERATURE_ALERT, DEFAULT_MAX_TEMPERATURE_ALERT)));
         //Set minimum alert temperature
@@ -185,7 +193,7 @@ public class EditDashboardController extends AppCompatActivity {
                 // when parameters are being modified.
                 ParametersArgument parameters = new ParametersArgument();
                 // Get the User's information
-                String username= editedUsername.getText().toString();
+                String username = editedUsername.getText().toString();
                 String password = editedPassword.getText().toString();
                 String permissions = editPermissionsSpinner.getSelectedItem().toString();
                 String oldUsername = usernameSpinner.getSelectedItem().toString();
@@ -198,11 +206,15 @@ public class EditDashboardController extends AppCompatActivity {
                 }
                 // Get the numbers
                 int temperature = DEFAULT_TEMPERATURE;
+                int summerTemperature = DEFAULT_SUMMER_TEMPERATURE;
+                int winterTemperature = DEFAULT_WINTER_TEMPERATURE;
                 int callTimer = DEFAULT_CALL_DELAY;
                 int maxAlertTemperature = DEFAULT_MAX_TEMPERATURE_ALERT;
                 int minAlertTemperature = DEFAULT_MIN_TEMPERATURE_ALERT;
                 try {
                     temperature = Integer.parseInt(temperatureField.getText().toString());
+                    summerTemperature = Integer.parseInt(summerTemperatureField.getText().toString());
+                    winterTemperature = Integer.parseInt(winterTemperatureField.getText().toString());
                     maxAlertTemperature = Integer.parseInt(maxAlertTemperatureField.getText().toString());
                     minAlertTemperature = Integer.parseInt(minAlertTemperatureField.getText().toString());
                     if (Math.abs(temperature) > MAXIMUM_TEMPERATURE){
@@ -213,6 +225,8 @@ public class EditDashboardController extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 parameters.setTemperature(temperature);
+                parameters.setSummerTemperature(summerTemperature);
+                parameters.setWinterTemperature(winterTemperature);
                 parameters.setMinAlertTemperature(Math.min(minAlertTemperature, maxAlertTemperature));
                 parameters.setMaxAlertTemperature(Math.max(minAlertTemperature, maxAlertTemperature));
                 parameters.setCallTimer(callTimer);
@@ -255,7 +269,7 @@ public class EditDashboardController extends AppCompatActivity {
                 Userbase currentUserbase = UserbaseHelper.loadUserbase(context);
                 // If the permissions were modified check that the user is allowed
                 if (!model.getUserbase().getPermissionsConfiguration().equals(currentUserbase.getPermissionsConfiguration())
-                    && UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)) {
+                        && UserbaseHelper.verifyPermissions(Action.CHANGE_PERMISSIONS_CONFIG, context)) {
                     model.getUserbase().setPermissionConfiguration(model.getUserbase().getPermissionsConfiguration());
                     model.getUserbase().getPermissionsConfiguration().sendToContext(preferences);
                 }
@@ -264,9 +278,12 @@ public class EditDashboardController extends AppCompatActivity {
                         && UserbaseHelper.verifyPermissions(Action.MODIFY_USERBASE, context)) {
                     UserbaseHelper.saveUserbase(context, model.getUserbase());
                 }
-                // Send notification if required
-                if (parameters.isAwayMode() && parameters.getStatus() && LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
-                    NotificationsHelper.sendIntruderNotification(context);
+                // If simulation is running and away mode is on
+                if (parameters.isAwayMode() && parameters.getStatus()) {
+                    // Send notification if required
+                    if (LayoutsHelper.getSelectedLayout(context).isIntruderDetected()) {
+                        NotificationsHelper.sendIntruderNotification(context);
+                    }
                 }
                 // Close the activity
                 LogsHelper.add(context, new LogEntry("Edit Simulation Context", "Simulation Context Was Saved Successfully.", LogImportance.IMPORTANT));
@@ -365,7 +382,7 @@ public class EditDashboardController extends AppCompatActivity {
             awayErrorLayout.setVisibility(View.VISIBLE);
             error = getString(R.string.missing_house_layout);
         }
-        else if(!isHouseEmpty()){
+        else if(!model.isHouseEmpty(context)){
             awayStatusField.setAlpha(.5f);
             awayStatusField.setChecked(false);
             awayStatusField.setEnabled(false);
@@ -389,18 +406,6 @@ public class EditDashboardController extends AppCompatActivity {
                 dialog.show();
             }
         });
-    }
-
-    private boolean isHouseEmpty() {
-        HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
-
-        if (houseLayout != null) {
-            ArrayList<IInhabitant> inhabitants = LayoutsHelper.getSelectedLayout(context).getAllInhabitants();
-            return inhabitants.stream().allMatch(IInhabitant::isIntruder);
-        }
-        else{
-            return false;
-        }
     }
 
     private void setAwayStatus(){

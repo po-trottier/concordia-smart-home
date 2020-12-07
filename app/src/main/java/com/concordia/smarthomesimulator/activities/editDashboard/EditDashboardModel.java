@@ -11,9 +11,12 @@ import com.concordia.smarthomesimulator.enums.Permissions;
 import com.concordia.smarthomesimulator.helpers.LayoutsHelper;
 import com.concordia.smarthomesimulator.helpers.UserbaseHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
+import com.concordia.smarthomesimulator.interfaces.IInhabitant;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -333,6 +336,8 @@ public class EditDashboardModel extends ViewModel{
         editor.putBoolean(PREFERENCES_KEY_STATUS, parametersArgument.getStatus());
         editor.putInt(PREFERENCES_KEY_CALL_DELAY, parametersArgument.getCallTimer());
         editor.putInt(PREFERENCES_KEY_TEMPERATURE, parametersArgument.getTemperature());
+        editor.putInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, parametersArgument.getSummerTemperature());
+        editor.putInt(PREFERENCES_KEY_WINTER_TEMPERATURE, parametersArgument.getWinterTemperature());
         editor.putInt(PREFERENCES_KEY_DATETIME_YEAR, parametersArgument.getDate().getYear());
         editor.putInt(PREFERENCES_KEY_DATETIME_MONTH, parametersArgument.getDate().getMonthValue());
         editor.putInt(PREFERENCES_KEY_DATETIME_DAY, parametersArgument.getDate().getDayOfMonth());
@@ -366,6 +371,22 @@ public class EditDashboardModel extends ViewModel{
     public boolean hasSelectedSelf(SharedPreferences preferences, String username){
         String loggedUsername = preferences.getString(PREFERENCES_KEY_USERNAME, "");
         return loggedUsername.equalsIgnoreCase(username);
+    }
+
+    /**
+     * Is house empty boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isHouseEmpty(Context context) {
+        HouseLayout houseLayout = LayoutsHelper.getSelectedLayout(context);
+        if (houseLayout != null) {
+            ArrayList<IInhabitant> inhabitants = houseLayout.getAllInhabitants();
+            return inhabitants.stream().allMatch(IInhabitant::isIntruder);
+        }
+        else{
+            return false;
+        }
     }
 
     private boolean validateSeasons(ParametersArgument parametersArgument) {

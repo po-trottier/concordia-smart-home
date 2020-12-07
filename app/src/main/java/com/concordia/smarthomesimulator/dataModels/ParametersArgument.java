@@ -11,6 +11,8 @@ public class ParametersArgument {
     private boolean awayMode;
     private int callTimer;
     private int temperature;
+    private int summerTemperature;
+    private int winterTemperature;
     private LocalDate date;
     private LocalTime time;
     private int winterStart;
@@ -62,6 +64,20 @@ public class ParametersArgument {
     public int getTemperature() {
         return temperature;
     }
+
+    /**
+     * Gets desired summer temperature when away.
+     *
+     * @return the desired summer temperature when away
+     */
+    public int getSummerTemperature() { return summerTemperature; }
+
+    /**
+     * Gets desired winter temperature when away.
+     *
+     * @return the desired winter temperature when away
+     */
+    public int getWinterTemperature() { return winterTemperature; }
 
     /**
      * Gets date.
@@ -188,6 +204,20 @@ public class ParametersArgument {
     public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
+
+    /**
+     * Gets desired summer temperature when away.
+     *
+     * @param summerTemperature the desired summer temperature when away
+     */
+    public void setSummerTemperature(int summerTemperature) { this.summerTemperature = summerTemperature; }
+
+    /**
+     * Gets desired winter temperature when away.
+     *
+     * @param winterTemperature the desired winter temperature when away
+     */
+    public void setWinterTemperature(int winterTemperature) { this.winterTemperature = winterTemperature; }
 
     /**
      * Sets date.

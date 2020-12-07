@@ -10,6 +10,7 @@ import com.concordia.smarthomesimulator.singletons.LayoutSingleton;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -55,15 +56,28 @@ public class LayoutsHelper {
      * @return the selected layout
      */
     public static HouseLayout getSelectedLayout(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         if (LayoutSingleton.getInstance().getLayout() == null) {
-            SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
             String selection = preferences.getString(PREFERENCES_KEY_LAYOUT, "");
             ArrayList<HouseLayout> layouts = LayoutsHelper.listSavedLayouts(context);
 
             HouseLayout selected = layouts.stream().filter(layout -> layout.getName().equals(selection)).findFirst().orElse(null);
             LayoutSingleton.getInstance().setLayout(selected);
         }
-        return (HouseLayout) LayoutSingleton.getInstance().getLayout().clone();
+        if(LayoutSingleton.getInstance().getLayout() != null){
+            HouseLayout layout = (HouseLayout) LayoutSingleton.getInstance().getLayout().clone();
+            // Update the away temps
+            int desiredTemperature = preferences.getInt(PREFERENCES_KEY_WINTER_TEMPERATURE, DEFAULT_WINTER_TEMPERATURE);
+            if (isSummer(preferences)) {
+                desiredTemperature = preferences.getInt(PREFERENCES_KEY_SUMMER_TEMPERATURE, DEFAULT_SUMMER_TEMPERATURE);
+            }
+            for (Room room : layout.getRooms()) {
+                room.setDesiredAwayTemperature(desiredTemperature);
+                room.setAwayTemperature(preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, false));
+            }
+            return layout;
+        }
+        return null;
     }
 
     /**
@@ -178,6 +192,27 @@ public class LayoutsHelper {
     //endregion
 
     //region Private Methods
+
+    private static boolean isSummer(SharedPreferences preferences) {
+        LocalDate date = getSimulationDate(preferences);
+        int summerStart = preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START);
+        int summerEnd = preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END);
+        //Returns true for summer
+        if (summerStart < summerEnd) {
+            return date.getMonthValue() >= summerStart && date.getMonthValue() <= summerEnd;
+        } else {
+            return date.getMonthValue() >= summerStart && date.getMonthValue() <= 12 ||
+                   date.getMonthValue() <= summerEnd && date.getMonthValue() >= 1;
+        }
+    }
+
+    private static LocalDate getSimulationDate(SharedPreferences preferences) {
+        LocalDate now = LocalDate.now();
+        int year = preferences.getInt(PREFERENCES_KEY_DATETIME_YEAR, now.getYear());
+        int month = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, now.getMonthValue());
+        int day = preferences.getInt(PREFERENCES_KEY_DATETIME_DAY, now.getDayOfMonth());
+        return LocalDate.of(year, month, day);
+    }
 
     private static HouseLayout loadEmptyHouseLayout(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
