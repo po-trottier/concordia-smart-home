@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class TemperatureHelperUnitTest {
     @Test
-    public void temperatureHelperKnowsIfMonthIsinSummer() {
+    public void temperatureHelperKnowsIfMonthIsInSummer() {
         // Setup
         int summerStart = DEFAULT_SUMMER_START;
         int summerEnd = DEFAULT_SUMMER_END;

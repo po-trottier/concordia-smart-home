@@ -135,6 +135,7 @@ public class TemperatureHelper {
                         double more = actualTemperature + OUTSIDE_TEMPERATURE_CHANGE;
                         room.setActualTemperature(actualTemperature > outsideTemperature ? less : more);
                     }
+                    break;
                 case COOLING:
                 case HEATING:
                     if (Math.abs(actualTemperature - desiredTemperature) < HVAC_TEMPERATURE_CHANGE){
@@ -147,6 +148,7 @@ public class TemperatureHelper {
                             LogsHelper.add(context, new LogEntry("Temperature Change", message, LogImportance.MINOR));
                         }
                         if (newVentStatus == VentilationStatus.COOLING && outsideTemperature < actualTemperature && !isAway) {
+                            room.setVentilationStatus(VentilationStatus.OFF);
                             tryOpeningWindows(room, preferences);
                         }
                         double less = actualTemperature - HVAC_TEMPERATURE_CHANGE;
