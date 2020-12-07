@@ -94,9 +94,10 @@ public class TemperatureHelper {
             @Override
             public void run() {
             HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
-            if (layout == null) return;
+            if (layout == null) {
+                return;
+            }
             LayoutsHelper.saveHouseLayout(context, layout);
-            LayoutsHelper.updateSelectedLayout(context, layout);
             }
         }, 0, TEMPERATURE_SAVE_INTERVAL);
     }

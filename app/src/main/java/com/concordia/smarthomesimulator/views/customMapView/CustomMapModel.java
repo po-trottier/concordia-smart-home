@@ -389,7 +389,8 @@ public class CustomMapModel {
             if (room.getShape().contains(x, y)) {
                 //  Only act on the event if the action is of type ACTION_UP (Finger lifted)
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    showTemperatureDialog(context, room.getRoom());
+                    Room updatedRoom = LayoutsHelper.getSelectedLayout(context).getRoom(room.getRoom().getName());
+                    showTemperatureDialog(context, updatedRoom);
                 }
                 return true;
             }
@@ -445,6 +446,10 @@ public class CustomMapModel {
     //region Show Dialog Methods
 
     private void showTemperatureDialog(Context context, Room room) {
+        if (room == null) {
+            return;
+        }
+
         final CustomRoomAlertView customView = (CustomRoomAlertView) LayoutInflater.from(context).inflate(R.layout.alert_show_room, null, false);
         customView.setRoomInformation(room);
 
