@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.*;
 import com.concordia.smarthomesimulator.enums.DeviceType;
@@ -18,9 +19,10 @@ import com.concordia.smarthomesimulator.enums.Orientation;
 import com.concordia.smarthomesimulator.helpers.LogsHelper;
 import com.concordia.smarthomesimulator.interfaces.IDevice;
 import com.concordia.smarthomesimulator.interfaces.IInhabitant;
-import com.concordia.smarthomesimulator.views.customHeatingZoneView.CustomHeatingZoneView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -99,7 +101,16 @@ public class CustomMapSettingsView extends ScrollView {
      * @return the temporary layout
      */
     public HouseLayout getTemporaryLayout() {
-        return model.getLayout();
+        HouseLayout layout = (HouseLayout) model.getLayout().clone();
+        for (HeatingZone zone : layout.getHeatingZones()) {
+            for (Room room : zone.getRooms()) {
+                if (!room.isTemperatureOverridden()) {
+                    room.setDesiredTemperature(zone.getDesiredTemperature());
+                    layout.getRoom(room.getName()).setDesiredTemperature(zone.getDesiredTemperature());
+                }
+            }
+        }
+        return layout;
     }
 
     //endregion
@@ -502,8 +513,8 @@ public class CustomMapSettingsView extends ScrollView {
         zonesListLayout.removeAllViews();
 
         for (HeatingZone zone : model.getLayout().getHeatingZones()) {
-            CustomHeatingZoneView child = (CustomHeatingZoneView) inflate(context, R.layout.adapter_heating_zone, null);
-            child.setupView(zone, model.getLayout());
+            LinearLayout child = (LinearLayout) inflate(context, R.layout.adapter_heating_zone, null);
+            setupZoneView(child, zone);
             zonesListLayout.addView(child);
         }
     }
@@ -511,6 +522,164 @@ public class CustomMapSettingsView extends ScrollView {
     //endregion
 
     //region Setup Custom Views
+
+    private void setupZoneView(LinearLayout view, HeatingZone zone) {
+        TextView zoneName = view.findViewById(R.id.adapter_zone_name);
+        zoneName.setText(zone.getName());
+        TextView zoneTemperature = view.findViewById(R.id.adapter_zone_temperature);
+        zoneTemperature.setText(zone.getDesiredTemperature() + context.getString(R.string.generic_degrees_celsius));
+        // Setup the temperature picker intent + rooms
+        setZoneTitleIntent(view, zone);
+        setZoneRooms(view, zone);
+    }
+
+    private void setZoneTitleIntent(LinearLayout view, HeatingZone zone) {
+        LinearLayout zoneTitle = view.findViewById(R.id.adapter_zone_title_bar);
+        zoneTitle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View customView = setupTemperatureLayout(zone);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.text_alert_edit_temperature))
+                    .setView(customView)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            EditText temperatureField = customView.findViewById(R.id.alert_edit_temperature);
+                            // Make sure the temperature is reasonable
+                            double temperature = DEFAULT_TEMPERATURE;
+                            try {
+                                temperature = Double.parseDouble(temperatureField.getText().toString().trim());
+                            } catch (NumberFormatException ignored) {}
+                            temperature = Math.min(MAXIMUM_TEMPERATURE, temperature);
+                            temperature = Math.max(MINIMUM_TEMPERATURE, temperature);
+                            // Set the zone temperature
+                            zone.setDesiredTemperature(temperature);
+                            // Set the room temperatures
+                            ArrayList<Room> roomsToMove = new ArrayList<>(zone.getRooms());
+                            for (Room room : roomsToMove) {
+                                model.getLayout().removeRoom(room.getName());
+                                model.getLayout().addRoom(room);
+                                // Make sure to put it back in the right zone
+                                model.getLayout().getHeatingZones().get(0).removeRoom(room.getName());
+                                zone.addRoom(room);
+                            }
+                            // Update the view
+                            updateView();
+                            // Log the action
+                            LogsHelper.add(context, new LogEntry("Map Settings", "Temperature setting changed for zone " + zone.getName(), LogImportance.IMPORTANT));
+                        }
+                    });
+                if (!zone.getName().equalsIgnoreCase(DEFAULT_NAME_HEATING_ZONE)) {
+                    builder.setNeutralButton(R.string.generic_remove, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            model.getLayout().removeHeatingZone(zone.getName());
+                            updateView();
+                            // Log the action
+                            LogsHelper.add(context, new LogEntry("Map Settings", "Climate Zone removed: " + zone.getName(), LogImportance.IMPORTANT));
+                        }
+                    });
+                }
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    private void setZoneRooms(LinearLayout view, HeatingZone zone) {
+        LinearLayout zoneRooms = view.findViewById(R.id.adapter_zone_rooms);
+        TextView noRooms = view.findViewById(R.id.adapter_zone_no_room);
+
+        noRooms.setVisibility(zone.getRooms().size() < 1 ? VISIBLE : GONE);
+        zoneRooms.setVisibility(zone.getRooms().size() < 1 ? GONE : VISIBLE);
+
+        zoneRooms.removeAllViews();
+
+        for (Room room : zone.getRooms()) {
+            ConstraintLayout child = (ConstraintLayout) inflate(context, R.layout.adapter_zone_room, null);
+
+            TextView roomName = child.findViewById(R.id.adapter_zone_room_name);
+            roomName.setText(room.getName());
+
+            TextView override = child.findViewById(R.id.adapter_zone_room_override);
+            override.setVisibility(room.isTemperatureOverridden() ? VISIBLE : GONE);
+
+            ConstraintLayout roomLayout = child.findViewById(R.id.adapter_zone_room_layout);
+            roomLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View customView = setupMoveRoomLayout();
+                    final AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setTitle(context.getString(R.string.text_alert_move_room))
+                        .setView(customView)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (model.getSelectedZone() == null) {
+                                    return;
+                                }
+                                // Update the room
+                                room.setDesiredTemperature(model.getSelectedZone().getDesiredTemperature());
+                                room.setIsTemperatureOverridden(false);
+                                // Update the layout
+                                model.getLayout().removeRoom(room.getName());
+                                model.getLayout().addRoom(room);
+                                // Update the zones
+                                model.getSelectedZone().addRoom(room);
+                                model.getLayout().getHeatingZones().get(0).removeRoom(room.getName());
+                                // Update the view
+                                updateView();
+                                // Log the action
+                                String message = room.getName() + " was moved from zone " + zone.getName() + " to" + model.getSelectedZone().getName();
+                                LogsHelper.add(context, new LogEntry("Map Set", message, LogImportance.IMPORTANT));
+                            }
+                        })
+                        .create();
+                    dialog.show();
+                }
+            });
+
+            zoneRooms.addView(child);
+        }
+    }
+
+    private View setupMoveRoomLayout() {
+        View customView = inflate(context, R.layout.alert_select_zone, null);
+
+        ListView zoneList = customView.findViewById(R.id.alert_select_zone_list);
+        List<String> zoneNames = model.getLayout().getHeatingZones()
+            .stream()
+            .map(HeatingZone::getName)
+            .collect(Collectors.toList());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, zoneNames);
+        zoneList.setAdapter(adapter);
+
+        zoneList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected zone
+                model.setSelectedZone(model.getLayout().getHeatingZone(zoneNames.get(position)));
+                // Color the selected item
+                for (int i = 0; i < parent.getChildCount(); i ++) {
+                    View child = parent.getChildAt(i);
+                    child.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+                view.setBackgroundColor(context.getColor(R.color.accentFaded));
+            }
+        });
+
+        return customView;
+    }
+
+    private View setupTemperatureLayout(HeatingZone zone) {
+        View customView = inflate(context, R.layout.alert_edit_temperature, null);
+        EditText temperature = customView.findViewById(R.id.alert_edit_temperature);
+        temperature.setText(Double.toString(zone.getDesiredTemperature()));
+        return customView;
+    }
 
     private View setupAddInhabitantLayout() {
         // Create the custom view

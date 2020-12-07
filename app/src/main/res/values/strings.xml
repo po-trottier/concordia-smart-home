@@ -219,6 +219,7 @@
 
     <string name="intruder_category">Intruder Alerts</string>
     <string name="temperature_category">Temperature Alerts</string>
+    <string name="windows_category">Device Alerts</string>
     <string name="intruder_title">Intruder Alert</string>
     <string name="intruder_text">Intruder detected : Contacting authorities %d in minutes</string>
     <string name="authorities_title">Authorities Contacted</string>
@@ -230,6 +231,9 @@
     <string name="in_the_segment_alert_text">in the</string>
     <string name="in_zone_segment_alert_text">in Zone :</string>
 
+    <string name="window_locked_alert_title">Windows cannot be opened!</string>
+    <string name="window_locked_alert_text_end"> have locked windows.</string>
+    <string name="window_locked_alert_text_start">Rooms:  </string>
     <string name="seasons_title">Select Seasons Range</string>
     <string name="winter_start">Winter</string>
     <string name="summer_start">Summer</string>

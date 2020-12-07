@@ -108,4 +108,5 @@ public class Constants {
     // Notifications
     public final static String INTRUDER_NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d943f6";
     public final static String TEMPERATURE_NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d94301";
+    public final static String WINDOWS_NOTIFICATION_CHANNEL = "86b2d2f2-3a9d-431b-a757-fd35c6d94359";
 }

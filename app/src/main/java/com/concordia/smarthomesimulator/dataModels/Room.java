@@ -138,6 +138,15 @@ public class Room extends Observable implements Serializable {
     }
 
     /**
+     * Gets all windows
+     *
+     * @return the devices
+     */
+    public ArrayList<Window> getWindows() {
+        return windows;
+    }
+
+    /**
      * Gets desired temperature.
      *
      * @return the desired temperature

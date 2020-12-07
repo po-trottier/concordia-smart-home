@@ -7,13 +7,13 @@ import com.concordia.smarthomesimulator.R;
 import com.concordia.smarthomesimulator.dataModels.HouseLayout;
 import com.concordia.smarthomesimulator.dataModels.LogEntry;
 import com.concordia.smarthomesimulator.dataModels.Room;
+import com.concordia.smarthomesimulator.dataModels.Window;
 import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.VentilationStatus;
 import com.concordia.smarthomesimulator.views.customMapView.CustomMapView;
 
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.LocalDate;
+import java.util.*;
 
 import static com.concordia.smarthomesimulator.Constants.*;
 
@@ -23,7 +23,10 @@ public class TemperatureHelper {
     private static Timer temperatureTimer;
     private static Timer saveTimer;
 
+    private static boolean notifiedAboutLockedWindows;
+
     private static HashMap<String, Double> extremeRooms;
+    private static ArrayList<String> roomNamesWithLockedWindows;
 
     /**
      * Adjusts how the HVAC behaves for each room, updating ventilation status and actual temps.
@@ -35,6 +38,8 @@ public class TemperatureHelper {
         SharedPreferences preferences = context.getSharedPreferences(context.getPackageName(),Context.MODE_PRIVATE);
         // Initialize the dictionary
         extremeRooms = new HashMap<>();
+        roomNamesWithLockedWindows = new ArrayList<>();
+        notifiedAboutLockedWindows = false;
         // Create a timer so that the temperature of each room changes based on their actual temperature, and the desired temperature
         setupTemperatureTimer(context, preferences);
         // Create a timer to save the layout at a rate independent of the in-app time
@@ -53,26 +58,27 @@ public class TemperatureHelper {
         temperatureTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-            // Make sure the scale is still valid
-            long newPeriod = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
-            if (newPeriod != period) {
-                adjustTemperature(context);
-            }
-            // Get the current layout
-            HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
-            // Update room temperature and make sure none are extreme
-            if (layout == null) {
-                return;
-            }
-            updateRoomTemperatures(context, preferences, layout);
-            notifyExtremeTemperatures(context, preferences, layout);
-            // Update the layout with the modifications
-            LayoutsHelper.updateSelectedLayout(context, layout);
-            // Update the Map UI if it's visible
-            CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
-            if (view != null) {
-                view.updateView();
-            }
+                // Make sure the scale is still valid
+                long newPeriod = (long) (SECOND_TO_MS / preferences.getFloat(PREFERENCES_KEY_TIME_SCALE, DEFAULT_TIME_SCALE));
+                if (newPeriod != period) {
+                    adjustTemperature(context);
+                }
+                // Get the current layout
+                HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
+                // Update room temperature and make sure none are extreme
+                if (layout == null) {
+                    return;
+                }
+                updateRoomTemperatures(context, preferences, layout);
+                notifyWindowLocked(context);
+                notifyExtremeTemperatures(context, preferences, layout);
+                // Update the layout with the modifications
+                LayoutsHelper.updateSelectedLayout(context, layout);
+                // Update the Map UI if it's visible
+                CustomMapView view = ((Activity) context).findViewById(R.id.custom_map_view);
+                if (view != null) {
+                    view.updateView();
+                }
             }
         }, 0, period);
     }
@@ -88,9 +94,10 @@ public class TemperatureHelper {
             @Override
             public void run() {
             HouseLayout layout = LayoutsHelper.getSelectedLayout(context);
-            if (layout == null) return;
+            if (layout == null) {
+                return;
+            }
             LayoutsHelper.saveHouseLayout(context, layout);
-            LayoutsHelper.updateSelectedLayout(context, layout);
             }
         }, 0, TEMPERATURE_SAVE_INTERVAL);
     }
@@ -99,6 +106,7 @@ public class TemperatureHelper {
         if (layout == null) {
             return;
         }
+        boolean isAway = preferences.getBoolean(PREFERENCES_KEY_AWAY_MODE, DEFAULT_STATUS);
         double outsideTemperature = preferences.getInt(PREFERENCES_KEY_TEMPERATURE, DEFAULT_TEMPERATURE);
         // Update the temperature for every room in the layout
         for (Room room: layout.getRooms()){
@@ -137,6 +145,9 @@ public class TemperatureHelper {
                             room.setVentilationStatus(newVentStatus);
                             String message = room.getName() + newVentStatus.getDescription();
                             LogsHelper.add(context, new LogEntry("Temperature Change", message, LogImportance.MINOR));
+                        }
+                        if (newVentStatus == VentilationStatus.COOLING && outsideTemperature < actualTemperature && !isAway) {
+                            tryOpeningWindows(room, preferences);
                         }
                         double less = actualTemperature - HVAC_TEMPERATURE_CHANGE;
                         double more = actualTemperature + HVAC_TEMPERATURE_CHANGE;
@@ -178,4 +189,52 @@ public class TemperatureHelper {
             NotificationsHelper.sendTemperatureAlertNotification(context, alertTitle, alertText, room.getName());
         }
     }
+
+    private static void notifyWindowLocked(Context context){
+        if (roomNamesWithLockedWindows.size() != 0){
+            if (!notifiedAboutLockedWindows){
+                notifiedAboutLockedWindows = true;
+                String alertTitle = context.getString(R.string.window_locked_alert_title);
+                String alertText = context.getString(R.string.window_locked_alert_text_start);
+                for (String roomName : roomNamesWithLockedWindows){
+                    alertText = alertText.concat(roomName + ", ");
+                }
+                alertText = alertText + context.getString(R.string.window_locked_alert_text_end);
+                NotificationsHelper.sendWindowLockedAlertNotification(context, alertTitle, alertText);
+            } //else the user was notified already, don't notify again
+        } else {
+            notifiedAboutLockedWindows = false;
+        }
+    }
+
+    private static void tryOpeningWindows(Room room, SharedPreferences preferences){
+        int summerStart = preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START);
+        int summerEnd = preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END);
+        int presentMonth = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, LocalDate.now().getMonthValue());
+        boolean anyWindowLocked = false;
+        if (!isInSummer(summerStart, summerEnd, presentMonth)) {
+            return;
+        }
+        for (Window window : room.getWindows()){
+            if (window.getIsLocked()){
+                anyWindowLocked = true;
+            } else {
+                window.setIsOpened(true);
+            }
+        }
+        if (anyWindowLocked){
+            roomNamesWithLockedWindows.add(room.getName());
+        } else {
+            roomNamesWithLockedWindows.remove(room.getName());
+        }
+    }
+
+    public static boolean isInSummer(int start, int end, int now){
+        // subtracting 1 to everything since we store months nums as 1-12
+        for (int i = start-1; i != (end-1 + 1) % 12; i = (i + 1) % 12){
+            if (now-1 == i) return true;
+        }
+        return false;
+    }
+
 }

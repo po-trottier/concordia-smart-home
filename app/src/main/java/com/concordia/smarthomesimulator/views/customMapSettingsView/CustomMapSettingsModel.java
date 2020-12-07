@@ -33,6 +33,7 @@ public class CustomMapSettingsModel {
     private HouseLayout layout;
     private Room selectedRoom;
     private Room modifiedRoom;
+    private HeatingZone selectedZone;
 
     //endregion
 
@@ -61,7 +62,7 @@ public class CustomMapSettingsModel {
      * @param layout the layout
      */
     public void setLayout(HouseLayout layout) {
-        this.layout = (HouseLayout) layout.clone();
+        this.layout = layout;
         if (layout.getRooms().size() > 0) {
             selectedRoom = getOrderedRooms().get(0);
         }
@@ -73,7 +74,7 @@ public class CustomMapSettingsModel {
      * @param context the context
      */
     public void updateLayout(Context context) {
-        layout = (HouseLayout) LayoutsHelper.getSelectedLayout(context).clone();
+        layout = LayoutsHelper.getSelectedLayout(context);
         if (layout.getRooms().size() > 0) {
             selectedRoom = getOrderedRooms().get(0);
         }
@@ -121,6 +122,24 @@ public class CustomMapSettingsModel {
      */
     public void setSelectedRoom(Room room) {
         selectedRoom = room;
+    }
+
+    /**
+     * Gets selected zone.
+     *
+     * @return the selected zone
+     */
+    public HeatingZone getSelectedZone() {
+        return selectedZone;
+    }
+
+    /**
+     * Sets selected zone.
+     *
+     * @param selectedZone the selected zone
+     */
+    public void setSelectedZone(HeatingZone selectedZone) {
+        this.selectedZone = selectedZone;
     }
 
     //endregion
