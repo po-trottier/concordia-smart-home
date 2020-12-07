@@ -33,7 +33,11 @@ public class HeatingZone implements Serializable {
     @Override
     public Object clone() {
         HeatingZone newZone = new HeatingZone(name);
-        newZone.addRooms(rooms);
+        ArrayList<Room> newRooms = new ArrayList<>();
+        for (Room room : rooms) {
+            newRooms.add((Room) room.clone());
+        }
+        newZone.addRooms(newRooms);
         newZone.setDesiredTemperature(desiredTemp);
         return newZone;
     }
