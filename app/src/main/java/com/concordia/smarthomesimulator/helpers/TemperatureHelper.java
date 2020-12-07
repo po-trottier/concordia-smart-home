@@ -140,6 +140,7 @@ public class TemperatureHelper {
                         double more = actualTemperature + OUTSIDE_TEMPERATURE_CHANGE;
                         room.setActualTemperature(actualTemperature > outsideTemperature ? less : more);
                     }
+                    break;
                 case COOLING:
                 case HEATING:
                     if (Math.abs(actualTemperature - desiredTemperature) < HVAC_TEMPERATURE_CHANGE){
