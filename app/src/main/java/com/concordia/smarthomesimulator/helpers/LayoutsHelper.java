@@ -102,8 +102,12 @@ public class LayoutsHelper {
             }
         }
         // Add the 2 default layouts (Empty and Demo)
-        layouts.add(0, LayoutsHelper.loadEmptyHouseLayout(context));
-        layouts.add(1, LayoutsHelper.loadDemoHouseLayout(context));
+        if (layouts.stream().noneMatch(l -> l.getName().equalsIgnoreCase(EMPTY_LAYOUT_NAME))) {
+            layouts.add(0, LayoutsHelper.loadEmptyHouseLayout(context));
+        }
+        if (layouts.stream().noneMatch(l -> l.getName().equalsIgnoreCase(DEMO_LAYOUT_NAME))) {
+            layouts.add(1, LayoutsHelper.loadDemoHouseLayout(context));
+        }
         // Return the full list
         return layouts;
     }
