@@ -146,7 +146,7 @@ public class TemperatureHelper {
                             String message = room.getName() + newVentStatus.getDescription();
                             LogsHelper.add(context, new LogEntry("Temperature Change", message, LogImportance.MINOR));
                         }
-                        if (newVentStatus == VentilationStatus.COOLING && outsideTemperature < desiredTemperature && !isAway) {
+                        if (newVentStatus == VentilationStatus.COOLING && outsideTemperature < actualTemperature && !isAway) {
                             tryOpeningWindows(room, preferences);
                         }
                         double less = actualTemperature - HVAC_TEMPERATURE_CHANGE;

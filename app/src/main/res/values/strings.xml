@@ -233,7 +233,7 @@
 
     <string name="window_locked_alert_title">Windows cannot be opened!</string>
     <string name="window_locked_alert_text_end"> have locked windows.</string>
-    <string name="window_locked_alert_text_start">Rooms </string>
+    <string name="window_locked_alert_text_start">Rooms:  </string>
     <string name="seasons_title">Select Seasons Range</string>
     <string name="winter_start">Winter</string>
     <string name="summer_start">Summer</string>
