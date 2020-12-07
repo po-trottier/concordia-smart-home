@@ -219,6 +219,7 @@
 
     <string name="intruder_category">Intruder Alerts</string>
     <string name="temperature_category">Temperature Alerts</string>
+    <string name="windows_category">Device Alerts</string>
     <string name="intruder_title">Intruder Alert</string>
     <string name="intruder_text">Intruder detected : Contacting authorities %d in minutes</string>
     <string name="authorities_title">Authorities Contacted</string>

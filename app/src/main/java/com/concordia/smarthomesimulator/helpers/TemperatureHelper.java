@@ -12,6 +12,7 @@ import com.concordia.smarthomesimulator.enums.LogImportance;
 import com.concordia.smarthomesimulator.enums.VentilationStatus;
 import com.concordia.smarthomesimulator.views.customMapView.CustomMapView;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static com.concordia.smarthomesimulator.Constants.*;
@@ -144,8 +145,7 @@ public class TemperatureHelper {
                             String message = room.getName() + newVentStatus.getDescription();
                             LogsHelper.add(context, new LogEntry("Temperature Change", message, LogImportance.MINOR));
                         }
-                        if (newVentStatus == VentilationStatus.COOLING && outsideTemperature < desiredTemperature
-                                && !isAway) {
+                        if (newVentStatus == VentilationStatus.COOLING && outsideTemperature < desiredTemperature && !isAway) {
                             tryOpeningWindows(room, preferences);
                         }
                         double less = actualTemperature - HVAC_TEMPERATURE_CHANGE;
@@ -207,11 +207,13 @@ public class TemperatureHelper {
     }
 
     private static void tryOpeningWindows(Room room, SharedPreferences preferences){
-        int summerStart = preferences.getInt(PREFERENCES_KEY_SUMMER_START,DEFAULT_MONTH);
-        int summerEnd = preferences.getInt(PREFERENCES_KEY_SUMMER_END,DEFAULT_MONTH);
-        int presentMonth = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, DEFAULT_MONTH);
+        int summerStart = preferences.getInt(PREFERENCES_KEY_SUMMER_START, DEFAULT_SUMMER_START);
+        int summerEnd = preferences.getInt(PREFERENCES_KEY_SUMMER_END, DEFAULT_SUMMER_END);
+        int presentMonth = preferences.getInt(PREFERENCES_KEY_DATETIME_MONTH, LocalDate.now().getMonthValue());
         boolean anyWindowLocked = false;
-        if (!isInSummer(summerStart, summerEnd, presentMonth))  return;
+        if (!isInSummer(summerStart, summerEnd, presentMonth)) {
+            return;
+        }
         for (Window window : room.getWindows()){
             if (window.getIsLocked()){
                 anyWindowLocked = true;
@@ -219,10 +221,10 @@ public class TemperatureHelper {
                 window.setIsOpened(true);
             }
         }
-        if (!anyWindowLocked){
-            roomNamesWithLockedWindows.remove(room.getName());
-        } else {
+        if (anyWindowLocked){
             roomNamesWithLockedWindows.add(room.getName());
+        } else {
+            roomNamesWithLockedWindows.remove(room.getName());
         }
     }
 
